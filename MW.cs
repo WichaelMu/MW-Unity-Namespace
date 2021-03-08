@@ -71,6 +71,16 @@ namespace MW {
     }
 
     public static class Generic {
+
+        public const float k10Percent = .1f;
+        public const float kQuarter = .25f;
+        public const float kHalf = .5f;
+        public const float kThreeQuarters = .75f;
+        public const float kOneThird = .3333333333333333333333333333333333f;
+        public const float kTwoThirds = kOneThird * 2;
+
+        public const float k1To255RGB = 0.0039215686274509803921568627451F;
+
         /// <summary>If self can see target within SearchAngle degrees while facing face.</summary>
         /// <param name="face">The direction self is facing.</param>
         /// <param name="self">The transform searching for target.</param>
@@ -145,6 +155,11 @@ namespace MW {
                 return Mathf.RoundToInt(fValue);
             }
 
+            if (dp < 0) {
+                Debug.LogWarning("Please use a number greater than 0. Rounding to 2 instead.");
+                dp = 2;
+            }
+
             int fFactor = (int)Mathf.Pow(10, dp);
             return Mathf.Round(fValue * fFactor) / fFactor;
         }
@@ -194,7 +209,7 @@ namespace MW {
             return Fibonacci(n - 1) + Fibonacci(n - 2);
         }
 
-        /// <summary>Generates a sphere with an equal distribution of points.</summary>
+        /// <summary>Generates spherical points with an equal distribution.</summary>
         /// <param name="resolution">The number of points to generate.</param>
         /// <param name="goldenRationModifier">Adjusts the golden ratio.</param>
         /// <returns>The Vector3[] points for the sphere.</returns>
@@ -261,13 +276,10 @@ namespace MW {
 
     public static class Conversion {
 
-
-        const float k1To255 = 0.0039215686274509803921568627451F;
-
         /// <summary>The corresponding colour in RGA using Vector3.</summary>
         /// <param name="colour">The RGB/XYZ channel values, respectively.</param>
         public static Color Colour255(Vector3 colour) {
-            colour *= k1To255;
+            colour *= Generic.k1To255RGB;
 
             for (int i = 0; i < 3; i++)
                 colour[i] = Mathf.Clamp(colour[i], 0, 255);
@@ -281,9 +293,9 @@ namespace MW {
         /// <param name="b">The blue value.</param>
         public static Color Colour255(int r, int g, int b) {
 
-            float _r = r * k1To255;
-            float _g = g * k1To255;
-            float _b = b * k1To255;
+            float _r = r * Generic.k1To255RGB;
+            float _g = g * Generic.k1To255RGB;
+            float _b = b * Generic.k1To255RGB;
 
             return new Color(_r, _g, _b);
         }
@@ -294,9 +306,9 @@ namespace MW {
         /// <param name="b">The blue value.</param>
         public static Color Colour255(float r, float g, float b) {
 
-            r *= k1To255;
-            g *= k1To255;
-            b *= k1To255;
+            r *= Generic.k1To255RGB;
+            g *= Generic.k1To255RGB;
+            b *= Generic.k1To255RGB;
 
             return new Color(r, g, b);
         }
@@ -304,7 +316,7 @@ namespace MW {
         /// <summary>The corresponding colour in RGBA using Vector4.</summary>
         /// <param name="colour">The RGBA/XYZW channel values, respectivaly.</param>
         public static Color Colour255(Vector4 colour) {
-            colour *= k1To255;
+            colour *= Generic.k1To255RGB;
 
             for (int i = 0; i < 4; i++)
                 colour[i] = Mathf.Clamp(colour[i], 0, 255);
@@ -319,10 +331,10 @@ namespace MW {
         /// <param name="a">The alpha value.</param>
         public static Color Colour255(int r, int g, int b, int a) {
 
-            float _r = r * k1To255;
-            float _g = g * k1To255;
-            float _b = b * k1To255;
-            float _a = a * k1To255;
+            float _r = r * Generic.k1To255RGB;
+            float _g = g * Generic.k1To255RGB;
+            float _b = b * Generic.k1To255RGB;
+            float _a = a * Generic.k1To255RGB;
 
             return new Color(_r, _g, _b, _a);
         }
@@ -334,10 +346,10 @@ namespace MW {
         /// <param name="a">The alpha value.</param>
         public static Color Colour255(float r, float g, float b, float a) {
 
-            r *= k1To255;
-            g *= k1To255;
-            b *= k1To255;
-            a *= k1To255;
+            r *= Generic.k1To255RGB;
+            g *= Generic.k1To255RGB;
+            b *= Generic.k1To255RGB;
+            a *= Generic.k1To255RGB;
 
             return new Color(r, g, b, a);
         }
@@ -1639,8 +1651,10 @@ namespace MW {
             if (AudioLogic == null) {
                 AudioLogic = this;
                 gameObject.name = "Audio";
-            } else
+            } else {
+                Debug.LogWarning("Ensure there is only one Audio object in the scene and that only one is being initialised");
                 Destroy(gameObject);
+            }
 
             this.Sounds = Sounds;
 
