@@ -170,6 +170,19 @@ namespace MW {
             Bool = !Bool;
         }
 
+        /// <summary>Flip-Flops Bool.</summary>
+        /// <param name="Bool"></param>
+        /// <param name="callbackTrue">The method to call if the flip-flop is true.</param>
+        /// <param name="callbackFalse">The method to call if the flip-flop is false.</param>
+        public static void FlipFlop(ref bool Bool, Action callbackTrue, Action callbackFalse) {
+            Bool = !Bool;
+
+            if (Bool)
+                callbackTrue();
+            else
+                callbackFalse();
+        }
+
         /// <summary>If value is within the +- limit of from.</summary>
         /// <param name="value">The value to check.</param>
         /// <param name="from">The value to compare.</param>
@@ -561,6 +574,7 @@ namespace MW {
 
             switch (unit) {
                 case Units.MetresPerSecond:
+                    Debug.LogWarning("Use 'self.velocity.magnitude' instead.");
                     return speed;
                 case Units.KilometrsePerHour:
                     return speed * 3.6f;
@@ -734,6 +748,13 @@ namespace MW {
         /// <param name="self">The transform to look towards the point.</param>
         /// <param name="point">The transform of where self needs to look towards</param>
         public static void Billboard(Transform self, Transform point) {
+            self.LookAt(point);
+        }
+
+        /// <summary>Ensures the transform always faces point.</summary>
+        /// <param name="self">The transform to look towards the point.</param>
+        /// <param name="point">The point in world coordinates.</param>
+        public static void Billboard(Transform self, Vector3 point) {
             self.LookAt(point);
         }
     }

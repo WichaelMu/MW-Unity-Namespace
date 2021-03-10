@@ -39,6 +39,12 @@
             <summary>Flip-Flops Bool.</summary>
             <param name="Bool"></param>
         </member>
+        <member name="M:MW.Generic.FlipFlop(System.Boolean@,System.Action,System.Action)">
+            <summary>Flip-Flops Bool.</summary>
+            <param name="Bool"></param>
+            <param name="callbackTrue">The method to call if the flip-flop is true.</param>
+            <param name="callbackFalse">The method to call if the flip-flop is false.</param>
+        </member>
         <member name="M:MW.Generic.IsWithin(System.Single,System.Single,System.Single)">
             <summary>If value is within the +- limit of from.</summary>
             <param name="value">The value to check.</param>
@@ -60,7 +66,7 @@
             <param name="n"></param>
         </member>
         <member name="M:MW.Generic.GenerateEqualSphere(System.Int32,System.Single)">
-            <summary>Generates a sphere with an equal distribution of points.</summary>
+            <summary>Generates spherical points with an equal distribution.</summary>
             <param name="resolution">The number of points to generate.</param>
             <param name="goldenRationModifier">Adjusts the golden ratio.</param>
             <returns>The Vector3[] points for the sphere.</returns>
@@ -281,6 +287,11 @@
             <summary>Ensures the transform always faces point.</summary>
             <param name="self">The transform to look towards the point.</param>
             <param name="point">The transform of where self needs to look towards</param>
+        </member>
+        <member name="M:MW.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Vector3)">
+            <summary>Ensures the transform always faces point.</summary>
+            <param name="self">The transform to look towards the point.</param>
+            <param name="point">The point in world coordinates.</param>
         </member>
         <member name="T:MW.IO">
             <summary>Input/Output.</summary>
