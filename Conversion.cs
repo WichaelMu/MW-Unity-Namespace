@@ -6,14 +6,14 @@ namespace MW.Conversion {
     public static class Conversion {
 
         /// <summary>The corresponding colour in RGA using Vector3.</summary>
-        /// <param name="colour">The RGB/XYZ channel values, respectively.</param>
-        public static Color Colour255(Vector3 colour) {
-            colour *= Generic.k1To255RGB;
+        /// <param name="vColour">The RGB/XYZ channel values, respectively.</param>
+        public static Color Colour255(Vector3 vColour) {
+            vColour *= Generic.k1To255RGB;
 
             for (int i = 0; i < 3; i++)
-                colour[i] = Mathf.Clamp(colour[i], 0, 255);
+                vColour[i] = Mathf.Clamp(vColour[i], 0, 255);
 
-            return new Color(colour.x, colour.y, colour.z);
+            return new Color(vColour.x, vColour.y, vColour.z);
         }
 
         /// <summary>The corresponding colour from 0 - 255 in RGB.</summary>
@@ -43,14 +43,14 @@ namespace MW.Conversion {
         }
 
         /// <summary>The corresponding colour in RGBA using Vector4.</summary>
-        /// <param name="colour">The RGBA/XYZW channel values, respectivaly.</param>
-        public static Color Colour255(Vector4 colour) {
-            colour *= General.Generic.k1To255RGB;
+        /// <param name="v4Colour">The RGBA/XYZW channel values, respectivaly.</param>
+        public static Color Colour255(Vector4 v4Colour) {
+            v4Colour *= Generic.k1To255RGB;
 
             for (int i = 0; i < 4; i++)
-                colour[i] = Mathf.Clamp(colour[i], 0, 255);
+                v4Colour[i] = Mathf.Clamp(v4Colour[i], 0, 255);
 
-            return new Color(colour.x, colour.y, colour.z, colour.w);
+            return new Color(v4Colour.x, v4Colour.y, v4Colour.z, v4Colour.w);
         }
 
         /// <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
@@ -84,22 +84,22 @@ namespace MW.Conversion {
         }
 
         ///<summary>Converts a hexadecimal to its corresponding colour.</summary>
-        /// <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-        public static Color ColourHex(string hex) {
+        /// <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+        public static Color ColourHex(string sHex) {
 
-            if (hex[0] != '#') {
+            if (sHex[0] != '#') {
                 Debug.LogWarning("Please use '#' to denote Hex.\nReturning White by default.");
                 return Color.white;
             }
 
-            if (hex.Length > 7) {
+            if (sHex.Length > 7) {
                 Debug.LogWarning("Please use the format: '#RRGGBB' for hex to colour conversion.\nReturning White by default");
                 return Color.white;
             }
 
-            int nH1 = int.Parse(hex[1] + "" + hex[2] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH2 = int.Parse(hex[3] + "" + hex[4] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH3 = int.Parse(hex[5] + "" + hex[6] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH1 = int.Parse(sHex[1] + "" + sHex[2] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH2 = int.Parse(sHex[3] + "" + sHex[4] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH3 = int.Parse(sHex[5] + "" + sHex[6] + "", System.Globalization.NumberStyles.HexNumber);
 
             Vector3 V = new Vector3 {
                 x = nH1,
@@ -111,29 +111,29 @@ namespace MW.Conversion {
         }
 
         /// <summary>The corresponding hexadecimal and alpha colour.</summary>
-        /// <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-        /// <param name="alpha">The float alpha.</param>
-        public static Color ColourHex(string hex, float alpha) {
+        /// <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+        /// <param name="fAlpha">The float alpha.</param>
+        public static Color ColourHex(string sHex, float fAlpha) {
 
-            if (hex[0] != '#') {
+            if (sHex[0] != '#') {
                 Debug.LogWarning("Please use '#' to denote Hex.\nReturning White by default.");
                 return Color.white;
             }
 
-            if (hex.Length > 7) {
+            if (sHex.Length > 7) {
                 Debug.LogWarning("Please use the format: '#RRGGBB' for hex to colour conversion.\nReturning White by default");
                 return Color.white;
             }
 
-            int nH1 = int.Parse(hex[1] + "" + hex[2] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH2 = int.Parse(hex[3] + "" + hex[4] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH3 = int.Parse(hex[5] + "" + hex[6] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH1 = int.Parse(sHex[1] + "" + sHex[2] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH2 = int.Parse(sHex[3] + "" + sHex[4] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH3 = int.Parse(sHex[5] + "" + sHex[6] + "", System.Globalization.NumberStyles.HexNumber);
 
             Vector4 V = new Vector4 {
                 x = nH1,
                 y = nH2,
                 z = nH3,
-                w = alpha
+                w = fAlpha
             };
 
             return Colour255(V);
@@ -141,29 +141,29 @@ namespace MW.Conversion {
         }
 
         /// <summary>The corresponding hexadecimal colour and hexadecimal alpha.</summary>
-        /// <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-        /// <param name="alpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
-        public static Color ColourHex(string hex, string alpha) {
+        /// <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+        /// <param name="sAlpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
+        public static Color ColourHex(string sHex, string sAlpha) {
 
-            if (hex[0] != '#' || alpha[0] != '#') {
+            if (sHex[0] != '#' || sAlpha[0] != '#') {
                 Debug.LogWarning("Please use '#' to denote Hex.\nReturning White by default.");
                 return Color.white;
             }
 
-            if (hex.Length > 7) {
+            if (sHex.Length > 7) {
                 Debug.LogWarning("Please use the format: '#RRGGBB' for hex to colour conversion.\nReturning White by default");
                 return Color.white;
             }
 
-            if (alpha.Length > 3) {
+            if (sAlpha.Length > 3) {
                 Debug.LogWarning("Please use the format: '#AA' for hex to alpha conversion.\nReturning White by default");
                 return Color.white;
             }
 
-            int nH1 = int.Parse(hex[1] + "" + hex[2] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH2 = int.Parse(hex[3] + "" + hex[4] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH3 = int.Parse(hex[5] + "" + hex[6] + "", System.Globalization.NumberStyles.HexNumber);
-            int nH4 = int.Parse(alpha[1] + "" + alpha[2] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH1 = int.Parse(sHex[1] + "" + sHex[2] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH2 = int.Parse(sHex[3] + "" + sHex[4] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH3 = int.Parse(sHex[5] + "" + sHex[6] + "", System.Globalization.NumberStyles.HexNumber);
+            int nH4 = int.Parse(sAlpha[1] + "" + sAlpha[2] + "", System.Globalization.NumberStyles.HexNumber);
 
             Vector4 V = new Vector4 {
                 x = nH1,
@@ -177,17 +177,17 @@ namespace MW.Conversion {
         }
 
         /// <summary>The normalised direction to to, relative to from.</summary>
-        /// <param name="from">The Vector3 seeking a direction to to.</param>
-        /// <param name="to">The direction to look at.</param>
-        public static Vector3 Direction(Vector3 from, Vector3 to) {
-            return (to - from).normalized;
+        /// <param name="vFrom">The Vector3 seeking a direction to to.</param>
+        /// <param name="vTo">The direction to look at.</param>
+        public static Vector3 Direction(Vector3 vFrom, Vector3 vTo) {
+            return (vTo - vFrom).normalized;
         }
 
         /// <summary>The normalised direction to to, relative to from.</summary>
-        /// <param name="from">The Vector3 seeking a direction to to.</param>
-        /// <param name="to">The direction to look at.</param>
-        public static Vector2 Direction(Vector2 from, Vector2 to) {
-            return (to - from).normalized;
+        /// <param name="vFrom">The Vector3 seeking a direction to to.</param>
+        /// <param name="vTo">The direction to look at.</param>
+        public static Vector2 Direction(Vector2 vFrom, Vector2 vTo) {
+            return (vTo - vFrom).normalized;
         }
     }
 

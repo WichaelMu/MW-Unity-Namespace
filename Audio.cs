@@ -6,83 +6,83 @@ namespace MW.Audio {
 
     [Serializable]
     public class Sound {
-        public AudioClip Sounds;
-        public string Name;
+        public AudioClip ACSounds;
+        public string sName;
 
         [Range(0f, 1f)]
-        public float Volume = 1, Pitch = 1;
+        public float fVVolume = 1, fPitch = 1;
 
-        public bool Loop;
+        public bool bLoop;
 
         [HideInInspector]
-        public AudioSource sound;
+        public AudioSource ASSound;
     }
 
     /// <summary>The Audio controller for in-game sounds.</summary>
     public class Audio : MonoBehaviour {
-        public static Audio AudioLogic;
+        public static Audio AAudioLogic;
 
-        public bool MuteAll;
-        public Sound[] Sounds;
+        public bool bMuteAll;
+        public Sound[] SSounds;
 
         const string kErr1 = "Sound of name: ";
         const string kErr2 = " could not be ";
 
         /// <summary>Populates the Sounds array to match the settings.</summary>
-        public void Initialise(Sound[] Sounds) {
-            if (AudioLogic == null) {
-                AudioLogic = this;
+        public void Initialise(Sound[] SSounds) {
+            if (AAudioLogic == null) {
+                AAudioLogic = this;
                 gameObject.name = "Audio";
             } else {
                 Debug.LogWarning("Ensure there is only one Audio object in the scene and that only one is being initialised");
                 Destroy(gameObject);
             }
 
-            this.Sounds = Sounds;
+            this.SSounds = SSounds;
 
-            if (!MuteAll)
-                foreach (Sound s in Sounds) {
-                    s.sound = gameObject.AddComponent<AudioSource>();
-                    s.sound.clip = s.Sounds;
-                    s.sound.volume = s.Volume;
-                    s.sound.pitch = s.Pitch;
-                    s.sound.loop = s.Loop;
+            if (!bMuteAll)
+                foreach (Sound s in SSounds) {
+                    s.ASSound = gameObject.AddComponent<AudioSource>();
+                    s.ASSound.clip = s.ACSounds;
+                    s.ASSound.volume = s.fVVolume;
+                    s.ASSound.pitch = s.fPitch;
+                    s.ASSound.loop = s.bLoop;
                 }
         }
 
         /// <summary>Plays sound of name n.</summary>
-        /// <param name="n">The name of the requested sound to play in capital casing.</param>
+        /// <param name="sName">The name of the requested sound to play in capital casing.</param>
 
-        public void Play(string n) {
-            if (MuteAll)
+        public void Play(string sName) {
+            if (bMuteAll)
                 return;
-            Sound s = Find(n);
+            Sound s = Find(sName);
             if (s != null && !IsPlaying(s))
-                s.sound.Play();
+                s.ASSound.Play();
             if (s == null)
-                Debug.LogWarning(kErr1 + n + kErr2 + "played!");
+                Debug.LogWarning(kErr1 + sName + kErr2 + "played!");
         }
 
         /// <summary>Stops sound of name n.</summary>
-        /// <param name="n">The name of the requested sound to stop playing in capital casing.</param>
+        /// <param name="sName">The name of the requested sound to stop playing in capital casing.</param>
 
-        public void Stop(string n) {
-            if (MuteAll)
+        public void Stop(string sName) {
+            if (bMuteAll)
                 return;
-            Sound s = Find(n);
+            Sound s = Find(sName);
             if (s != null && IsPlaying(s))
-                s.sound.Stop();
+                s.ASSound.Stop();
             if (s == null)
-                Debug.LogWarning(kErr1 + n + kErr2 + "stopped!");
+                Debug.LogWarning(kErr1 + sName + kErr2 + "stopped!");
         }
 
         /// <summary>Stop every sound in the game.</summary>
 
         public void StopAll() {
-            if (MuteAll)
+            if (bMuteAll)
                 return;
-            foreach (Sound s in Sounds)
-                s.sound.Stop();
+            foreach (Sound s in SSounds)
+                s.ASSound.Stop();
         }
 
         /// <summary>Returns a sound in the Sounds array.</summary>
@@ -90,19 +90,19 @@ namespace MW.Audio {
         /// <returns>The sound clip of the requested sound.</returns>
 
         Sound Find(string n) {
-            return Array.Find(Sounds, sound => sound.Name == n);
+            return Array.Find(SSounds, sound => sound.sName == n);
         }
 
         /// <summary>Whether or not sound of name n is playing.</summary>
-        /// <param name="n">The name of the sound to query in capital casing.</param>
-        public bool IsPlaying(string n) {
-            if (MuteAll)
+        /// <param name="sName">The name of the sound to query in capital casing.</param>
+        public bool IsPlaying(string sName) {
+            if (bMuteAll)
                 return false;
-            return Find(n).sound.isPlaying;
+            return Find(sName).ASSound.isPlaying;
         }
 
         bool IsPlaying(Sound s) {
-            return s.sound.isPlaying;
+            return s.ASSound.isPlaying;
         }
     }
 }

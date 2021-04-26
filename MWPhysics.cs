@@ -11,97 +11,97 @@ namespace MW.MWPhysics {
         /// <summary>
         /// If the distance between from and to is less than or EqualTo detection.
         /// </summary>
-        /// <param name="from">The reference coordinate to compare.</param>
-        /// <param name="to">The target coordinate to compare.</param>
-        /// <param name="distance">The range that is considered if from has 'reached' to.</param>
-        /// <param name="EqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
+        /// <param name="vFrom">The reference coordinate to compare.</param>
+        /// <param name="vTo">The target coordinate to compare.</param>
+        /// <param name="fDistance">The range that is considered if from has 'reached' to.</param>
+        /// <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
         /// <returns></returns>
-        public static bool HasReached(Vector3 from, Vector3 to, float distance = .1f, bool EqualTo = false) {
-            if (EqualTo)
-                return Vector3.Distance(from, to) < distance;
-            return Vector3.Distance(from, to) <= distance;
+        public static bool HasReached(Vector3 vFrom, Vector3 vTo, float fDistance = .1f, bool bEqualTo = false) {
+            if (bEqualTo)
+                return Vector3.Distance(vFrom, vTo) < fDistance;
+            return Vector3.Distance(vFrom, vTo) <= fDistance;
         }
 
         /// <summary>
         /// If the distance between from and to is less than or EqualTo detection.
         /// </summary>
-        /// <param name="from">The reference coordinate to compare.</param>
-        /// <param name="to">The target coordinate to compare.</param>
-        /// <param name="EqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-        /// <param name="distance">The range that is considered if from has 'reached' to.</param>
+        /// <param name="vFrom">The reference coordinate to compare.</param>
+        /// <param name="vTo">The target coordinate to compare.</param>
+        /// <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
+        /// <param name="fDistance">The range that is considered if from has 'reached' to.</param>
         /// <returns></returns>
-        public static bool HasReached(Vector3 from, Vector3 to, bool EqualTo = false, float distance = .1f) {
-            if (EqualTo)
-                return Vector3.Distance(from, to) < distance;
-            return Vector3.Distance(from, to) <= distance;
+        public static bool HasReached(Vector3 vFrom, Vector3 vTo, bool bEqualTo = false, float fDistance = .1f) {
+            if (bEqualTo)
+                return Vector3.Distance(vFrom, vTo) < fDistance;
+            return Vector3.Distance(vFrom, vTo) <= fDistance;
         }
 
         /// <summary>
         /// Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
         /// </summary>
-        /// <param name="self">The Rigidbody to move.</param>
-        /// <param name="target">The Transform destination.</param>
-        /// <param name="velocity">The rate at which self moves towards target.</param>
-        /// <param name="TurnRadius">The maximum degrees self can turn towards target.</param>
-        public static void HomeTowards(Rigidbody self, Transform target, float velocity, float TurnRadius) {
+        /// <param name="RBSelf">The Rigidbody to move.</param>
+        /// <param name="TTarget">The Transform destination.</param>
+        /// <param name="fVelocity">The rate at which self moves towards target.</param>
+        /// <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
+        public static void HomeTowards(Rigidbody RBSelf, Transform TTarget, float fVelocity, float fTurnRadius) {
 
-            Transform _self = self.transform;
-            self.velocity = _self.forward * velocity * Time.deltaTime;
-            self.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(target.position - _self.position), TurnRadius));
+            Transform _self = RBSelf.transform;
+            RBSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
+            RBSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(TTarget.position - _self.position), fTurnRadius));
         }
 
         /// <summary>
         /// Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
         /// </summary>
-        /// <param name="self">The Rigidbody to move.</param>
-        /// <param name="target">The destination coordinates.</param>
-        /// <param name="velocity">The rate at which self moves towards target.</param>
-        /// <param name="TurnRadius">The maximum degrees self can turn towards target.</param>
-        public static void HomeTowards(Rigidbody self, Vector3 target, float velocity, float TurnRadius) {
+        /// <param name="RBSelf">The Rigidbody to move.</param>
+        /// <param name="vTarget">The destination coordinates.</param>
+        /// <param name="fVelocity">The rate at which self moves towards target.</param>
+        /// <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
+        public static void HomeTowards(Rigidbody RBSelf, Vector3 vTarget, float fVelocity, float fTurnRadius) {
 
-            Transform _self = self.transform;
-            self.velocity = _self.forward * velocity * Time.deltaTime;
-            self.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(target - _self.position, _self.up), TurnRadius));
+            Transform _self = RBSelf.transform;
+            RBSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
+            RBSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(vTarget - _self.position, _self.up), fTurnRadius));
         }
 
-        /// <param name="equation">The equation to use to accelerate.</param>
-        /// <param name="CurrentSpeed">The current speed of the acceleration.</param>
-        /// <param name="RateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
-        /// <param name="terminal">The maximum speed.</param>
+        /// <param name="EEquation">The equation to use to accelerate.</param>
+        /// <param name="fCurrentSpeed">The current speed of the acceleration.</param>
+        /// <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
+        /// <param name="fTerminal">The maximum speed.</param>
         /// <param name="time">The elapsed time.</param>
         /// <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
-        public static float Acceleration(Equation equation, float CurrentSpeed, float RateOfAcceleration, float terminal, float time) {
-            terminal *= VelocityRatio;
+        public static float Acceleration(Equation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal) {
+            fTerminal *= VelocityRatio;
 
-            if (RateOfAcceleration == 0)
-                Debug.LogError(nameof(RateOfAcceleration) + " cannot be zero");
+            if (fRateOfAcceleration == 0)
+                Debug.LogError(nameof(fRateOfAcceleration) + " cannot be zero");
 
-            return Mathf.Clamp(Mathf.Lerp(CurrentSpeed / Time.deltaTime, terminal, Interpolate.Ease(equation, 0, 1, RateOfAcceleration)), 0, terminal);
+            return Mathf.Clamp(Mathf.Lerp(fCurrentSpeed / Time.deltaTime, fTerminal, Interpolate.Ease(EEquation, 0, 1, fRateOfAcceleration)), 0, fTerminal);
         }
 
-        public static float Deceleration(float CurrentSpeed, float TargetVelocity = 0) {
-            return -((TargetVelocity - CurrentSpeed) / Time.deltaTime);
+        public static float Deceleration(float fCurrentSpeed, float fTargetVelocity = 0) {
+            return -((fTargetVelocity - fCurrentSpeed) / Time.deltaTime);
         }
 
         static float fAR = 0;
 
-        /// <param name="self">The rigidbody to calculate an acceleration rate.</param>
-        /// <param name="Speed">The current speed of the rigidbody.</param>
+        /// <param name="RBSelf">The rigidbody to calculate an acceleration rate.</param>
+        /// <param name="fSpeed">The current speed of the rigidbody.</param>
         /// <returns>The float rate of movement in metres per second.</returns>
-        public static float AccelerationRate(Rigidbody self, float Speed) {
-            float a = self.velocity.magnitude - Speed / Time.deltaTime;
+        public static float AccelerationRate(Rigidbody RBSelf, float fSpeed) {
+            float a = RBSelf.velocity.magnitude - fSpeed / Time.deltaTime;
             float fAccelerationRate = (a - fAR) * -1;
             fAR = a;
             return fAccelerationRate;
         }
 
-        /// <param name="self">The Rigidbody to read a speed from.</param>
-        /// <param name="unit">The desired unit of measurement.</param>
+        /// <param name="RBSelf">The Rigidbody to read a speed from.</param>
+        /// <param name="UUnit">The desired unit of measurement.</param>
         /// <returns>A speed reading from self in unit of measurement.</returns>
-        public static float Speed(Rigidbody self, Units unit = Units.MetresPerSecond) {
-            float speed = self.velocity.magnitude;
+        public static float Speed(Rigidbody RBSelf, Units UUnit = Units.MetresPerSecond) {
+            float speed = RBSelf.velocity.magnitude;
 
-            switch (unit) {
+            switch (UUnit) {
                 case Units.MetresPerSecond:
                     Debug.LogWarning("Use 'self.velocity.magnitude' instead.");
                     return speed;
@@ -120,70 +120,70 @@ namespace MW.MWPhysics {
                 case Units.MilesPerSecond:
                     return speed * 1609.34f;
                 default:
-                    Debug.LogWarning("Failed to convert speed to: " + nameof(unit) + "\nReturning metres per second.");
+                    Debug.LogWarning("Failed to convert speed to: " + nameof(UUnit) + "\nReturning metres per second.");
                     return speed;
             }
         }
 
         /// <summary>The direction of natural air resistance.</summary>
-        /// <param name="self">The rigidbody to apply air resistance to.</param>
-        public static Vector3 AirResitance(Rigidbody self) {
-            return -(.5f * Speed(self) * Speed(self) * self.drag * self.velocity.normalized);
+        /// <param name="RBSelf">The rigidbody to apply air resistance to.</param>
+        public static Vector3 AirResitance(Rigidbody RBSelf) {
+            return -(.5f * Speed(RBSelf) * Speed(RBSelf) * RBSelf.drag * RBSelf.velocity.normalized);
         }
 
         /// <summary>Interpolates between origin and destination using equation in duration.</summary>
-        /// <param name="equation">The equation to use to interpolate.</param>
-        /// <param name="origin">The origin of the interpolation.</param>
-        /// <param name="destination">The destination of this interpolation.</param>
-        /// <param name="duration">The duration of the interpolation.</param>
-        /// <param name="start">The starting value of equation.</param>
-        /// <param name="final">The final value of equation.</param>
-        public static void V3Interpolate(Equation equation, Vector3 origin, Vector3 destination, float duration, float start = 0, float final = 1) {
-            Vector3.Lerp(origin, destination, Interpolate.Ease(equation, start, final, duration));
+        /// <param name="EEquation">The equation to use to interpolate.</param>
+        /// <param name="vOrigin">The origin of the interpolation.</param>
+        /// <param name="vDestination">The destination of this interpolation.</param>
+        /// <param name="fDuration">The duration of the interpolation.</param>
+        /// <param name="fStart">The starting value of equation.</param>
+        /// <param name="fFinal">The final value of equation.</param>
+        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination, float fDuration, float fStart = 0, float fFinal = 1) {
+            Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, fStart, fFinal, fDuration));
         }
 
         /// <summary>Interpolates between origin and destination using equation.</summary>
-        /// <param name="equation">The equation to use to interpolate.</param>
-        /// <param name="origin">The origin of the interpolation.</param>
-        /// <param name="destination">The destination of this interpolation.</param>
-        /// <param name="start">The starting value of equation.</param>
-        /// <param name="final">The final value of equation.</param>
-        public static void V3Interpolate(Equation equation, Vector3 origin, Vector3 destination, float start = 0, float final = 1) {
-            Vector3.Lerp(origin, destination, Interpolate.Ease(equation, start, final, 1));
+        /// <param name="EEquation">The equation to use to interpolate.</param>
+        /// <param name="vOrigin">The origin of the interpolation.</param>
+        /// <param name="vDestination">The destination of this interpolation.</param>
+        /// <param name="fStart">The starting value of equation.</param>
+        /// <param name="fFinal">The final value of equation.</param>
+        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination, float fStart = 0, float fFinal = 1) {
+            Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, fStart, fFinal, 1));
         }
 
         /// <summary>Interpolates between origin and destination.</summary>
-        /// <param name="equation">The equation to use for interpolation.</param>
-        /// <param name="origin">The origin of the interpolation.</param>
-        /// <param name="destination">The destination of this interpolation.</param>
-        public static void V3Interpolate(Equation equation, Vector3 origin, Vector3 destination) {
-            Vector3.Lerp(origin, destination, Interpolate.Ease(equation, 0, 1, .3f));
+        /// <param name="EEquation">The equation to use for interpolation.</param>
+        /// <param name="vOrigin">The origin of the interpolation.</param>
+        /// <param name="vDestination">The destination of this interpolation.</param>
+        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination) {
+            Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, 0, 1, .3f));
         }
 
         /// <summary>Interpolates between origin and destination at a constant rate.</summary>
-        /// <param name="origin">The origin of the interpolation.</param>
-        /// <param name="destination">The destination of this interpolation.</param>
-        public static void V3Interpolate(Vector3 origin, Vector3 destination) {
-            Vector3.Lerp(origin, destination, Time.deltaTime);
+        /// <param name="vOrigin">The origin of the interpolation.</param>
+        /// <param name="vDestination">The destination of this interpolation.</param>
+        public static void V3Interpolate(Vector3 vOrigin, Vector3 vDestination) {
+            Vector3.Lerp(vOrigin, vDestination, Time.deltaTime);
         }
 
 
         /// <summary>The direction in which to avoid colliding with obstacles.</summary>
-        /// <param name="self">The transform wanting to avoid collisions.</param>
-        /// <param name="angle">The angle to search for potential collisions.</param>
-        /// <param name="searchDistance">The distance to search for collisions.</param>
-        /// <param name="obstacles">The layer to avoid colliding with.</param>
-        /// <param name="debug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
-        public static Vector3 CollisionAvoidance(Transform self, float angle, float searchDistance, LayerMask obstacles, bool debug) {
-            Collider[] colliders = Physics.OverlapSphere(self.position, searchDistance, obstacles);
+        /// <param name="TSelf">The transform wanting to avoid collisions.</param>
+        /// <param name="fAngle">The angle to search for potential collisions.</param>
+        /// <param name="fSearchDistance">The distance to search for collisions.</param>
+        /// <param name="lmObstacles">The layer to avoid colliding with.</param>
+        /// <param name="bDebug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
+        public static Vector3 CollisionAvoidance(Transform TSelf, float fAngle, float fSearchDistance, LayerMask lmObstacles, bool bDebug) {
+            Collider[] colliders = Physics.OverlapSphere(TSelf.position, fSearchDistance, lmObstacles);
 
             float min = float.MaxValue;
-            Vector3 dir = self.forward;
+            Vector3 dir = TSelf.forward;
 
             for (int i = 0; i < colliders.Length; i++) {
-                Vector3 closestPoint = colliders[i].ClosestPoint(self.position);
-                if (General.Generic.InFOV(Direction.forward, self, closestPoint, angle)) {
-                    float distance = Vector3.Distance(self.position, closestPoint);
+                Vector3 closestPoint = colliders[i].ClosestPoint(TSelf.position);
+                if (General.Generic.InFOV(Direction.forward, TSelf, closestPoint, fAngle)) {
+                    float distance = Vector3.Distance(TSelf.position, closestPoint);
                     if (distance < min) {
                         min = distance;
                         dir = closestPoint;
@@ -192,13 +192,13 @@ namespace MW.MWPhysics {
             }
 
 
-            Vector3 flipped = Vector3.Reflect(self.forward, (dir - self.position).normalized);
+            Vector3 flipped = Vector3.Reflect(TSelf.forward, (dir - TSelf.position).normalized);
 
-            Physics.Raycast(self.position, flipped, out RaycastHit hit, 500000f, obstacles);
+            Physics.Raycast(TSelf.position, flipped, out RaycastHit hit, 500000f, lmObstacles);
 
-            if (debug) {
-                Debug.DrawRay(self.position, (dir - self.position).normalized * searchDistance, Color.red);
-                Debug.DrawRay(self.position, (flipped - self.position).normalized, Color.blue);
+            if (bDebug) {
+                Debug.DrawRay(TSelf.position, (dir - TSelf.position).normalized * fSearchDistance, Color.red);
+                Debug.DrawRay(TSelf.position, (flipped - TSelf.position).normalized, Color.blue);
             }
 
             return hit.point;

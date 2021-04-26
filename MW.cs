@@ -58,28 +58,28 @@ namespace MW {
     }
 
     /// <summary>Generates a new pair of two types of values.</summary>
-    /// <typeparam name="T">The type of the first variable to store.</typeparam>
-    /// <typeparam name="Y">The type of the second variable to store.</typeparam>
-    public struct Pair<T, Y> {
-        public T first { get; set; }
-        public Y second { get; set; }
+    /// <typeparam name="T_First">The type of the first variable to store.</typeparam>
+    /// <typeparam name="T_Second">The type of the second variable to store.</typeparam>
+    public struct Pair<T_First, T_Second> {
+        public T_First first { get; set; }
+        public T_Second second { get; set; }
 
-        public Pair(T first, Y second) {
+        public Pair(T_First first, T_Second second) {
             this.first = first;
             this.second = second;
         }
     }
 
     /// <summary>Generates a new variable of three types of values.</summary>
-    /// <typeparam name="T">The type of the first variable to store.</typeparam>
-    /// <typeparam name="Y">The type of the second variable to store.</typeparam>
-    /// <typeparam name="U">The type of the third variable to store.</typeparam>
-    public struct Triple<T, Y, U> {
-        public T first { get; set; }
-        public Y second { get; set; }
-        public U third { get; set; }
+    /// <typeparam name="T_First">The type of the first variable to store.</typeparam>
+    /// <typeparam name="T_Second">The type of the second variable to store.</typeparam>
+    /// <typeparam name="T_Third">The type of the third variable to store.</typeparam>
+    public struct Triple<T_First, T_Second, T_Third> {
+        public T_First first { get; set; }
+        public T_Second second { get; set; }
+        public T_Third third { get; set; }
 
-        public Triple(T first, Y second, U third) {
+        public Triple(T_First first, T_Second second, T_Third third) {
             this.first = first;
             this.second = second;
             this.third = third;
