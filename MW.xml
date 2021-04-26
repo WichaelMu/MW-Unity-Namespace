@@ -4,74 +4,158 @@
         <name>MW</name>
     </assembly>
     <members>
-        <member name="T:MW.Equation">
-            <seealso cref="!:https://easings.net/"/>
+        <member name="T:MW.Audio.Audio">
+            <summary>The Audio controller for in-game sounds.</summary>
         </member>
-        <member name="M:MW.Generic.InFOV(MW.Direction,UnityEngine.Transform,UnityEngine.Transform,System.Single)">
+        <member name="M:MW.Audio.Audio.Initialise(MW.Audio.Sound[])">
+            <summary>Populates the Sounds array to match the settings.</summary>
+        </member>
+        <member name="M:MW.Audio.Audio.Play(System.String)">
+            <summary>Plays sound of name n.</summary>
+            <param name="n">The name of the requested sound to play in capital casing.</param>
+        </member>
+        <member name="M:MW.Audio.Audio.Stop(System.String)">
+            <summary>Stops sound of name n.</summary>
+            <param name="n">The name of the requested sound to stop playing in capital casing.</param>
+        </member>
+        <member name="M:MW.Audio.Audio.StopAll">
+            <summary>Stop every sound in the game.</summary>
+        </member>
+        <member name="M:MW.Audio.Audio.Find(System.String)">
+            <summary>Returns a sound in the Sounds array.</summary>
+            <param name="n">The name of the requested sound.</param>
+            <returns>The sound clip of the requested sound.</returns>
+        </member>
+        <member name="M:MW.Audio.Audio.IsPlaying(System.String)">
+            <summary>Whether or not sound of name n is playing.</summary>
+            <param name="n">The name of the sound to query in capital casing.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Colour255(UnityEngine.Vector3)">
+            <summary>The corresponding colour in RGA using Vector3.</summary>
+            <param name="colour">The RGB/XYZ channel values, respectively.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Colour255(System.Int32,System.Int32,System.Int32)">
+            <summary>The corresponding colour from 0 - 255 in RGB.</summary>
+            <param name="r">The red value.</param>
+            <param name="g">The green value.</param>
+            <param name="b">The blue value.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Colour255(System.Single,System.Single,System.Single)">
+            <summary>The corresponding colour from 0 - 255 in RGB.</summary>
+            <param name="r">The red value.</param>
+            <param name="g">The green value.</param>
+            <param name="b">The blue value.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Colour255(UnityEngine.Vector4)">
+            <summary>The corresponding colour in RGBA using Vector4.</summary>
+            <param name="colour">The RGBA/XYZW channel values, respectivaly.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Colour255(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
+            <param name="r">The red value.</param>
+            <param name="g">The green value.</param>
+            <param name="b">The blue value.</param>
+            <param name="a">The alpha value.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Colour255(System.Single,System.Single,System.Single,System.Single)">
+            <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
+            <param name="r">The red value.</param>
+            <param name="g">The green value.</param>
+            <param name="b">The blue value.</param>
+            <param name="a">The alpha value.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.ColourHex(System.String)">
+            <summary>Converts a hexadecimal to its corresponding colour.</summary>
+             <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.ColourHex(System.String,System.Single)">
+            <summary>The corresponding hexadecimal and alpha colour.</summary>
+            <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+            <param name="alpha">The float alpha.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.ColourHex(System.String,System.String)">
+            <summary>The corresponding hexadecimal colour and hexadecimal alpha.</summary>
+            <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+            <param name="alpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Direction(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>The normalised direction to to, relative to from.</summary>
+            <param name="from">The Vector3 seeking a direction to to.</param>
+            <param name="to">The direction to look at.</param>
+        </member>
+        <member name="M:MW.Conversion.Conversion.Direction(UnityEngine.Vector2,UnityEngine.Vector2)">
+            <summary>The normalised direction to to, relative to from.</summary>
+            <param name="from">The Vector3 seeking a direction to to.</param>
+            <param name="to">The direction to look at.</param>
+        </member>
+        <member name="F:MW.General.Generic.k1To255RGB">
+            <summary>The ratio between 1 and 255.</summary>
+        </member>
+        <member name="M:MW.General.Generic.InFOV(MW.Direction,UnityEngine.Transform,UnityEngine.Transform,System.Single)">
             <summary>If self can see target within SearchAngle degrees while facing face.</summary>
             <param name="face">The direction self is facing.</param>
             <param name="self">The transform searching for target.</param>
             <param name="target">The transform to look out for.</param>
             <param name="SearchAngle">The maximum degrees to search for target.</param>
         </member>
-        <member name="M:MW.Generic.InFOV(MW.Direction,UnityEngine.Transform,UnityEngine.Vector3,System.Single)">
+        <member name="M:MW.General.Generic.InFOV(MW.Direction,UnityEngine.Transform,UnityEngine.Vector3,System.Single)">
             <summary>If self can see target within SearchAngle degrees while facing face.</summary>
             <param name="face">The direction self is facing.</param>
             <param name="self">The transform searching for target.</param>
             <param name="target">The position to look out for.</param>
             <param name="SearchAngle">The maximum degrees to search for target.</param>
         </member>
-        <member name="M:MW.Generic.LineOfSight(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.LayerMask)">
+        <member name="M:MW.General.Generic.LineOfSight(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.LayerMask)">
             <summary>If self has a line of sight to to.</summary>
             <param name="self">The position to look from.</param>
             <param name="to">The position to look to.</param>
             <param name="obstacles">The obstacles to consider obtrusive.</param>
         </member>
-        <member name="M:MW.Generic.LineOfSight(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.General.Generic.LineOfSight(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>If self has a line of sight to to.</summary>
         </member>
-        <member name="M:MW.Generic.RoundToDP(System.Single,System.Int32)">
+        <member name="M:MW.General.Generic.RoundToDP(System.Single,System.Int32)">
             <summary>The fValue rounded to dp decimal places.</summary>
              <param name="fValue">The value to be rounded.</param>
              <param name="dp">The decimal places to be included.</param>
         </member>
-        <member name="M:MW.Generic.FlipFlop(System.Boolean@)">
+        <member name="M:MW.General.Generic.FlipFlop(System.Boolean@)">
             <summary>Flip-Flops Bool.</summary>
             <param name="Bool"></param>
         </member>
-        <member name="M:MW.Generic.FlipFlop(System.Boolean@,System.Action,System.Action)">
+        <member name="M:MW.General.Generic.FlipFlop(System.Boolean@,System.Action,System.Action)">
             <summary>Flip-Flops Bool.</summary>
             <param name="Bool"></param>
             <param name="callbackTrue">The method to call if the flip-flop is true.</param>
             <param name="callbackFalse">The method to call if the flip-flop is false.</param>
         </member>
-        <member name="M:MW.Generic.IsWithin(System.Single,System.Single,System.Single)">
+        <member name="M:MW.General.Generic.IsWithin(System.Single,System.Single,System.Single)">
             <summary>If value is within the +- limit of from.</summary>
             <param name="value">The value to check.</param>
             <param name="from">The value to compare.</param>
             <param name="limit">The limits to consider.</param>
         </member>
-        <member name="M:MW.Generic.Max(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.General.Generic.Max(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>The largest vector between L and R, according to magnitude.</summary>
             <param name="L"></param>
             <param name="R"></param>
         </member>
-        <member name="M:MW.Generic.Min(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.General.Generic.Min(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>The smallest vector vector between L and R, according to magnitude.</summary>
             <param name="L"></param>
             <param name="R"></param>
         </member>
-        <member name="M:MW.Generic.Fibonacci(System.Int32)">
+        <member name="M:MW.General.Generic.Fibonacci(System.Int32)">
             <summary>Returns the n'th Fibonacci number.</summary>
             <param name="n"></param>
         </member>
-        <member name="M:MW.Generic.GenerateEqualSphere(System.Int32,System.Single)">
+        <member name="M:MW.General.Generic.GenerateEqualSphere(System.Int32,System.Single)">
             <summary>Generates spherical points with an equal distribution.</summary>
             <param name="resolution">The number of points to generate.</param>
             <param name="goldenRationModifier">Adjusts the golden ratio.</param>
             <returns>The Vector3[] points for the sphere.</returns>
         </member>
-        <member name="M:MW.Generic.Bridge(UnityEngine.Vector3,UnityEngine.Vector3,System.Int32,System.Single)">
+        <member name="M:MW.General.Generic.Bridge(UnityEngine.Vector3,UnityEngine.Vector3,System.Int32,System.Single)">
             <summary>Generates the points to 'bridge' origin and target together at a height as an arc.</summary>
             <param name="origin">The starting point of the bridge.</param>
             <param name="target">The ending point of the bridge.</param>
@@ -79,245 +163,7 @@
             <param name="height">The maximum height of the bridge.</param>
             <returns>The Vector3[] points for the bridge.</returns>
         </member>
-        <member name="M:MW.Conversion.Colour255(UnityEngine.Vector3)">
-            <summary>The corresponding colour in RGA using Vector3.</summary>
-            <param name="colour">The RGB/XYZ channel values, respectively.</param>
-        </member>
-        <member name="M:MW.Conversion.Colour255(System.Int32,System.Int32,System.Int32)">
-            <summary>The corresponding colour from 0 - 255 in RGB.</summary>
-            <param name="r">The red value.</param>
-            <param name="g">The green value.</param>
-            <param name="b">The blue value.</param>
-        </member>
-        <member name="M:MW.Conversion.Colour255(System.Single,System.Single,System.Single)">
-            <summary>The corresponding colour from 0 - 255 in RGB.</summary>
-            <param name="r">The red value.</param>
-            <param name="g">The green value.</param>
-            <param name="b">The blue value.</param>
-        </member>
-        <member name="M:MW.Conversion.Colour255(UnityEngine.Vector4)">
-            <summary>The corresponding colour in RGBA using Vector4.</summary>
-            <param name="colour">The RGBA/XYZW channel values, respectivaly.</param>
-        </member>
-        <member name="M:MW.Conversion.Colour255(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
-            <param name="r">The red value.</param>
-            <param name="g">The green value.</param>
-            <param name="b">The blue value.</param>
-            <param name="a">The alpha value.</param>
-        </member>
-        <member name="M:MW.Conversion.Colour255(System.Single,System.Single,System.Single,System.Single)">
-            <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
-            <param name="r">The red value.</param>
-            <param name="g">The green value.</param>
-            <param name="b">The blue value.</param>
-            <param name="a">The alpha value.</param>
-        </member>
-        <member name="M:MW.Conversion.ColourHex(System.String)">
-            <summary>Converts a hexadecimal to its corresponding colour.</summary>
-             <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-        </member>
-        <member name="M:MW.Conversion.ColourHex(System.String,System.Single)">
-            <summary>The corresponding hexadecimal and alpha colour.</summary>
-            <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-            <param name="alpha">The float alpha.</param>
-        </member>
-        <member name="M:MW.Conversion.ColourHex(System.String,System.String)">
-            <summary>The corresponding hexadecimal colour and hexadecimal alpha.</summary>
-            <param name="hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-            <param name="alpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
-        </member>
-        <member name="M:MW.Conversion.Direction(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>The normalised direction to to, relative to from.</summary>
-            <param name="from">The Vector3 seeking a direction to to.</param>
-            <param name="to">The direction to look at.</param>
-        </member>
-        <member name="M:MW.Conversion.Direction(UnityEngine.Vector2,UnityEngine.Vector2)">
-            <summary>The normalised direction to to, relative to from.</summary>
-            <param name="from">The Vector3 seeking a direction to to.</param>
-            <param name="to">The direction to look at.</param>
-        </member>
-        <member name="F:MW.Moveable.VelocityRatio">
-            <summary>Convert inspector speed to m/s.</summary>
-        </member>
-        <member name="M:MW.Moveable.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
-            <summary>
-            If the distance between from and to is less than or EqualTo detection.
-            </summary>
-            <param name="from">The reference coordinate to compare.</param>
-            <param name="to">The target coordinate to compare.</param>
-            <param name="distance">The range that is considered if from has 'reached' to.</param>
-            <param name="EqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-            <returns></returns>
-        </member>
-        <member name="M:MW.Moveable.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
-            <summary>
-            If the distance between from and to is less than or EqualTo detection.
-            </summary>
-            <param name="from">The reference coordinate to compare.</param>
-            <param name="to">The target coordinate to compare.</param>
-            <param name="EqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-            <param name="distance">The range that is considered if from has 'reached' to.</param>
-            <returns></returns>
-        </member>
-        <member name="M:MW.Moveable.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
-            <summary>
-            Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
-            </summary>
-            <param name="self">The Rigidbody to move.</param>
-            <param name="target">The Transform destination.</param>
-            <param name="velocity">The rate at which self moves towards target.</param>
-            <param name="TurnRadius">The maximum degrees self can turn towards target.</param>
-        </member>
-        <member name="M:MW.Moveable.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
-            <summary>
-            Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
-            </summary>
-            <param name="self">The Rigidbody to move.</param>
-            <param name="target">The destination coordinates.</param>
-            <param name="velocity">The rate at which self moves towards target.</param>
-            <param name="TurnRadius">The maximum degrees self can turn towards target.</param>
-        </member>
-        <member name="M:MW.Moveable.Acceleration(MW.Equation,System.Single,System.Single,System.Single,System.Single)">
-            <param name="equation">The equation to use to accelerate.</param>
-            <param name="CurrentSpeed">The current speed of the acceleration.</param>
-            <param name="RateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
-            <param name="terminal">The maximum speed.</param>
-            <param name="time">The elapsed time.</param>
-            <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
-        </member>
-        <member name="M:MW.Moveable.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
-            <param name="self">The rigidbody to calculate an acceleration rate.</param>
-            <param name="Speed">The current speed of the rigidbody.</param>
-            <returns>The float rate of movement in metres per second.</returns>
-        </member>
-        <member name="M:MW.Moveable.Speed(UnityEngine.Rigidbody,MW.Units)">
-            <param name="self">The Rigidbody to read a speed from.</param>
-            <param name="unit">The desired unit of measurement.</param>
-            <returns>A speed reading from self in unit of measurement.</returns>
-        </member>
-        <member name="M:MW.Moveable.AirResitance(UnityEngine.Rigidbody)">
-            <summary>The direction of natural air resistance.</summary>
-            <param name="self">The rigidbody to apply air resistance to.</param>
-        </member>
-        <member name="M:MW.Moveable.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
-            <summary>Interpolates between origin and destination using equation in duration.</summary>
-            <param name="equation">The equation to use to interpolate.</param>
-            <param name="origin">The origin of the interpolation.</param>
-            <param name="destination">The destination of this interpolation.</param>
-            <param name="duration">The duration of the interpolation.</param>
-            <param name="start">The starting value of equation.</param>
-            <param name="final">The final value of equation.</param>
-        </member>
-        <member name="M:MW.Moveable.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
-            <summary>Interpolates between origin and destination using equation.</summary>
-            <param name="equation">The equation to use to interpolate.</param>
-            <param name="origin">The origin of the interpolation.</param>
-            <param name="destination">The destination of this interpolation.</param>
-            <param name="start">The starting value of equation.</param>
-            <param name="final">The final value of equation.</param>
-        </member>
-        <member name="M:MW.Moveable.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>Interpolates between origin and destination.</summary>
-            <param name="equation">The equation to use for interpolation.</param>
-            <param name="origin">The origin of the interpolation.</param>
-            <param name="destination">The destination of this interpolation.</param>
-        </member>
-        <member name="M:MW.Moveable.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>Interpolates between origin and destination at a constant rate.</summary>
-            <param name="origin">The origin of the interpolation.</param>
-            <param name="destination">The destination of this interpolation.</param>
-        </member>
-        <member name="M:MW.Moveable.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
-            <summary>The direction in which to avoid colliding with obstacles.</summary>
-            <param name="self">The transform wanting to avoid collisions.</param>
-            <param name="angle">The angle to search for potential collisions.</param>
-            <param name="searchDistance">The distance to search for collisions.</param>
-            <param name="obstacles">The layer to avoid colliding with.</param>
-            <param name="debug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform)">
-            <summary>Have the camera follow target's transform.</summary>
-            <param name="camera">The camera to move.</param>
-            <param name="target">The target's transform component.</param>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform,UnityEngine.Vector3)">
-            <summary>Have the camera to follow target's transform at an offset.</summary>
-            <param name="camera">The camera to move.</param>
-            <param name="target">The target's transform component.</param>
-            <param name="offset">The target's position at an offset.</param>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3)">
-            <summary>Have the camera follow target's position.</summary>
-            <param name="camera">The camera to move.</param>
-            <param name="target">The target's position to follow.</param>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>Have the camera follow target's position at an offset.</summary>
-            <param name="camera">The camera to move.</param>
-            <param name="target">The target's position to follow.</param>
-            <param name="offset">The target's position at an offset.</param>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Transform)">
-            <summary>Have the main camera follow target's transform.</summary>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Transform,UnityEngine.Vector3)">
-            <summary>Have the main camera follow target's transform at an offset.</summary>
-            <param name="target">The target's transform component.</param>
-            <param name="offset">The target's position at an offset.</param>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Vector3)">
-            <summary>Have the main camera follow target's position.</summary>
-        </member>
-        <member name="M:MW.MWCamera.CameraFollow(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>Have the main camera follow target's position at an offset.</summary>
-            <param name="target">The target's position.</param>
-            <param name="offset">The target's position at an offset.</param>
-        </member>
-        <member name="M:MW.MWCamera.Billboard(UnityEngine.Transform)">
-            <summary>Ensures the transform always faces the main camera.</summary>
-            <param name="self">The transform to look towards the main camera.</param>
-        </member>
-        <member name="M:MW.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Camera)">
-            <summary>Ensures the transform always faces camera.</summary>
-            <param name="self">The transform to look towards the camera.</param>
-            <param name="camera">The camera to look at.</param>
-        </member>
-        <member name="M:MW.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Transform)">
-            <summary>Ensures the transform always faces point.</summary>
-            <param name="self">The transform to look towards the point.</param>
-            <param name="point">The transform of where self needs to look towards</param>
-        </member>
-        <member name="M:MW.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Vector3)">
-            <summary>Ensures the transform always faces point.</summary>
-            <param name="self">The transform to look towards the point.</param>
-            <param name="point">The point in world coordinates.</param>
-        </member>
-        <member name="T:MW.IO">
-            <summary>Input/Output.</summary>
-        </member>
-        <member name="M:MW.IO.LeftClick(System.Boolean,System.Boolean)">
-            <param name="Hold">Whether or not to check if this button is held down.</param>
-            <param name="Up">Whether or not to check if this button is released.</param>
-            <returns>If the Left Mouse Button was clicked or Held.</returns>
-        </member>
-        <member name="M:MW.IO.RightClick(System.Boolean,System.Boolean)">
-            <param name="Hold">Whether or not to check if this button is held down.</param>
-            <param name="Up">Whether or not to check if this button is released.</param>
-            <returns>If the Right Mouse Button was clicked or Held.</returns>
-        </member>
-        <member name="M:MW.IO.MiddleClick(System.Boolean,System.Boolean)">
-            <param name="Hold">Whether or not to check if this button is held down.</param>
-            /// <param name="Up">Whether or not to check if this button is released.</param>
-            <returns>If the Middle Mouse Button was clicked or Held.</returns>
-        </member>
-        <member name="M:MW.IO.Key(UnityEngine.KeyCode,System.Boolean,System.Boolean)">
-            <param name="Stroke">The key that was pressed on the keyboard.</param>
-            <param name="Hold">Whether or not to check if this button is held down.</param>
-            <param name="Up">Whether or not to check if this button is released.</param>
-            <returns>If Stroke was pressed or Held.</returns>
-        </member>
-        <member name="M:MW.HUD.DrawLine(UnityEngine.LineRenderer,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,UnityEngine.Material,System.Boolean,System.Int32)">
+        <member name="M:MW.HUD.HUD.DrawLine(UnityEngine.LineRenderer,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,UnityEngine.Material,System.Boolean)">
             <summary>
             Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
             </summary>
@@ -330,9 +176,21 @@
             <param name="offset">The offset to place this line.</param>
             <param name="material">The material used to draw the line.</param>
             <param name="UseWorldSpace">Should this line use world space?</param>
-            <param name="NumberOfSegments">The number of verticies of this line.</param>
         </member>
-        <member name="M:MW.HUD.DrawCircle(UnityEngine.LineRenderer,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,UnityEngine.Material,System.Boolean,System.Int32)">
+        <member name="M:MW.HUD.HUD.DrawLine(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,System.Boolean)">
+            <summary>
+            Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
+            </summary>
+            <param name="self">The GameObject calling this.</param>
+            <param name="from">The coordinates where the line will originate.</param>
+            <param name="to">The coordinates where the line will end.</param>
+            <param name="StartColour">The starting colour gradient for this line.</param>
+            <param name="EndColour">The ending colour gradient for this line.</param>
+            <param name="LineWidth">The thickness of this line.</param>
+            <param name="offset">The offset to place this line.</param>
+            <param name="UseWorldSpace">Should this line use world space?</param>
+        </member>
+        <member name="M:MW.HUD.HUD.DrawCircle(UnityEngine.LineRenderer,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,UnityEngine.Material,System.Boolean,System.Int32)">
             <summary>
             Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
             </summary>
@@ -345,487 +203,63 @@
             <param name="UseWorldSpace">Should this circle use world space?</param>
             <param name="NumberOfSegments">The number of verticies of this circle.</param>
         </member>
-        <member name="M:MW.HUD.ScaleSize(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.HUD.HUD.DrawCircle(UnityEngine.GameObject,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,System.Boolean,System.Int32)">
+            <summary>
+            Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
+            </summary>
+            <param name="self">The GameObject calling this.</param>
+            <param name="around">The centre of the circle to be drawn.</param>
+            <param name="radius">The radius of this circle.</param>
+            <param name="LineColour">The colour of this circle.</param>
+            <param name="LineWidth">The thickness of this circle.</param>
+            <param name="UseWorldSpace">Should this circle use world space?</param>
+            <param name="NumberOfSegments">The number of verticies of this circle.</param>
+        </member>
+        <member name="M:MW.HUD.HUD.ScaleSize(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Scales the canvas element relative to self.</summary>
             <param name="self">The position to scale from.</param>
             <param name="ScaleWith">The position to scale with.</param>
             <returns>The relative scale size in Vector2.</returns>
         </member>
-        <member name="M:MW.Easing.Linear(System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.Equation)">
             <summary>
-            Easing equation function for a simple linear tweening, with no easing.
+            Returns the function associated to the easingFunction enum. This value returned should be cached as it allocates memory
+            to return.
             </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
+            <param name="easingFunction">The enum associated with the easing function.</param>
+            <returns>The easing function</returns>
         </member>
-        <member name="M:MW.Easing.ExpoEaseOut(System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:MW.Easing.Interpolate.GetEasingFunctionDerivative(MW.Equation)">
             <summary>
-            Easing equation function for an exponential (2^t) easing out: 
-            decelerating from zero velocity.
+            Gets the derivative function of the appropriate easing function. If you use an easing function for position then this
+            function can get you the speed at a given time (normalized).
             </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
+            <param name="easingFunction"></param>
+            <returns>The derivative function</returns>
         </member>
-        <member name="M:MW.Easing.ExpoEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an exponential (2^t) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
+        <member name="T:MW.IO.IO">
+            <summary>Input/Output.</summary>
         </member>
-        <member name="M:MW.Easing.ExpoEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an exponential (2^t) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
+        <member name="M:MW.IO.IO.LeftClick(System.Boolean,System.Boolean)">
+            <param name="Hold">Whether or not to check if this button is held down.</param>
+            <param name="Up">Whether or not to check if this button is released.</param>
+            <returns>If the Left Mouse Button was clicked or Held.</returns>
         </member>
-        <member name="M:MW.Easing.ExpoEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an exponential (2^t) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
+        <member name="M:MW.IO.IO.RightClick(System.Boolean,System.Boolean)">
+            <param name="Hold">Whether or not to check if this button is held down.</param>
+            <param name="Up">Whether or not to check if this button is released.</param>
+            <returns>If the Right Mouse Button was clicked or Held.</returns>
         </member>
-        <member name="M:MW.Easing.CircEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a circular (sqrt(1-t^2)) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
+        <member name="M:MW.IO.IO.MiddleClick(System.Boolean,System.Boolean)">
+            <param name="Hold">Whether or not to check if this button is held down.</param>
+            /// <param name="Up">Whether or not to check if this button is released.</param>
+            <returns>If the Middle Mouse Button was clicked or Held.</returns>
         </member>
-        <member name="M:MW.Easing.CircEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a circular (sqrt(1-t^2)) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.CircEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a circular (sqrt(1-t^2)) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.CircEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a circular (sqrt(1-t^2)) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuadEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quadratic (t^2) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuadEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quadratic (t^2) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuadEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quadratic (t^2) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuadEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quadratic (t^2) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.SineEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a sinusoidal (sin(t)) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.SineEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a sinusoidal (sin(t)) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.SineEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a sinusoidal (sin(t)) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.SineEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a sinusoidal (sin(t)) easing in/out: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.CubicEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a cubic (t^3) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.CubicEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a cubic (t^3) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.CubicEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a cubic (t^3) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.CubicEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a cubic (t^3) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuartEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quartic (t^4) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuartEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quartic (t^4) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuartEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quartic (t^4) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuartEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quartic (t^4) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuintEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quintic (t^5) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuintEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quintic (t^5) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuintEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quintic (t^5) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.QuintEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a quintic (t^5) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.ElasticEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an elastic (exponentially decaying sine wave) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.ElasticEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an elastic (exponentially decaying sine wave) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.ElasticEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an elastic (exponentially decaying sine wave) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.ElasticEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for an elastic (exponentially decaying sine wave) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BounceEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BounceEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BounceEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BounceEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BackEaseOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out: 
-            decelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BackEaseIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in: 
-            accelerating from zero velocity.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BackEaseInOut(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in/out: 
-            acceleration until halfway, then deceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="M:MW.Easing.BackEaseOutIn(System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out/in: 
-            deceleration until halfway, then acceleration.
-            </summary>
-            <param name="t">Current time in seconds.</param>
-            <param name="b">Starting value.</param>
-            <param name="c">Final value.</param>
-            <param name="d">Duration of animation.</param>
-            <returns>The correct value.</returns>
-        </member>
-        <member name="T:MW.Audio">
-            <summary>The Audio controller for in-game sounds.</summary>
-        </member>
-        <member name="M:MW.Audio.Initialise(MW.Sound[])">
-            <summary>Populates the Sounds array to match the settings.</summary>
-        </member>
-        <member name="M:MW.Audio.Play(System.String)">
-            <summary>Plays sound of name n.</summary>
-            <param name="n">The name of the requested sound to play in capital casing.</param>
-        </member>
-        <member name="M:MW.Audio.Stop(System.String)">
-            <summary>Stops sound of name n.</summary>
-            <param name="n">The name of the requested sound to stop playing in capital casing.</param>
-        </member>
-        <member name="M:MW.Audio.StopAll">
-            <summary>Stop every sound in the game.</summary>
-        </member>
-        <member name="M:MW.Audio.Find(System.String)">
-            <summary>Returns a sound in the Sounds array.</summary>
-            <param name="n">The name of the requested sound.</param>
-            <returns>The sound clip of the requested sound.</returns>
-        </member>
-        <member name="M:MW.Audio.IsPlaying(System.String)">
-            <summary>Whether or not sound of name n is playing.</summary>
-            <param name="n">The name of the sound to query in capital casing.</param>
+        <member name="M:MW.IO.IO.Key(UnityEngine.KeyCode,System.Boolean,System.Boolean)">
+            <param name="Stroke">The key that was pressed on the keyboard.</param>
+            <param name="Hold">Whether or not to check if this button is held down.</param>
+            <param name="Up">Whether or not to check if this button is released.</param>
+            <returns>If Stroke was pressed or Held.</returns>
         </member>
         <member name="T:MW.Pair`2">
             <summary>Generates a new pair of two types of values.</summary>
@@ -837,6 +271,162 @@
             <typeparam name="T">The type of the first variable to store.</typeparam>
             <typeparam name="Y">The type of the second variable to store.</typeparam>
             <typeparam name="U">The type of the third variable to store.</typeparam>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform)">
+            <summary>Have the camera follow target's transform.</summary>
+            <param name="camera">The camera to move.</param>
+            <param name="target">The target's transform component.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform,UnityEngine.Vector3)">
+            <summary>Have the camera to follow target's transform at an offset.</summary>
+            <param name="camera">The camera to move.</param>
+            <param name="target">The target's transform component.</param>
+            <param name="offset">The target's position at an offset.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3)">
+            <summary>Have the camera follow target's position.</summary>
+            <param name="camera">The camera to move.</param>
+            <param name="target">The target's position to follow.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>Have the camera follow target's position at an offset.</summary>
+            <param name="camera">The camera to move.</param>
+            <param name="target">The target's position to follow.</param>
+            <param name="offset">The target's position at an offset.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Transform)">
+            <summary>Have the main camera follow target's transform.</summary>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Transform,UnityEngine.Vector3)">
+            <summary>Have the main camera follow target's transform at an offset.</summary>
+            <param name="target">The target's transform component.</param>
+            <param name="offset">The target's position at an offset.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Vector3)">
+            <summary>Have the main camera follow target's position.</summary>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>Have the main camera follow target's position at an offset.</summary>
+            <param name="target">The target's position.</param>
+            <param name="offset">The target's position at an offset.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform)">
+            <summary>Ensures the transform always faces the main camera.</summary>
+            <param name="self">The transform to look towards the main camera.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Camera)">
+            <summary>Ensures the transform always faces camera.</summary>
+            <param name="self">The transform to look towards the camera.</param>
+            <param name="camera">The camera to look at.</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Transform)">
+            <summary>Ensures the transform always faces point.</summary>
+            <param name="self">The transform to look towards the point.</param>
+            <param name="point">The transform of where self needs to look towards</param>
+        </member>
+        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Vector3)">
+            <summary>Ensures the transform always faces point.</summary>
+            <param name="self">The transform to look towards the point.</param>
+            <param name="point">The point in world coordinates.</param>
+        </member>
+        <member name="F:MW.MWPhysics.MWPhysics.VelocityRatio">
+            <summary>Convert inspector speed to m/s.</summary>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
+            <summary>
+            If the distance between from and to is less than or EqualTo detection.
+            </summary>
+            <param name="from">The reference coordinate to compare.</param>
+            <param name="to">The target coordinate to compare.</param>
+            <param name="distance">The range that is considered if from has 'reached' to.</param>
+            <param name="EqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
+            <summary>
+            If the distance between from and to is less than or EqualTo detection.
+            </summary>
+            <param name="from">The reference coordinate to compare.</param>
+            <param name="to">The target coordinate to compare.</param>
+            <param name="EqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
+            <param name="distance">The range that is considered if from has 'reached' to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
+            <summary>
+            Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
+            </summary>
+            <param name="self">The Rigidbody to move.</param>
+            <param name="target">The Transform destination.</param>
+            <param name="velocity">The rate at which self moves towards target.</param>
+            <param name="TurnRadius">The maximum degrees self can turn towards target.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
+            <summary>
+            Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
+            </summary>
+            <param name="self">The Rigidbody to move.</param>
+            <param name="target">The destination coordinates.</param>
+            <param name="velocity">The rate at which self moves towards target.</param>
+            <param name="TurnRadius">The maximum degrees self can turn towards target.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.Acceleration(MW.Equation,System.Single,System.Single,System.Single,System.Single)">
+            <param name="equation">The equation to use to accelerate.</param>
+            <param name="CurrentSpeed">The current speed of the acceleration.</param>
+            <param name="RateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
+            <param name="terminal">The maximum speed.</param>
+            <param name="time">The elapsed time.</param>
+            <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
+            <param name="self">The rigidbody to calculate an acceleration rate.</param>
+            <param name="Speed">The current speed of the rigidbody.</param>
+            <returns>The float rate of movement in metres per second.</returns>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.Speed(UnityEngine.Rigidbody,MW.Units)">
+            <param name="self">The Rigidbody to read a speed from.</param>
+            <param name="unit">The desired unit of measurement.</param>
+            <returns>A speed reading from self in unit of measurement.</returns>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.AirResitance(UnityEngine.Rigidbody)">
+            <summary>The direction of natural air resistance.</summary>
+            <param name="self">The rigidbody to apply air resistance to.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
+            <summary>Interpolates between origin and destination using equation in duration.</summary>
+            <param name="equation">The equation to use to interpolate.</param>
+            <param name="origin">The origin of the interpolation.</param>
+            <param name="destination">The destination of this interpolation.</param>
+            <param name="duration">The duration of the interpolation.</param>
+            <param name="start">The starting value of equation.</param>
+            <param name="final">The final value of equation.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
+            <summary>Interpolates between origin and destination using equation.</summary>
+            <param name="equation">The equation to use to interpolate.</param>
+            <param name="origin">The origin of the interpolation.</param>
+            <param name="destination">The destination of this interpolation.</param>
+            <param name="start">The starting value of equation.</param>
+            <param name="final">The final value of equation.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>Interpolates between origin and destination.</summary>
+            <param name="equation">The equation to use for interpolation.</param>
+            <param name="origin">The origin of the interpolation.</param>
+            <param name="destination">The destination of this interpolation.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>Interpolates between origin and destination at a constant rate.</summary>
+            <param name="origin">The origin of the interpolation.</param>
+            <param name="destination">The destination of this interpolation.</param>
+        </member>
+        <member name="M:MW.MWPhysics.MWPhysics.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
+            <summary>The direction in which to avoid colliding with obstacles.</summary>
+            <param name="self">The transform wanting to avoid collisions.</param>
+            <param name="angle">The angle to search for potential collisions.</param>
+            <param name="searchDistance">The distance to search for collisions.</param>
+            <param name="obstacles">The layer to avoid colliding with.</param>
+            <param name="debug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
         </member>
     </members>
 </doc>
