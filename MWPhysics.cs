@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using MW.Easing;
+using MW.General;
 
 namespace MW.MWPhysics {
 
 
-    public static class MWPhysics {
+    public static class Kinematics {
         /// <summary>Convert inspector speed to m/s.</summary>
-        public const int VelocityRatio = 50;
+        public const int kVelocityRatio = 50;
 
         /// <summary>
         /// If the distance between from and to is less than or EqualTo detection.
@@ -63,15 +64,17 @@ namespace MW.MWPhysics {
             RBSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
             RBSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(vTarget - _self.position, _self.up), fTurnRadius));
         }
+    }
+
+    public static class Mathematics {
 
         /// <param name="EEquation">The equation to use to accelerate.</param>
         /// <param name="fCurrentSpeed">The current speed of the acceleration.</param>
         /// <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
         /// <param name="fTerminal">The maximum speed.</param>
-        /// <param name="time">The elapsed time.</param>
         /// <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
         public static float Acceleration(Equation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal) {
-            fTerminal *= VelocityRatio;
+            fTerminal *= Kinematics.kVelocityRatio;
 
             if (fRateOfAcceleration == 0)
                 Debug.LogError(nameof(fRateOfAcceleration) + " cannot be zero");
@@ -102,9 +105,6 @@ namespace MW.MWPhysics {
             float speed = RBSelf.velocity.magnitude;
 
             switch (UUnit) {
-                case Units.MetresPerSecond:
-                    Debug.LogWarning("Use 'self.velocity.magnitude' instead.");
-                    return speed;
                 case Units.KilometrsePerHour:
                     return speed * 3.6f;
                 case Units.MilesPerHour:
@@ -119,18 +119,44 @@ namespace MW.MWPhysics {
                     return speed * 11811.02362f;
                 case Units.MilesPerSecond:
                     return speed * 1609.34f;
+                case Units.MetresPerSecond:
+                    Debug.LogWarning("Use 'RBSelf.velocity.magnitude' instead.");
+                    return speed;
                 default:
                     Debug.LogWarning("Failed to convert speed to: " + nameof(UUnit) + "\nReturning metres per second.");
                     return speed;
             }
         }
 
+        /// <summary>The direction to intercept RBTarget relative to RBSelf.</summary>
+        /// <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
+        /// <param name="RBTarget">The Rigidbody to predict.</param>
+        public static Vector3 PredictiveProjectile(Rigidbody RBSelf, Rigidbody RBTarget) {
+            //  The approximate conversion from velocity in an rb.AddForce is the 2/3 of the force being applied.
+
+            //  At a velocity of 950, the cannon travels at ~633 m/s.
+            //  ~2279 kmph.
+
+            float fSecondsPerKM = 1000 / (RBSelf.velocity.magnitude * Generic.kTwoThirds);
+
+            //  Distance between the RBSelf and RBTarget in thousands.
+            float fDistanceBetweenPlayer = Vector3.Distance(RBSelf.position, RBTarget.position) * Generic.kThousandth;
+
+            Vector3 vForwardPrediction = RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer;
+
+            return vForwardPrediction;
+        }
+    }
+
+    public static class Aerodynamics {
         /// <summary>The direction of natural air resistance.</summary>
         /// <param name="RBSelf">The rigidbody to apply air resistance to.</param>
         public static Vector3 AirResitance(Rigidbody RBSelf) {
-            return -(.5f * Speed(RBSelf) * Speed(RBSelf) * RBSelf.drag * RBSelf.velocity.normalized);
+            return -(.5f * Mathematics.Speed(RBSelf) * Mathematics.Speed(RBSelf) * RBSelf.drag * RBSelf.velocity.normalized);
         }
+    }
 
+    public static class PhysicsInterpolation {
         /// <summary>Interpolates between origin and destination using equation in duration.</summary>
         /// <param name="EEquation">The equation to use to interpolate.</param>
         /// <param name="vOrigin">The origin of the interpolation.</param>
@@ -167,6 +193,9 @@ namespace MW.MWPhysics {
             Vector3.Lerp(vOrigin, vDestination, Time.deltaTime);
         }
 
+    }
+
+    public static class Miscellanous {
 
         /// <summary>The direction in which to avoid colliding with obstacles.</summary>
         /// <param name="TSelf">The transform wanting to avoid collisions.</param>
@@ -182,7 +211,7 @@ namespace MW.MWPhysics {
 
             for (int i = 0; i < colliders.Length; i++) {
                 Vector3 closestPoint = colliders[i].ClosestPoint(TSelf.position);
-                if (General.Generic.InFOV(Direction.forward, TSelf, closestPoint, fAngle)) {
+                if (Generic.InFOV(Direction.forward, TSelf, closestPoint, fAngle)) {
                     float distance = Vector3.Distance(TSelf.position, closestPoint);
                     if (distance < min) {
                         min = distance;

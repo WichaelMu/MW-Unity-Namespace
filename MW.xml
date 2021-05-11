@@ -4,89 +4,105 @@
         <name>MW</name>
     </assembly>
     <members>
-        <member name="T:MW.Audio.Audio">
+        <member name="T:MW.Audio.AudioControl">
             <summary>The Audio controller for in-game sounds.</summary>
         </member>
-        <member name="M:MW.Audio.Audio.Initialise(MW.Audio.Sound[])">
+        <member name="M:MW.Audio.AudioControl.Initialise(MW.Audio.Sound[])">
             <summary>Populates the Sounds array to match the settings.</summary>
         </member>
-        <member name="M:MW.Audio.Audio.Play(System.String)">
+        <member name="M:MW.Audio.AudioControl.Play(System.String)">
             <summary>Plays sound of name n.</summary>
             <param name="sName">The name of the requested sound to play in capital casing.</param>
         </member>
-        <member name="M:MW.Audio.Audio.Stop(System.String)">
+        <member name="M:MW.Audio.AudioControl.Stop(System.String)">
             <summary>Stops sound of name n.</summary>
             <param name="sName">The name of the requested sound to stop playing in capital casing.</param>
         </member>
-        <member name="M:MW.Audio.Audio.StopAll">
+        <member name="M:MW.Audio.AudioControl.StopAll">
             <summary>Stop every sound in the game.</summary>
         </member>
-        <member name="M:MW.Audio.Audio.Find(System.String)">
+        <member name="M:MW.Audio.AudioControl.Find(System.String)">
             <summary>Returns a sound in the Sounds array.</summary>
             <param name="n">The name of the requested sound.</param>
             <returns>The sound clip of the requested sound.</returns>
         </member>
-        <member name="M:MW.Audio.Audio.IsPlaying(System.String)">
+        <member name="M:MW.Audio.AudioControl.IsPlaying(System.String)">
             <summary>Whether or not sound of name n is playing.</summary>
             <param name="sName">The name of the sound to query in capital casing.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Colour255(UnityEngine.Vector3)">
+        <member name="M:MW.Conversion.Colour.Colour255(UnityEngine.Vector3)">
             <summary>The corresponding colour in RGA using Vector3.</summary>
             <param name="vColour">The RGB/XYZ channel values, respectively.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Colour255(System.Int32,System.Int32,System.Int32)">
+        <member name="M:MW.Conversion.Colour.Colour255(System.Int32,System.Int32,System.Int32)">
             <summary>The corresponding colour from 0 - 255 in RGB.</summary>
             <param name="r">The red value.</param>
             <param name="g">The green value.</param>
             <param name="b">The blue value.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Colour255(System.Single,System.Single,System.Single)">
+        <member name="M:MW.Conversion.Colour.Colour255(System.Single,System.Single,System.Single)">
             <summary>The corresponding colour from 0 - 255 in RGB.</summary>
             <param name="r">The red value.</param>
             <param name="g">The green value.</param>
             <param name="b">The blue value.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Colour255(UnityEngine.Vector4)">
+        <member name="M:MW.Conversion.Colour.Colour255(UnityEngine.Vector4)">
             <summary>The corresponding colour in RGBA using Vector4.</summary>
             <param name="v4Colour">The RGBA/XYZW channel values, respectivaly.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Colour255(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:MW.Conversion.Colour.Colour255(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
             <param name="r">The red value.</param>
             <param name="g">The green value.</param>
             <param name="b">The blue value.</param>
             <param name="a">The alpha value.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Colour255(System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:MW.Conversion.Colour.Colour255(System.Single,System.Single,System.Single,System.Single)">
             <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
             <param name="r">The red value.</param>
             <param name="g">The green value.</param>
             <param name="b">The blue value.</param>
             <param name="a">The alpha value.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.ColourHex(System.String)">
+        <member name="M:MW.Conversion.Colour.ColourHex(System.String)">
             <summary>Converts a hexadecimal to its corresponding colour.</summary>
              <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.ColourHex(System.String,System.Single)">
+        <member name="M:MW.Conversion.Colour.ColourHex(System.String,System.Single)">
             <summary>The corresponding hexadecimal and alpha colour.</summary>
             <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
             <param name="fAlpha">The float alpha.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.ColourHex(System.String,System.String)">
+        <member name="M:MW.Conversion.Colour.ColourHex(System.String,System.String)">
             <summary>The corresponding hexadecimal colour and hexadecimal alpha.</summary>
             <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
             <param name="sAlpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Direction(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.Conversion.Bearing.Direction(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>The normalised direction to to, relative to from.</summary>
             <param name="vFrom">The Vector3 seeking a direction to to.</param>
             <param name="vTo">The direction to look at.</param>
         </member>
-        <member name="M:MW.Conversion.Conversion.Direction(UnityEngine.Vector2,UnityEngine.Vector2)">
+        <member name="M:MW.Conversion.Bearing.Direction(UnityEngine.Vector2,UnityEngine.Vector2)">
             <summary>The normalised direction to to, relative to from.</summary>
             <param name="vFrom">The Vector3 seeking a direction to to.</param>
             <param name="vTo">The direction to look at.</param>
+        </member>
+        <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.Equation)">
+            <summary>
+            Returns the function associated to the easingFunction enum. This fValue returned should be cached as it allocates memory
+            to return.
+            </summary>
+            <param name="EEasingFunction">The enum associated with the easing function.</param>
+            <returns>The easing function</returns>
+        </member>
+        <member name="M:MW.Easing.Interpolate.GetEasingFunctionDerivative(MW.Equation)">
+            <summary>
+            Gets the derivative function of the appropriate easing function. If you use an easing function for position then this
+            function can get you the speed at a given time (normalized).
+            </summary>
+            <param name="easingFunction"></param>
+            <returns>The derivative function</returns>
         </member>
         <member name="F:MW.General.Generic.k1To255RGB">
             <summary>The ratio between 1 and 255.</summary>
@@ -163,7 +179,7 @@
             <param name="fHeight">The maximum height of the bridge.</param>
             <returns>The Vector3[] points for the bridge.</returns>
         </member>
-        <member name="M:MW.HUD.HUD.DrawLine(UnityEngine.LineRenderer,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,UnityEngine.Material,System.Boolean)">
+        <member name="M:MW.HUD.Draw.DrawLine(UnityEngine.LineRenderer,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,UnityEngine.Material,System.Boolean)">
             <summary>
             Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
             </summary>
@@ -177,7 +193,7 @@
             <param name="MMaterial">The material used to draw the line.</param>
             <param name="bUseWorldSpacUseWorldSpace">Should this line use world space?</param>
         </member>
-        <member name="M:MW.HUD.HUD.DrawLine(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,System.Boolean)">
+        <member name="M:MW.HUD.Draw.DrawLine(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,System.Boolean)">
             <summary>
             Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
             </summary>
@@ -190,7 +206,7 @@
             <param name="vOffset">The offset to place this line.</param>
             <param name="bUseWorldSpace">Should this line use world space?</param>
         </member>
-        <member name="M:MW.HUD.HUD.DrawCircle(UnityEngine.LineRenderer,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,UnityEngine.Material,System.Boolean,System.Int32)">
+        <member name="M:MW.HUD.Draw.DrawCircle(UnityEngine.LineRenderer,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,UnityEngine.Material,System.Boolean,System.Int32)">
             <summary>
             Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
             </summary>
@@ -203,7 +219,7 @@
             <param name="bUseWorldSpace">Should this circle use world space?</param>
             <param name="nNumberOfSegments">The number of verticies of this circle.</param>
         </member>
-        <member name="M:MW.HUD.HUD.DrawCircle(UnityEngine.GameObject,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,System.Boolean,System.Int32)">
+        <member name="M:MW.HUD.Draw.DrawCircle(UnityEngine.GameObject,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,System.Boolean,System.Int32)">
             <summary>
             Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
             </summary>
@@ -215,47 +231,19 @@
             <param name="bUseWorldSpace">Should this circle use world space?</param>
             <param name="nNumberOfSegments">The number of verticies of this circle.</param>
         </member>
-        <member name="M:MW.HUD.HUD.ScaleSize(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.HUD.UI.ScaleSize(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Scales the canvas element relative to self.</summary>
             <param name="vSelf">The position to scale from.</param>
             <param name="vScaleWith">The position to scale with.</param>
             <returns>The relative scale size in Vector2.</returns>
         </member>
-        <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.Equation)">
-            <summary>
-            Returns the function associated to the easingFunction enum. This fValue returned should be cached as it allocates memory
-            to return.
-            </summary>
-            <param name="EEasingFunction">The enum associated with the easing function.</param>
-            <returns>The easing function</returns>
-        </member>
-        <member name="M:MW.Easing.Interpolate.GetEasingFunctionDerivative(MW.Equation)">
-            <summary>
-            Gets the derivative function of the appropriate easing function. If you use an easing function for position then this
-            function can get you the speed at a given time (normalized).
-            </summary>
-            <param name="easingFunction"></param>
-            <returns>The derivative function</returns>
-        </member>
-        <member name="T:MW.IO.IO">
-            <summary>Input/Output.</summary>
-        </member>
-        <member name="M:MW.IO.IO.LeftClick(System.Boolean,System.Boolean)">
+        <member name="M:MW.IO.Mouse.Click(MW.IO.Mouse.Button,System.Boolean,System.Boolean)">
+            <param name="BMouse">The mouse press to listen for.</param>
             <param name="bHold">Whether or not to check if this button is held down.</param>
             <param name="bUp">Whether or not to check if this button is released.</param>
-            <returns>If the Left Mouse Button was clicked or Held.</returns>
+            <returns>If the BMouse was clicked or held.</returns>
         </member>
-        <member name="M:MW.IO.IO.RightClick(System.Boolean,System.Boolean)">
-            <param name="bHold">Whether or not to check if this button is held down.</param>
-            <param name="bUp">Whether or not to check if this button is released.</param>
-            <returns>If the Right Mouse Button was clicked or Held.</returns>
-        </member>
-        <member name="M:MW.IO.IO.MiddleClick(System.Boolean,System.Boolean)">
-            <param name="bHold">Whether or not to check if this button is held down.</param>
-            /// <param name="bUp">Whether or not to check if this button is released.</param>
-            <returns>If the Middle Mouse Button was clicked or Held.</returns>
-        </member>
-        <member name="M:MW.IO.IO.Key(UnityEngine.KeyCode,System.Boolean,System.Boolean)">
+        <member name="M:MW.IO.Keyboard.Key(UnityEngine.KeyCode,System.Boolean,System.Boolean)">
             <param name="KCStroke">The key that was pressed on the keyboard.</param>
             <param name="bHold">Whether or not to check if this button is held down.</param>
             <param name="bUp">Whether or not to check if this button is released.</param>
@@ -329,10 +317,10 @@
             <param name="TSelf">The transform to look towards the point.</param>
             <param name="vPoint">The point in world coordinates.</param>
         </member>
-        <member name="F:MW.MWPhysics.MWPhysics.VelocityRatio">
+        <member name="F:MW.MWPhysics.Kinematics.kVelocityRatio">
             <summary>Convert inspector speed to m/s.</summary>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
+        <member name="M:MW.MWPhysics.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
             <summary>
             If the distance between from and to is less than or EqualTo detection.
             </summary>
@@ -342,7 +330,7 @@
             <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
             <returns></returns>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
+        <member name="M:MW.MWPhysics.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
             <summary>
             If the distance between from and to is less than or EqualTo detection.
             </summary>
@@ -352,7 +340,7 @@
             <param name="fDistance">The range that is considered if from has 'reached' to.</param>
             <returns></returns>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
             <summary>
             Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
             </summary>
@@ -361,7 +349,7 @@
             <param name="fVelocity">The rate at which self moves towards target.</param>
             <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
             <summary>
             Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
             </summary>
@@ -370,29 +358,33 @@
             <param name="fVelocity">The rate at which self moves towards target.</param>
             <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.Acceleration(MW.Equation,System.Single,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.Mathematics.Acceleration(MW.Equation,System.Single,System.Single,System.Single)">
             <param name="EEquation">The equation to use to accelerate.</param>
             <param name="fCurrentSpeed">The current speed of the acceleration.</param>
             <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
             <param name="fTerminal">The maximum speed.</param>
-            <param name="time">The elapsed time.</param>
             <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
+        <member name="M:MW.MWPhysics.Mathematics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
             <param name="RBSelf">The rigidbody to calculate an acceleration rate.</param>
             <param name="fSpeed">The current speed of the rigidbody.</param>
             <returns>The float rate of movement in metres per second.</returns>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.Speed(UnityEngine.Rigidbody,MW.Units)">
+        <member name="M:MW.MWPhysics.Mathematics.Speed(UnityEngine.Rigidbody,MW.Units)">
             <param name="RBSelf">The Rigidbody to read a speed from.</param>
             <param name="UUnit">The desired unit of measurement.</param>
             <returns>A speed reading from self in unit of measurement.</returns>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.AirResitance(UnityEngine.Rigidbody)">
+        <member name="M:MW.MWPhysics.Mathematics.PredictiveProjectile(UnityEngine.Rigidbody,UnityEngine.Rigidbody)">
+            <summary>The direction to intercept RBTarget relative to RBSelf.</summary>
+            <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
+            <param name="RBTarget">The Rigidbody to predict.</param>
+        </member>
+        <member name="M:MW.MWPhysics.Aerodynamics.AirResitance(UnityEngine.Rigidbody)">
             <summary>The direction of natural air resistance.</summary>
             <param name="RBSelf">The rigidbody to apply air resistance to.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
             <summary>Interpolates between origin and destination using equation in duration.</summary>
             <param name="EEquation">The equation to use to interpolate.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
@@ -401,7 +393,7 @@
             <param name="fStart">The starting value of equation.</param>
             <param name="fFinal">The final value of equation.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
             <summary>Interpolates between origin and destination using equation.</summary>
             <param name="EEquation">The equation to use to interpolate.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
@@ -409,18 +401,18 @@
             <param name="fStart">The starting value of equation.</param>
             <param name="fFinal">The final value of equation.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Interpolates between origin and destination.</summary>
             <param name="EEquation">The equation to use for interpolation.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
             <param name="vDestination">The destination of this interpolation.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Interpolates between origin and destination at a constant rate.</summary>
             <param name="vOrigin">The origin of the interpolation.</param>
             <param name="vDestination">The destination of this interpolation.</param>
         </member>
-        <member name="M:MW.MWPhysics.MWPhysics.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
+        <member name="M:MW.MWPhysics.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
             <summary>The direction in which to avoid colliding with obstacles.</summary>
             <param name="TSelf">The transform wanting to avoid collisions.</param>
             <param name="fAngle">The angle to search for potential collisions.</param>

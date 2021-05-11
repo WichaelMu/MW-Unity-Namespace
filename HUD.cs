@@ -1,8 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using MW.Audio;
+using TMPro;
 
 namespace MW.HUD {
 
-    public static class HUD {
+    public enum Mode {
+        Append,
+        Clear
+	}
+
+    public static class Draw {
 
         /// <summary>
         /// Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
@@ -116,6 +124,9 @@ namespace MW.HUD {
                 theta += deltaTheta;
             }
         }
+    }
+
+    public static class UI {
 
         /// <summary>Scales the canvas element relative to self.</summary>
         /// <param name="vSelf">The position to scale from.</param>
@@ -125,6 +136,29 @@ namespace MW.HUD {
             float scale = Mathf.Clamp(Vector3.Distance(vSelf, vScaleWith), 1, 1000);
             scale *= .01f;
             return new Vector2(scale, scale) * .03f;
+        }
+
+        public static IEnumerator AnimateText(TextMeshProUGUI tmpTextMeshPro, string sContent, float fDelay, Mode mMode) {
+            if (mMode == Mode.Clear) {
+                tmpTextMeshPro.text = "";
+			}
+
+            for (int i = 0; i < sContent.Length; ++i) {
+                tmpTextMeshPro.text += sContent[i];
+                yield return new WaitForSeconds(fDelay);
+			}
+        }
+
+        public static IEnumerator AnimateText(TextMeshProUGUI tmpTextMeshPro, string sContent, float fDelay, Mode mMode, string sSound) {
+            if (mMode == Mode.Clear) {
+                tmpTextMeshPro.text = "";
+            }
+
+            for (int i = 0; i < sContent.Length; ++i) {
+                tmpTextMeshPro.text += sContent[i];
+                AudioControl.AAudioLogic.Play(sSound);
+                yield return new WaitForSeconds(fDelay);
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using MW.General;
+using MW.IO;
 
 namespace MW.Conversion {
 
-    public static class Conversion {
+    public static class Colour {
 
         /// <summary>The corresponding colour in RGA using Vector3.</summary>
         /// <param name="vColour">The RGB/XYZ channel values, respectively.</param>
@@ -176,6 +177,9 @@ namespace MW.Conversion {
 
         }
 
+    }
+
+    public static class Bearing {
         /// <summary>The normalised direction to to, relative to from.</summary>
         /// <param name="vFrom">The Vector3 seeking a direction to to.</param>
         /// <param name="vTo">The direction to look at.</param>
@@ -189,6 +193,5 @@ namespace MW.Conversion {
         public static Vector2 Direction(Vector2 vFrom, Vector2 vTo) {
             return (vTo - vFrom).normalized;
         }
-    }
-
+	}
 }

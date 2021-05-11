@@ -6,6 +6,7 @@ namespace MW.General {
 
     public static class Generic {
 
+        public const float kThousandth = .001f;
         public const float k10Percent = .1f;
         public const float kQuarter = .25f;
         public const float kHalf = .5f;

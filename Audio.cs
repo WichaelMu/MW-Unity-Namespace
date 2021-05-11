@@ -19,8 +19,8 @@ namespace MW.Audio {
     }
 
     /// <summary>The Audio controller for in-game sounds.</summary>
-    public class Audio : MonoBehaviour {
-        public static Audio AAudioLogic;
+    public class AudioControl : MonoBehaviour {
+        public static AudioControl AAudioLogic;
 
         public bool bMuteAll;
         public Sound[] SSounds;
