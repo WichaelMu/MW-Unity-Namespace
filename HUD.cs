@@ -138,7 +138,12 @@ namespace MW.HUD {
             return new Vector2(scale, scale) * .03f;
         }
 
-        public static IEnumerator AnimateText(TextMeshProUGUI tmpTextMeshPro, string sContent, float fDelay, Mode mMode) {
+        /// <summary>Animates tmpTextMeshPro to display sContent like a typewriter.</summary>
+        /// <param name="tmpTextMeshPro">The text to animate.</param>
+        /// <param name="sContent">The content to display.</param>
+        /// <param name="fDelay">The time gap between writing a new letter.</param>
+        /// <param name="mMode">Should the text append, or clear?</param>
+        public static IEnumerator TypewriterText(TextMeshProUGUI tmpTextMeshPro, string sContent, float fDelay, Mode mMode) {
             if (mMode == Mode.Clear) {
                 tmpTextMeshPro.text = "";
 			}
@@ -149,7 +154,13 @@ namespace MW.HUD {
 			}
         }
 
-        public static IEnumerator AnimateText(TextMeshProUGUI tmpTextMeshPro, string sContent, float fDelay, Mode mMode, string sSound) {
+        /// <summary>Animates tmpTextMeshPro to display sContent like a typewriter.</summary>
+        /// <param name="tmpTextMeshPro">The text to animate.</param>
+        /// <param name="sContent">The content to display.</param>
+        /// <param name="fDelay">The time gap between writing a new letter.</param>
+        /// <param name="mMode">Should the text append, or clear?</param>
+        /// <param name="sSound">The sound to play for every letter added on.</param>
+        public static IEnumerator TypewriterText(TextMeshProUGUI tmpTextMeshPro, string sContent, float fDelay, Mode mMode, string sSound) {
             if (mMode == Mode.Clear) {
                 tmpTextMeshPro.text = "";
             }
