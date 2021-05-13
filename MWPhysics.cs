@@ -151,7 +151,7 @@ namespace MW.MWPhysics {
     public static class Aerodynamics {
         /// <summary>The direction of natural air resistance.</summary>
         /// <param name="RBSelf">The rigidbody to apply air resistance to.</param>
-        public static Vector3 AirResitance(Rigidbody RBSelf) {
+        public static Vector3 AirResistance(Rigidbody RBSelf) {
             return -(.5f * Mathematics.Speed(RBSelf) * Mathematics.Speed(RBSelf) * RBSelf.drag * RBSelf.velocity.normalized);
         }
     }
