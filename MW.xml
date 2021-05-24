@@ -4,63 +4,6 @@
         <name>MW</name>
     </assembly>
     <members>
-        <member name="E:MW.Aircraft.Aircraft.UpdateHUD">
-            <summary>Used to update the player's HUD with speed and altitude information.</summary>
-        </member>
-        <member name="F:MW.Aircraft.Aircraft.kRollDelta">
-            <summary>Increases the rate of roll.</summary>
-        </member>
-        <member name="F:MW.Aircraft.Aircraft.fGForce">
-            <summary>The G-Force experienced by this aircraft.</summary>
-        </member>
-        <member name="F:MW.Aircraft.Aircraft.t">
-            <summary>Used for lerping.</summary>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.Yaw(System.Boolean)">
-            <summary>Yaws the airplane along the Y-Axis.</summary>
-            <param name="bNegative">True if yawing left.</param>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.Pitch(System.Boolean)">
-            <summary>Pitches the airplane along the X-Axis.</summary>
-            <param name="bNegative">True if pitching upwards.</param>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.Roll(System.Boolean)">
-            <summary>Rolls the airplane along the Z-Axis.</summary>
-            <param name="bNegative">True if rolling right.</param>
-        </member>
-        <member name="F:MW.Aircraft.Aircraft.smooth">
-            <summary>Smoothing for returning to level flight.</summary>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.ReturnToLevelRoll">
-            <summary>Returns to level horizontal flight like a normal passenger plane.</summary>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.AirResistance">
-            <returns>The direction where air resistance should be applied.</returns>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.AngularDrag">
-            <returns>1 if rigidbody is moving in the direction it is facing. 0 if rigidbody is moving in a direction +-90 degrees from where it is facing. -1 if rigidbody is moving in the opposite direction of where it is facing.</returns>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.CalculateGForce">
-            <summary>Updates the G-Force.</summary>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.HorizontalAngle">
-            <returns>The angle in degrees this airplane is from the horizon.</returns>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.Speed">
-            <returns>The speed of this aircraft per delta time.</returns>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.ClampedSpeed">
-            <returns>The speed of this aircraft clamped at a minimum of zero and one by Time.deltaTime.</returns>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.PlayExhaust">
-            <summary>Plays the particle system exhaust effect.</summary>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.StopExhaust">
-            <summary>Stops the particle system exhaust effect.</summary>
-        </member>
-        <member name="M:MW.Aircraft.Aircraft.ShowVorticies(System.Single)">
-            <summary>Enables the trail renderer vorticies effect.</summary>
-        </member>
         <member name="T:MW.Audio.AudioControl">
             <summary>The Audio controller for in-game sounds.</summary>
         </member>
@@ -86,6 +29,21 @@
         <member name="M:MW.Audio.AudioControl.IsPlaying(System.String)">
             <summary>Whether or not sound of name n is playing.</summary>
             <param name="sName">The name of the sound to query in capital casing.</param>
+        </member>
+        <member name="M:MW.Vehicle.Car.Car.PreTick">
+            <summary>Called before the first frame.</summary>
+        </member>
+        <member name="M:MW.Vehicle.Car.Car.Initialise">
+            <summary>Called just before the first frame.</summary>
+        </member>
+        <member name="M:MW.Vehicle.Car.Car.Tick">
+            <summary>Called every frame.</summary>
+        </member>
+        <member name="M:MW.Vehicle.Car.Car.PhysicsTick">
+            <summary>Called every physics frame.</summary>
+        </member>
+        <member name="F:MW.Vehicle.Car.Car.kMaxSpeed">
+            <summary>Terminal velocity = 400 kmph (kmph * (2/3)).</summary>
         </member>
         <member name="M:MW.Conversion.Colour.Colour255(UnityEngine.Vector3)">
             <summary>The corresponding colour in RGA using Vector3.</summary>
@@ -452,7 +410,7 @@
             <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
             <param name="RBTarget">The Rigidbody to predict.</param>
         </member>
-        <member name="M:MW.MWPhysics.Aerodynamics.AirResitance(UnityEngine.Rigidbody)">
+        <member name="M:MW.MWPhysics.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
             <summary>The direction of natural air resistance.</summary>
             <param name="RBSelf">The rigidbody to apply air resistance to.</param>
         </member>

@@ -105,6 +105,8 @@ namespace MW.MWPhysics {
             float speed = RBSelf.velocity.magnitude;
 
             switch (UUnit) {
+                case Units.MetresPerSecond:
+                    return speed;
                 case Units.KilometrsePerHour:
                     return speed * 3.6f;
                 case Units.MilesPerHour:
@@ -119,9 +121,6 @@ namespace MW.MWPhysics {
                     return speed * 11811.02362f;
                 case Units.MilesPerSecond:
                     return speed * 1609.34f;
-                case Units.MetresPerSecond:
-                    Debug.LogWarning("Use 'RBSelf.velocity.magnitude' instead.");
-                    return speed;
                 default:
                     Debug.LogWarning("Failed to convert speed to: " + nameof(UUnit) + "\nReturning metres per second.");
                     return speed;
