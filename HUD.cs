@@ -23,8 +23,7 @@ namespace MW.HUD {
         /// <param name="fLineWidth">The thickness of this line.</param>
         /// <param name="vOffset">The offset to place this line.</param>
         /// <param name="MMaterial">The material used to draw the line.</param>
-        /// <param name="bUseWorldSpacUseWorldSpace">Should this line use world space?</param>
-        public static void DrawLine(LineRenderer LRSelf, Vector3 vFrom, Vector3 vTo, Color colStartColour, Color colEndColour, float fLineWidth, Vector3 vOffset, Material MMaterial, bool bUseWorldSpace = true) {
+        public static void Line(LineRenderer LRSelf, Vector3 vFrom, Vector3 vTo, Color colStartColour, Color colEndColour, float fLineWidth, Vector3 vOffset, Material MMaterial, bool bUseWorldSpace = true) {
 
             LRSelf.material = MMaterial;
             LRSelf.startColor = colStartColour;
@@ -48,7 +47,7 @@ namespace MW.HUD {
         /// <param name="fLineWidth">The thickness of this line.</param>
         /// <param name="vOffset">The offset to place this line.</param>
         /// <param name="bUseWorldSpace">Should this line use world space?</param>
-        public static void DrawLine(GameObject GSelf, Vector3 vFrom, Vector3 vTo, Color colStartColour, Color colEndColour, float fLineWidth, Vector3 vOffset, bool bUseWorldSpace = true) {
+        public static void Line(GameObject GSelf, Vector3 vFrom, Vector3 vTo, Color colStartColour, Color colEndColour, float fLineWidth, Vector3 vOffset, bool bUseWorldSpace = true) {
             LineRenderer _LR = GSelf.GetComponent<LineRenderer>() ?? GSelf.AddComponent<LineRenderer>();
             _LR.startColor = colStartColour;
             _LR.endColor = colEndColour;
@@ -72,7 +71,7 @@ namespace MW.HUD {
         /// <param name="MMaterial">The material used to draw the circle.</param>
         /// <param name="bUseWorldSpace">Should this circle use world space?</param>
         /// <param name="nNumberOfSegments">The number of verticies of this circle.</param>
-        public static void DrawCircle(LineRenderer LRSelf, Vector3 vAround, float fRadius, Color colLineColour, float fLineWidth, Material MMaterial, bool bUseWorldSpace = true, int nNumberOfSegments = 1) {
+        public static void Circle(LineRenderer LRSelf, Vector3 vAround, float fRadius, Color colLineColour, float fLineWidth, Material MMaterial, bool bUseWorldSpace = true, int nNumberOfSegments = 1) {
 
             LRSelf.material = MMaterial;
             LRSelf.startColor = colLineColour;
@@ -104,7 +103,7 @@ namespace MW.HUD {
         /// <param name="fLineWidth">The thickness of this circle.</param>
         /// <param name="bUseWorldSpace">Should this circle use world space?</param>
         /// <param name="nNumberOfSegments">The number of verticies of this circle.</param>
-        public static void DrawCircle(GameObject GSelf, Vector3 vAround, float fRadius, Color colLineColour, float fLineWidth, bool bUseWorldSpace = true, int nNumberOfSegments = 1) {
+        public static void Circle(GameObject GSelf, Vector3 vAround, float fRadius, Color colLineColour, float fLineWidth, bool bUseWorldSpace = true, int nNumberOfSegments = 1) {
             LineRenderer _LR = GSelf.GetComponent<LineRenderer>() ?? GSelf.AddComponent<LineRenderer>();
             _LR.startColor = colLineColour;
             _LR.endColor = colLineColour;

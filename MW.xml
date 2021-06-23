@@ -406,9 +406,15 @@
             <returns>A speed reading from self in unit of measurement.</returns>
         </member>
         <member name="M:MW.MWPhysics.Mathematics.PredictiveProjectile(UnityEngine.Rigidbody,UnityEngine.Rigidbody)">
-            <summary>The direction to intercept RBTarget relative to RBSelf.</summary>
+            <summary>The position to intercept RBTarget relative to RBSelf.</summary>
             <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
             <param name="RBTarget">The Rigidbody to predict.</param>
+        </member>
+        <member name="M:MW.MWPhysics.Mathematics.PredictiveProjectile(UnityEngine.Transform,UnityEngine.Rigidbody,System.Single)">
+            <summary>The position to intercept RBTarget relative to TSelf.</summary>
+            <param name="TSelf">Transform who will be intercepting RBTarget.</param>
+            <param name="RBTarget">The Rigidbody to predict.</param>
+            <param name="fForce">The force applied to a projectile as a UnityEngine.ForceMode.Force.</param>
         </member>
         <member name="M:MW.MWPhysics.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
             <summary>The direction of natural air resistance.</summary>

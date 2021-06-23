@@ -11,7 +11,7 @@ namespace MW {
         down
     }
 
-    public enum Equation {
+    public enum EEquation {
         Linear,
         EaseInSine,
         EaseOutSine,

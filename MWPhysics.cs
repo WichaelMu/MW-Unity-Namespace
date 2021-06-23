@@ -73,7 +73,7 @@ namespace MW.MWPhysics {
         /// <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
         /// <param name="fTerminal">The maximum speed.</param>
         /// <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
-        public static float Acceleration(Equation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal) {
+        public static float Acceleration(EEquation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal) {
             fTerminal *= Kinematics.kVelocityRatio;
 
             if (fRateOfAcceleration == 0)
@@ -127,7 +127,7 @@ namespace MW.MWPhysics {
             }
         }
 
-        /// <summary>The direction to intercept RBTarget relative to RBSelf.</summary>
+        /// <summary>The position to intercept RBTarget relative to RBSelf.</summary>
         /// <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
         /// <param name="RBTarget">The Rigidbody to predict.</param>
         public static Vector3 PredictiveProjectile(Rigidbody RBSelf, Rigidbody RBTarget) {
@@ -140,6 +140,21 @@ namespace MW.MWPhysics {
 
             //  Distance between the RBSelf and RBTarget in thousands.
             float fDistanceBetweenPlayer = Vector3.Distance(RBSelf.position, RBTarget.position) * Generic.kThousandth;
+
+            Vector3 vForwardPrediction = RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer;
+
+            return vForwardPrediction;
+        }
+
+        /// <summary>The position to intercept RBTarget relative to TSelf.</summary>
+        /// <param name="TSelf">Transform who will be intercepting RBTarget.</param>
+        /// <param name="RBTarget">The Rigidbody to predict.</param>
+        /// <param name="fForce">The force applied to a projectile as a UnityEngine.ForceMode.Force.</param>
+        public static Vector3 PredictiveProjectile(Transform TSelf, Rigidbody RBTarget, float fForce) {
+            float fSecondsPerKM = 1000 / (fForce * Generic.kTwoThirds);
+
+            //  Distance between the RBSelf and RBTarget in thousands.
+            float fDistanceBetweenPlayer = Vector3.Distance(TSelf.position, RBTarget.position) * Generic.kThousandth;
 
             Vector3 vForwardPrediction = RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer;
 
@@ -163,7 +178,7 @@ namespace MW.MWPhysics {
         /// <param name="fDuration">The duration of the interpolation.</param>
         /// <param name="fStart">The starting value of equation.</param>
         /// <param name="fFinal">The final value of equation.</param>
-        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination, float fDuration, float fStart = 0, float fFinal = 1) {
+        public static void V3Interpolate(EEquation EEquation, Vector3 vOrigin, Vector3 vDestination, float fDuration, float fStart = 0, float fFinal = 1) {
             Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, fStart, fFinal, fDuration));
         }
 
@@ -173,7 +188,7 @@ namespace MW.MWPhysics {
         /// <param name="vDestination">The destination of this interpolation.</param>
         /// <param name="fStart">The starting value of equation.</param>
         /// <param name="fFinal">The final value of equation.</param>
-        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination, float fStart = 0, float fFinal = 1) {
+        public static void V3Interpolate(EEquation EEquation, Vector3 vOrigin, Vector3 vDestination, float fStart = 0, float fFinal = 1) {
             Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, fStart, fFinal, 1));
         }
 
@@ -181,7 +196,7 @@ namespace MW.MWPhysics {
         /// <param name="EEquation">The equation to use for interpolation.</param>
         /// <param name="vOrigin">The origin of the interpolation.</param>
         /// <param name="vDestination">The destination of this interpolation.</param>
-        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination) {
+        public static void V3Interpolate(EEquation EEquation, Vector3 vOrigin, Vector3 vDestination) {
             Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, 0, 1, .3f));
         }
 

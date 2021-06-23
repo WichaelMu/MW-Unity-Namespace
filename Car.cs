@@ -97,7 +97,7 @@ namespace MW.Vehicle.Car {
 			}
 
 			float fGearRatio = pGear.second;
-			float fForce = Mathematics.Acceleration(Equation.EaseInSine, Speed() + fNormalisedInput, fGearRatio, kMaxSpeed * fGearRatio);
+			float fForce = Mathematics.Acceleration(EEquation.EaseInSine, Speed() + fNormalisedInput, fGearRatio, kMaxSpeed * fGearRatio);
 
 			//	Only reverse if the gear is -1 and the speed is <= 5.
 			if (pGear.first == -1) {
