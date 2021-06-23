@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MW.Audio {
+namespace MW.Audible {
 
 
     [Serializable]
@@ -20,7 +20,7 @@ namespace MW.Audio {
 
     /// <summary>The Audio controller for in-game sounds.</summary>
     public class Audio : MonoBehaviour {
-        public static Audio AAudioLogic;
+        public static Audio aAudioInstance;
 
         public bool bMuteAll;
         public Sound[] SSounds;
@@ -30,8 +30,8 @@ namespace MW.Audio {
 
         /// <summary>Populates the Sounds array to match the settings.</summary>
         public void Initialise(Sound[] SSounds) {
-            if (AAudioLogic == null) {
-                AAudioLogic = this;
+            if (aAudioInstance == null) {
+                aAudioInstance = this;
                 gameObject.name = "Audio";
             } else {
                 Debug.LogWarning("Ensure there is only one Audio object in the scene and that only one is being initialised");

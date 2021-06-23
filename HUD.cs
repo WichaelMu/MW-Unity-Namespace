@@ -1,14 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
-using MW.Audio;
+using MW.Audible;
 using TMPro;
 
 namespace MW.HUD {
-
-    public enum Mode {
-        Append,
-        Clear
-	}
 
     public static class Draw {
 
@@ -128,6 +123,11 @@ namespace MW.HUD {
 
     public static class UI {
 
+        public enum Mode {
+            Append,
+            Clear
+        }
+
         /// <summary>Scales the canvas element relative to self.</summary>
         /// <param name="vSelf">The position to scale from.</param>
         /// <param name="vScaleWith">The position to scale with.</param>
@@ -167,7 +167,7 @@ namespace MW.HUD {
 
             for (int i = 0; i < sContent.Length; ++i) {
                 tmpTextMeshPro.text += sContent[i];
-                AudioControl.AAudioLogic.Play(sSound);
+                Audio.aAudioInstance.Play(sSound);
                 yield return new WaitForSeconds(fDelay);
             }
         }
