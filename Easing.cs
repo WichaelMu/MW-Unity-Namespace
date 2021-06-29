@@ -4,7 +4,7 @@ namespace MW.Easing {
 
     public static class Interpolate {
 
-        #region Equations
+        #region EEquations
 
         const float kNaturalLogOf2 = 0.693147181f;
 
@@ -569,132 +569,132 @@ namespace MW.Easing {
         /// </summary>
         /// <param name="EEasingFunction">The enum associated with the easing function.</param>
         /// <returns>The easing function</returns>
-        public static Function GetEasingFunction(Equation EEasingFunction) {
-            if (EEasingFunction == Equation.EaseInQuad) {
+        public static Function GetEasingFunction(EEquation EEasingFunction) {
+            if (EEasingFunction == EEquation.EaseInQuad) {
                 return EaseInQuad;
             }
 
-            else if (EEasingFunction == Equation.EaseOutQuad) {
+            else if (EEasingFunction == EEquation.EaseOutQuad) {
                 return EaseOutQuad;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutQuad) {
+            else if (EEasingFunction == EEquation.EaseInOutQuad) {
                 return EaseInOutQuad;
             }
 
-            else if (EEasingFunction == Equation.EaseInCubic) {
+            else if (EEasingFunction == EEquation.EaseInCubic) {
                 return EaseInCubic;
             }
 
-            else if (EEasingFunction == Equation.EaseOutCubic) {
+            else if (EEasingFunction == EEquation.EaseOutCubic) {
                 return EaseOutCubic;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutCubic) {
+            else if (EEasingFunction == EEquation.EaseInOutCubic) {
                 return EaseInOutCubic;
             }
 
-            else if (EEasingFunction == Equation.EaseInQuart) {
+            else if (EEasingFunction == EEquation.EaseInQuart) {
                 return EaseInQuart;
             }
 
-            else if (EEasingFunction == Equation.EaseOutQuart) {
+            else if (EEasingFunction == EEquation.EaseOutQuart) {
                 return EaseOutQuart;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutQuart) {
+            else if (EEasingFunction == EEquation.EaseInOutQuart) {
                 return EaseInOutQuart;
             }
 
-            else if (EEasingFunction == Equation.EaseInQuint) {
+            else if (EEasingFunction == EEquation.EaseInQuint) {
                 return EaseInQuint;
             }
 
-            else if (EEasingFunction == Equation.EaseOutQuint) {
+            else if (EEasingFunction == EEquation.EaseOutQuint) {
                 return EaseOutQuint;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutQuint) {
+            else if (EEasingFunction == EEquation.EaseInOutQuint) {
                 return EaseInOutQuint;
             }
 
-            else if (EEasingFunction == Equation.EaseInSine) {
+            else if (EEasingFunction == EEquation.EaseInSine) {
                 return EaseInSine;
             }
 
-            else if (EEasingFunction == Equation.EaseOutSine) {
+            else if (EEasingFunction == EEquation.EaseOutSine) {
                 return EaseOutSine;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutSine) {
+            else if (EEasingFunction == EEquation.EaseInOutSine) {
                 return EaseInOutSine;
             }
 
-            else if (EEasingFunction == Equation.EaseInExpo) {
+            else if (EEasingFunction == EEquation.EaseInExpo) {
                 return EaseInExpo;
             }
 
-            else if (EEasingFunction == Equation.EaseOutExpo) {
+            else if (EEasingFunction == EEquation.EaseOutExpo) {
                 return EaseOutExpo;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutExpo) {
+            else if (EEasingFunction == EEquation.EaseInOutExpo) {
                 return EaseInOutExpo;
             }
 
-            else if (EEasingFunction == Equation.EaseInCirc) {
+            else if (EEasingFunction == EEquation.EaseInCirc) {
                 return EaseInCirc;
             }
 
-            else if (EEasingFunction == Equation.EaseOutCirc) {
+            else if (EEasingFunction == EEquation.EaseOutCirc) {
                 return EaseOutCirc;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutCirc) {
+            else if (EEasingFunction == EEquation.EaseInOutCirc) {
                 return EaseInOutCirc;
             }
 
-            else if (EEasingFunction == Equation.Linear) {
+            else if (EEasingFunction == EEquation.Linear) {
                 return Linear;
             }
 
-            else if (EEasingFunction == Equation.Spring) {
+            else if (EEasingFunction == EEquation.Spring) {
                 return Spring;
             }
 
-            else if (EEasingFunction == Equation.EaseInBounce) {
+            else if (EEasingFunction == EEquation.EaseInBounce) {
                 return EaseInBounce;
             }
 
-            else if (EEasingFunction == Equation.EaseOutBounce) {
+            else if (EEasingFunction == EEquation.EaseOutBounce) {
                 return EaseOutBounce;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutBounce) {
+            else if (EEasingFunction == EEquation.EaseInOutBounce) {
                 return EaseInOutBounce;
             }
 
-            else if (EEasingFunction == Equation.EaseInBack) {
+            else if (EEasingFunction == EEquation.EaseInBack) {
                 return EaseInBack;
             }
 
-            else if (EEasingFunction == Equation.EaseOutBack) {
+            else if (EEasingFunction == EEquation.EaseOutBack) {
                 return EaseOutBack;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutBack) {
+            else if (EEasingFunction == EEquation.EaseInOutBack) {
                 return EaseInOutBack;
             }
 
-            else if (EEasingFunction == Equation.EaseInElastic) {
+            else if (EEasingFunction == EEquation.EaseInElastic) {
                 return EaseInElastic;
             }
 
-            else if (EEasingFunction == Equation.EaseOutElastic) {
+            else if (EEasingFunction == EEquation.EaseOutElastic) {
                 return EaseOutElastic;
             }
 
-            else if (EEasingFunction == Equation.EaseInOutElastic) {
+            else if (EEasingFunction == EEquation.EaseInOutElastic) {
                 return EaseInOutElastic;
             }
 
@@ -707,132 +707,132 @@ namespace MW.Easing {
         /// </summary>
         /// <param name="easingFunction"></param>
         /// <returns>The derivative function</returns>
-        public static Function GetEasingFunctionDerivative(Equation easingFunction) {
-            if (easingFunction == Equation.EaseInQuad) {
+        public static Function GetEasingFunctionDerivative(EEquation easingFunction) {
+            if (easingFunction == EEquation.EaseInQuad) {
                 return EaseInQuadD;
             }
 
-            else if (easingFunction == Equation.EaseOutQuad) {
+            else if (easingFunction == EEquation.EaseOutQuad) {
                 return EaseOutQuadD;
             }
 
-            else if (easingFunction == Equation.EaseInOutQuad) {
+            else if (easingFunction == EEquation.EaseInOutQuad) {
                 return EaseInOutQuadD;
             }
 
-            else if (easingFunction == Equation.EaseInCubic) {
+            else if (easingFunction == EEquation.EaseInCubic) {
                 return EaseInCubicD;
             }
 
-            else if (easingFunction == Equation.EaseOutCubic) {
+            else if (easingFunction == EEquation.EaseOutCubic) {
                 return EaseOutCubicD;
             }
 
-            else if (easingFunction == Equation.EaseInOutCubic) {
+            else if (easingFunction == EEquation.EaseInOutCubic) {
                 return EaseInOutCubicD;
             }
 
-            else if (easingFunction == Equation.EaseInQuart) {
+            else if (easingFunction == EEquation.EaseInQuart) {
                 return EaseInQuartD;
             }
 
-            else if (easingFunction == Equation.EaseOutQuart) {
+            else if (easingFunction == EEquation.EaseOutQuart) {
                 return EaseOutQuartD;
             }
 
-            else if (easingFunction == Equation.EaseInOutQuart) {
+            else if (easingFunction == EEquation.EaseInOutQuart) {
                 return EaseInOutQuartD;
             }
 
-            else if (easingFunction == Equation.EaseInQuint) {
+            else if (easingFunction == EEquation.EaseInQuint) {
                 return EaseInQuintD;
             }
 
-            else if (easingFunction == Equation.EaseOutQuint) {
+            else if (easingFunction == EEquation.EaseOutQuint) {
                 return EaseOutQuintD;
             }
 
-            else if (easingFunction == Equation.EaseInOutQuint) {
+            else if (easingFunction == EEquation.EaseInOutQuint) {
                 return EaseInOutQuintD;
             }
 
-            else if (easingFunction == Equation.EaseInSine) {
+            else if (easingFunction == EEquation.EaseInSine) {
                 return EaseInSineD;
             }
 
-            else if (easingFunction == Equation.EaseOutSine) {
+            else if (easingFunction == EEquation.EaseOutSine) {
                 return EaseOutSineD;
             }
 
-            else if (easingFunction == Equation.EaseInOutSine) {
+            else if (easingFunction == EEquation.EaseInOutSine) {
                 return EaseInOutSineD;
             }
 
-            else if (easingFunction == Equation.EaseInExpo) {
+            else if (easingFunction == EEquation.EaseInExpo) {
                 return EaseInExpoD;
             }
 
-            else if (easingFunction == Equation.EaseOutExpo) {
+            else if (easingFunction == EEquation.EaseOutExpo) {
                 return EaseOutExpoD;
             }
 
-            else if (easingFunction == Equation.EaseInOutExpo) {
+            else if (easingFunction == EEquation.EaseInOutExpo) {
                 return EaseInOutExpoD;
             }
 
-            else if (easingFunction == Equation.EaseInCirc) {
+            else if (easingFunction == EEquation.EaseInCirc) {
                 return EaseInCircD;
             }
 
-            else if (easingFunction == Equation.EaseOutCirc) {
+            else if (easingFunction == EEquation.EaseOutCirc) {
                 return EaseOutCircD;
             }
 
-            else if (easingFunction == Equation.EaseInOutCirc) {
+            else if (easingFunction == EEquation.EaseInOutCirc) {
                 return EaseInOutCircD;
             }
 
-            else if (easingFunction == Equation.Linear) {
+            else if (easingFunction == EEquation.Linear) {
                 return LinearD;
             }
 
-            else if (easingFunction == Equation.Spring) {
+            else if (easingFunction == EEquation.Spring) {
                 return SpringD;
             }
 
-            else if (easingFunction == Equation.EaseInBounce) {
+            else if (easingFunction == EEquation.EaseInBounce) {
                 return EaseInBounceD;
             }
 
-            else if (easingFunction == Equation.EaseOutBounce) {
+            else if (easingFunction == EEquation.EaseOutBounce) {
                 return EaseOutBounceD;
             }
 
-            else if (easingFunction == Equation.EaseInOutBounce) {
+            else if (easingFunction == EEquation.EaseInOutBounce) {
                 return EaseInOutBounceD;
             }
 
-            else if (easingFunction == Equation.EaseInBack) {
+            else if (easingFunction == EEquation.EaseInBack) {
                 return EaseInBackD;
             }
 
-            else if (easingFunction == Equation.EaseOutBack) {
+            else if (easingFunction == EEquation.EaseOutBack) {
                 return EaseOutBackD;
             }
 
-            else if (easingFunction == Equation.EaseInOutBack) {
+            else if (easingFunction == EEquation.EaseInOutBack) {
                 return EaseInOutBackD;
             }
 
-            else if (easingFunction == Equation.EaseInElastic) {
+            else if (easingFunction == EEquation.EaseInElastic) {
                 return EaseInElasticD;
             }
 
-            else if (easingFunction == Equation.EaseOutElastic) {
+            else if (easingFunction == EEquation.EaseOutElastic) {
                 return EaseOutElasticD;
             }
 
-            else if (easingFunction == Equation.EaseInOutElastic) {
+            else if (easingFunction == EEquation.EaseInOutElastic) {
                 return EaseInOutElasticD;
             }
 
@@ -841,75 +841,75 @@ namespace MW.Easing {
 
 #endregion
 
-        public static float Ease(Equation EEquation, float fStart, float fEnd, float fValue) {
+        public static float Ease(EEquation EEEquation, float fStart, float fEnd, float fValue) {
             
-            switch (EEquation) {
-                case Equation.EaseInQuad:
+            switch (EEEquation) {
+                case EEquation.EaseInQuad:
                     return EaseInQuad(fStart, fEnd, fValue);
-                case Equation.EaseOutQuad:
+                case EEquation.EaseOutQuad:
                     return EaseOutQuad(fStart, fEnd, fValue);
-                case Equation.EaseInOutQuad:
+                case EEquation.EaseInOutQuad:
                     return EaseInOutQuad(fStart, fEnd, fValue);
-                case Equation.EaseInCubic:
+                case EEquation.EaseInCubic:
                     return EaseInCubic(fStart, fEnd, fValue);
-                case Equation.EaseOutCubic:
+                case EEquation.EaseOutCubic:
                     return EaseOutCubic(fStart, fEnd, fValue);
-                case Equation.EaseInOutCubic:
+                case EEquation.EaseInOutCubic:
                     return EaseInOutCubic(fStart, fEnd, fValue);
-                case Equation.EaseInQuart:
+                case EEquation.EaseInQuart:
                     return EaseInQuart(fStart, fEnd, fValue);
-                case Equation.EaseOutQuart:
+                case EEquation.EaseOutQuart:
                     return EaseOutQuart(fStart, fEnd, fValue);
-                case Equation.EaseInOutQuart:
+                case EEquation.EaseInOutQuart:
                     return EaseInOutQuart(fStart, fEnd, fValue);
-                case Equation.EaseInQuint:
+                case EEquation.EaseInQuint:
                     return EaseInQuint(fStart, fEnd, fValue);
-                case Equation.EaseOutQuint:
+                case EEquation.EaseOutQuint:
                     return EaseOutQuint(fStart, fEnd, fValue);
-                case Equation.EaseInOutQuint:
+                case EEquation.EaseInOutQuint:
                     return EaseInOutQuint(fStart, fEnd, fValue);
-                case Equation.EaseInSine:
+                case EEquation.EaseInSine:
                     return EaseInSine(fStart, fEnd, fValue);
-                case Equation.EaseOutSine:
+                case EEquation.EaseOutSine:
                     return EaseOutSine(fStart, fEnd, fValue);
-                case Equation.EaseInOutSine:
+                case EEquation.EaseInOutSine:
                     return EaseInOutSine(fStart, fEnd, fValue);
-                case Equation.EaseInExpo:
+                case EEquation.EaseInExpo:
                     return EaseInExpo(fStart, fEnd, fValue);
-                case Equation.EaseOutExpo:
+                case EEquation.EaseOutExpo:
                     return EaseOutExpo(fStart, fEnd, fValue);
-                case Equation.EaseInOutExpo:
+                case EEquation.EaseInOutExpo:
                     return EaseInOutExpo(fStart, fEnd, fValue);
-                case Equation.EaseInCirc:
+                case EEquation.EaseInCirc:
                     return EaseInCirc(fStart, fEnd, fValue);
-                case Equation.EaseOutCirc:
+                case EEquation.EaseOutCirc:
                     return EaseOutCirc(fStart, fEnd, fValue);
-                case Equation.EaseInOutCirc:
+                case EEquation.EaseInOutCirc:
                     return EaseInOutCirc(fStart, fEnd, fValue);
-                case Equation.Linear:
+                case EEquation.Linear:
                     return Linear(fStart, fEnd, fValue);
-                case Equation.Spring:
+                case EEquation.Spring:
                     return Spring(fStart, fEnd, fValue);
-                case Equation.EaseInBounce:
+                case EEquation.EaseInBounce:
                     return EaseInBounce(fStart, fEnd, fValue);
-                case Equation.EaseOutBounce:
+                case EEquation.EaseOutBounce:
                     return EaseOutBounce(fStart, fEnd, fValue);
-                case Equation.EaseInOutBounce:
+                case EEquation.EaseInOutBounce:
                     return EaseInOutBounce(fStart, fEnd, fValue);
-                case Equation.EaseInBack:
+                case EEquation.EaseInBack:
                     return EaseInBack(fStart, fEnd, fValue);
-                case Equation.EaseOutBack:
+                case EEquation.EaseOutBack:
                     return EaseOutBack(fStart, fEnd, fValue);
-                case Equation.EaseInOutBack:
+                case EEquation.EaseInOutBack:
                     return EaseInOutBack(fStart, fEnd, fValue);
-                case Equation.EaseInElastic:
+                case EEquation.EaseInElastic:
                     return EaseInElastic(fStart, fEnd, fValue);
-                case Equation.EaseOutElastic:
+                case EEquation.EaseOutElastic:
                     return EaseOutElastic(fStart, fEnd, fValue);
-                case Equation.EaseInOutElastic:
+                case EEquation.EaseInOutElastic:
                     return EaseInOutElastic(fStart, fEnd, fValue);
                 default:
-                    Debug.LogWarning("Could not convert Easing.Equation.\nReturning Easing.Linear instead.");
+                    Debug.LogWarning("Could not convert Easing.EEquation.\nReturning Easing.Linear instead.");
                     return Linear(fStart, fEnd, fValue);
             }
         }

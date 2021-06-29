@@ -88,7 +88,7 @@
             <param name="vFrom">The Vector3 seeking a direction to to.</param>
             <param name="vTo">The direction to look at.</param>
         </member>
-        <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.Equation)">
+        <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.EEquation)">
             <summary>
             Returns the function associated to the easingFunction enum. This fValue returned should be cached as it allocates memory
             to return.
@@ -96,7 +96,7 @@
             <param name="EEasingFunction">The enum associated with the easing function.</param>
             <returns>The easing function</returns>
         </member>
-        <member name="M:MW.Easing.Interpolate.GetEasingFunctionDerivative(MW.Equation)">
+        <member name="M:MW.Easing.Interpolate.GetEasingFunctionDerivative(MW.EEquation)">
             <summary>
             Gets the derivative function of the appropriate easing function. If you use an easing function for position then this
             function can get you the speed at a given time (normalized).
@@ -107,14 +107,14 @@
         <member name="F:MW.General.Generic.k1To255RGB">
             <summary>The ratio between 1 and 255.</summary>
         </member>
-        <member name="M:MW.General.Generic.InFOV(MW.Direction,UnityEngine.Transform,UnityEngine.Transform,System.Single)">
+        <member name="M:MW.General.Generic.InFOV(MW.EDirection,UnityEngine.Transform,UnityEngine.Transform,System.Single)">
             <summary>If self can see target within SearchAngle degrees while facing face.</summary>
             <param name="dirFace">The direction self is facing.</param>
             <param name="TSelf">The transform searching for target.</param>
             <param name="TTarget">The transform to look out for.</param>
             <param name="fSearchAngle">The maximum degrees to search for target.</param>
         </member>
-        <member name="M:MW.General.Generic.InFOV(MW.Direction,UnityEngine.Transform,UnityEngine.Vector3,System.Single)">
+        <member name="M:MW.General.Generic.InFOV(MW.EDirection,UnityEngine.Transform,UnityEngine.Vector3,System.Single)">
             <summary>If self can see target within SearchAngle degrees while facing face.</summary>
             <param name="dirFace">The direction self is facing.</param>
             <param name="TSelf">The transform searching for target.</param>
@@ -191,7 +191,7 @@
             <param name="fLineWidth">The thickness of this line.</param>
             <param name="vOffset">The offset to place this line.</param>
             <param name="MMaterial">The material used to draw the line.</param>
-            <param name="bUseWorldSpacUseWorldSpace">Should this line use world space?</param>
+            <param name="bUseWorldSpace">Should this line use world space?</param>
         </member>
         <member name="M:MW.HUD.Draw.DrawLine(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,System.Boolean)">
             <summary>
@@ -237,14 +237,14 @@
             <param name="vScaleWith">The position to scale with.</param>
             <returns>The relative scale size in Vector2.</returns>
         </member>
-        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.Mode)">
+        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.UI.Mode)">
             <summary>Animates tmpTextMeshPro to display sContent like a typewriter.</summary>
             <param name="tmpTextMeshPro">The text to animate.</param>
             <param name="sContent">The content to display.</param>
             <param name="fDelay">The time gap between writing a new letter.</param>
             <param name="mMode">Should the text append, or clear?</param>
         </member>
-        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.Mode,System.String)">
+        <member name="M:MW.HUD.UI.TypewriterText(TMPro.TextMeshProUGUI,System.String,System.Single,MW.HUD.UI.Mode,System.String)">
             <summary>Animates tmpTextMeshPro to display sContent like a typewriter.</summary>
             <param name="tmpTextMeshPro">The text to animate.</param>
             <param name="sContent">The content to display.</param>
@@ -252,7 +252,7 @@
             <param name="mMode">Should the text append, or clear?</param>
             <param name="sSound">The sound to play for every letter added on.</param>
         </member>
-        <member name="M:MW.IO.Mouse.Click(MW.IO.Mouse.Button,System.Boolean,System.Boolean)">
+        <member name="M:MW.IO.Mouse.Click(MW.EButton,System.Boolean,System.Boolean)">
             <param name="BMouse">The mouse press to listen for.</param>
             <param name="bHold">Whether or not to check if this button is held down.</param>
             <param name="bUp">Whether or not to check if this button is released.</param>
@@ -373,7 +373,7 @@
             <param name="fVelocity">The rate at which self moves towards target.</param>
             <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
         </member>
-        <member name="M:MW.MWPhysics.Mathematics.Acceleration(MW.Equation,System.Single,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.Mathematics.Acceleration(MW.EEquation,System.Single,System.Single,System.Single)">
             <param name="EEquation">The equation to use to accelerate.</param>
             <param name="fCurrentSpeed">The current speed of the acceleration.</param>
             <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
@@ -385,7 +385,7 @@
             <param name="fSpeed">The current speed of the rigidbody.</param>
             <returns>The float rate of movement in metres per second.</returns>
         </member>
-        <member name="M:MW.MWPhysics.Mathematics.Speed(UnityEngine.Rigidbody,MW.Units)">
+        <member name="M:MW.MWPhysics.Mathematics.Speed(UnityEngine.Rigidbody,MW.EUnits)">
             <param name="RBSelf">The Rigidbody to read a speed from.</param>
             <param name="UUnit">The desired unit of measurement.</param>
             <returns>A speed reading from self in unit of measurement.</returns>
@@ -399,7 +399,7 @@
             <summary>The direction of natural air resistance.</summary>
             <param name="RBSelf">The rigidbody to apply air resistance to.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
             <summary>Interpolates between origin and destination using equation in duration.</summary>
             <param name="EEquation">The equation to use to interpolate.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
@@ -408,7 +408,7 @@
             <param name="fStart">The starting value of equation.</param>
             <param name="fFinal">The final value of equation.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
             <summary>Interpolates between origin and destination using equation.</summary>
             <param name="EEquation">The equation to use to interpolate.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
@@ -416,7 +416,7 @@
             <param name="fStart">The starting value of equation.</param>
             <param name="fFinal">The final value of equation.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.Equation,UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Interpolates between origin and destination.</summary>
             <param name="EEquation">The equation to use for interpolation.</param>
             <param name="vOrigin">The origin of the interpolation.</param>

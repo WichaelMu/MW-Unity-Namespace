@@ -20,7 +20,7 @@ namespace MW.Audible {
 
     /// <summary>The Audio controller for in-game sounds.</summary>
     public class Audio : MonoBehaviour {
-        public static Audio aAudioInstance;
+        public static Audio AAudioInstance;
 
         public bool bMuteAll;
         public Sound[] SSounds;
@@ -30,8 +30,8 @@ namespace MW.Audible {
 
         /// <summary>Populates the Sounds array to match the settings.</summary>
         public void Initialise(Sound[] SSounds) {
-            if (aAudioInstance == null) {
-                aAudioInstance = this;
+            if (AAudioInstance == null) {
+                AAudioInstance = this;
                 gameObject.name = "Audio";
             } else {
                 Debug.LogWarning("Ensure there is only one Audio object in the scene and that only one is being initialised");

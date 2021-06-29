@@ -2,7 +2,7 @@
 using MW.Easing;
 using MW.General;
 
-namespace MW.MWPhysics {
+namespace MW.Physx {
 
 
     public static class Kinematics {
@@ -40,29 +40,29 @@ namespace MW.MWPhysics {
         /// <summary>
         /// Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
         /// </summary>
-        /// <param name="RBSelf">The Rigidbody to move.</param>
+        /// <param name="RSelf">The Rigidbody to move.</param>
         /// <param name="TTarget">The Transform destination.</param>
         /// <param name="fVelocity">The rate at which self moves towards target.</param>
         /// <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
-        public static void HomeTowards(Rigidbody RBSelf, Transform TTarget, float fVelocity, float fTurnRadius) {
+        public static void HomeTowards(Rigidbody RSelf, Transform TTarget, float fVelocity, float fTurnRadius) {
 
-            Transform _self = RBSelf.transform;
-            RBSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
-            RBSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(TTarget.position - _self.position), fTurnRadius));
+            Transform _self = RSelf.transform;
+            RSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
+            RSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(TTarget.position - _self.position), fTurnRadius));
         }
 
         /// <summary>
         /// Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
         /// </summary>
-        /// <param name="RBSelf">The Rigidbody to move.</param>
+        /// <param name="RSelf">The Rigidbody to move.</param>
         /// <param name="vTarget">The destination coordinates.</param>
         /// <param name="fVelocity">The rate at which self moves towards target.</param>
         /// <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
-        public static void HomeTowards(Rigidbody RBSelf, Vector3 vTarget, float fVelocity, float fTurnRadius) {
+        public static void HomeTowards(Rigidbody RSelf, Vector3 vTarget, float fVelocity, float fTurnRadius) {
 
-            Transform _self = RBSelf.transform;
-            RBSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
-            RBSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(vTarget - _self.position, _self.up), fTurnRadius));
+            Transform _self = RSelf.transform;
+            RSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
+            RSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(vTarget - _self.position, _self.up), fTurnRadius));
         }
     }
 
@@ -73,7 +73,7 @@ namespace MW.MWPhysics {
         /// <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
         /// <param name="fTerminal">The maximum speed.</param>
         /// <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
-        public static float Acceleration(Equation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal) {
+        public static float Acceleration(EEquation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal) {
             fTerminal *= Kinematics.kVelocityRatio;
 
             if (fRateOfAcceleration == 0)
@@ -88,39 +88,39 @@ namespace MW.MWPhysics {
 
         static float fAR = 0;
 
-        /// <param name="RBSelf">The rigidbody to calculate an acceleration rate.</param>
+        /// <param name="RSelf">The rigidbody to calculate an acceleration rate.</param>
         /// <param name="fSpeed">The current speed of the rigidbody.</param>
         /// <returns>The float rate of movement in metres per second.</returns>
-        public static float AccelerationRate(Rigidbody RBSelf, float fSpeed) {
-            float a = RBSelf.velocity.magnitude - fSpeed / Time.deltaTime;
+        public static float AccelerationRate(Rigidbody RSelf, float fSpeed) {
+            float a = RSelf.velocity.magnitude - fSpeed / Time.deltaTime;
             float fAccelerationRate = (a - fAR) * -1;
             fAR = a;
             return fAccelerationRate;
         }
 
-        /// <param name="RBSelf">The Rigidbody to read a speed from.</param>
+        /// <param name="RSelf">The Rigidbody to read a speed from.</param>
         /// <param name="UUnit">The desired unit of measurement.</param>
         /// <returns>A speed reading from self in unit of measurement.</returns>
-        public static float Speed(Rigidbody RBSelf, Units UUnit = Units.MetresPerSecond) {
-            float speed = RBSelf.velocity.magnitude;
+        public static float Speed(Rigidbody RSelf, EUnits UUnit = EUnits.MetresPerSecond) {
+            float speed = RSelf.velocity.magnitude;
 
             switch (UUnit) {
-                case Units.KilometrsePerHour:
+                case EUnits.KilometrsePerHour:
                     return speed * 3.6f;
-                case Units.MilesPerHour:
+                case EUnits.MilesPerHour:
                     return speed * 2.23694f;
-                case Units.KilometresPerSecond:
+                case EUnits.KilometresPerSecond:
                     return speed * .001f;
-                case Units.MetresPerHour:
+                case EUnits.MetresPerHour:
                     return speed * 3600;
-                case Units.FeetPerSecond:
+                case EUnits.FeetPerSecond:
                     return speed * 3.28084f;
-                case Units.FeetPerHour:
+                case EUnits.FeetPerHour:
                     return speed * 11811.02362f;
-                case Units.MilesPerSecond:
+                case EUnits.MilesPerSecond:
                     return speed * 1609.34f;
-                case Units.MetresPerSecond:
-                    Debug.LogWarning("Use 'RBSelf.velocity.magnitude' instead.");
+                case EUnits.MetresPerSecond:
+                    Debug.LogWarning("Use 'RSelf.velocity.magnitude' instead.");
                     return speed;
                 default:
                     Debug.LogWarning("Failed to convert speed to: " + nameof(UUnit) + "\nReturning metres per second.");
@@ -128,19 +128,19 @@ namespace MW.MWPhysics {
             }
         }
 
-        /// <summary>The direction to intercept RBTarget relative to RBSelf.</summary>
-        /// <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
+        /// <summary>The direction to intercept RBTarget relative to RSelf.</summary>
+        /// <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
         /// <param name="RBTarget">The Rigidbody to predict.</param>
-        public static Vector3 PredictiveProjectile(Rigidbody RBSelf, Rigidbody RBTarget) {
+        public static Vector3 PredictiveProjectile(Rigidbody RSelf, Rigidbody RBTarget) {
             //  The approximate conversion from velocity in an rb.AddForce is the 2/3 of the force being applied.
 
             //  At a velocity of 950, the cannon travels at ~633 m/s.
             //  ~2279 kmph.
 
-            float fSecondsPerKM = 1000 / (RBSelf.velocity.magnitude * Generic.kTwoThirds);
+            float fSecondsPerKM = 1000 / (RSelf.velocity.magnitude * Generic.kTwoThirds);
 
-            //  Distance between the RBSelf and RBTarget in thousands.
-            float fDistanceBetweenPlayer = Vector3.Distance(RBSelf.position, RBTarget.position) * Generic.kThousandth;
+            //  Distance between the RSelf and RBTarget in thousands.
+            float fDistanceBetweenPlayer = Vector3.Distance(RSelf.position, RBTarget.position) * Generic.kThousandth;
 
             Vector3 vForwardPrediction = RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer;
 
@@ -150,9 +150,9 @@ namespace MW.MWPhysics {
 
     public static class Aerodynamics {
         /// <summary>The direction of natural air resistance.</summary>
-        /// <param name="RBSelf">The rigidbody to apply air resistance to.</param>
-        public static Vector3 AirResistance(Rigidbody RBSelf) {
-            return -(.5f * Mathematics.Speed(RBSelf) * Mathematics.Speed(RBSelf) * RBSelf.drag * RBSelf.velocity.normalized);
+        /// <param name="RSelf">The rigidbody to apply air resistance to.</param>
+        public static Vector3 AirResistance(Rigidbody RSelf) {
+            return -(.5f * Mathematics.Speed(RSelf) * Mathematics.Speed(RSelf) * RSelf.drag * RSelf.velocity.normalized);
         }
     }
 
@@ -164,7 +164,7 @@ namespace MW.MWPhysics {
         /// <param name="fDuration">The duration of the interpolation.</param>
         /// <param name="fStart">The starting value of equation.</param>
         /// <param name="fFinal">The final value of equation.</param>
-        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination, float fDuration, float fStart = 0, float fFinal = 1) {
+        public static void V3Interpolate(EEquation EEquation, Vector3 vOrigin, Vector3 vDestination, float fDuration, float fStart = 0, float fFinal = 1) {
             Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, fStart, fFinal, fDuration));
         }
 
@@ -174,7 +174,7 @@ namespace MW.MWPhysics {
         /// <param name="vDestination">The destination of this interpolation.</param>
         /// <param name="fStart">The starting value of equation.</param>
         /// <param name="fFinal">The final value of equation.</param>
-        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination, float fStart = 0, float fFinal = 1) {
+        public static void V3Interpolate(EEquation EEquation, Vector3 vOrigin, Vector3 vDestination, float fStart = 0, float fFinal = 1) {
             Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, fStart, fFinal, 1));
         }
 
@@ -182,7 +182,7 @@ namespace MW.MWPhysics {
         /// <param name="EEquation">The equation to use for interpolation.</param>
         /// <param name="vOrigin">The origin of the interpolation.</param>
         /// <param name="vDestination">The destination of this interpolation.</param>
-        public static void V3Interpolate(Equation EEquation, Vector3 vOrigin, Vector3 vDestination) {
+        public static void V3Interpolate(EEquation EEquation, Vector3 vOrigin, Vector3 vDestination) {
             Vector3.Lerp(vOrigin, vDestination, Interpolate.Ease(EEquation, 0, 1, .3f));
         }
 
@@ -211,7 +211,7 @@ namespace MW.MWPhysics {
 
             for (int i = 0; i < colliders.Length; i++) {
                 Vector3 closestPoint = colliders[i].ClosestPoint(TSelf.position);
-                if (Generic.InFOV(Direction.forward, TSelf, closestPoint, fAngle)) {
+                if (Generic.InFOV(EDirection.forward, TSelf, closestPoint, fAngle)) {
                     float distance = Vector3.Distance(TSelf.position, closestPoint);
                     if (distance < min) {
                         min = distance;

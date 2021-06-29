@@ -22,20 +22,20 @@ namespace MW.General {
         /// <param name="TSelf">The transform searching for target.</param>
         /// <param name="TTarget">The transform to look out for.</param>
         /// <param name="fSearchAngle">The maximum degrees to search for target.</param>
-        public static bool InFOV(Direction dirFace, Transform TSelf, Transform TTarget, float fSearchAngle) {
+        public static bool InFOV(EDirection dirFace, Transform TSelf, Transform TTarget, float fSearchAngle) {
 
             switch (dirFace) {
-                case Direction.forward:
+                case EDirection.forward:
                     return Vector3.Angle(TSelf.forward, TTarget.position - TSelf.position) < fSearchAngle;
-                case Direction.right:
+                case EDirection.right:
                     return Vector3.Angle(TSelf.right, TTarget.position - TSelf.position) < fSearchAngle;
-                case Direction.back:
+                case EDirection.back:
                     return Vector3.Angle(-TSelf.forward, TTarget.position - TSelf.position) < fSearchAngle;
-                case Direction.left:
+                case EDirection.left:
                     return Vector3.Angle(-TSelf.right, TTarget.position - TSelf.position) < fSearchAngle;
-                case Direction.up:
+                case EDirection.up:
                     return Vector3.Angle(TSelf.up, TTarget.position - TSelf.position) < fSearchAngle;
-                case Direction.down:
+                case EDirection.down:
                     return Vector3.Angle(-TSelf.up, TTarget.position - TSelf.position) < fSearchAngle;
                 default:
                     Debug.LogWarning("There was a problem in determining a face direction");
@@ -48,20 +48,20 @@ namespace MW.General {
         /// <param name="TSelf">The transform searching for target.</param>
         /// <param name="vTarget">The position to look out for.</param>
         /// <param name="fSearchAngle">The maximum degrees to search for target.</param>
-        public static bool InFOV(Direction dirFace, Transform TSelf, Vector3 vTarget, float fSearchAngle) {
+        public static bool InFOV(EDirection dirFace, Transform TSelf, Vector3 vTarget, float fSearchAngle) {
 
             switch (dirFace) {
-                case Direction.forward:
+                case EDirection.forward:
                     return Vector3.Angle(TSelf.forward, vTarget - TSelf.position) < fSearchAngle;
-                case Direction.right:
+                case EDirection.right:
                     return Vector3.Angle(TSelf.right, vTarget - TSelf.position) < fSearchAngle;
-                case Direction.back:
+                case EDirection.back:
                     return Vector3.Angle(-TSelf.forward, vTarget - TSelf.position) < fSearchAngle;
-                case Direction.left:
+                case EDirection.left:
                     return Vector3.Angle(-TSelf.right, vTarget - TSelf.position) < fSearchAngle;
-                case Direction.up:
+                case EDirection.up:
                     return Vector3.Angle(TSelf.up, vTarget - TSelf.position) < fSearchAngle;
-                case Direction.down:
+                case EDirection.down:
                     return Vector3.Angle(-TSelf.up, vTarget - TSelf.position) < fSearchAngle;
                 default:
                     Debug.LogWarning("There was a problem in determining a face direction");

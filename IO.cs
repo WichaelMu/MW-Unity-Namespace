@@ -4,33 +4,27 @@ namespace MW.IO {
 
     public static class Mouse {
 
-        public enum Button {
-            LeftMouse,
-            MiddleMouse,
-            RightMouse
-		}
-
         /// <param name="BMouse">The mouse press to listen for.</param>
         /// <param name="bHold">Whether or not to check if this button is held down.</param>
         /// <param name="bUp">Whether or not to check if this button is released.</param>
         /// <returns>If the BMouse was clicked or held.</returns>
-        public static bool Click(Button BMouse, bool bHold = false, bool bUp = false) {
+        public static bool Click(EButton BMouse, bool bHold = false, bool bUp = false) {
             switch(BMouse) {
-                case Button.LeftMouse:
+                case EButton.LeftMouse:
                     if (bUp)
-                        return Input.GetMouseButtonUp(1);
+                        return Input.GetMouseButtonUp(0);
 
                     if (bHold)
                         return Input.GetMouseButton(0);
                     return Input.GetMouseButtonDown(0);
-                case Button.RightMouse:
+                case EButton.RightMouse:
                     if (bUp)
                         return Input.GetMouseButtonUp(1);
 
                     if (bHold)
                         return Input.GetMouseButton(1);
                     return Input.GetMouseButtonDown(1);
-                case Button.MiddleMouse:
+                case EButton.MiddleMouse:
                     if (bUp)
                         return Input.GetMouseButtonUp(2);
 

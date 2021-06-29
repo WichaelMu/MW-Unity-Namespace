@@ -18,7 +18,7 @@ namespace MW.HUD {
         /// <param name="fLineWidth">The thickness of this line.</param>
         /// <param name="vOffset">The offset to place this line.</param>
         /// <param name="MMaterial">The material used to draw the line.</param>
-        /// <param name="bUseWorldSpacUseWorldSpace">Should this line use world space?</param>
+        /// <param name="bUseWorldSpace">Should this line use world space?</param>
         public static void DrawLine(LineRenderer LRSelf, Vector3 vFrom, Vector3 vTo, Color colStartColour, Color colEndColour, float fLineWidth, Vector3 vOffset, Material MMaterial, bool bUseWorldSpace = true) {
 
             LRSelf.material = MMaterial;
@@ -167,7 +167,7 @@ namespace MW.HUD {
 
             for (int i = 0; i < sContent.Length; ++i) {
                 tmpTextMeshPro.text += sContent[i];
-                Audio.aAudioInstance.Play(sSound);
+                Audio.AAudioInstance.Play(sSound);
                 yield return new WaitForSeconds(fDelay);
             }
         }
