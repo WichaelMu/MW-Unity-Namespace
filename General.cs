@@ -19,24 +19,24 @@ namespace MW.General {
 
         /// <summary>If self can see target within SearchAngle degrees while facing face.</summary>
         /// <param name="dirFace">The direction self is facing.</param>
-        /// <param name="TSelf">The transform searching for target.</param>
-        /// <param name="TTarget">The transform to look out for.</param>
+        /// <param name="ASelf">The transform searching for target.</param>
+        /// <param name="ATarget">The transform to look out for.</param>
         /// <param name="fSearchAngle">The maximum degrees to search for target.</param>
-        public static bool InFOV(EDirection dirFace, Transform TSelf, Transform TTarget, float fSearchAngle) {
+        public static bool InFOV(EDirection dirFace, Transform ASelf, Transform ATarget, float fSearchAngle) {
 
             switch (dirFace) {
                 case EDirection.forward:
-                    return Vector3.Angle(TSelf.forward, TTarget.position - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(ASelf.forward, ATarget.position - ASelf.position) < fSearchAngle;
                 case EDirection.right:
-                    return Vector3.Angle(TSelf.right, TTarget.position - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(ASelf.right, ATarget.position - ASelf.position) < fSearchAngle;
                 case EDirection.back:
-                    return Vector3.Angle(-TSelf.forward, TTarget.position - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(-ASelf.forward, ATarget.position - ASelf.position) < fSearchAngle;
                 case EDirection.left:
-                    return Vector3.Angle(-TSelf.right, TTarget.position - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(-ASelf.right, ATarget.position - ASelf.position) < fSearchAngle;
                 case EDirection.up:
-                    return Vector3.Angle(TSelf.up, TTarget.position - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(ASelf.up, ATarget.position - ASelf.position) < fSearchAngle;
                 case EDirection.down:
-                    return Vector3.Angle(-TSelf.up, TTarget.position - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(-ASelf.up, ATarget.position - ASelf.position) < fSearchAngle;
                 default:
                     Debug.LogWarning("There was a problem in determining a face direction");
                     return false;
@@ -45,24 +45,24 @@ namespace MW.General {
 
         /// <summary>If self can see target within SearchAngle degrees while facing face.</summary>
         /// <param name="dirFace">The direction self is facing.</param>
-        /// <param name="TSelf">The transform searching for target.</param>
+        /// <param name="ASelf">The transform searching for target.</param>
         /// <param name="vTarget">The position to look out for.</param>
         /// <param name="fSearchAngle">The maximum degrees to search for target.</param>
-        public static bool InFOV(EDirection dirFace, Transform TSelf, Vector3 vTarget, float fSearchAngle) {
+        public static bool InFOV(EDirection dirFace, Transform ASelf, Vector3 vTarget, float fSearchAngle) {
 
             switch (dirFace) {
                 case EDirection.forward:
-                    return Vector3.Angle(TSelf.forward, vTarget - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(ASelf.forward, vTarget - ASelf.position) < fSearchAngle;
                 case EDirection.right:
-                    return Vector3.Angle(TSelf.right, vTarget - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(ASelf.right, vTarget - ASelf.position) < fSearchAngle;
                 case EDirection.back:
-                    return Vector3.Angle(-TSelf.forward, vTarget - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(-ASelf.forward, vTarget - ASelf.position) < fSearchAngle;
                 case EDirection.left:
-                    return Vector3.Angle(-TSelf.right, vTarget - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(-ASelf.right, vTarget - ASelf.position) < fSearchAngle;
                 case EDirection.up:
-                    return Vector3.Angle(TSelf.up, vTarget - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(ASelf.up, vTarget - ASelf.position) < fSearchAngle;
                 case EDirection.down:
-                    return Vector3.Angle(-TSelf.up, vTarget - TSelf.position) < fSearchAngle;
+                    return Vector3.Angle(-ASelf.up, vTarget - ASelf.position) < fSearchAngle;
                 default:
                     Debug.LogWarning("There was a problem in determining a face direction");
                     return false;

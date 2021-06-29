@@ -41,14 +41,14 @@ namespace MW.Physx {
         /// Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
         /// </summary>
         /// <param name="RSelf">The Rigidbody to move.</param>
-        /// <param name="TTarget">The Transform destination.</param>
+        /// <param name="ATarget">The Transform destination.</param>
         /// <param name="fVelocity">The rate at which self moves towards target.</param>
         /// <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
-        public static void HomeTowards(Rigidbody RSelf, Transform TTarget, float fVelocity, float fTurnRadius) {
+        public static void HomeTowards(Rigidbody RSelf, Transform ATarget, float fVelocity, float fTurnRadius) {
 
             Transform _self = RSelf.transform;
             RSelf.velocity = _self.forward * fVelocity * Time.deltaTime;
-            RSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(TTarget.position - _self.position), fTurnRadius));
+            RSelf.MoveRotation(Quaternion.RotateTowards(_self.rotation, Quaternion.LookRotation(ATarget.position - _self.position), fTurnRadius));
         }
 
         /// <summary>
@@ -198,21 +198,21 @@ namespace MW.Physx {
     public static class Miscellanous {
 
         /// <summary>The direction in which to avoid colliding with obstacles.</summary>
-        /// <param name="TSelf">The transform wanting to avoid collisions.</param>
+        /// <param name="ASelf">The transform wanting to avoid collisions.</param>
         /// <param name="fAngle">The angle to search for potential collisions.</param>
         /// <param name="fSearchDistance">The distance to search for collisions.</param>
         /// <param name="lmObstacles">The layer to avoid colliding with.</param>
         /// <param name="bDebug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
-        public static Vector3 CollisionAvoidance(Transform TSelf, float fAngle, float fSearchDistance, LayerMask lmObstacles, bool bDebug) {
-            Collider[] colliders = Physics.OverlapSphere(TSelf.position, fSearchDistance, lmObstacles);
+        public static Vector3 CollisionAvoidance(Transform ASelf, float fAngle, float fSearchDistance, LayerMask lmObstacles, bool bDebug) {
+            Collider[] colliders = Physics.OverlapSphere(ASelf.position, fSearchDistance, lmObstacles);
 
             float min = float.MaxValue;
-            Vector3 dir = TSelf.forward;
+            Vector3 dir = ASelf.forward;
 
             for (int i = 0; i < colliders.Length; i++) {
-                Vector3 closestPoint = colliders[i].ClosestPoint(TSelf.position);
-                if (Generic.InFOV(EDirection.forward, TSelf, closestPoint, fAngle)) {
-                    float distance = Vector3.Distance(TSelf.position, closestPoint);
+                Vector3 closestPoint = colliders[i].ClosestPoint(ASelf.position);
+                if (Generic.InFOV(EDirection.forward, ASelf, closestPoint, fAngle)) {
+                    float distance = Vector3.Distance(ASelf.position, closestPoint);
                     if (distance < min) {
                         min = distance;
                         dir = closestPoint;
@@ -221,13 +221,13 @@ namespace MW.Physx {
             }
 
 
-            Vector3 flipped = Vector3.Reflect(TSelf.forward, (dir - TSelf.position).normalized);
+            Vector3 flipped = Vector3.Reflect(ASelf.forward, (dir - ASelf.position).normalized);
 
-            Physics.Raycast(TSelf.position, flipped, out RaycastHit hit, 500000f, lmObstacles);
+            Physics.Raycast(ASelf.position, flipped, out RaycastHit hit, 500000f, lmObstacles);
 
             if (bDebug) {
-                Debug.DrawRay(TSelf.position, (dir - TSelf.position).normalized * fSearchDistance, Color.red);
-                Debug.DrawRay(TSelf.position, (flipped - TSelf.position).normalized, Color.blue);
+                Debug.DrawRay(ASelf.position, (dir - ASelf.position).normalized * fSearchDistance, Color.red);
+                Debug.DrawRay(ASelf.position, (flipped - ASelf.position).normalized, Color.blue);
             }
 
             return hit.point;

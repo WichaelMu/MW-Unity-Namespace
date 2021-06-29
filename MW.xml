@@ -110,14 +110,14 @@
         <member name="M:MW.General.Generic.InFOV(MW.EDirection,UnityEngine.Transform,UnityEngine.Transform,System.Single)">
             <summary>If self can see target within SearchAngle degrees while facing face.</summary>
             <param name="dirFace">The direction self is facing.</param>
-            <param name="TSelf">The transform searching for target.</param>
-            <param name="TTarget">The transform to look out for.</param>
+            <param name="ASelf">The transform searching for target.</param>
+            <param name="ATarget">The transform to look out for.</param>
             <param name="fSearchAngle">The maximum degrees to search for target.</param>
         </member>
         <member name="M:MW.General.Generic.InFOV(MW.EDirection,UnityEngine.Transform,UnityEngine.Vector3,System.Single)">
             <summary>If self can see target within SearchAngle degrees while facing face.</summary>
             <param name="dirFace">The direction self is facing.</param>
-            <param name="TSelf">The transform searching for target.</param>
+            <param name="ASelf">The transform searching for target.</param>
             <param name="vTarget">The position to look out for.</param>
             <param name="fSearchAngle">The maximum degrees to search for target.</param>
         </member>
@@ -278,12 +278,12 @@
         <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform)">
             <summary>Have the camera follow target's transform.</summary>
             <param name="CCamera">The camera to move.</param>
-            <param name="TTarget">The target's transform component.</param>
+            <param name="ATarget">The target's transform component.</param>
         </member>
         <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>Have the camera to follow target's transform at an offset.</summary>
             <param name="CCamera">The camera to move.</param>
-            <param name="TTarget">The target's transform component.</param>
+            <param name="ATarget">The target's transform component.</param>
             <param name="vOffset">The target's position at an offset.</param>
         </member>
         <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3)">
@@ -302,7 +302,7 @@
         </member>
         <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>Have the main camera follow target's transform at an offset.</summary>
-            <param name="TTarget">The target's transform component.</param>
+            <param name="ATarget">The target's transform component.</param>
             <param name="vOffset">The target's position at an offset.</param>
         </member>
         <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Vector3)">
@@ -315,21 +315,21 @@
         </member>
         <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform)">
             <summary>Ensures the transform always faces the main camera.</summary>
-            <param name="TSelf">The transform to look towards the main camera.</param>
+            <param name="ASelf">The transform to look towards the main camera.</param>
         </member>
         <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Camera)">
             <summary>Ensures the transform always faces camera.</summary>
-            <param name="TSelf">The transform to look towards the camera.</param>
+            <param name="ASelf">The transform to look towards the camera.</param>
             <param name="CCamera">The camera to look at.</param>
         </member>
         <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Transform)">
             <summary>Ensures the transform always faces point.</summary>
-            <param name="TSelf">The transform to look towards the point.</param>
+            <param name="ASelf">The transform to look towards the point.</param>
             <param name="TPoint">The transform of where self needs to look towards</param>
         </member>
         <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>Ensures the transform always faces point.</summary>
-            <param name="TSelf">The transform to look towards the point.</param>
+            <param name="ASelf">The transform to look towards the point.</param>
             <param name="vPoint">The point in world coordinates.</param>
         </member>
         <member name="F:MW.MWPhysics.Kinematics.kVelocityRatio">
@@ -360,7 +360,7 @@
             Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
             </summary>
             <param name="RBSelf">The Rigidbody to move.</param>
-            <param name="TTarget">The Transform destination.</param>
+            <param name="ATarget">The Transform destination.</param>
             <param name="fVelocity">The rate at which self moves towards target.</param>
             <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
         </member>
@@ -429,7 +429,7 @@
         </member>
         <member name="M:MW.MWPhysics.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
             <summary>The direction in which to avoid colliding with obstacles.</summary>
-            <param name="TSelf">The transform wanting to avoid collisions.</param>
+            <param name="ASelf">The transform wanting to avoid collisions.</param>
             <param name="fAngle">The angle to search for potential collisions.</param>
             <param name="fSearchDistance">The distance to search for collisions.</param>
             <param name="lmObstacles">The layer to avoid colliding with.</param>
