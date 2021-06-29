@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using MW.IO;
 
-namespace MW.MWCamera {
+namespace MW.Optics {
 
 
-    public static class MWCamera {
+    public static class Tracking {
         /// <summary>Have the camera follow target's transform.</summary>
         /// <param name="CCamera">The camera to move.</param>
         /// <param name="TTarget">The target's transform component.</param>
@@ -85,4 +86,45 @@ namespace MW.MWCamera {
             TSelf.LookAt(vPoint);
         }
     }
+
+    public static class Orthographic {
+        /// <summary>Fires a ray from CCamera to mouse position.</summary>
+        /// <returns>Pair::First RaycastHit2D information about the Raycast. Pair::Second if the ray hit something.</returns>
+        public static TPair<RaycastHit2D, bool> Raycast(Camera CCamera) {
+            Ray r = CCamera.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit2D hit = Physics2D.Raycast(r.origin, r.direction, 50);
+
+            return new TPair<RaycastHit2D, bool>(hit, hit.collider != null);
+        }
+
+        public static Plane PPlane = new Plane(-Vector3.forward, Vector3.zero);
+        static Vector3 vStartDrag;
+        static Vector3 vEndDrag;
+        static Vector3 vDragPos = Vector3.zero;
+
+        public static void Pan(Camera CCamera, EButton BButtonToActivate, float fInterpolateSpeed) {
+            if (Mouse.Click(BButtonToActivate)) {
+                Ray ray = CCamera.ScreenPointToRay(Input.mousePosition);
+
+                if (PPlane.Raycast(ray, out float intersect)) {
+                    vStartDrag = ray.GetPoint(intersect);
+                }
+            }
+
+            if (Mouse.Click(BButtonToActivate, true)) {
+                Ray ray = CCamera.ScreenPointToRay(Input.mousePosition);
+
+                if (PPlane.Raycast(ray, out float intersect)) {
+                    vEndDrag = ray.GetPoint(intersect);
+
+                    vDragPos = CCamera.transform.position + vStartDrag - vEndDrag;
+                }
+            }
+
+            if (vDragPos != Vector3.zero)
+                CCamera.transform.position = Vector3.Lerp(CCamera.transform.position, vDragPos, fInterpolateSpeed * Time.deltaTime);
+        }
+    }
+
 }
