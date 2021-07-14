@@ -90,7 +90,7 @@
         </member>
         <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.EEquation)">
             <summary>
-            Returns the function associated to the easingFunction enum. This fValue returned should be cached as it allocates memory
+            Returns the function associated to the easingFunction enum. This fDuration returned should be cached as it allocates memory
             to return.
             </summary>
             <param name="EEasingFunction">The enum associated with the easing function.</param>
@@ -264,78 +264,82 @@
             <param name="bUp">Whether or not to check if this button is released.</param>
             <returns>If Stroke was pressed or Held.</returns>
         </member>
-        <member name="T:MW.Pair`2">
+        <member name="T:MW.TPair`2">
             <summary>Generates a new pair of two types of values.</summary>
             <typeparam name="T_First">The type of the first variable to store.</typeparam>
             <typeparam name="T_Second">The type of the second variable to store.</typeparam>
         </member>
-        <member name="T:MW.Triple`3">
+        <member name="T:MW.TTriple`3">
             <summary>Generates a new variable of three types of values.</summary>
             <typeparam name="T_First">The type of the first variable to store.</typeparam>
             <typeparam name="T_Second">The type of the second variable to store.</typeparam>
             <typeparam name="T_Third">The type of the third variable to store.</typeparam>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Camera,UnityEngine.Transform)">
             <summary>Have the camera follow target's transform.</summary>
             <param name="CCamera">The camera to move.</param>
             <param name="ATarget">The target's transform component.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Transform,UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Camera,UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>Have the camera to follow target's transform at an offset.</summary>
             <param name="CCamera">The camera to move.</param>
             <param name="ATarget">The target's transform component.</param>
             <param name="vOffset">The target's position at an offset.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3)">
             <summary>Have the camera follow target's position.</summary>
             <param name="CCamera">The camera to move.</param>
             <param name="vTarget">The target's position to follow.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Camera,UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Have the camera follow target's position at an offset.</summary>
             <param name="CCamera">The camera to move.</param>
             <param name="vTarget">The target's position to follow.</param>
             <param name="vOffset">The target's position at an offset.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Transform)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Transform)">
             <summary>Have the main camera follow target's transform.</summary>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Transform,UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>Have the main camera follow target's transform at an offset.</summary>
             <param name="ATarget">The target's transform component.</param>
             <param name="vOffset">The target's position at an offset.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Vector3)">
             <summary>Have the main camera follow target's position.</summary>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.CameraFollow(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.CameraFollow(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Have the main camera follow target's position at an offset.</summary>
             <param name="vTarget">The target's position.</param>
             <param name="vOffset">The target's position at an offset.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform)">
+        <member name="M:MW.Optics.Tracking.Billboard(UnityEngine.Transform)">
             <summary>Ensures the transform always faces the main camera.</summary>
             <param name="ASelf">The transform to look towards the main camera.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Camera)">
+        <member name="M:MW.Optics.Tracking.Billboard(UnityEngine.Transform,UnityEngine.Camera)">
             <summary>Ensures the transform always faces camera.</summary>
             <param name="ASelf">The transform to look towards the camera.</param>
             <param name="CCamera">The camera to look at.</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Transform)">
+        <member name="M:MW.Optics.Tracking.Billboard(UnityEngine.Transform,UnityEngine.Transform)">
             <summary>Ensures the transform always faces point.</summary>
             <param name="ASelf">The transform to look towards the point.</param>
-            <param name="TPoint">The transform of where self needs to look towards</param>
+            <param name="APoint">The transform of where self needs to look towards</param>
         </member>
-        <member name="M:MW.MWCamera.MWCamera.Billboard(UnityEngine.Transform,UnityEngine.Vector3)">
+        <member name="M:MW.Optics.Tracking.Billboard(UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>Ensures the transform always faces point.</summary>
             <param name="ASelf">The transform to look towards the point.</param>
             <param name="vPoint">The point in world coordinates.</param>
         </member>
-        <member name="F:MW.MWPhysics.Kinematics.kVelocityRatio">
+        <member name="M:MW.Optics.Orthographic.Raycast(UnityEngine.Camera)">
+            <summary>Fires a ray from CCamera to mouse position.</summary>
+            <returns>Pair::First RaycastHit2D information about the Raycast. Pair::Second if the ray hit something.</returns>
+        </member>
+        <member name="F:MW.Physx.Kinematics.kVelocityRatio">
             <summary>Convert inspector speed to m/s.</summary>
         </member>
-        <member name="M:MW.MWPhysics.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
+        <member name="M:MW.Physx.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
             <summary>
             If the distance between from and to is less than or EqualTo detection.
             </summary>
@@ -345,7 +349,7 @@
             <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
             <returns></returns>
         </member>
-        <member name="M:MW.MWPhysics.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
+        <member name="M:MW.Physx.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
             <summary>
             If the distance between from and to is less than or EqualTo detection.
             </summary>
@@ -355,51 +359,51 @@
             <param name="fDistance">The range that is considered if from has 'reached' to.</param>
             <returns></returns>
         </member>
-        <member name="M:MW.MWPhysics.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
+        <member name="M:MW.Physx.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
             <summary>
             Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
             </summary>
-            <param name="RBSelf">The Rigidbody to move.</param>
+            <param name="RSelf">The Rigidbody to move.</param>
             <param name="ATarget">The Transform destination.</param>
             <param name="fVelocity">The rate at which self moves towards target.</param>
             <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
         </member>
-        <member name="M:MW.MWPhysics.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
+        <member name="M:MW.Physx.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
             <summary>
             Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
             </summary>
-            <param name="RBSelf">The Rigidbody to move.</param>
+            <param name="RSelf">The Rigidbody to move.</param>
             <param name="vTarget">The destination coordinates.</param>
             <param name="fVelocity">The rate at which self moves towards target.</param>
             <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
         </member>
-        <member name="M:MW.MWPhysics.Mathematics.Acceleration(MW.EEquation,System.Single,System.Single,System.Single)">
+        <member name="M:MW.Physx.Mathematics.Acceleration(MW.EEquation,System.Single,System.Single,System.Single)">
             <param name="EEquation">The equation to use to accelerate.</param>
             <param name="fCurrentSpeed">The current speed of the acceleration.</param>
             <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
             <param name="fTerminal">The maximum speed.</param>
             <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
         </member>
-        <member name="M:MW.MWPhysics.Mathematics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
-            <param name="RBSelf">The rigidbody to calculate an acceleration rate.</param>
+        <member name="M:MW.Physx.Mathematics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
+            <param name="RSelf">The rigidbody to calculate an acceleration rate.</param>
             <param name="fSpeed">The current speed of the rigidbody.</param>
             <returns>The float rate of movement in metres per second.</returns>
         </member>
-        <member name="M:MW.MWPhysics.Mathematics.Speed(UnityEngine.Rigidbody,MW.EUnits)">
-            <param name="RBSelf">The Rigidbody to read a speed from.</param>
+        <member name="M:MW.Physx.Mathematics.Speed(UnityEngine.Rigidbody,MW.EUnits)">
+            <param name="RSelf">The Rigidbody to read a speed from.</param>
             <param name="UUnit">The desired unit of measurement.</param>
             <returns>A speed reading from self in unit of measurement.</returns>
         </member>
-        <member name="M:MW.MWPhysics.Mathematics.PredictiveProjectile(UnityEngine.Rigidbody,UnityEngine.Rigidbody)">
-            <summary>The direction to intercept RBTarget relative to RBSelf.</summary>
-            <param name="RBSelf">The Rigidbody predicting the movement of RBTarget.</param>
+        <member name="M:MW.Physx.Mathematics.PredictiveProjectile(UnityEngine.Rigidbody,UnityEngine.Rigidbody)">
+            <summary>The direction to intercept RBTarget relative to RSelf.</summary>
+            <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
             <param name="RBTarget">The Rigidbody to predict.</param>
         </member>
-        <member name="M:MW.MWPhysics.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
+        <member name="M:MW.Physx.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
             <summary>The direction of natural air resistance.</summary>
-            <param name="RBSelf">The rigidbody to apply air resistance to.</param>
+            <param name="RSelf">The rigidbody to apply air resistance to.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
+        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
             <summary>Interpolates between origin and destination using equation in duration.</summary>
             <param name="EEquation">The equation to use to interpolate.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
@@ -408,7 +412,7 @@
             <param name="fStart">The starting value of equation.</param>
             <param name="fFinal">The final value of equation.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
+        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
             <summary>Interpolates between origin and destination using equation.</summary>
             <param name="EEquation">The equation to use to interpolate.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
@@ -416,18 +420,18 @@
             <param name="fStart">The starting value of equation.</param>
             <param name="fFinal">The final value of equation.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Interpolates between origin and destination.</summary>
             <param name="EEquation">The equation to use for interpolation.</param>
             <param name="vOrigin">The origin of the interpolation.</param>
             <param name="vDestination">The destination of this interpolation.</param>
         </member>
-        <member name="M:MW.MWPhysics.PhysicsInterpolation.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
+        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
             <summary>Interpolates between origin and destination at a constant rate.</summary>
             <param name="vOrigin">The origin of the interpolation.</param>
             <param name="vDestination">The destination of this interpolation.</param>
         </member>
-        <member name="M:MW.MWPhysics.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
+        <member name="M:MW.Physx.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
             <summary>The direction in which to avoid colliding with obstacles.</summary>
             <param name="ASelf">The transform wanting to avoid collisions.</param>
             <param name="fAngle">The angle to search for potential collisions.</param>

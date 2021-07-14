@@ -8,201 +8,201 @@ namespace MW.Easing {
 
         const float kNaturalLogOf2 = 0.693147181f;
 
-        public static float Linear(float fStart, float fEnd, float fValue) {
-            return Mathf.Lerp(fStart, fEnd, fValue);
+        public static float Linear(float fStart, float fEnd, float fDuration) {
+            return Mathf.Lerp(fStart, fEnd, fDuration);
         }
 
-        public static float Spring(float fStart, float fEnd, float fValue) {
-            fValue = Mathf.Clamp01(fValue);
-            fValue = (Mathf.Sin(fValue * Mathf.PI * (0.2f + 2.5f * fValue * fValue * fValue)) * Mathf.Pow(1f - fValue, 2.2f) + fValue) * (1f + (1.2f * (1f - fValue)));
-            return fStart + (fEnd - fStart) * fValue;
+        public static float Spring(float fStart, float fEnd, float fDuration) {
+            fDuration = Mathf.Clamp01(fDuration);
+            fDuration = (Mathf.Sin(fDuration * Mathf.PI * (0.2f + 2.5f * fDuration * fDuration * fDuration)) * Mathf.Pow(1f - fDuration, 2.2f) + fDuration) * (1f + (1.2f * (1f - fDuration)));
+            return fStart + (fEnd - fStart) * fDuration;
         }
 
-        public static float EaseInQuad(float fStart, float fEnd, float fValue) {
+        public static float EaseInQuad(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * fValue * fValue + fStart;
+            return fEnd * fDuration * fDuration + fStart;
         }
 
-        public static float EaseOutQuad(float fStart, float fEnd, float fValue) {
+        public static float EaseOutQuad(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return -fEnd * fValue * (fValue - 2) + fStart;
+            return -fEnd * fDuration * (fDuration - 2) + fStart;
         }
 
-        public static float EaseInOutQuad(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutQuad(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
-            if (fValue < 1) return fEnd * 0.5f * fValue * fValue + fStart;
-            fValue--;
-            return -fEnd * 0.5f * (fValue * (fValue - 2) - 1) + fStart;
+            if (fDuration < 1) return fEnd * 0.5f * fDuration * fDuration + fStart;
+            fDuration--;
+            return -fEnd * 0.5f * (fDuration * (fDuration - 2) - 1) + fStart;
         }
 
-        public static float EaseInCubic(float fStart, float fEnd, float fValue) {
+        public static float EaseInCubic(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * fValue * fValue * fValue + fStart;
+            return fEnd * fDuration * fDuration * fDuration + fStart;
         }
 
-        public static float EaseOutCubic(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutCubic(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return fEnd * (fValue * fValue * fValue + 1) + fStart;
+            return fEnd * (fDuration * fDuration * fDuration + 1) + fStart;
         }
 
-        public static float EaseInOutCubic(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutCubic(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
-            if (fValue < 1) return fEnd * 0.5f * fValue * fValue * fValue + fStart;
-            fValue -= 2;
-            return fEnd * 0.5f * (fValue * fValue * fValue + 2) + fStart;
+            if (fDuration < 1) return fEnd * 0.5f * fDuration * fDuration * fDuration + fStart;
+            fDuration -= 2;
+            return fEnd * 0.5f * (fDuration * fDuration * fDuration + 2) + fStart;
         }
 
-        public static float EaseInQuart(float fStart, float fEnd, float fValue) {
+        public static float EaseInQuart(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * fValue * fValue * fValue * fValue + fStart;
+            return fEnd * fDuration * fDuration * fDuration * fDuration + fStart;
         }
 
-        public static float EaseOutQuart(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutQuart(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return -fEnd * (fValue * fValue * fValue * fValue - 1) + fStart;
+            return -fEnd * (fDuration * fDuration * fDuration * fDuration - 1) + fStart;
         }
 
-        public static float EaseInOutQuart(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutQuart(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
-            if (fValue < 1) return fEnd * 0.5f * fValue * fValue * fValue * fValue + fStart;
-            fValue -= 2;
-            return -fEnd * 0.5f * (fValue * fValue * fValue * fValue - 2) + fStart;
+            if (fDuration < 1) return fEnd * 0.5f * fDuration * fDuration * fDuration * fDuration + fStart;
+            fDuration -= 2;
+            return -fEnd * 0.5f * (fDuration * fDuration * fDuration * fDuration - 2) + fStart;
         }
 
-        public static float EaseInQuint(float fStart, float fEnd, float fValue) {
+        public static float EaseInQuint(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * fValue * fValue * fValue * fValue * fValue + fStart;
+            return fEnd * fDuration * fDuration * fDuration * fDuration * fDuration + fStart;
         }
 
-        public static float EaseOutQuint(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutQuint(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return fEnd * (fValue * fValue * fValue * fValue * fValue + 1) + fStart;
+            return fEnd * (fDuration * fDuration * fDuration * fDuration * fDuration + 1) + fStart;
         }
 
-        public static float EaseInOutQuint(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutQuint(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
-            if (fValue < 1) return fEnd * 0.5f * fValue * fValue * fValue * fValue * fValue + fStart;
-            fValue -= 2;
-            return fEnd * 0.5f * (fValue * fValue * fValue * fValue * fValue + 2) + fStart;
+            if (fDuration < 1) return fEnd * 0.5f * fDuration * fDuration * fDuration * fDuration * fDuration + fStart;
+            fDuration -= 2;
+            return fEnd * 0.5f * (fDuration * fDuration * fDuration * fDuration * fDuration + 2) + fStart;
         }
 
-        public static float EaseInSine(float fStart, float fEnd, float fValue) {
+        public static float EaseInSine(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return -fEnd * Mathf.Cos(fValue * (Mathf.PI * 0.5f)) + fEnd + fStart;
+            return -fEnd * Mathf.Cos(fDuration * (Mathf.PI * 0.5f)) + fEnd + fStart;
         }
 
-        public static float EaseOutSine(float fStart, float fEnd, float fValue) {
+        public static float EaseOutSine(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * Mathf.Sin(fValue * (Mathf.PI * 0.5f)) + fStart;
+            return fEnd * Mathf.Sin(fDuration * (Mathf.PI * 0.5f)) + fStart;
         }
 
-        public static float EaseInOutSine(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutSine(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return -fEnd * 0.5f * (Mathf.Cos(Mathf.PI * fValue) - 1) + fStart;
+            return -fEnd * 0.5f * (Mathf.Cos(Mathf.PI * fDuration) - 1) + fStart;
         }
 
-        public static float EaseInExpo(float fStart, float fEnd, float fValue) {
+        public static float EaseInExpo(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * Mathf.Pow(2, 10 * (fValue - 1)) + fStart;
+            return fEnd * Mathf.Pow(2, 10 * (fDuration - 1)) + fStart;
         }
 
-        public static float EaseOutExpo(float fStart, float fEnd, float fValue) {
+        public static float EaseOutExpo(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * (-Mathf.Pow(2, -10 * fValue) + 1) + fStart;
+            return fEnd * (-Mathf.Pow(2, -10 * fDuration) + 1) + fStart;
         }
 
-        public static float EaseInOutExpo(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutExpo(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
-            if (fValue < 1) return fEnd * 0.5f * Mathf.Pow(2, 10 * (fValue - 1)) + fStart;
-            fValue--;
-            return fEnd * 0.5f * (-Mathf.Pow(2, -10 * fValue) + 2) + fStart;
+            if (fDuration < 1) return fEnd * 0.5f * Mathf.Pow(2, 10 * (fDuration - 1)) + fStart;
+            fDuration--;
+            return fEnd * 0.5f * (-Mathf.Pow(2, -10 * fDuration) + 2) + fStart;
         }
 
-        public static float EaseInCirc(float fStart, float fEnd, float fValue) {
+        public static float EaseInCirc(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return -fEnd * (Mathf.Sqrt(1 - fValue * fValue) - 1) + fStart;
+            return -fEnd * (Mathf.Sqrt(1 - fDuration * fDuration) - 1) + fStart;
         }
 
-        public static float EaseOutCirc(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutCirc(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return fEnd * Mathf.Sqrt(1 - fValue * fValue) + fStart;
+            return fEnd * Mathf.Sqrt(1 - fDuration * fDuration) + fStart;
         }
 
-        public static float EaseInOutCirc(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutCirc(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
-            if (fValue < 1) return -fEnd * 0.5f * (Mathf.Sqrt(1 - fValue * fValue) - 1) + fStart;
-            fValue -= 2;
-            return fEnd * 0.5f * (Mathf.Sqrt(1 - fValue * fValue) + 1) + fStart;
+            if (fDuration < 1) return -fEnd * 0.5f * (Mathf.Sqrt(1 - fDuration * fDuration) - 1) + fStart;
+            fDuration -= 2;
+            return fEnd * 0.5f * (Mathf.Sqrt(1 - fDuration * fDuration) + 1) + fStart;
         }
 
-        public static float EaseInBounce(float fStart, float fEnd, float fValue) {
+        public static float EaseInBounce(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
             float d = 1f;
-            return fEnd - EaseOutBounce(0, fEnd, d - fValue) + fStart;
+            return fEnd - EaseOutBounce(0, fEnd, d - fDuration) + fStart;
         }
 
-        public static float EaseOutBounce(float fStart, float fEnd, float fValue) {
-            fValue /= 1f;
+        public static float EaseOutBounce(float fStart, float fEnd, float fDuration) {
+            fDuration /= 1f;
             fEnd -= fStart;
-            if (fValue < (1 / 2.75f)) {
-                return fEnd * (7.5625f * fValue * fValue) + fStart;
-            } else if (fValue < (2 / 2.75f)) {
-                fValue -= (1.5f / 2.75f);
-                return fEnd * (7.5625f * (fValue) * fValue + .75f) + fStart;
-            } else if (fValue < (2.5 / 2.75)) {
-                fValue -= (2.25f / 2.75f);
-                return fEnd * (7.5625f * (fValue) * fValue + .9375f) + fStart;
+            if (fDuration < (1 / 2.75f)) {
+                return fEnd * (7.5625f * fDuration * fDuration) + fStart;
+            } else if (fDuration < (2 / 2.75f)) {
+                fDuration -= (1.5f / 2.75f);
+                return fEnd * (7.5625f * (fDuration) * fDuration + .75f) + fStart;
+            } else if (fDuration < (2.5 / 2.75)) {
+                fDuration -= (2.25f / 2.75f);
+                return fEnd * (7.5625f * (fDuration) * fDuration + .9375f) + fStart;
             } else {
-                fValue -= (2.625f / 2.75f);
-                return fEnd * (7.5625f * (fValue) * fValue + .984375f) + fStart;
+                fDuration -= (2.625f / 2.75f);
+                return fEnd * (7.5625f * (fDuration) * fDuration + .984375f) + fStart;
             }
         }
 
-        public static float EaseInOutBounce(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutBounce(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
             float d = 1f;
-            if (fValue < d * 0.5f) return EaseInBounce(0, fEnd, fValue * 2) * 0.5f + fStart;
-            else return EaseOutBounce(0, fEnd, fValue * 2 - d) * 0.5f + fEnd * 0.5f + fStart;
+            if (fDuration < d * 0.5f) return EaseInBounce(0, fEnd, fDuration * 2) * 0.5f + fStart;
+            else return EaseOutBounce(0, fEnd, fDuration * 2 - d) * 0.5f + fEnd * 0.5f + fStart;
         }
 
-        public static float EaseInBack(float fStart, float fEnd, float fValue) {
+        public static float EaseInBack(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            fValue /= 1;
+            fDuration /= 1;
             float s = 1.70158f;
-            return fEnd * (fValue) * fValue * ((s + 1) * fValue - s) + fStart;
+            return fEnd * (fDuration) * fDuration * ((s + 1) * fDuration - s) + fStart;
         }
 
-        public static float EaseOutBack(float fStart, float fEnd, float fValue) {
+        public static float EaseOutBack(float fStart, float fEnd, float fDuration) {
             float s = 1.70158f;
             fEnd -= fStart;
-            fValue = (fValue) - 1;
-            return fEnd * ((fValue) * fValue * ((s + 1) * fValue + s) + 1) + fStart;
+            fDuration = (fDuration) - 1;
+            return fEnd * ((fDuration) * fDuration * ((s + 1) * fDuration + s) + 1) + fStart;
         }
 
-        public static float EaseInOutBack(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutBack(float fStart, float fEnd, float fDuration) {
             float s = 1.70158f;
             fEnd -= fStart;
-            fValue /= .5f;
-            if ((fValue) < 1) {
+            fDuration /= .5f;
+            if ((fDuration) < 1) {
                 s *= (1.525f);
-                return fEnd * 0.5f * (fValue * fValue * (((s) + 1) * fValue - s)) + fStart;
+                return fEnd * 0.5f * (fDuration * fDuration * (((s) + 1) * fDuration - s)) + fStart;
             }
-            fValue -= 2;
+            fDuration -= 2;
             s *= (1.525f);
-            return fEnd * 0.5f * ((fValue) * fValue * (((s) + 1) * fValue + s) + 2) + fStart;
+            return fEnd * 0.5f * ((fDuration) * fDuration * (((s) + 1) * fDuration + s) + 2) + fStart;
         }
 
-        public static float EaseInElastic(float fStart, float fEnd, float fValue) {
+        public static float EaseInElastic(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
 
             float d = 1f;
@@ -210,9 +210,9 @@ namespace MW.Easing {
             float s;
             float a = 0;
 
-            if (fValue == 0) return fStart;
+            if (fDuration == 0) return fStart;
 
-            if ((fValue /= d) == 1) return fStart + fEnd;
+            if ((fDuration /= d) == 1) return fStart + fEnd;
 
             if (a == 0f || a < Mathf.Abs(fEnd)) {
                 a = fEnd;
@@ -221,10 +221,10 @@ namespace MW.Easing {
                 s = p / (2 * Mathf.PI) * Mathf.Asin(fEnd / a);
             }
 
-            return -(a * Mathf.Pow(2, 10 * (fValue -= 1)) * Mathf.Sin((fValue * d - s) * (2 * Mathf.PI) / p)) + fStart;
+            return -(a * Mathf.Pow(2, 10 * (fDuration -= 1)) * Mathf.Sin((fDuration * d - s) * (2 * Mathf.PI) / p)) + fStart;
         }
 
-        public static float EaseOutElastic(float fStart, float fEnd, float fValue) {
+        public static float EaseOutElastic(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
 
             float d = 1f;
@@ -232,9 +232,9 @@ namespace MW.Easing {
             float s;
             float a = 0;
 
-            if (fValue == 0) return fStart;
+            if (fDuration == 0) return fStart;
 
-            if ((fValue /= d) == 1) return fStart + fEnd;
+            if ((fDuration /= d) == 1) return fStart + fEnd;
 
             if (a == 0f || a < Mathf.Abs(fEnd)) {
                 a = fEnd;
@@ -243,10 +243,10 @@ namespace MW.Easing {
                 s = p / (2 * Mathf.PI) * Mathf.Asin(fEnd / a);
             }
 
-            return (a * Mathf.Pow(2, -10 * fValue) * Mathf.Sin((fValue * d - s) * (2 * Mathf.PI) / p) + fEnd + fStart);
+            return (a * Mathf.Pow(2, -10 * fDuration) * Mathf.Sin((fDuration * d - s) * (2 * Mathf.PI) / p) + fEnd + fStart);
         }
 
-        public static float EaseInOutElastic(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutElastic(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
 
             float d = 1f;
@@ -254,9 +254,9 @@ namespace MW.Easing {
             float s;
             float a = 0;
 
-            if (fValue == 0) return fStart;
+            if (fDuration == 0) return fStart;
 
-            if ((fValue /= d * 0.5f) == 2) return fStart + fEnd;
+            if ((fDuration /= d * 0.5f) == 2) return fStart + fEnd;
 
             if (a == 0f || a < Mathf.Abs(fEnd)) {
                 a = fEnd;
@@ -265,242 +265,242 @@ namespace MW.Easing {
                 s = p / (2 * Mathf.PI) * Mathf.Asin(fEnd / a);
             }
 
-            if (fValue < 1) return -0.5f * (a * Mathf.Pow(2, 10 * (fValue -= 1)) * Mathf.Sin((fValue * d - s) * (2 * Mathf.PI) / p)) + fStart;
-            return a * Mathf.Pow(2, -10 * (fValue -= 1)) * Mathf.Sin((fValue * d - s) * (2 * Mathf.PI) / p) * 0.5f + fEnd + fStart;
+            if (fDuration < 1) return -0.5f * (a * Mathf.Pow(2, 10 * (fDuration -= 1)) * Mathf.Sin((fDuration * d - s) * (2 * Mathf.PI) / p)) + fStart;
+            return a * Mathf.Pow(2, -10 * (fDuration -= 1)) * Mathf.Sin((fDuration * d - s) * (2 * Mathf.PI) / p) * 0.5f + fEnd + fStart;
         }
 
         //
         // These are derived functions that the motor can use to get the speed at a specific time.
         //
-        // The easing functions all work with a normalized time (0 to 1) and the returned fValue here
-        // reflects that. fValues returned here should be divided by the actual time.
+        // The easing functions all work with a normalized time (0 to 1) and the returned fDuration here
+        // reflects that. fDurations returned here should be divided by the actual time.
         //
         // TODO: These functions have not had the testing they deserve. If there is odd behavior around
         //       dash speeds then this would be the first place I'd look.
 
-        public static float LinearD(float fStart, float fEnd, float fValue) {
+        public static float LinearD(float fStart, float fEnd, float fDuration) {
             return fEnd - fStart;
         }
 
-        public static float EaseInQuadD(float fStart, float fEnd, float fValue) {
-            return 2f * (fEnd - fStart) * fValue;
+        public static float EaseInQuadD(float fStart, float fEnd, float fDuration) {
+            return 2f * (fEnd - fStart) * fDuration;
         }
 
-        public static float EaseOutQuadD(float fStart, float fEnd, float fValue) {
+        public static float EaseOutQuadD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return -fEnd * fValue - fEnd * (fValue - 2);
+            return -fEnd * fDuration - fEnd * (fDuration - 2);
         }
 
-        public static float EaseInOutQuadD(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutQuadD(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
 
-            if (fValue < 1) {
-                return fEnd * fValue;
+            if (fDuration < 1) {
+                return fEnd * fDuration;
             }
 
-            fValue--;
+            fDuration--;
 
-            return fEnd * (1 - fValue);
+            return fEnd * (1 - fDuration);
         }
 
-        public static float EaseInCubicD(float fStart, float fEnd, float fValue) {
-            return 3f * (fEnd - fStart) * fValue * fValue;
+        public static float EaseInCubicD(float fStart, float fEnd, float fDuration) {
+            return 3f * (fEnd - fStart) * fDuration * fDuration;
         }
 
-        public static float EaseOutCubicD(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutCubicD(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return 3f * fEnd * fValue * fValue;
+            return 3f * fEnd * fDuration * fDuration;
         }
 
-        public static float EaseInOutCubicD(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutCubicD(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
 
-            if (fValue < 1) {
-                return (3f / 2f) * fEnd * fValue * fValue;
+            if (fDuration < 1) {
+                return (3f / 2f) * fEnd * fDuration * fDuration;
             }
 
-            fValue -= 2;
+            fDuration -= 2;
 
-            return (3f / 2f) * fEnd * fValue * fValue;
+            return (3f / 2f) * fEnd * fDuration * fDuration;
         }
 
-        public static float EaseInQuartD(float fStart, float fEnd, float fValue) {
-            return 4f * (fEnd - fStart) * fValue * fValue * fValue;
+        public static float EaseInQuartD(float fStart, float fEnd, float fDuration) {
+            return 4f * (fEnd - fStart) * fDuration * fDuration * fDuration;
         }
 
-        public static float EaseOutQuartD(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutQuartD(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return -4f * fEnd * fValue * fValue * fValue;
+            return -4f * fEnd * fDuration * fDuration * fDuration;
         }
 
-        public static float EaseInOutQuartD(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutQuartD(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
 
-            if (fValue < 1) {
-                return 2f * fEnd * fValue * fValue * fValue;
+            if (fDuration < 1) {
+                return 2f * fEnd * fDuration * fDuration * fDuration;
             }
 
-            fValue -= 2;
+            fDuration -= 2;
 
-            return -2f * fEnd * fValue * fValue * fValue;
+            return -2f * fEnd * fDuration * fDuration * fDuration;
         }
 
-        public static float EaseInQuintD(float fStart, float fEnd, float fValue) {
-            return 5f * (fEnd - fStart) * fValue * fValue * fValue * fValue;
+        public static float EaseInQuintD(float fStart, float fEnd, float fDuration) {
+            return 5f * (fEnd - fStart) * fDuration * fDuration * fDuration * fDuration;
         }
 
-        public static float EaseOutQuintD(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutQuintD(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return 5f * fEnd * fValue * fValue * fValue * fValue;
+            return 5f * fEnd * fDuration * fDuration * fDuration * fDuration;
         }
 
-        public static float EaseInOutQuintD(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutQuintD(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
 
-            if (fValue < 1) {
-                return (5f / 2f) * fEnd * fValue * fValue * fValue * fValue;
+            if (fDuration < 1) {
+                return (5f / 2f) * fEnd * fDuration * fDuration * fDuration * fDuration;
             }
 
-            fValue -= 2;
+            fDuration -= 2;
 
-            return (5f / 2f) * fEnd * fValue * fValue * fValue * fValue;
+            return (5f / 2f) * fEnd * fDuration * fDuration * fDuration * fDuration;
         }
 
-        public static float EaseInSineD(float fStart, float fEnd, float fValue) {
-            return (fEnd - fStart) * 0.5f * Mathf.PI * Mathf.Sin(0.5f * Mathf.PI * fValue);
+        public static float EaseInSineD(float fStart, float fEnd, float fDuration) {
+            return (fEnd - fStart) * 0.5f * Mathf.PI * Mathf.Sin(0.5f * Mathf.PI * fDuration);
         }
 
-        public static float EaseOutSineD(float fStart, float fEnd, float fValue) {
+        public static float EaseOutSineD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return (Mathf.PI * 0.5f) * fEnd * Mathf.Cos(fValue * (Mathf.PI * 0.5f));
+            return (Mathf.PI * 0.5f) * fEnd * Mathf.Cos(fDuration * (Mathf.PI * 0.5f));
         }
 
-        public static float EaseInOutSineD(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutSineD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return fEnd * 0.5f * Mathf.PI * Mathf.Sin(Mathf.PI * fValue);
+            return fEnd * 0.5f * Mathf.PI * Mathf.Sin(Mathf.PI * fDuration);
         }
-        public static float EaseInExpoD(float fStart, float fEnd, float fValue) {
-            return (10f * kNaturalLogOf2 * (fEnd - fStart) * Mathf.Pow(2f, 10f * (fValue - 1)));
+        public static float EaseInExpoD(float fStart, float fEnd, float fDuration) {
+            return (10f * kNaturalLogOf2 * (fEnd - fStart) * Mathf.Pow(2f, 10f * (fDuration - 1)));
         }
 
-        public static float EaseOutExpoD(float fStart, float fEnd, float fValue) {
+        public static float EaseOutExpoD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
-            return 5f * kNaturalLogOf2 * fEnd * Mathf.Pow(2f, 1f - 10f * fValue);
+            return 5f * kNaturalLogOf2 * fEnd * Mathf.Pow(2f, 1f - 10f * fDuration);
         }
 
-        public static float EaseInOutExpoD(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutExpoD(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
 
-            if (fValue < 1) {
-                return 5f * kNaturalLogOf2 * fEnd * Mathf.Pow(2f, 10f * (fValue - 1));
+            if (fDuration < 1) {
+                return 5f * kNaturalLogOf2 * fEnd * Mathf.Pow(2f, 10f * (fDuration - 1));
             }
 
-            fValue--;
+            fDuration--;
 
-            return (5f * kNaturalLogOf2 * fEnd) / (Mathf.Pow(2f, 10f * fValue));
+            return (5f * kNaturalLogOf2 * fEnd) / (Mathf.Pow(2f, 10f * fDuration));
         }
 
-        public static float EaseInCircD(float fStart, float fEnd, float fValue) {
-            return ((fEnd - fStart) * fValue) / Mathf.Sqrt(1f - fValue * fValue);
+        public static float EaseInCircD(float fStart, float fEnd, float fDuration) {
+            return ((fEnd - fStart) * fDuration) / Mathf.Sqrt(1f - fDuration * fDuration);
         }
 
-        public static float EaseOutCircD(float fStart, float fEnd, float fValue) {
-            fValue--;
+        public static float EaseOutCircD(float fStart, float fEnd, float fDuration) {
+            fDuration--;
             fEnd -= fStart;
-            return (-fEnd * fValue) / Mathf.Sqrt(1f - fValue * fValue);
+            return (-fEnd * fDuration) / Mathf.Sqrt(1f - fDuration * fDuration);
         }
 
-        public static float EaseInOutCircD(float fStart, float fEnd, float fValue) {
-            fValue /= .5f;
+        public static float EaseInOutCircD(float fStart, float fEnd, float fDuration) {
+            fDuration /= .5f;
             fEnd -= fStart;
 
-            if (fValue < 1) {
-                return (fEnd * fValue) / (2f * Mathf.Sqrt(1f - fValue * fValue));
+            if (fDuration < 1) {
+                return (fEnd * fDuration) / (2f * Mathf.Sqrt(1f - fDuration * fDuration));
             }
 
-            fValue -= 2;
+            fDuration -= 2;
 
-            return (-fEnd * fValue) / (2f * Mathf.Sqrt(1f - fValue * fValue));
+            return (-fEnd * fDuration) / (2f * Mathf.Sqrt(1f - fDuration * fDuration));
         }
 
-        public static float EaseInBounceD(float fStart, float fEnd, float fValue) {
+        public static float EaseInBounceD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
             float d = 1f;
 
-            return EaseOutBounceD(0, fEnd, d - fValue);
+            return EaseOutBounceD(0, fEnd, d - fDuration);
         }
 
-        public static float EaseOutBounceD(float fStart, float fEnd, float fValue) {
-            fValue /= 1f;
+        public static float EaseOutBounceD(float fStart, float fEnd, float fDuration) {
+            fDuration /= 1f;
             fEnd -= fStart;
 
-            if (fValue < (1 / 2.75f)) {
-                return 2f * fEnd * 7.5625f * fValue;
-            } else if (fValue < (2 / 2.75f)) {
-                fValue -= (1.5f / 2.75f);
-                return 2f * fEnd * 7.5625f * fValue;
-            } else if (fValue < (2.5 / 2.75)) {
-                fValue -= (2.25f / 2.75f);
-                return 2f * fEnd * 7.5625f * fValue;
+            if (fDuration < (1 / 2.75f)) {
+                return 2f * fEnd * 7.5625f * fDuration;
+            } else if (fDuration < (2 / 2.75f)) {
+                fDuration -= (1.5f / 2.75f);
+                return 2f * fEnd * 7.5625f * fDuration;
+            } else if (fDuration < (2.5 / 2.75)) {
+                fDuration -= (2.25f / 2.75f);
+                return 2f * fEnd * 7.5625f * fDuration;
             } else {
-                fValue -= (2.625f / 2.75f);
-                return 2f * fEnd * 7.5625f * fValue;
+                fDuration -= (2.625f / 2.75f);
+                return 2f * fEnd * 7.5625f * fDuration;
             }
         }
 
-        public static float EaseInOutBounceD(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutBounceD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
             float d = 1f;
 
-            if (fValue < d * 0.5f) {
-                return EaseInBounceD(0, fEnd, fValue * 2) * 0.5f;
+            if (fDuration < d * 0.5f) {
+                return EaseInBounceD(0, fEnd, fDuration * 2) * 0.5f;
             } else {
-                return EaseOutBounceD(0, fEnd, fValue * 2 - d) * 0.5f;
+                return EaseOutBounceD(0, fEnd, fDuration * 2 - d) * 0.5f;
             }
         }
 
-        public static float EaseInBackD(float fStart, float fEnd, float fValue) {
+        public static float EaseInBackD(float fStart, float fEnd, float fDuration) {
             float s = 1.70158f;
 
-            return 3f * (s + 1f) * (fEnd - fStart) * fValue * fValue - 2f * s * (fEnd - fStart) * fValue;
+            return 3f * (s + 1f) * (fEnd - fStart) * fDuration * fDuration - 2f * s * (fEnd - fStart) * fDuration;
         }
 
-        public static float EaseOutBackD(float fStart, float fEnd, float fValue) {
+        public static float EaseOutBackD(float fStart, float fEnd, float fDuration) {
             float s = 1.70158f;
             fEnd -= fStart;
-            fValue = (fValue) - 1;
+            fDuration = (fDuration) - 1;
 
-            return fEnd * ((s + 1f) * fValue * fValue + 2f * fValue * ((s + 1f) * fValue + s));
+            return fEnd * ((s + 1f) * fDuration * fDuration + 2f * fDuration * ((s + 1f) * fDuration + s));
         }
 
-        public static float EaseInOutBackD(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutBackD(float fStart, float fEnd, float fDuration) {
             float s = 1.70158f;
             fEnd -= fStart;
-            fValue /= .5f;
+            fDuration /= .5f;
 
-            if ((fValue) < 1) {
+            if ((fDuration) < 1) {
                 s *= (1.525f);
-                return 0.5f * fEnd * (s + 1) * fValue * fValue + fEnd * fValue * ((s + 1f) * fValue - s);
+                return 0.5f * fEnd * (s + 1) * fDuration * fDuration + fEnd * fDuration * ((s + 1f) * fDuration - s);
             }
 
-            fValue -= 2;
+            fDuration -= 2;
             s *= (1.525f);
-            return 0.5f * fEnd * ((s + 1) * fValue * fValue + 2f * fValue * ((s + 1f) * fValue + s));
+            return 0.5f * fEnd * ((s + 1) * fDuration * fDuration + 2f * fDuration * ((s + 1f) * fDuration + s));
         }
 
-        public static float EaseInElasticD(float fStart, float fEnd, float fValue) {
-            return EaseOutElasticD(fStart, fEnd, 1f - fValue);
+        public static float EaseInElasticD(float fStart, float fEnd, float fDuration) {
+            return EaseOutElasticD(fStart, fEnd, 1f - fDuration);
         }
 
-        public static float EaseOutElasticD(float fStart, float fEnd, float fValue) {
+        public static float EaseOutElasticD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
 
             float d = 1f;
@@ -515,12 +515,12 @@ namespace MW.Easing {
                 s = p / (2 * Mathf.PI) * Mathf.Asin(fEnd / a);
             }
 
-            return (a * Mathf.PI * d * Mathf.Pow(2f, 1f - 10f * fValue) *
-                Mathf.Cos((2f * Mathf.PI * (d * fValue - s)) / p)) / p - 5f * kNaturalLogOf2 * a *
-                Mathf.Pow(2f, 1f - 10f * fValue) * Mathf.Sin((2f * Mathf.PI * (d * fValue - s)) / p);
+            return (a * Mathf.PI * d * Mathf.Pow(2f, 1f - 10f * fDuration) *
+                Mathf.Cos((2f * Mathf.PI * (d * fDuration - s)) / p)) / p - 5f * kNaturalLogOf2 * a *
+                Mathf.Pow(2f, 1f - 10f * fDuration) * Mathf.Sin((2f * Mathf.PI * (d * fDuration - s)) / p);
         }
 
-        public static float EaseInOutElasticD(float fStart, float fEnd, float fValue) {
+        public static float EaseInOutElasticD(float fStart, float fEnd, float fDuration) {
             fEnd -= fStart;
 
             float d = 1f;
@@ -535,28 +535,28 @@ namespace MW.Easing {
                 s = p / (2 * Mathf.PI) * Mathf.Asin(fEnd / a);
             }
 
-            if (fValue < 1) {
-                fValue -= 1;
+            if (fDuration < 1) {
+                fDuration -= 1;
 
-                return -5f * kNaturalLogOf2 * a * Mathf.Pow(2f, 10f * fValue) * Mathf.Sin(2 * Mathf.PI * (d * fValue - 2f) / p) -
-                    a * Mathf.PI * d * Mathf.Pow(2f, 10f * fValue) * Mathf.Cos(2 * Mathf.PI * (d * fValue - s) / p) / p;
+                return -5f * kNaturalLogOf2 * a * Mathf.Pow(2f, 10f * fDuration) * Mathf.Sin(2 * Mathf.PI * (d * fDuration - 2f) / p) -
+                    a * Mathf.PI * d * Mathf.Pow(2f, 10f * fDuration) * Mathf.Cos(2 * Mathf.PI * (d * fDuration - s) / p) / p;
             }
 
-            fValue -= 1;
+            fDuration -= 1;
 
-            return a * Mathf.PI * d * Mathf.Cos(2f * Mathf.PI * (d * fValue - s) / p) / (p * Mathf.Pow(2f, 10f * fValue)) -
-                5f * kNaturalLogOf2 * a * Mathf.Sin(2f * Mathf.PI * (d * fValue - s) / p) / (Mathf.Pow(2f, 10f * fValue));
+            return a * Mathf.PI * d * Mathf.Cos(2f * Mathf.PI * (d * fDuration - s) / p) / (p * Mathf.Pow(2f, 10f * fDuration)) -
+                5f * kNaturalLogOf2 * a * Mathf.Sin(2f * Mathf.PI * (d * fDuration - s) / p) / (Mathf.Pow(2f, 10f * fDuration));
         }
 
-        public static float SpringD(float fStart, float fEnd, float fValue) {
-            fValue = Mathf.Clamp01(fValue);
+        public static float SpringD(float fStart, float fEnd, float fDuration) {
+            fDuration = Mathf.Clamp01(fDuration);
             fEnd -= fStart;
 
-            return fEnd * (6f * (1f - fValue) / 5f + 1f) * (-2.2f * Mathf.Pow(1f - fValue, 1.2f) *
-                Mathf.Sin(Mathf.PI * fValue * (2.5f * fValue * fValue * fValue + 0.2f)) + Mathf.Pow(1f - fValue, 2.2f) *
-                (Mathf.PI * (2.5f * fValue * fValue * fValue + 0.2f) + 7.5f * Mathf.PI * fValue * fValue * fValue) *
-                Mathf.Cos(Mathf.PI * fValue * (2.5f * fValue * fValue * fValue + 0.2f)) + 1f) -
-                6f * fEnd * (Mathf.Pow(1 - fValue, 2.2f) * Mathf.Sin(Mathf.PI * fValue * (2.5f * fValue * fValue * fValue + 0.2f)) + fValue
+            return fEnd * (6f * (1f - fDuration) / 5f + 1f) * (-2.2f * Mathf.Pow(1f - fDuration, 1.2f) *
+                Mathf.Sin(Mathf.PI * fDuration * (2.5f * fDuration * fDuration * fDuration + 0.2f)) + Mathf.Pow(1f - fDuration, 2.2f) *
+                (Mathf.PI * (2.5f * fDuration * fDuration * fDuration + 0.2f) + 7.5f * Mathf.PI * fDuration * fDuration * fDuration) *
+                Mathf.Cos(Mathf.PI * fDuration * (2.5f * fDuration * fDuration * fDuration + 0.2f)) + 1f) -
+                6f * fEnd * (Mathf.Pow(1 - fDuration, 2.2f) * Mathf.Sin(Mathf.PI * fDuration * (2.5f * fDuration * fDuration * fDuration + 0.2f)) + fDuration
                 / 5f);
 
         }
@@ -564,7 +564,7 @@ namespace MW.Easing {
         public delegate float Function(float s, float e, float v);
 
         /// <summary>
-        /// Returns the function associated to the easingFunction enum. This fValue returned should be cached as it allocates memory
+        /// Returns the function associated to the easingFunction enum. This fDuration returned should be cached as it allocates memory
         /// to return.
         /// </summary>
         /// <param name="EEasingFunction">The enum associated with the easing function.</param>
@@ -841,76 +841,76 @@ namespace MW.Easing {
 
 #endregion
 
-        public static float Ease(EEquation EEEquation, float fStart, float fEnd, float fValue) {
+        public static float Ease(EEquation EEEquation, float fStart, float fEnd, float fDuration) {
             
             switch (EEEquation) {
                 case EEquation.EaseInQuad:
-                    return EaseInQuad(fStart, fEnd, fValue);
+                    return EaseInQuad(fStart, fEnd, fDuration);
                 case EEquation.EaseOutQuad:
-                    return EaseOutQuad(fStart, fEnd, fValue);
+                    return EaseOutQuad(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutQuad:
-                    return EaseInOutQuad(fStart, fEnd, fValue);
+                    return EaseInOutQuad(fStart, fEnd, fDuration);
                 case EEquation.EaseInCubic:
-                    return EaseInCubic(fStart, fEnd, fValue);
+                    return EaseInCubic(fStart, fEnd, fDuration);
                 case EEquation.EaseOutCubic:
-                    return EaseOutCubic(fStart, fEnd, fValue);
+                    return EaseOutCubic(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutCubic:
-                    return EaseInOutCubic(fStart, fEnd, fValue);
+                    return EaseInOutCubic(fStart, fEnd, fDuration);
                 case EEquation.EaseInQuart:
-                    return EaseInQuart(fStart, fEnd, fValue);
+                    return EaseInQuart(fStart, fEnd, fDuration);
                 case EEquation.EaseOutQuart:
-                    return EaseOutQuart(fStart, fEnd, fValue);
+                    return EaseOutQuart(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutQuart:
-                    return EaseInOutQuart(fStart, fEnd, fValue);
+                    return EaseInOutQuart(fStart, fEnd, fDuration);
                 case EEquation.EaseInQuint:
-                    return EaseInQuint(fStart, fEnd, fValue);
+                    return EaseInQuint(fStart, fEnd, fDuration);
                 case EEquation.EaseOutQuint:
-                    return EaseOutQuint(fStart, fEnd, fValue);
+                    return EaseOutQuint(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutQuint:
-                    return EaseInOutQuint(fStart, fEnd, fValue);
+                    return EaseInOutQuint(fStart, fEnd, fDuration);
                 case EEquation.EaseInSine:
-                    return EaseInSine(fStart, fEnd, fValue);
+                    return EaseInSine(fStart, fEnd, fDuration);
                 case EEquation.EaseOutSine:
-                    return EaseOutSine(fStart, fEnd, fValue);
+                    return EaseOutSine(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutSine:
-                    return EaseInOutSine(fStart, fEnd, fValue);
+                    return EaseInOutSine(fStart, fEnd, fDuration);
                 case EEquation.EaseInExpo:
-                    return EaseInExpo(fStart, fEnd, fValue);
+                    return EaseInExpo(fStart, fEnd, fDuration);
                 case EEquation.EaseOutExpo:
-                    return EaseOutExpo(fStart, fEnd, fValue);
+                    return EaseOutExpo(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutExpo:
-                    return EaseInOutExpo(fStart, fEnd, fValue);
+                    return EaseInOutExpo(fStart, fEnd, fDuration);
                 case EEquation.EaseInCirc:
-                    return EaseInCirc(fStart, fEnd, fValue);
+                    return EaseInCirc(fStart, fEnd, fDuration);
                 case EEquation.EaseOutCirc:
-                    return EaseOutCirc(fStart, fEnd, fValue);
+                    return EaseOutCirc(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutCirc:
-                    return EaseInOutCirc(fStart, fEnd, fValue);
+                    return EaseInOutCirc(fStart, fEnd, fDuration);
                 case EEquation.Linear:
-                    return Linear(fStart, fEnd, fValue);
+                    return Linear(fStart, fEnd, fDuration);
                 case EEquation.Spring:
-                    return Spring(fStart, fEnd, fValue);
+                    return Spring(fStart, fEnd, fDuration);
                 case EEquation.EaseInBounce:
-                    return EaseInBounce(fStart, fEnd, fValue);
+                    return EaseInBounce(fStart, fEnd, fDuration);
                 case EEquation.EaseOutBounce:
-                    return EaseOutBounce(fStart, fEnd, fValue);
+                    return EaseOutBounce(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutBounce:
-                    return EaseInOutBounce(fStart, fEnd, fValue);
+                    return EaseInOutBounce(fStart, fEnd, fDuration);
                 case EEquation.EaseInBack:
-                    return EaseInBack(fStart, fEnd, fValue);
+                    return EaseInBack(fStart, fEnd, fDuration);
                 case EEquation.EaseOutBack:
-                    return EaseOutBack(fStart, fEnd, fValue);
+                    return EaseOutBack(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutBack:
-                    return EaseInOutBack(fStart, fEnd, fValue);
+                    return EaseInOutBack(fStart, fEnd, fDuration);
                 case EEquation.EaseInElastic:
-                    return EaseInElastic(fStart, fEnd, fValue);
+                    return EaseInElastic(fStart, fEnd, fDuration);
                 case EEquation.EaseOutElastic:
-                    return EaseOutElastic(fStart, fEnd, fValue);
+                    return EaseOutElastic(fStart, fEnd, fDuration);
                 case EEquation.EaseInOutElastic:
-                    return EaseInOutElastic(fStart, fEnd, fValue);
+                    return EaseInOutElastic(fStart, fEnd, fDuration);
                 default:
                     Debug.LogWarning("Could not convert Easing.EEquation.\nReturning Easing.Linear instead.");
-                    return Linear(fStart, fEnd, fValue);
+                    return Linear(fStart, fEnd, fDuration);
             }
         }
     }
