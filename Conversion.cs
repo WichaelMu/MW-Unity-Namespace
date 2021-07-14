@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using MW.General;
-using MW.IO;
 
 namespace MW.Conversion {
 
@@ -177,6 +176,13 @@ namespace MW.Conversion {
 
         }
 
+        public static Vector3 VColour(Color CColour) {
+            return new Vector3(CColour.r / Generic.k1To255RGB, CColour.g / Generic.k1To255RGB, CColour.b / Generic.k1To255RGB);
+		}
+
+        public static Vector4 VColourA(Color CColour) {
+            return new Vector4(CColour.r / Generic.k1To255RGB, CColour.g / Generic.k1To255RGB, CColour.b / Generic.k1To255RGB, CColour.a / Generic.k1To255RGB);
+        }
     }
 
     public static class Bearing {
