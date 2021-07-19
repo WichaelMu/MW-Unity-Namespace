@@ -88,6 +88,45 @@
             <param name="vFrom">The Vector3 seeking a direction to to.</param>
             <param name="vTo">The direction to look at.</param>
         </member>
+        <member name="T:MW.Development.Diagnostics">
+            <summary>Diagnostics for Unity Engine development.</summary>
+        </member>
+        <member name="T:MW.Development.Diagnostics.EVerbosity">
+            <summary>UnityEngine.Debug.[MW.Development.Diagnostics.Stacktrace.EVerbosity]</summary>
+        </member>
+        <member name="T:MW.Development.Diagnostics.Stopwatch">
+            <summary>Track execution time of code.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.#ctor(System.Boolean)">
+            <summary>Creates a new Stopwatch.</summary>
+            <param name="bStartOnCreation">Immediately starting timing upon instantiating?</param>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.Start">
+            <summary>Start Stopwatch.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.Stop">
+            <summary>Stop Stopwatch and get the elapsed time.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.Restart">
+            <summary>Restarts Stopwatch and get the time before restarting.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.Time">
+            <summary>Get the current elapsed time.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.TimeInSeconds">
+            <summary>Get the current elapsed time in seconds.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stopwatch.ToSeconds(System.Int64)">
+            <summary>Converts milliseconds to seconds.</summary>
+            <param name="lMilliseconds">Milliseconds to convert.</param>
+        </member>
+        <member name="T:MW.Development.Diagnostics.Stacktrace">
+            <summary>Provides a stacktrace for code.</summary>
+        </member>
+        <member name="M:MW.Development.Diagnostics.Stacktrace.Here(MW.Development.Diagnostics.EVerbosity)">
+            <summary>Stacktrace using UnityEngine.Debug with verbosity.</summary>
+            <param name="verbosity">The verbosity of the UnityEngine.Debug.</param>
+        </member>
         <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.EEquation)">
             <summary>
             Returns the function associated to the easingFunction enum. This fDuration returned should be cached as it allocates memory
