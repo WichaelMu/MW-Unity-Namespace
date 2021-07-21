@@ -88,44 +88,61 @@
             <param name="vFrom">The Vector3 seeking a direction to to.</param>
             <param name="vTo">The direction to look at.</param>
         </member>
-        <member name="T:MW.Development.Diagnostics">
-            <summary>Diagnostics for Unity Engine development.</summary>
-        </member>
-        <member name="T:MW.Development.Diagnostics.EVerbosity">
+        <member name="T:MW.Diagnostics.EVerbosity">
             <summary>UnityEngine.Debug.[MW.Development.Diagnostics.Stacktrace.EVerbosity]</summary>
         </member>
-        <member name="T:MW.Development.Diagnostics.Stopwatch">
+        <member name="T:MW.Diagnostics.Stopwatch">
             <summary>Track execution time of code.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.#ctor(System.Boolean)">
+        <member name="M:MW.Diagnostics.Stopwatch.#ctor(System.Boolean)">
             <summary>Creates a new Stopwatch.</summary>
             <param name="bStartOnCreation">Immediately starting timing upon instantiating?</param>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.Start">
+        <member name="M:MW.Diagnostics.Stopwatch.Start">
             <summary>Start Stopwatch.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.Stop">
+        <member name="M:MW.Diagnostics.Stopwatch.Stop">
             <summary>Stop Stopwatch and get the elapsed time.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.Restart">
+        <member name="M:MW.Diagnostics.Stopwatch.Restart">
             <summary>Restarts Stopwatch and get the time before restarting.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.Time">
+        <member name="M:MW.Diagnostics.Stopwatch.Time">
             <summary>Get the current elapsed time.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.TimeInSeconds">
+        <member name="M:MW.Diagnostics.Stopwatch.TimeInSeconds">
             <summary>Get the current elapsed time in seconds.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stopwatch.ToSeconds(System.Int64)">
+        <member name="M:MW.Diagnostics.Stopwatch.ToSeconds(System.Int64)">
             <summary>Converts milliseconds to seconds.</summary>
             <param name="lMilliseconds">Milliseconds to convert.</param>
         </member>
-        <member name="T:MW.Development.Diagnostics.Stacktrace">
+        <member name="T:MW.Diagnostics.Stacktrace">
             <summary>Provides a stacktrace for code.</summary>
         </member>
-        <member name="M:MW.Development.Diagnostics.Stacktrace.Here(MW.Development.Diagnostics.EVerbosity)">
+        <member name="M:MW.Diagnostics.Stacktrace.Here(MW.Diagnostics.EVerbosity)">
             <summary>Stacktrace using UnityEngine.Debug with verbosity.</summary>
             <param name="verbosity">The verbosity of the UnityEngine.Debug.</param>
+        </member>
+        <member name="M:MW.Diagnostics.Stacktrace.Here(System.String,MW.Diagnostics.EVerbosity)">
+            <summary>Stacktrace using UnityEngine.Debug with verbosity and a message.</summary>
+            <param name="sMessage">The message to show.</param>
+            <param name="verbosity">The verbosity og the UnityEngine.Debug.</param>
+        </member>
+        <member name="M:MW.Diagnostics.Debug.Log(System.Object[])">
+            <summary>UnityEngine.Logs every object.</summary>
+            <param name="debug">The list of objects to log.</param>
+        </member>
+        <member name="M:MW.Diagnostics.Debug.LogError(System.Object[])">
+            <summary>UnityEngine.LogErrors every object.</summary>
+            <param name="debug">The list of objects to log.</param>
+        </member>
+        <member name="M:MW.Diagnostics.Debug.LogWarning(System.Object[])">
+            <summary>UnityEngine.LogWarnings every object.</summary>
+            <param name="debug">The list of objects to log.</param>
+        </member>
+        <member name="M:MW.Diagnostics.Editor.Terminate">
+            <summary>Switches the Unity Editor to Edit mode.</summary>
         </member>
         <member name="M:MW.Easing.Interpolate.GetEasingFunction(MW.EEquation)">
             <summary>

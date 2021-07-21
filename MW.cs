@@ -127,11 +127,17 @@ namespace MW {
         public void UpdateItem(T TItem) {
             SortUp(TItem);
             SortDown(TItem);
-		}
+        }
 
-        public bool Contains(T TItem) {
-            return Equals(TItems[TItem.nIndex], TItem);
-		}
+        public void UpdateItemUp(T TItem) {
+            SortUp(TItem);
+        }
+
+        public void UpdateItemDown(T TItem) {
+            SortDown(TItem);
+        }
+
+        public bool Contains(T TItem) => Equals(TItems[TItem.nIndex], TItem);
 
         void SortDown(T TItem) {
             while (true) {
