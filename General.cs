@@ -13,6 +13,10 @@ namespace MW.General {
         public const float kThreeQuarters = .75f;
         public const float kOneThird = .3333333333333333333333333333333333f;
         public const float kTwoThirds = kOneThird * 2;
+        public const float kPhi = 1.6180339887498948482045868343656381f;
+        public const float kE = 2.71828182845904523536f;
+        public const float kSqrt2 = 1.4142135623730950488016887242097f;
+        public const float kSqrt3 = 1.7320508075688772935274463415059f;
 
         /// <summary>The ratio between 1 and 255.</summary>
         public const float k1To255RGB = 0.0039215686274509803921568627451F;
@@ -69,7 +73,7 @@ namespace MW.General {
             }
         }
 
-        /// <summary>If self has a line of sight to to.</summary>
+        /// <summary>If self has an unobstructed line of sight to to.</summary>
         /// <param name="vSelf">The position to look from.</param>
         /// <param name="vTo">The position to look to.</param>
         /// <param name="lmObstacles">The obstacles to consider obtrusive.</param>
@@ -77,7 +81,9 @@ namespace MW.General {
             return !Physics.Linecast(vSelf, vTo, lmObstacles);
         }
 
-        /// <summary>If self has a line of sight to to.</summary>
+        /// <summary>If self has an unobstructed line of sight to to.</summary>
+        /// <param name="vSelf">The position to look from.</param>
+        /// <param name="vTo">The position to look to.</param>
         public static bool LineOfSight(Vector3 vSelf, Vector3 vTo) {
             return !Physics.Linecast(vSelf, vTo);
         }
@@ -150,12 +156,19 @@ namespace MW.General {
             return (vL.magnitude > vR.magnitude) ? vR : vL;
         }
 
+        static int[] fib_dp = new int[int.MaxValue];
+
         /// <summary>Returns the n'th Fibonacci number.</summary>
         /// <param name="n"></param>
         public static int Fibonacci(int n) {
+            if (fib_dp[n] != 0)
+                return fib_dp[n];
             if (n <= 2)
                 return 1;
-            return Fibonacci(n - 1) + Fibonacci(n - 2);
+
+            fib_dp[n] = Fibonacci(n - 1) + Fibonacci(n - 2);
+
+            return fib_dp[n];
         }
 
         /// <summary>Generates spherical points with an equal distribution.</summary>
