@@ -7,13 +7,16 @@ namespace MW.General {
     public static class Generic {
 
         public const float kThousandth = .001f;
+        public const float kHundreth = .01f;
         public const float k10Percent = .1f;
         public const float kQuarter = .25f;
         public const float kHalf = .5f;
         public const float kThreeQuarters = .75f;
         public const float kOneThird = .3333333333333333333333333333333333f;
         public const float kTwoThirds = kOneThird * 2;
+        /// <summary>The golden ratio.</summary>
         public const float kPhi = 1.6180339887498948482045868343656381f;
+        /// <summary>Euler's number.</summary>
         public const float kE = 2.71828182845904523536f;
         public const float kSqrt2 = 1.4142135623730950488016887242097f;
         public const float kSqrt3 = 1.7320508075688772935274463415059f;
@@ -156,11 +159,13 @@ namespace MW.General {
             return (vL.magnitude > vR.magnitude) ? vR : vL;
         }
 
-        static int[] fib_dp = new int[int.MaxValue];
+        static int[] fib_dp;
 
         /// <summary>Returns the n'th Fibonacci number.</summary>
         /// <param name="n"></param>
         public static int Fibonacci(int n) {
+            if (fib_dp == null)
+                fib_dp = new int[int.MaxValue];
             if (fib_dp[n] != 0)
                 return fib_dp[n];
             if (n <= 2)

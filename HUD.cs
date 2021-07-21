@@ -7,9 +7,7 @@ namespace MW.HUD {
 
     public static class Draw {
 
-        /// <summary>
-        /// Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
-        /// </summary>
+        /// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>
         /// <param name="LRSelf">The LineRenderer of the GameObject calling this.</param>
         /// <param name="vFrom">The coordinates where the line will originate.</param>
         /// <param name="vTo">The coordinates where the line will end.</param>
@@ -32,9 +30,7 @@ namespace MW.HUD {
             LRSelf.SetPosition(0, vFrom + vOffset);
             LRSelf.SetPosition(1, vTo + vOffset);
         }
-        /// <summary>
-        /// Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
-        /// </summary>
+        /// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>
         /// <param name="GSelf">The GameObject calling this.</param>
         /// <param name="vFrom">The coordinates where the line will originate.</param>
         /// <param name="vTo">The coordinates where the line will end.</param>
@@ -56,9 +52,7 @@ namespace MW.HUD {
             _LR.SetPosition(1, vTo + vOffset);
         }
 
-        /// <summary>
-        /// Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
-        /// </summary>
+        /// <summary>Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.</summary>
         /// <param name="LRSelf">The LineRenderer of the GameObject calling this.</param>
         /// <param name="vAround">The centre of the circle to be drawn.</param>
         /// <param name="fRadius">The radius of this circle.</param>
@@ -89,9 +83,7 @@ namespace MW.HUD {
             }
         }
 
-        /// <summary>
-        /// Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
-        /// </summary>
+        /// <summary>Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.</summary>
         /// <param name="GSelf">The GameObject calling this.</param>
         /// <param name="vAround">The centre of the circle to be drawn.</param>
         /// <param name="fRadius">The radius of this circle.</param>

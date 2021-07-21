@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using MW.IO;
+using MW.Diagnostics;
 
 namespace MW.Optics {
 
@@ -88,9 +89,13 @@ namespace MW.Optics {
     }
 
     public static class Orthographic {
+        const string kCameraIsNotOrthographicError = " is not orthographic";
+
         /// <summary>Fires a ray from CCamera to mouse position.</summary>
         /// <returns>Pair::First RaycastHit2D information about the Raycast. Pair::Second if the ray hit something.</returns>
         public static TPair<RaycastHit2D, bool> Raycast(Camera CCamera) {
+            if (!CCamera.orthographic) { Diagnostics.Debug.Log(CCamera.name + kCameraIsNotOrthographicError); }
+
             Ray r = CCamera.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit2D hit = Physics2D.Raycast(r.origin, r.direction, 50);
@@ -104,6 +109,8 @@ namespace MW.Optics {
         static Vector3 vDragPos = Vector3.zero;
 
         public static void Pan(Camera CCamera, EButton BButtonToActivate, float fInterpolateSpeed) {
+            if (!CCamera.orthographic) { Diagnostics.Debug.Log(CCamera.name + kCameraIsNotOrthographicError); }
+
             if (Mouse.Click(BButtonToActivate)) {
                 Ray ray = CCamera.ScreenPointToRay(Input.mousePosition);
 
