@@ -67,12 +67,20 @@ namespace MW {
     /// <typeparam name="T_First">The type of the first variable to store.</typeparam>
     /// <typeparam name="T_Second">The type of the second variable to store.</typeparam>
     public struct TPair<T_First, T_Second> {
-        public T_First first { get; set; }
-        public T_Second second { get; set; }
+        public T_First First { get; set; }
+        public T_Second Second { get; set; }
 
-        public TPair(T_First first, T_Second second) {
-            this.first = first;
-            this.second = second;
+        public TPair(T_First First, T_Second Second) {
+            this.First = First;
+            this.Second = Second;
+        }
+
+		public override int GetHashCode() {
+            int hash = 17;
+            hash *= 31 + First.GetHashCode();
+            hash *= 31 + Second.GetHashCode();
+
+            return hash;
         }
     }
 
@@ -81,16 +89,25 @@ namespace MW {
     /// <typeparam name="T_Second">The type of the second variable to store.</typeparam>
     /// <typeparam name="T_Third">The type of the third variable to store.</typeparam>
     public struct TTriple<T_First, T_Second, T_Third> {
-        public T_First first { get; set; }
-        public T_Second second { get; set; }
-        public T_Third third { get; set; }
+        public T_First First { get; set; }
+        public T_Second Second { get; set; }
+        public T_Third Third { get; set; }
 
-        public TTriple(T_First first, T_Second second, T_Third third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
+        public TTriple(T_First First, T_Second Second, T_Third Third) {
+            this.First = First;
+            this.Second = Second;
+            this.Third = Third;
         }
-    }
+
+        public override int GetHashCode() {
+            int hash = 17;
+            hash *= 31 + First.GetHashCode();
+            hash *= 31 + Second.GetHashCode();
+            hash *= 31 + Third.GetHashCode();
+
+            return hash;
+        }
+	}
 
     public class THeap<T> where T : IHeapItem<T> {
         T[] TItems;
