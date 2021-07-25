@@ -90,6 +90,7 @@ namespace MW.Math {
         /// <param name="nNumber">The number to check.</param>
         public static bool IsPowerOfTwo(int nNumber) => (nNumber & (nNumber - 1)) == 0;
 
+        /// <summary>The greatest common divisor of na and nb.</summary>
         public static int GreatestCommonDivisor(int na, int nb) {
             while (nb != 0) {
                 int t = nb;
@@ -106,23 +107,41 @@ namespace MW.Math {
             return GCD == 0 ? 0 : (na / GCD) * nb;
 		}
 
-        /// <summary>Wraps TN between TMin and TMax.</summary>
-        /// <param name="TN">The dynamic number to wrap.</param>
-        /// <param name="TMin">The minimum value to wrap.</param>
-        /// <param name="TMax">The maximum value to wrap.</param>
-        public static dynamic Wrap(dynamic TN, dynamic TMin, dynamic TMax) {
-            dynamic s = TMax - TMin;
-            dynamic e = TN;
-            while (e < TMin) {
+        /// <summary>Wraps f between fMin and fMax.</summary>
+        /// <param name="f">The float number to wrap.</param>
+        /// <param name="fMin">The minimum value to wrap.</param>
+        /// <param name="fMax">The maximum value to wrap.</param>
+        public static float Wrap(float f, float fMin, float fMax) {
+            float s = fMax - fMin;
+            float e = f;
+            while (e < fMin) {
                 e += s;
 			}
 
-            while (e > TMax) {
+            while (e > fMax) {
                 e -= s;
 			}
 
             return e;
 		}
+
+        /// <summary>Wraps n between nMin and nMax.</summary>
+        /// <param name="n">The float number to wrap.</param>
+        /// <param name="nMin">The minimum value to wrap.</param>
+        /// <param name="nMax">The maximum value to wrap.</param>
+        public static float Wrap(int n, int nMin, int nMax) {
+            float s = nMax - nMin;
+            float e = n;
+            while (e < nMin) {
+                e += s;
+            }
+
+            while (e > nMax) {
+                e -= s;
+            }
+
+            return e;
+        }
 
         /// <summary>Whether v1 is parallel to v2 within fParallelThreshold.</summary>
         /// <param name="v1">Whether this vector is parallel to the other.</param>
@@ -134,5 +153,64 @@ namespace MW.Math {
         /// <summary>Whether vVector has been normalised.</summary>
         /// <param name="vVector">The vector to check.</param>
         public static bool IsNormalised(Vector3 vVector) => Mathf.Abs(1f - vVector.sqrMagnitude) < .01f;
+
+        /// <summary>The angle in degrees pointing towards vDirection using the X-Axis and Z-Axis. (For 3D space)</summary>
+        /// <param name="vDirection">The direction to calculate an angle towards.</param>
+        public static float AngleFromVectorXZ(Vector3 vDirection) {
+            return Mathf.Atan2(vDirection.x, vDirection.z) * Mathf.Rad2Deg;
+        }
+
+        /// <summary>The angle in degrees pointing towards vDirection using the X-Axis and Y-Axis. (For 2D space)</summary>
+        /// <param name="vDirection">The direction to calculate an angle towards.</param>
+        public static float AngleFromVectorXY(Vector3 vDirection) {
+            return -Mathf.Atan2(vDirection.x, vDirection.y) * Mathf.Rad2Deg;
+        }
+
+        /// <summary>Returns a normalised Vector at fDegrees, relative to dirForward.</summary>
+        /// <param name="fDegrees">The angle offset.</param>
+        /// <param name="dirForward">The forward direction.</param>
+        public static Vector3 VectorFromAngle(float fDegrees, EDirection dirForward) {
+            return dirForward switch {
+                EDirection.Forward => new Vector3(Mathf.Sin(fDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(fDegrees * Mathf.Deg2Rad)),
+                EDirection.Right => new Vector3(Mathf.Cos(-fDegrees * Mathf.Deg2Rad), 0, Mathf.Sin(-fDegrees * Mathf.Deg2Rad)),
+                EDirection.Up => new Vector3(Mathf.Sin(-fDegrees * Mathf.Deg2Rad), Mathf.Cos(-fDegrees * Mathf.Deg2Rad), 0),
+
+                EDirection.Back => -VectorFromAngle(fDegrees, EDirection.Forward),
+                EDirection.Left => -VectorFromAngle(fDegrees, EDirection.Right),
+                EDirection.Down => -VectorFromAngle(fDegrees, EDirection.Up),
+                _ => Vector3.forward,
+            };
+        }
+
+        public static void SinCos(ref float fSine, ref float fCosine, float fValue) {
+            float quotient = (Generic.kInversePI * 0.5f) * fValue;
+            if (fValue >= 0.0f) {
+                quotient = (float)((int)(quotient + 0.5f));
+            } else {
+                quotient = (float)((int)(quotient - 0.5f));
+            }
+            float y = fValue - (2.0f * Mathf.PI) * quotient;
+
+            // Map y to [-pi/2,pi/2] with sin(y) = sin(Value).
+            float sign;
+            if (y > Generic.kHalfPI) {
+                y = Mathf.PI - y;
+                sign = -1.0f;
+            } else if (y < -Generic.kHalfPI) {
+                y = -Mathf.PI - y;
+                sign = -1.0f;
+            } else {
+                sign = +1.0f;
+            }
+
+            float y2 = y * y;
+
+            // 11-degree minimax approximation
+            fSine = (((((-2.3889859e-08f * y2 + 2.7525562e-06f) * y2 - 0.00019840874f) * y2 + 0.0083333310f) * y2 - 0.16666667f) * y2 + 1.0f) * y;
+
+            // 10-degree minimax approximation
+            float p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
+            fCosine = sign * p;
+        }
     }
 }
