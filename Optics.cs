@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using MW.IO;
-using MW.Diagnostics;
 
 namespace MW.Optics {
 
@@ -92,7 +91,7 @@ namespace MW.Optics {
         const string kCameraIsNotOrthographicError = " is not orthographic";
 
         /// <summary>Fires a ray from CCamera to mouse position.</summary>
-        /// <returns>Pair::First RaycastHit2D information about the Raycast. Pair::Second if the ray hit something.</returns>
+        /// <returns>TPair::First RaycastHit2D information about the Raycast. TPair::Second if the ray hit something.</returns>
         public static TPair<RaycastHit2D, bool> Raycast(Camera CCamera) {
             if (!CCamera.orthographic) { Diagnostics.Debug.Log(CCamera.name + kCameraIsNotOrthographicError); }
 
@@ -103,11 +102,18 @@ namespace MW.Optics {
             return new TPair<RaycastHit2D, bool>(hit, hit.collider != null);
         }
 
-        public static Plane PPlane = new Plane(-Vector3.forward, Vector3.zero);
+
+		/// <summary>The Plane to pan a Camera for an Orthographic world.</summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "PPlane is intended to be used and modified outside of MW.sln; inside a Unity project. A programmer might want to change the UnityEngine.Plane if the 2D, orthographic, game requires panning to be performed in a different manner than otherwise provided.")]
+		public static Plane PPlane = new Plane(-Vector3.forward, Vector3.zero);
         static Vector3 vStartDrag;
         static Vector3 vEndDrag;
         static Vector3 vDragPos = Vector3.zero;
 
+        /// <summary>Pan CCamera using BButtonToActivate by linearlly interpolating with fInterpolateSpeed.</summary>
+        /// <param name="CCamera">The camera to pan.</param>
+        /// <param name="BButtonToActivate">The mouse button to start activate panning.</param>
+        /// <param name="fInterpolateSpeed">The speed to ease the camera's movement.</param>
         public static void Pan(Camera CCamera, EButton BButtonToActivate, float fInterpolateSpeed) {
             if (!CCamera.orthographic) { Diagnostics.Debug.Log(CCamera.name + kCameraIsNotOrthographicError); }
 

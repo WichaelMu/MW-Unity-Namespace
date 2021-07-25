@@ -5,21 +5,30 @@ namespace MW.General {
 
 
     public static class Generic {
-
+        /// <summary>Shorthand for writing / 1000. (Always faster to multiply than to divide)</summary>
         public const float kThousandth = .001f;
+        /// <summary>Shorthand for writing / 100. (Always faster to multiply than to divide)</summary>
         public const float kHundreth = .01f;
+        /// <summary>Shorthand for writing / 10. (Always faster to multiply than to divide)</summary>
         public const float k10Percent = .1f;
+        /// <summary>Shorthand for writing / 4. (Always faster to multiply than to divide)</summary>
         public const float kQuarter = .25f;
+        /// <summary>Shorthand for writing / 2. (Always faster to multiply than to divide)</summary>
         public const float kHalf = .5f;
-        public const float kThreeQuarters = .75f;
+        /// <summary>Shorthand for writing / 3. (Always faster to multiply than to divide)</summary>
         public const float kOneThird = .3333333333333333333333333333333333f;
+        /// <summary>Shorthand for writing 1.6 recurring. (Always faster to multiply than to divide)</summary>
         public const float kTwoThirds = kOneThird * 2;
         /// <summary>The golden ratio.</summary>
         public const float kPhi = 1.6180339887498948482045868343656381f;
-        /// <summary>Euler's number.</summary>
+        /// <summary>Euler's number. (e)</summary>
         public const float kE = 2.71828182845904523536f;
+        /// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(2). (Always faster to multiply than to divide)</summary>
         public const float kSqrt2 = 1.4142135623730950488016887242097f;
+        /// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3). (Always faster to multiply than to divide)</summary>
         public const float kSqrt3 = 1.7320508075688772935274463415059f;
+        public const float kInversePI = .31830988618f;
+        public const float kHalfPI = 1.5707963267948966192313216916398f;
 
         /// <summary>The ratio between 1 and 255.</summary>
         public const float k1To255RGB = 0.0039215686274509803921568627451F;
@@ -32,17 +41,17 @@ namespace MW.General {
         public static bool InFOV(EDirection dirFace, Transform ASelf, Transform ATarget, float fSearchAngle) {
 
             switch (dirFace) {
-                case EDirection.forward:
+                case EDirection.Forward:
                     return Vector3.Angle(ASelf.forward, ATarget.position - ASelf.position) < fSearchAngle;
-                case EDirection.right:
+                case EDirection.Right:
                     return Vector3.Angle(ASelf.right, ATarget.position - ASelf.position) < fSearchAngle;
-                case EDirection.back:
+                case EDirection.Back:
                     return Vector3.Angle(-ASelf.forward, ATarget.position - ASelf.position) < fSearchAngle;
-                case EDirection.left:
+                case EDirection.Left:
                     return Vector3.Angle(-ASelf.right, ATarget.position - ASelf.position) < fSearchAngle;
-                case EDirection.up:
+                case EDirection.Up:
                     return Vector3.Angle(ASelf.up, ATarget.position - ASelf.position) < fSearchAngle;
-                case EDirection.down:
+                case EDirection.Down:
                     return Vector3.Angle(-ASelf.up, ATarget.position - ASelf.position) < fSearchAngle;
                 default:
                     Debug.LogWarning("There was a problem in determining a face direction");
@@ -58,17 +67,17 @@ namespace MW.General {
         public static bool InFOV(EDirection dirFace, Transform ASelf, Vector3 vTarget, float fSearchAngle) {
 
             switch (dirFace) {
-                case EDirection.forward:
+                case EDirection.Forward:
                     return Vector3.Angle(ASelf.forward, vTarget - ASelf.position) < fSearchAngle;
-                case EDirection.right:
+                case EDirection.Right:
                     return Vector3.Angle(ASelf.right, vTarget - ASelf.position) < fSearchAngle;
-                case EDirection.back:
+                case EDirection.Back:
                     return Vector3.Angle(-ASelf.forward, vTarget - ASelf.position) < fSearchAngle;
-                case EDirection.left:
+                case EDirection.Left:
                     return Vector3.Angle(-ASelf.right, vTarget - ASelf.position) < fSearchAngle;
-                case EDirection.up:
+                case EDirection.Up:
                     return Vector3.Angle(ASelf.up, vTarget - ASelf.position) < fSearchAngle;
-                case EDirection.down:
+                case EDirection.Down:
                     return Vector3.Angle(-ASelf.up, vTarget - ASelf.position) < fSearchAngle;
                 default:
                     Debug.LogWarning("There was a problem in determining a face direction");

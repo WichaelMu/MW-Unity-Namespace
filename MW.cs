@@ -2,15 +2,17 @@
 
 namespace MW {
 
+    /// <summary>Orientations for specific faces.</summary>
     public enum EDirection {
-        forward,
-        right,
-        back,
-        left,
-        up,
-        down
+        Forward,
+        Right,
+        Up,
+        Back,
+        Left,
+        Down
     }
 
+    /// <summary>Interpolating equations.</summary>
     public enum EEquation {
         Linear,
         EaseInSine,
@@ -46,6 +48,7 @@ namespace MW {
         EaseInOutElastic,
     };
 
+    /// <summary>Units of measurement of speed.</summary>
     public enum EUnits {
         MetresPerSecond,
         KilometresPerSecond,
@@ -57,6 +60,7 @@ namespace MW {
         MilesPerHour
     }
 
+    /// <summary>The mouse buttons on a standard mouse.</summary>
     public enum EButton {
         LeftMouse,
         MiddleMouse,
@@ -64,13 +68,13 @@ namespace MW {
     }
 
     /// <summary>Generates a new pair of two types of values.</summary>
-    /// <typeparam name="T_First">The type of the first variable to store.</typeparam>
-    /// <typeparam name="T_Second">The type of the second variable to store.</typeparam>
-    public struct TPair<T_First, T_Second> {
-        public T_First First { get; set; }
-        public T_Second Second { get; set; }
+    /// <typeparam name="TFirst">The type of the first variable to store.</typeparam>
+    /// <typeparam name="TSecond">The type of the second variable to store.</typeparam>
+    public struct TPair<TFirst, TSecond> {
+        public TFirst First { get; set; }
+        public TSecond Second { get; set; }
 
-        public TPair(T_First First, T_Second Second) {
+        public TPair(TFirst First, TSecond Second) {
             this.First = First;
             this.Second = Second;
         }
@@ -85,15 +89,15 @@ namespace MW {
     }
 
     /// <summary>Generates a new variable of three types of values.</summary>
-    /// <typeparam name="T_First">The type of the first variable to store.</typeparam>
-    /// <typeparam name="T_Second">The type of the second variable to store.</typeparam>
-    /// <typeparam name="T_Third">The type of the third variable to store.</typeparam>
-    public struct TTriple<T_First, T_Second, T_Third> {
-        public T_First First { get; set; }
-        public T_Second Second { get; set; }
-        public T_Third Third { get; set; }
+    /// <typeparam name="TFirst">The type of the first variable to store.</typeparam>
+    /// <typeparam name="TSecond">The type of the second variable to store.</typeparam>
+    /// <typeparam name="TThird">The type of the third variable to store.</typeparam>
+    public struct TTriple<TFirst, TSecond, TThird> {
+        public TFirst First { get; set; }
+        public TSecond Second { get; set; }
+        public TThird Third { get; set; }
 
-        public TTriple(T_First First, T_Second Second, T_Third Third) {
+        public TTriple(TFirst First, TSecond Second, TThird Third) {
             this.First = First;
             this.Second = Second;
             this.Third = Third;
@@ -110,7 +114,8 @@ namespace MW {
 	}
 
     public class THeap<T> where T : IHeapItem<T> {
-        T[] TItems;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
+		T[] TItems;
         int nCount;
 
         public int Count { get {
@@ -123,7 +128,7 @@ namespace MW {
 		}
 
         public void Add(T TItem) {
-            TItem.nIndex = nCount;
+            TItem.HeapItemIndex = nCount;
             TItems[nCount] = TItem;
 
             SortUp(TItem);
@@ -135,7 +140,7 @@ namespace MW {
             nCount--;
 
             TItems[0] = TItems[nCount];
-            TItems[0].nIndex = 0;
+            TItems[0].HeapItemIndex = 0;
             SortDown(TItems[0]);
 
             return T_;
@@ -154,12 +159,12 @@ namespace MW {
             SortDown(TItem);
         }
 
-        public bool Contains(T TItem) => Equals(TItems[TItem.nIndex], TItem);
+        public bool Contains(T TItem) => Equals(TItems[TItem.HeapItemIndex], TItem);
 
         void SortDown(T TItem) {
             while (true) {
-                int nLeft = TItem.nIndex * 2 + 1;
-                int nRight = TItem.nIndex * 2 + 2;
+                int nLeft = TItem.HeapItemIndex * 2 + 1;
+                int nRight = TItem.HeapItemIndex * 2 + 2;
                 int nSwap;
 
                 if (nLeft < nCount) {
@@ -183,7 +188,7 @@ namespace MW {
 		}
 
         void SortUp(T TItem) {
-            int nParent = (TItem.nIndex - 1) / 2;
+            int nParent = (TItem.HeapItemIndex - 1) / 2;
 
             while (true) {
                 T TParent = TItems[nParent];
@@ -194,21 +199,21 @@ namespace MW {
                     break;
 				}
 
-                nParent = (TItem.nIndex - 1) / 2;
+                nParent = (TItem.HeapItemIndex - 1) / 2;
             }
 		}
 
         void Swap(T l, T r) {
-            TItems[l.nIndex] = r;
-            TItems[r.nIndex] = l;
+            TItems[l.HeapItemIndex] = r;
+            TItems[r.HeapItemIndex] = l;
 
-            int _ = l.nIndex;
-            l.nIndex = r.nIndex;
-            r.nIndex = _;
+            int _ = l.HeapItemIndex;
+            l.HeapItemIndex = r.HeapItemIndex;
+            r.HeapItemIndex = _;
 		}
 	}
 
     public interface IHeapItem<T> : System.IComparable<T> {
-        int nIndex { get; set; }
+        int HeapItemIndex { get; set; }
 	}
 }

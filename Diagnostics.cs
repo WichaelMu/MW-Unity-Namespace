@@ -89,7 +89,7 @@ namespace MW.Diagnostics {
 
 	public static class Debug {
 		/// <summary>UnityEngine.Logs every object.</summary>
-		/// <param name="debug">The list of objects to log.</param>
+		/// <param name="debug">The list of objects to log separated by a space.</param>
 		public static void Log(params object[] debug) {
 			for (int i = 0; i < debug.Length; ++i) {
 				UnityEngine.Debug.Log(debug[i].ToString() + ' ');
@@ -97,7 +97,7 @@ namespace MW.Diagnostics {
 		}
 
 		/// <summary>UnityEngine.LogErrors every object.</summary>
-		/// <param name="debug">The list of objects to log.</param>
+		/// <param name="debug">The list of objects to log separated by a space.</param>
 		public static void LogError(params object[] debug) {
 			for (int i = 0; i < debug.Length; ++i) {
 				UnityEngine.Debug.LogError(debug[i].ToString() + ' ');
@@ -105,7 +105,7 @@ namespace MW.Diagnostics {
 		}
 
 		/// <summary>UnityEngine.LogWarnings every object.</summary>
-		/// <param name="debug">The list of objects to log.</param>
+		/// <param name="debug">The list of objects to log separated by a space.</param>
 		public static void LogWarning(params object[] debug) {
 			for (int i = 0; i < debug.Length; ++i) {
 				UnityEngine.Debug.LogWarning(debug[i].ToString() + ' ');
