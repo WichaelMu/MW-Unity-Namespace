@@ -160,6 +160,12 @@
             <param name="easingFunction"></param>
             <returns>The derivative function</returns>
         </member>
+        <member name="F:MW.General.Generic.kPhi">
+            <summary>The golden ratio.</summary>
+        </member>
+        <member name="F:MW.General.Generic.kE">
+            <summary>Euler's number.</summary>
+        </member>
         <member name="F:MW.General.Generic.k1To255RGB">
             <summary>The ratio between 1 and 255.</summary>
         </member>
@@ -178,13 +184,15 @@
             <param name="fSearchAngle">The maximum degrees to search for target.</param>
         </member>
         <member name="M:MW.General.Generic.LineOfSight(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.LayerMask)">
-            <summary>If self has a line of sight to to.</summary>
+            <summary>If self has an unobstructed line of sight to to.</summary>
             <param name="vSelf">The position to look from.</param>
             <param name="vTo">The position to look to.</param>
             <param name="lmObstacles">The obstacles to consider obtrusive.</param>
         </member>
         <member name="M:MW.General.Generic.LineOfSight(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>If self has a line of sight to to.</summary>
+            <summary>If self has an unobstructed line of sight to to.</summary>
+            <param name="vSelf">The position to look from.</param>
+            <param name="vTo">The position to look to.</param>
         </member>
         <member name="M:MW.General.Generic.RoundToDP(System.Single,System.Int32)">
             <summary>The fValue rounded to dp decimal places.</summary>
@@ -236,9 +244,7 @@
             <returns>The Vector3[] points for the bridge.</returns>
         </member>
         <member name="M:MW.HUD.Draw.DrawLine(UnityEngine.LineRenderer,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,UnityEngine.Material,System.Boolean)">
-            <summary>
-            Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
-            </summary>
+            <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>
             <param name="LRSelf">The LineRenderer of the GameObject calling this.</param>
             <param name="vFrom">The coordinates where the line will originate.</param>
             <param name="vTo">The coordinates where the line will end.</param>
@@ -250,9 +256,7 @@
             <param name="bUseWorldSpace">Should this line use world space?</param>
         </member>
         <member name="M:MW.HUD.Draw.DrawLine(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,UnityEngine.Color,System.Single,UnityEngine.Vector3,System.Boolean)">
-            <summary>
-            Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.
-            </summary>
+            <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>
             <param name="GSelf">The GameObject calling this.</param>
             <param name="vFrom">The coordinates where the line will originate.</param>
             <param name="vTo">The coordinates where the line will end.</param>
@@ -263,9 +267,7 @@
             <param name="bUseWorldSpace">Should this line use world space?</param>
         </member>
         <member name="M:MW.HUD.Draw.DrawCircle(UnityEngine.LineRenderer,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,UnityEngine.Material,System.Boolean,System.Int32)">
-            <summary>
-            Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
-            </summary>
+            <summary>Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.</summary>
             <param name="LRSelf">The LineRenderer of the GameObject calling this.</param>
             <param name="vAround">The centre of the circle to be drawn.</param>
             <param name="fRadius">The radius of this circle.</param>
@@ -276,9 +278,7 @@
             <param name="nNumberOfSegments">The number of verticies of this circle.</param>
         </member>
         <member name="M:MW.HUD.Draw.DrawCircle(UnityEngine.GameObject,UnityEngine.Vector3,System.Single,UnityEngine.Color,System.Single,System.Boolean,System.Int32)">
-            <summary>
-            Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.
-            </summary>
+            <summary>Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.</summary>
             <param name="GSelf">The GameObject calling this.</param>
             <param name="vAround">The centre of the circle to be drawn.</param>
             <param name="fRadius">The radius of this circle.</param>
@@ -319,6 +319,116 @@
             <param name="bHold">Whether or not to check if this button is held down.</param>
             <param name="bUp">Whether or not to check if this button is released.</param>
             <returns>If Stroke was pressed or Held.</returns>
+        </member>
+        <member name="F:MW.Kinetic.Kinematics.kVelocityRatio">
+            <summary>Convert inspector speed to m/s.</summary>
+        </member>
+        <member name="M:MW.Kinetic.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
+            <summary>If the distance between from and to is less than or EqualTo detection.</summary>
+            <param name="vFrom">The reference coordinate to compare.</param>
+            <param name="vTo">The target coordinate to compare.</param>
+            <param name="fDistance">The range that is considered if from has 'reached' to.</param>
+            <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MW.Kinetic.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
+            <summary>If the distance between from and to is less than or EqualTo detection.</summary>
+            <param name="vFrom">The reference coordinate to compare.</param>
+            <param name="vTo">The target coordinate to compare.</param>
+            <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
+            <param name="fDistance">The range that is considered if from has 'reached' to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MW.Kinetic.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
+            <summary>Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.</summary>
+            <param name="RSelf">The Rigidbody to move.</param>
+            <param name="ATarget">The Transform destination.</param>
+            <param name="fVelocity">The rate at which self moves towards target.</param>
+            <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
+        </member>
+        <member name="M:MW.Kinetic.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
+            <summary>Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.</summary>
+            <param name="RSelf">The Rigidbody to move.</param>
+            <param name="vTarget">The destination coordinates.</param>
+            <param name="fVelocity">The rate at which self moves towards target.</param>
+            <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
+        </member>
+        <member name="M:MW.Kinetic.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
+            <summary>The direction of natural air resistance.</summary>
+            <param name="RSelf">The rigidbody to apply air resistance to.</param>
+        </member>
+        <member name="M:MW.Kinetic.Aerodynamics.Lift(System.Single,System.Single,System.Single,System.Single)">
+            <summary>The scale of lift applied to a wing with fWingArea travelling at fVelocity through a fluid at fDensity with fLiftCoefficient.</summary>
+            <param name="fLiftCoefficient">The heuristic coefficient for lift.</param>
+            <param name="fDensity">The density of the fluid.</param>
+            <param name="fVelocity">The speed at which the wing is travelling.</param>
+            <param name="fWingArea">The area of the wing.</param>
+        </member>
+        <member name="M:MW.Kinetic.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
+            <summary>The direction in which to avoid colliding with obstacles.</summary>
+            <param name="ASelf">The transform wanting to avoid collisions.</param>
+            <param name="fAngle">The angle to search for potential collisions.</param>
+            <param name="fSearchDistance">The distance to search for collisions.</param>
+            <param name="lmObstacles">The layer to avoid colliding with.</param>
+            <param name="bDebug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.Acceleration(MW.EEquation,System.Single,System.Single,System.Single)">
+            <param name="EEquation">The equation to use to accelerate.</param>
+            <param name="fCurrentSpeed">The current speed of the acceleration.</param>
+            <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
+            <param name="fTerminal">The maximum speed.</param>
+            <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
+        </member>
+        <member name="M:MW.Math.Mathematics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
+            <param name="RSelf">The rigidbody to calculate an acceleration rate.</param>
+            <param name="fSpeed">The current speed of the rigidbody.</param>
+            <returns>The float rate of movement in metres per second.</returns>
+        </member>
+        <member name="M:MW.Math.Mathematics.Speed(UnityEngine.Rigidbody,MW.EUnits)">
+            <param name="RSelf">The Rigidbody to read a speed from.</param>
+            <param name="UUnit">The desired unit of measurement.</param>
+            <returns>A speed reading from self in unit of measurement.</returns>
+        </member>
+        <member name="M:MW.Math.Mathematics.PredictiveProjectile(UnityEngine.Rigidbody,UnityEngine.Rigidbody)">
+            <summary>The direction to intercept RBTarget relative to RSelf.</summary>
+            <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
+            <param name="RBTarget">The Rigidbody to predict.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.IsPowerOfTwo(System.Int32)">
+            <summary>Whether nNumber is a power of two.</summary>
+            <param name="nNumber">The number to check.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.LowestCommonMultiple(System.Int32,System.Int32)">
+            <summary>The lowest common multiple of na and nb.</summary>
+        </member>
+        <member name="M:MW.Math.Mathematics.Wrap(System.Single,System.Single,System.Single)">
+            <summary>Wraps TN between TMin and TMax.</summary>
+            <param name="TN">The float number to wrap.</param>
+            <param name="TMin">The minimum value to wrap.</param>
+            <param name="TMax">The maximum value to wrap.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.Parallel(UnityEngine.Vector3,UnityEngine.Vector3,System.Single)">
+            <summary>Whether v1 is parallel to v2 within fParallelThreshold.</summary>
+            <param name="v1">Whether this vector is parallel to the other.</param>
+            <param name="v2">Whether this vector is parallel to the other.</param>
+            <param name="fParallelThreshold">The threshold to consider parallel vectors.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.IsNormalised(UnityEngine.Vector3)">
+            <summary>Whether vVector has been normalised.</summary>
+            <param name="vVector">The vector to check.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.AngleFromVectorXZ(UnityEngine.Vector3)">
+            <summary>The angle in degrees pointing towards vDirection using the X-Axis and Z-Axis. (For 3D space)</summary>
+            <param name="vDirection">The direction to calculate an angle towards.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.AngleFromVectorXY(UnityEngine.Vector3)">
+            <summary>The angle in degrees pointing towards vDirection using the X-Axis and Y-Axis. (For 2D space)</summary>
+            <param name="vDirection">The direction to calculate an angle towards.</param>
+        </member>
+        <member name="M:MW.Math.Mathematics.VectorFromAngle(System.Single,MW.EDirection)">
+            <summary>Returns a normalised Vector at fDegrees, relative to dirForward.</summary>
+            <param name="fDegrees">The angle offset.</param>
+            <param name="dirForward">The forward direction.</param>
         </member>
         <member name="T:MW.TPair`2">
             <summary>Generates a new pair of two types of values.</summary>
@@ -391,109 +501,6 @@
         <member name="M:MW.Optics.Orthographic.Raycast(UnityEngine.Camera)">
             <summary>Fires a ray from CCamera to mouse position.</summary>
             <returns>Pair::First RaycastHit2D information about the Raycast. Pair::Second if the ray hit something.</returns>
-        </member>
-        <member name="F:MW.Physx.Kinematics.kVelocityRatio">
-            <summary>Convert inspector speed to m/s.</summary>
-        </member>
-        <member name="M:MW.Physx.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Boolean)">
-            <summary>
-            If the distance between from and to is less than or EqualTo detection.
-            </summary>
-            <param name="vFrom">The reference coordinate to compare.</param>
-            <param name="vTo">The target coordinate to compare.</param>
-            <param name="fDistance">The range that is considered if from has 'reached' to.</param>
-            <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-            <returns></returns>
-        </member>
-        <member name="M:MW.Physx.Kinematics.HasReached(UnityEngine.Vector3,UnityEngine.Vector3,System.Boolean,System.Single)">
-            <summary>
-            If the distance between from and to is less than or EqualTo detection.
-            </summary>
-            <param name="vFrom">The reference coordinate to compare.</param>
-            <param name="vTo">The target coordinate to compare.</param>
-            <param name="bEqualTo">If this calculation needs to check if the distance between from and to are equal.</param>
-            <param name="fDistance">The range that is considered if from has 'reached' to.</param>
-            <returns></returns>
-        </member>
-        <member name="M:MW.Physx.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Transform,System.Single,System.Single)">
-            <summary>
-            Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
-            </summary>
-            <param name="RSelf">The Rigidbody to move.</param>
-            <param name="ATarget">The Transform destination.</param>
-            <param name="fVelocity">The rate at which self moves towards target.</param>
-            <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
-        </member>
-        <member name="M:MW.Physx.Kinematics.HomeTowards(UnityEngine.Rigidbody,UnityEngine.Vector3,System.Single,System.Single)">
-            <summary>
-            Moves self towards target while moving at velocity with a maximum turn angle of TurnRadius degrees.
-            </summary>
-            <param name="RSelf">The Rigidbody to move.</param>
-            <param name="vTarget">The destination coordinates.</param>
-            <param name="fVelocity">The rate at which self moves towards target.</param>
-            <param name="fTurnRadius">The maximum degrees self can turn towards target.</param>
-        </member>
-        <member name="M:MW.Physx.Mathematics.Acceleration(MW.EEquation,System.Single,System.Single,System.Single)">
-            <param name="EEquation">The equation to use to accelerate.</param>
-            <param name="fCurrentSpeed">The current speed of the acceleration.</param>
-            <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
-            <param name="fTerminal">The maximum speed.</param>
-            <returns>The acceleration value using Easing equation, using the current speed and rate of acceleration towards terminal by over time.</returns>
-        </member>
-        <member name="M:MW.Physx.Mathematics.AccelerationRate(UnityEngine.Rigidbody,System.Single)">
-            <param name="RSelf">The rigidbody to calculate an acceleration rate.</param>
-            <param name="fSpeed">The current speed of the rigidbody.</param>
-            <returns>The float rate of movement in metres per second.</returns>
-        </member>
-        <member name="M:MW.Physx.Mathematics.Speed(UnityEngine.Rigidbody,MW.EUnits)">
-            <param name="RSelf">The Rigidbody to read a speed from.</param>
-            <param name="UUnit">The desired unit of measurement.</param>
-            <returns>A speed reading from self in unit of measurement.</returns>
-        </member>
-        <member name="M:MW.Physx.Mathematics.PredictiveProjectile(UnityEngine.Rigidbody,UnityEngine.Rigidbody)">
-            <summary>The direction to intercept RBTarget relative to RSelf.</summary>
-            <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
-            <param name="RBTarget">The Rigidbody to predict.</param>
-        </member>
-        <member name="M:MW.Physx.Aerodynamics.AirResistance(UnityEngine.Rigidbody)">
-            <summary>The direction of natural air resistance.</summary>
-            <param name="RSelf">The rigidbody to apply air resistance to.</param>
-        </member>
-        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single,System.Single)">
-            <summary>Interpolates between origin and destination using equation in duration.</summary>
-            <param name="EEquation">The equation to use to interpolate.</param>
-            <param name="vOrigin">The origin of the interpolation.</param>
-            <param name="vDestination">The destination of this interpolation.</param>
-            <param name="fDuration">The duration of the interpolation.</param>
-            <param name="fStart">The starting value of equation.</param>
-            <param name="fFinal">The final value of equation.</param>
-        </member>
-        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Single)">
-            <summary>Interpolates between origin and destination using equation.</summary>
-            <param name="EEquation">The equation to use to interpolate.</param>
-            <param name="vOrigin">The origin of the interpolation.</param>
-            <param name="vDestination">The destination of this interpolation.</param>
-            <param name="fStart">The starting value of equation.</param>
-            <param name="fFinal">The final value of equation.</param>
-        </member>
-        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(MW.EEquation,UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>Interpolates between origin and destination.</summary>
-            <param name="EEquation">The equation to use for interpolation.</param>
-            <param name="vOrigin">The origin of the interpolation.</param>
-            <param name="vDestination">The destination of this interpolation.</param>
-        </member>
-        <member name="M:MW.Physx.PhysicsInterpolation.V3Interpolate(UnityEngine.Vector3,UnityEngine.Vector3)">
-            <summary>Interpolates between origin and destination at a constant rate.</summary>
-            <param name="vOrigin">The origin of the interpolation.</param>
-            <param name="vDestination">The destination of this interpolation.</param>
-        </member>
-        <member name="M:MW.Physx.Miscellanous.CollisionAvoidance(UnityEngine.Transform,System.Single,System.Single,UnityEngine.LayerMask,System.Boolean)">
-            <summary>The direction in which to avoid colliding with obstacles.</summary>
-            <param name="ASelf">The transform wanting to avoid collisions.</param>
-            <param name="fAngle">The angle to search for potential collisions.</param>
-            <param name="fSearchDistance">The distance to search for collisions.</param>
-            <param name="lmObstacles">The layer to avoid colliding with.</param>
-            <param name="bDebug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
         </member>
     </members>
 </doc>
