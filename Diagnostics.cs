@@ -12,7 +12,7 @@ namespace MW.Diagnostics {
 
 		/// <summary>Creates a new Stopwatch.</summary>
 		/// <param name="bStartOnCreation">Immediately starting timing upon instantiating?</param>
-		public Stopwatch(bool bStartOnCreation = false) {
+		public Stopwatch(bool bStartOnCreation = true) {
 			sw = new System.Diagnostics.Stopwatch();
 
 			if (bStartOnCreation) {
@@ -87,10 +87,10 @@ namespace MW.Diagnostics {
 		}
 	}
 
-	public static class Debug {
+	public static class Log {
 		/// <summary>UnityEngine.Logs every object.</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void Log(params object[] debug) {
+		public static void Print(params object[] debug) {
 			for (int i = 0; i < debug.Length; ++i) {
 				UnityEngine.Debug.Log(debug[i].ToString() + ' ');
 			}
@@ -98,7 +98,7 @@ namespace MW.Diagnostics {
 
 		/// <summary>UnityEngine.LogErrors every object.</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void LogError(params object[] debug) {
+		public static void PrintError(params object[] debug) {
 			for (int i = 0; i < debug.Length; ++i) {
 				UnityEngine.Debug.LogError(debug[i].ToString() + ' ');
 			}
@@ -106,7 +106,7 @@ namespace MW.Diagnostics {
 
 		/// <summary>UnityEngine.LogWarnings every object.</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void LogWarning(params object[] debug) {
+		public static void PrintWarning(params object[] debug) {
 			for (int i = 0; i < debug.Length; ++i) {
 				UnityEngine.Debug.LogWarning(debug[i].ToString() + ' ');
 			}

@@ -93,7 +93,7 @@ namespace MW.Optics {
         /// <summary>Fires a ray from CCamera to mouse position.</summary>
         /// <returns>TPair::First RaycastHit2D information about the Raycast. TPair::Second if the ray hit something.</returns>
         public static TPair<RaycastHit2D, bool> Raycast(Camera CCamera) {
-            if (!CCamera.orthographic) { Diagnostics.Debug.Log(CCamera.name + kCameraIsNotOrthographicError); }
+            if (!CCamera.orthographic) { Diagnostics.Log.Print(CCamera.name + kCameraIsNotOrthographicError); }
 
             Ray r = CCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -115,7 +115,7 @@ namespace MW.Optics {
         /// <param name="BButtonToActivate">The mouse button to start activate panning.</param>
         /// <param name="fInterpolateSpeed">The speed to ease the camera's movement.</param>
         public static void Pan(Camera CCamera, EButton BButtonToActivate, float fInterpolateSpeed) {
-            if (!CCamera.orthographic) { Diagnostics.Debug.Log(CCamera.name + kCameraIsNotOrthographicError); }
+            if (!CCamera.orthographic) { Diagnostics.Log.Print(CCamera.name + kCameraIsNotOrthographicError); }
 
             if (Mouse.Click(BButtonToActivate)) {
                 Ray ray = CCamera.ScreenPointToRay(Input.mousePosition);
