@@ -34,14 +34,19 @@ namespace MW.Vector {
 			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range!")
 		};
 
+		static readonly MVector zero = new MVector(0, 0, 0);
+		static readonly MVector right = new MVector(1, 0, 0);
+		static readonly MVector up = new MVector(0, 1, 0);
+		static readonly MVector forward = new MVector(0, 0, 1);
+
 		/// <summary>Short for writing MVector(0, 0, 0).</summary>
-		public static readonly MVector Zero = new MVector(0, 0, 0);
+		public static readonly MVector Zero = zero;
 		/// <summary>Short for writing MVector(1, 0, 0).</summary>
-		public static readonly MVector Right = new MVector(1, 0, 0);
+		public static readonly MVector Right = right;
 		/// <summary>Short for writing MVector(0, 1, 0).</summary>
-		public static readonly MVector Up = new MVector(0, 1, 0);
+		public static readonly MVector Up = up;
 		/// <summary>Short for writing MVector(0, 0, 1).</summary>
-		public static readonly MVector Forward = new MVector(0, 0, 1);
+		public static readonly MVector Forward = forward;
 
 		/// <summary>Converts an MVector to a Vector3.</summary>
 		/// <param name="mVector">The MVector to convert.</param>
@@ -51,7 +56,7 @@ namespace MW.Vector {
 		public static MVector ToMVector(Vector3 vVector) => new MVector(vVector.x, vVector.y, vVector.z);
 
 		/// <summary>Normalises mVector.</summary>
-		public static MVector Normalise(MVector mVector) => mVector = mVector.Normalised;
+		public static MVector Normalise(MVector mVector) => mVector.Normalise();
 		/// <summary>The vector cross product of left and right.</summary>
 		public static MVector Cross(MVector left, MVector right) => left ^ right;
 		/// <summary>The vector dot product of left and right.</summary>
@@ -82,7 +87,7 @@ namespace MW.Vector {
 				float m = Magnitude;
 				if (m > kEpsilon) return this / m;
 
-				Diagnostics.Debug.LogError("MVector is zero!", "Returning MVector.Zero instead.");
+				Log.PrintError("MVector is zero!", "Returning MVector.Zero instead.");
 				return Zero;
 			}
 		}
@@ -161,6 +166,27 @@ namespace MW.Vector {
 			};
 		}
 
+		/// <summary>Ignores the X component of this MVector.</summary>
+		public MVector SetYZ() {
+			X = 0;
+
+			return this;
+		}
+
+		/// <summary>Ignores the Y component of this MVector.</summary>
+		public MVector SetXZ() {
+			Y = 0;
+
+			return this;
+		}
+
+		/// <summary>Ignores the Z component of this MVector.</summary>
+		public MVector SetXY() {
+			Z = 0;
+
+			return this;
+		}
+
 		public static MVector operator +(MVector l, MVector r) => new MVector(l.X + r.X, l.Y + r.Y, l.Z + r.Z);
 		public static MVector operator -(MVector l, MVector r) => new MVector(l.X - r.X, l.Y - r.Y, l.Z - r.Z);
 		public static MVector operator -(MVector v) => new MVector(-v.X, -v.Y, -v.Z);
@@ -187,15 +213,14 @@ namespace MW.Vector {
 		public bool Equals(MVector mV) => mV.X == X && mV.Y == Y && mV.Z == Z;
 
 		public static implicit operator Vector3(MVector mVector) => new Vector3(mVector.X, mVector.Y, mVector.Z);
+		public static implicit operator Vector2(MVector mVector) => new Vector2(mVector.X, mVector.Y);
 		
 		public static implicit operator Color(MVector mVector) {
-			if (Mathematics.IsNormalised(mVector)) {
-				return new Color(mVector.X, mVector.Y, mVector.Z);
+			if (mVector.Magnitude > Generic.kSqrt3) {
+				mVector *= Generic.k1To255RGB;
 			}
 
-			MVector normalised = mVector.Normalised;
-
-			return new Color(normalised.X, normalised.Y, normalised.Z);
+			return new Color(mVector.X, mVector.Y, mVector.Z);
 		}
 
 		public override int GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2);
