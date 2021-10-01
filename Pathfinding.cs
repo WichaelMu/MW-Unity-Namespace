@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using MW.Behaviour;
 using MW.Diagnostics;
 
 namespace MW.Pathfinding
 {
 	/// <summary>Provides the A* Pathfinding implementation for T.</summary>
 	/// <typeparam name="T">Generic type that derives from MW.Behaviour.MBehaviour and implements INode and IHeapItem for T.</typeparam>
-	public static class Pathfinding<T> where T : MBehaviour, INode<T>, IHeapItem<T>
+	public static class Pathfinding<T> where T : INode<T>, IHeapItem<T>
 	{
 		/// <summary>A* pathfinds from Origin to Destination looking uDepth times within a uMapSize.</summary>
 		/// <param name="Origin">T position to begin pathfinding.</param>
@@ -34,7 +33,7 @@ namespace MW.Pathfinding
 				T Current = Open.RemoveFirst();
 				Closed.Add(Current);
 
-				if (Current == Destination)
+				if (Current.CompareTo(Destination) == 0)
 				{
 					bFoundPath = true;
 					break;
@@ -45,11 +44,11 @@ namespace MW.Pathfinding
 					T Neighbour = (T)Current.Neighbour(i);
 					if (!Neighbour.IsTraversable() || Closed.Contains(Neighbour)) { continue; }
 
-					float fUpdatedCost = Current.G + Current.Position.SqrDistance(Neighbour.Position);
+					float fUpdatedCost = Current.G + Current.DistanceHeuristic(Neighbour);
 					if (fUpdatedCost < Neighbour.G || !Open.Contains(Neighbour))
 					{
 						Neighbour.G = fUpdatedCost;
-						Neighbour.H = Neighbour.Position.SqrDistance(Destination.Position);
+						Neighbour.H = Neighbour.DistanceHeuristic(Destination);
 
 						Neighbour.Parent = Current;
 
@@ -66,7 +65,7 @@ namespace MW.Pathfinding
 				long Time = sw.Time();
 
 				T Traverse = Destination;
-				while (Traverse != Origin)
+				while (Traverse.CompareTo(Origin) == 0)
 				{
 					Path.Add(Traverse);
 					Traverse = Traverse.Parent;
@@ -90,7 +89,7 @@ namespace MW.Pathfinding
 		}
 	}
 
-	public interface INode<T>
+	public interface INode<T> where T : IComparable<T>
 	{
 		/// <summary>This Node's F score.</summary>
 		float F { get; set; }
@@ -103,10 +102,15 @@ namespace MW.Pathfinding
 
 		/// <summary>How many directions can this Node point to?</summary>
 		uint Directions { get; set; }
+
 		/// <summary>Is this block traversable?</summary>
 		bool IsTraversable();
 		/// <summary>Get the Neighbouring Node at uDirection.</summary>
 		/// <param name="uDirection">The neighbour of this Node in this direction.</param>
 		INode<T> Neighbour(uint uDirection);
+		/// <summary>The distance heuristic to calculate pathfinding scores.</summary>
+		/// <param name="RelativeTo">Distance to from this T to Relative To.</param>
+		/// <returns>An indicative distance from this T, Relative To.</returns>
+		float DistanceHeuristic(T RelativeTo);
 	}
 }
