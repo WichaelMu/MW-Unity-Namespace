@@ -91,33 +91,34 @@ namespace MW.Diagnostics {
 		/// <summary>UnityEngine.Logs every object.</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
 		public static void Print(params object[] debug) {
+			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
-				UnityEngine.Debug.Log(debug[i].ToString() + ' ');
+				print += debug[i].ToString() + ' ';
 			}
+
+			UnityEngine.Debug.Log(print);
 		}
 
 		/// <summary>UnityEngine.LogErrors every object.</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
 		public static void PrintError(params object[] debug) {
+			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
-				UnityEngine.Debug.LogError(debug[i].ToString() + ' ');
+				print += debug[i].ToString() + ' ';
 			}
+
+			UnityEngine.Debug.LogError(print);
 		}
 
 		/// <summary>UnityEngine.LogWarnings every object.</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
 		public static void PrintWarning(params object[] debug) {
+			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
-				UnityEngine.Debug.LogWarning(debug[i].ToString() + ' ');
+				print += debug[i].ToString() + ' ';
 			}
-		}
-	}
 
-	public static class Editor {
-
-		/// <summary>Switches the Unity Editor to Edit mode.</summary>
-		public static void Terminate() {
-			UnityEditor.EditorApplication.ExitPlaymode();
+			UnityEngine.Debug.LogWarning(print);
 		}
 	}
 }
