@@ -117,7 +117,7 @@ namespace MW.Optics {
         public static void Pan(Camera CCamera, EButton BButtonToActivate, float fInterpolateSpeed) {
             if (!CCamera.orthographic) { Diagnostics.Log.Print(CCamera.name + kCameraIsNotOrthographicError); }
 
-            if (Mouse.Click(BButtonToActivate)) {
+            if (I.Click(BButtonToActivate)) {
                 Ray ray = CCamera.ScreenPointToRay(Input.mousePosition);
 
                 if (PPlane.Raycast(ray, out float intersect)) {
@@ -125,7 +125,7 @@ namespace MW.Optics {
                 }
             }
 
-            if (Mouse.Click(BButtonToActivate, true)) {
+            if (I.Click(BButtonToActivate, true)) {
                 Ray ray = CCamera.ScreenPointToRay(Input.mousePosition);
 
                 if (PPlane.Raycast(ray, out float intersect)) {
