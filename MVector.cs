@@ -27,6 +27,13 @@ namespace MW.Vector {
 			this.Z = Z;
 		}
 
+		public MVector(Vector3 xyz)
+		{
+			X = xyz.x;
+			Y = xyz.y;
+			Z = xyz.z;
+		}
+
 		public float this[int i] => i switch {
 			0 => X,
 			1 => Y,
@@ -111,11 +118,11 @@ namespace MW.Vector {
 		public MVector Mirror(MVector mNormal) => this - mNormal * 2f * (this | mNormal);
 
 		/// <summary>Rotates this MVector at an angle of fAngleDegrees around mAxis.</summary>
-		/// <param name="fAngleDegegrees">The degrees at which to rotate this MVector.</param>
+		/// <param name="fAngleDegrees">The degrees at which to rotate this MVector.</param>
 		/// <param name="mAxis">The axis to rotate this MVector around.</param>
-		public MVector RotateAngleAxis(float fAngleDegegrees, MVector mAxis) {
+		public MVector RotateAngleAxis(float fAngleDegrees, MVector mAxis) {
 			float S = 0, C = 0;
-			Mathematics.SinCos(ref S, ref C, fAngleDegegrees * Mathf.Deg2Rad);
+			Mathematics.SinCos(ref S, ref C, fAngleDegrees * Mathf.Deg2Rad);
 
 			float XX = mAxis.X * mAxis.X;
 			float YY = mAxis.Y * mAxis.Y;
@@ -199,6 +206,31 @@ namespace MW.Vector {
 		/// <summary>The vector dot product.</summary>
 		public static float operator |(MVector l, MVector r) => l.X * r.X + l.Y + r.Y + l.Z + r.Z;
 
+		/// <summary>Normalised direction from to.</summary>
+		public static MVector operator >(MVector From, MVector To) => (To - From).Normalised;
+		/// <summary>Normalised direction from to.</summary>
+		public static MVector operator <(MVector To, MVector From) => From > To;
+
+		public static MVector operator >>(MVector v, int i)
+		{
+			return new MVector
+			{
+				X = v.X + i,
+				Y = v.Y + i,
+				Z = v.Z + i
+			};
+		}
+
+		public static MVector operator <<(MVector v, int i)
+		{
+			return new MVector
+			{
+				X = v.X - i,
+				Y = v.Y - i,
+				Z = v.Z - i
+			};
+		}
+
 		public static bool operator ==(MVector l, MVector r) {
 			float x = l.X - r.X;
 			float y = l.Y - r.Y;
@@ -214,6 +246,9 @@ namespace MW.Vector {
 
 		public static implicit operator Vector3(MVector mVector) => new Vector3(mVector.X, mVector.Y, mVector.Z);
 		public static implicit operator Vector2(MVector mVector) => new Vector2(mVector.X, mVector.Y);
+		
+		public static implicit operator MVector(Vector3 vVector) => new MVector(vVector);
+		public static implicit operator MVector(Vector2 vVector) => new MVector(vVector);
 		
 		public static implicit operator Color(MVector mVector) {
 			if (mVector.Magnitude > Generic.kSqrt3) {
