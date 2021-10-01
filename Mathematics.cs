@@ -2,6 +2,7 @@
 using MW.Kinetic;
 using MW.Easing;
 using MW.General;
+using MW.Vector;
 
 namespace MW.Math {
 
@@ -70,7 +71,7 @@ namespace MW.Math {
         /// <summary>The direction to intercept RBTarget relative to RSelf.</summary>
         /// <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
         /// <param name="RBTarget">The Rigidbody to predict.</param>
-        public static Vector3 PredictiveProjectile(Rigidbody RSelf, Rigidbody RBTarget) {
+        public static MVector PredictiveProjectile(Rigidbody RSelf, Rigidbody RBTarget) {
             //  The approximate conversion from velocity in an rb.AddForce is the 2/3 of the force being applied.
 
             //  At a velocity of 950, the cannon travels at ~633 m/s.
@@ -81,7 +82,7 @@ namespace MW.Math {
             //  Distance between the RSelf and RBTarget in thousands.
             float fDistanceBetweenPlayer = Vector3.Distance(RSelf.position, RBTarget.position) * Generic.kThousandth;
 
-            Vector3 vForwardPrediction = RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer;
+                        MVector vForwardPrediction = new MVector(RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer);
 
             return vForwardPrediction;
         }
@@ -169,25 +170,25 @@ namespace MW.Math {
         /// <summary>Returns a normalised Vector at fDegrees, relative to dirForward.</summary>
         /// <param name="fDegrees">The angle offset.</param>
         /// <param name="dirForward">The forward direction.</param>
-        public static Vector3 VectorFromAngle(float fDegrees, EDirection dirForward) {
+        public static MVector VectorFromAngle(float fDegrees, EDirection dirForward) {
             return dirForward switch {
-                EDirection.Forward => new Vector3(Mathf.Sin(fDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(fDegrees * Mathf.Deg2Rad)),
-                EDirection.Right => new Vector3(Mathf.Cos(-fDegrees * Mathf.Deg2Rad), 0, Mathf.Sin(-fDegrees * Mathf.Deg2Rad)),
-                EDirection.Up => new Vector3(Mathf.Sin(-fDegrees * Mathf.Deg2Rad), Mathf.Cos(-fDegrees * Mathf.Deg2Rad), 0),
+                EDirection.Forward => new MVector(Mathf.Sin(fDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(fDegrees * Mathf.Deg2Rad)),
+                EDirection.Right => new MVector(Mathf.Cos(-fDegrees * Mathf.Deg2Rad), 0, Mathf.Sin(-fDegrees * Mathf.Deg2Rad)),
+                EDirection.Up => new MVector(Mathf.Sin(-fDegrees * Mathf.Deg2Rad), Mathf.Cos(-fDegrees * Mathf.Deg2Rad), 0),
 
                 EDirection.Back => -VectorFromAngle(fDegrees, EDirection.Forward),
                 EDirection.Left => -VectorFromAngle(fDegrees, EDirection.Right),
                 EDirection.Down => -VectorFromAngle(fDegrees, EDirection.Up),
-                _ => Vector3.forward,
+                _ => MVector.Forward,
             };
         }
 
         public static void SinCos(ref float fSine, ref float fCosine, float fValue) {
             float quotient = (Generic.kInversePI * 0.5f) * fValue;
             if (fValue >= 0.0f) {
-                quotient = (float)((int)(quotient + 0.5f));
+                quotient = (int)(quotient + 0.5f);
             } else {
-                quotient = (float)((int)(quotient - 0.5f));
+                quotient = (int)(quotient - 0.5f);
             }
             float y = fValue - (2.0f * Mathf.PI) * quotient;
 
