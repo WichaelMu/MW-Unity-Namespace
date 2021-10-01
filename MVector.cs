@@ -75,12 +75,15 @@ namespace MW.Vector {
 		/// <param name="dirForward">The forward direction.</param>
 		public static MVector MVectorFromAngle(float fDegrees, EDirection dirForward) => ToMVector(Mathematics.VectorFromAngle(fDegrees, dirForward));
 		/// <summary>The distance between left and right.</summary>
-		public static float Distance(MVector left, MVector right) {
+		public static float Distance(MVector left, MVector right) => Mathf.Sqrt(SqrDistance(left, right));
+
+		public static float SqrDistance(MVector left, MVector right)
+		{
 			float x = left.X - right.X;
 			float y = left.Y - right.Y;
 			float z = left.Z - right.Z;
 
-			return Mathf.Sqrt(x * x + y * y + z * z);
+			return x * x + y * y + z * z;
 		}
 
 		/// <summary>The square magnitude of this MVector.</summary>
@@ -193,6 +196,9 @@ namespace MW.Vector {
 
 			return this;
 		}
+
+		public float Distance(MVector v) => Distance(this, v);
+		public float SqrDistance(MVector v) => SqrDistance(this, v);
 
 		public static MVector operator +(MVector l, MVector r) => new MVector(l.X + r.X, l.Y + r.Y, l.Z + r.Z);
 		public static MVector operator -(MVector l, MVector r) => new MVector(l.X - r.X, l.Y - r.Y, l.Z - r.Z);

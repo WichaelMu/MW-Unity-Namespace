@@ -2,7 +2,7 @@
 
 namespace MW.Diagnostics {
 
-	/// <summary>UnityEngine.Debug.[MW.Development.Diagnostics.Stacktrace.EVerbosity]</summary>
+	/// <summary>UnityEngine.Debug.[MW.Diagnostics.Stacktrace.EVerbosity]</summary>
 	public enum EVerbosity { Log, Warning, Error };
 
 	/// <summary>Track execution time of code.</summary>

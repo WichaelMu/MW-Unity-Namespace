@@ -123,8 +123,8 @@ namespace MW {
 			} 
         }
 
-        public THeap(int nMaxSize) {
-            TItems = new T[nMaxSize];
+        public THeap(uint uMaxSize) {
+            TItems = new T[uMaxSize];
 		}
 
         public void Add(T TItem) {
