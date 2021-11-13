@@ -5,7 +5,7 @@ using MW.Diagnostics;
 namespace MW.Pathfinding
 {
 	/// <summary>Provides the A* Pathfinding implementation for T.</summary>
-	/// <typeparam name="T">Generic type that derives from MW.Behaviour.MBehaviour and implements INode and IHeapItem for T.</typeparam>
+	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	public static class Pathfinding<T> where T : INode<T>, IHeapItem<T>
 	{
 		/// <summary>A* pathfinds from Origin to Destination looking uDepth times within a uMapSize.</summary>
@@ -18,10 +18,11 @@ namespace MW.Pathfinding
 		/// <param name="OnPathFailed">What to do when a path cannot be found? Passes the current state of the Path as a parameter.</param>
 		/// <param name="bUseDiagnostics">Time the duration of Pathfinding?</param>
 		/// <returns>Whether or not a path was found from Origin to Destination within uDepth in uMapSize.</returns>
-		public static bool AStar(T Origin, T Destination, ref List<T> Path, uint uDepth, uint uMapSize, Action<List<T>> OnPathFound = null, Action<List<T>> OnPathFailed = null, bool bUseDiagnostics = false)
+		public static bool AStar(T Origin, T Destination, out List<T> Path, uint uDepth = int.MaxValue, uint uMapSize = 10000, Action<List<T>> OnPathFound = null, Action<List<T>> OnPathFailed = null, bool bUseDiagnostics = false)
 		{
 			Stopwatch sw = new Stopwatch(bUseDiagnostics);
 
+			Path = new List<T>();
 			bool bFoundPath = false;
 
 			THeap<T> Open = new THeap<T>(uMapSize);
@@ -39,7 +40,7 @@ namespace MW.Pathfinding
 					break;
 				}
 
-				for (uint i = 0; i < Current.Directions; ++i)
+				for (uint i = 0; i < Current.NumberOfDirections; ++i)
 				{
 					T Neighbour = (T)Current.Neighbour(i);
 					if (!Neighbour.IsTraversable() || Closed.Contains(Neighbour)) { continue; }
@@ -55,6 +56,10 @@ namespace MW.Pathfinding
 						if (!Open.Contains(Neighbour))
 						{
 							Open.Add(Neighbour);
+						}
+						else
+						{
+							Open.UpdateItem(Neighbour);
 						}
 					}
 				}
@@ -75,7 +80,7 @@ namespace MW.Pathfinding
 
 				if (bUseDiagnostics)
 				{
-					Log.Print("Path found in:", Time, "Path reversed in:", sw.Stop());
+					Log.Print("Path found in:", Time, "ms. Path reversed in:", sw.Stop());
 				}
 
 				OnPathFound?.Invoke(Path);
@@ -87,6 +92,178 @@ namespace MW.Pathfinding
 
 			return bFoundPath;
 		}
+	}
+
+	/// <summary>Computes a number of paths over a number of frames.</summary>
+	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
+	public static class PathRegister<T> where T : INode<T>, IHeapItem<T>
+	{
+		static Queue<PathRequest> PathsToCompute = new Queue<PathRequest>();
+		static bool bIsCurrentlyComputingPath;
+
+		/// <summary>Register a path to compute when possible.</summary>
+		/// <remarks>This is on a first-in, first-out basis. A Queue.</remarks>
+		/// <param name="Origin">T position to begin pathfinding.</param>
+		/// <param name="Destination">T position to pathfind to.</param>
+		/// <param name="OnPathCalculated">What to do when a path is found? List of T pathway.</param>
+		/// <param name="OnPathFailed">What to do when a path cannot be found? List of T pathway attempt.</param>
+		public static void RequestPath(T Origin, T Destination, Action<List<T>> OnPathCalculated, Action<List<T>> OnPathFailed = null)
+		{
+			PathRequest NewPath = new(Origin, Destination, OnPathCalculated, OnPathFailed);
+			PathsToCompute.Enqueue(NewPath);
+		}
+
+		/// <summary>Computes the next path in FIFO.</summary>
+		/// <returns>Whether or not a computation was executed.</returns>
+		public static bool ComputeNext()
+		{
+			bool bHasComputedPath = false;
+
+			if (!bIsCurrentlyComputingPath && PathsToCompute.Count > 0)
+			{
+				bIsCurrentlyComputingPath = true;
+
+				PathRequest CurrentComputation = PathsToCompute.Dequeue();
+				bool bPathFound = Pathfinding<T>.AStar(CurrentComputation.Origin, CurrentComputation.Destination, out List<T> Path);
+
+				if (bPathFound)
+				{
+					CurrentComputation.OnPathCalculated?.Invoke(Path);
+				}
+				else
+				{
+					CurrentComputation.OnPathFailed?.Invoke(Path);
+				}
+
+				bHasComputedPath = true;
+			}
+
+			bIsCurrentlyComputingPath = false;
+
+			return bHasComputedPath;
+		}
+
+		/// <summary>Computes BatchSize paths in a single call.</summary>
+		/// <param name="BatchSize">The number of paths to compute.</param>
+		public static void ComputeBatch(uint BatchSize)
+		{
+			for (uint i = 0; i < BatchSize; ++i)
+			{
+				if (!ComputeNext())
+					break;
+			}
+		}
+
+		/// <summary>Gets the number of agents waiting to compute paths.</summary>
+		/// <returns>Unsigned integer number of T's awaiting a path.</returns>
+		public static uint GetPathQueueSize()
+		{
+			return Convert.ToUInt32(PathsToCompute.Count);
+		}
+
+		// Information storing a request for a path.
+		// Uses default Pathfinding values.
+		struct PathRequest
+		{
+			public T Origin;
+			public T Destination;
+			public Action<List<T>> OnPathCalculated;
+			public Action<List<T>> OnPathFailed;
+
+			public PathRequest(T Origin, T Destination, Action<List<T>> OnPathCalculated, Action<List<T>> OnPathFailed)
+			{
+				this.Origin = Origin;
+				this.Destination = Destination;
+				this.OnPathCalculated = OnPathCalculated;
+				this.OnPathFailed = OnPathFailed;
+			}
+		}
+	}
+
+	/// <summary>The MonoBehavior script that manages pathfinding over frames.</summary>
+	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
+	public class MPathManager<T> : UnityEngine.MonoBehaviour where T : INode<T>, IHeapItem<T>
+	{
+		[UnityEngine.SerializeField] [UnityEngine.Min(1)] uint ComputationsPerFrame;
+		[UnityEngine.SerializeField] [UnityEngine.Min(1)] uint FramesBeforeComputation;
+
+		bool bIsPaused = false;
+		uint FrameTracker = 0;
+
+		void Update()
+		{
+			#region First Compute Skip Explanation.
+			/* Assume ComputationsPerFrame = 1. Assume FramesBeforeComputation = 1.
+			 * First frame:
+				* Will always skip the first call to compute paths.
+				* 
+				* Beginning of frame:
+				* FrameTracker = 1.
+				* No. Paths Computed = 0.
+				* 
+				* End of frame:
+				* FrameTracker = 1.
+				* No. Paths Computed = 0. // Skipped first frame computation.
+				* 
+			 * Second frame:
+				* Beginning of frame:
+				* FrameTracker = 1.
+				* No. Paths Computed = 0.
+				* 
+				* End of frame:
+				* FrameTracker = 0.
+				* No.PathsComputed = 1.
+				* 
+			 * Third frame:
+				* Beginning of frame:
+				* FrameTracker = 0.
+				* No. Paths Computed = 1.
+				* 
+				* End of frame:
+				* FrameTracker = 0.
+				* No. Paths Computed = 2.
+				* 
+			 * 
+			 * ...
+			 */
+			#endregion
+
+			if (!bIsPaused)
+			{
+				if (FrameTracker >= FramesBeforeComputation)
+				{
+					for (uint i = 0; i < ComputationsPerFrame; ++i)
+						PathRegister<T>.ComputeNext();
+
+					FrameTracker = 0;
+				}
+			}
+
+			FrameTracker++;
+		}
+
+		/// <summary>Halt the computation of paths.</summary>
+		public void Pause()
+		{
+			bIsPaused = true;
+		}
+
+		/// <summary>Continue the computation of paths.</summary>
+		public void Resume()
+		{
+			bIsPaused = false;
+		}
+
+		/// <summary>Prints the current status of this Path Manager.</summary>
+		/// <returns>If this Path Manager is currently Paused, or Running.</returns>
+		public EStatus Status()
+		{
+			Log.Print(nameof(MPathManager<T>), "is", bIsPaused ? "Paused." : "Running.");
+
+			return bIsPaused ? EStatus.Paused : EStatus.Running;
+		}
+
+		public enum EStatus { Paused = 1, Running = 2 }
 	}
 
 	public interface INode<T> where T : IComparable<T>
@@ -101,7 +278,7 @@ namespace MW.Pathfinding
 		T Parent { get; set; }
 
 		/// <summary>How many directions can this Node point to?</summary>
-		uint Directions { get; set; }
+		uint NumberOfDirections { get; set; }
 
 		/// <summary>Is this block traversable?</summary>
 		bool IsTraversable();
