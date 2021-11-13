@@ -4,6 +4,7 @@ using MW.Diagnostics;
 using MW.Math;
 
 namespace MW.Vector {
+	[System.Serializable]
 	public struct MVector {
 		public const float kEpsilon = 1E-05f;
 
@@ -15,18 +16,30 @@ namespace MW.Vector {
 		/// <summary>A new MVector ignoring the Z component.</summary>
 		public readonly MVector XY { get => new MVector(X, Y, 0); }
 
+		/// <summary>Construct all components to U.</summary>
+		public MVector(float U)
+		{
+			X = U;
+			Y = U;
+			Z = U;
+		}
+
+		/// <summary>Construct with X and Y components only.</summary>
 		public MVector(float X, float Y) {
 			this.X = X;
 			this.Y = Y;
 			Z = 0;
 		}
 
+		/// <summary>Construct an MVector with X, Y, and Z components.</summary>
 		public MVector(float X, float Y, float Z) {
 			this.X = X;
 			this.Y = Y;
 			this.Z = Z;
 		}
 
+		/// <summary>Construct an MVector with respect to a Vector3.</summary>
+		/// <param name="xyz"></param>
 		public MVector(Vector3 xyz)
 		{
 			X = xyz.x;
@@ -73,7 +86,7 @@ namespace MW.Vector {
 		/// <summary>A normalised MVector at fDegrees, relative to dirForward.</summary>
 		/// <param name="fDegrees">The angle offset.</param>
 		/// <param name="dirForward">The forward direction.</param>
-		public static MVector MVectorFromAngle(float fDegrees, EDirection dirForward) => ToMVector(Mathematics.VectorFromAngle(fDegrees, dirForward));
+		public static MVector MVectorFromAngle(float fDegrees, EDirection dirForward) => Mathematics.VectorFromAngle(fDegrees, dirForward);
 		/// <summary>The distance between left and right.</summary>
 		public static float Distance(MVector left, MVector right) => Mathf.Sqrt(SqrDistance(left, right));
 
@@ -177,21 +190,21 @@ namespace MW.Vector {
 		}
 
 		/// <summary>Ignores the X component of this MVector.</summary>
-		public MVector SetYZ() {
+		public MVector IgnoreX() {
 			X = 0;
 
 			return this;
 		}
 
 		/// <summary>Ignores the Y component of this MVector.</summary>
-		public MVector SetXZ() {
+		public MVector IgnoreY() {
 			Y = 0;
 
 			return this;
 		}
 
 		/// <summary>Ignores the Z component of this MVector.</summary>
-		public MVector SetXY() {
+		public MVector IgnoreZ() {
 			Z = 0;
 
 			return this;
@@ -201,6 +214,8 @@ namespace MW.Vector {
 		public float SqrDistance(MVector v) => SqrDistance(this, v);
 
 		public static MVector operator +(MVector l, MVector r) => new MVector(l.X + r.X, l.Y + r.Y, l.Z + r.Z);
+		public static MVector operator +(MVector l, Vector3 r) => l + (MVector)r;
+		public static MVector operator +(Vector3 l, MVector r) => (MVector)l + r;
 		public static MVector operator -(MVector l, MVector r) => new MVector(l.X - r.X, l.Y - r.Y, l.Z - r.Z);
 		public static MVector operator -(MVector v) => new MVector(-v.X, -v.Y, -v.Z);
 		public static MVector operator *(MVector v, float m) => new MVector(v.X * m, v.Y * m, v.Z * m);
@@ -256,12 +271,9 @@ namespace MW.Vector {
 		public static implicit operator MVector(Vector3 vVector) => new MVector(vVector);
 		public static implicit operator MVector(Vector2 vVector) => new MVector(vVector);
 		
+		/// <summary>The colour representation of this MVector, in 0-255 XYZ/RGB.</summary>
 		public static implicit operator Color(MVector mVector) {
-			if (mVector.Magnitude > Generic.kSqrt3) {
-				mVector *= Generic.k1To255RGB;
-			}
-
-			return new Color(mVector.X, mVector.Y, mVector.Z);
+			return Conversion.Colour.Colour255(mVector.X, mVector.Y, mVector.Z);
 		}
 
 		public override int GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2);
