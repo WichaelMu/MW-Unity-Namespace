@@ -159,7 +159,7 @@ namespace MW.HUD {
 
             for (int i = 0; i < sContent.Length; ++i) {
                 tmpTextMeshPro.text += sContent[i];
-                Audio.AAudioInstance.Play(sSound);
+                MAudio.AAudioInstance.Play(sSound);
                 yield return new WaitForSeconds(fDelay);
             }
         }
