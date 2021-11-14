@@ -20,13 +20,13 @@ namespace MW.Pathfinding
 		/// <returns>Whether or not a path was found from Origin to Destination within uDepth in uMapSize.</returns>
 		public static bool AStar(T Origin, T Destination, out List<T> Path, uint uDepth = int.MaxValue, uint uMapSize = 10000, Action<List<T>> OnPathFound = null, Action<List<T>> OnPathFailed = null, bool bUseDiagnostics = false)
 		{
-			Stopwatch sw = new Stopwatch(bUseDiagnostics);
+			Stopwatch sw = new(bUseDiagnostics);
 
-			Path = new List<T>();
+			Path = new ();
 			bool bFoundPath = false;
 
-			THeap<T> Open = new THeap<T>(uMapSize);
-			HashSet<T> Closed = new HashSet<T>();
+			THeap<T> Open = new (uMapSize);
+			HashSet<T> Closed = new ();
 			Open.Add(Origin);
 
 			while (Open.Count > 0 && !bFoundPath && uDepth-- != 0)
@@ -98,7 +98,7 @@ namespace MW.Pathfinding
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	public static class PathRegister<T> where T : INode<T>, IHeapItem<T>
 	{
-		static Queue<PathRequest> PathsToCompute = new Queue<PathRequest>();
+		static Queue<PathRequest> PathsToCompute = new ();
 		static bool bIsCurrentlyComputingPath;
 
 		/// <summary>Register a path to compute when possible.</summary>
@@ -184,8 +184,14 @@ namespace MW.Pathfinding
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	public class MPathManager<T> : UnityEngine.MonoBehaviour where T : INode<T>, IHeapItem<T>
 	{
-		[UnityEngine.SerializeField] [UnityEngine.Min(1)] uint ComputationsPerFrame;
-		[UnityEngine.SerializeField] [UnityEngine.Min(1)] uint FramesBeforeComputation;
+		/// <summary>The number of paths to compute per frame.</summary>
+		[UnityEngine.SerializeField] [UnityEngine.Min(1)] [UnityEngine.Tooltip("The number of paths to compute per frame.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
+		uint ComputationsPerFrame = 1;
+		/// <summary>The number of frames before path/s are computed.</summary>
+		[UnityEngine.SerializeField] [UnityEngine.Min(1)] [UnityEngine.Tooltip("The number of frames before path/s are computed.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
+		uint FramesBeforeComputation = 1;
 
 		bool bIsPaused = false;
 		uint FrameTracker = 0;
