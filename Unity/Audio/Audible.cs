@@ -42,7 +42,7 @@ namespace MW.Audio
 		const string kErr2 = " could not be ";
 
 		/// <summary>Populates the Sounds array to match the settings.</summary>
-		public void Initialise(MSound[] SSounds)
+		public virtual void Initialise(MSound[] SSounds)
 		{
 			if (AAudioInstance == null)
 			{
@@ -70,12 +70,13 @@ namespace MW.Audio
 
 		/// <summary>Plays sound of name n.</summary>
 		/// <param name="sName">The name of the requested sound to play.</param>
-		public void Play(string sName)
+		/// <param name="bOverlapSound"></param>
+		public void Play(string sName, bool bOverlapSound = false)
 		{
 			if (bMuteAllByDefault)
 				return;
 			MSound s = Find(sName);
-			if (s != null && !IsPlaying(s))
+			if (s != null && (bOverlapSound || !IsPlaying(s)))
 				s.ASSound.Play();
 			if (s == null)
 				Log.PrintWarning(kErr1 + sName + kErr2 + "played!");
