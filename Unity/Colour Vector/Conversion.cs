@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using MW.General;
 
 namespace MW.Conversion {
 
@@ -8,7 +7,7 @@ namespace MW.Conversion {
         /// <summary>The corresponding colour in RGA using Vector3.</summary>
         /// <param name="vColour">The RGB/XYZ channel values, respectively.</param>
         public static Color Colour255(Vector3 vColour) {
-            vColour *= Generic.k1To255RGB;
+            vColour *= Utils.k1To255RGB;
 
             for (int i = 0; i < 3; i++)
                 vColour[i] = Mathf.Clamp(vColour[i], 0, 255);
@@ -22,9 +21,9 @@ namespace MW.Conversion {
         /// <param name="b">The blue value.</param>
         public static Color Colour255(int r, int g, int b) {
 
-            float _r = r * Generic.k1To255RGB;
-            float _g = g * Generic.k1To255RGB;
-            float _b = b * Generic.k1To255RGB;
+            float _r = r * Utils.k1To255RGB;
+            float _g = g * Utils.k1To255RGB;
+            float _b = b * Utils.k1To255RGB;
 
             return new Color(_r, _g, _b);
         }
@@ -35,9 +34,9 @@ namespace MW.Conversion {
         /// <param name="b">The blue value.</param>
         public static Color Colour255(float r, float g, float b) {
 
-            r *= Generic.k1To255RGB;
-            g *= Generic.k1To255RGB;
-            b *= Generic.k1To255RGB;
+            r *= Utils.k1To255RGB;
+            g *= Utils.k1To255RGB;
+            b *= Utils.k1To255RGB;
 
             return new Color(r, g, b);
         }
@@ -45,7 +44,7 @@ namespace MW.Conversion {
         /// <summary>The corresponding colour in RGBA using Vector4.</summary>
         /// <param name="v4Colour">The RGBA/XYZW channel values, respectivaly.</param>
         public static Color Colour255(Vector4 v4Colour) {
-            v4Colour *= Generic.k1To255RGB;
+            v4Colour *= Utils.k1To255RGB;
 
             for (int i = 0; i < 4; i++)
                 v4Colour[i] = Mathf.Clamp(v4Colour[i], 0, 255);
@@ -60,10 +59,10 @@ namespace MW.Conversion {
         /// <param name="a">The alpha value.</param>
         public static Color Colour255(int r, int g, int b, int a) {
 
-            float _r = r * Generic.k1To255RGB;
-            float _g = g * Generic.k1To255RGB;
-            float _b = b * Generic.k1To255RGB;
-            float _a = a * Generic.k1To255RGB;
+            float _r = r * Utils.k1To255RGB;
+            float _g = g * Utils.k1To255RGB;
+            float _b = b * Utils.k1To255RGB;
+            float _a = a * Utils.k1To255RGB;
 
             return new Color(_r, _g, _b, _a);
         }
@@ -75,10 +74,10 @@ namespace MW.Conversion {
         /// <param name="a">The alpha value.</param>
         public static Color Colour255(float r, float g, float b, float a) {
 
-            r *= Generic.k1To255RGB;
-            g *= Generic.k1To255RGB;
-            b *= Generic.k1To255RGB;
-            a *= Generic.k1To255RGB;
+            r *= Utils.k1To255RGB;
+            g *= Utils.k1To255RGB;
+            b *= Utils.k1To255RGB;
+            a *= Utils.k1To255RGB;
 
             return new Color(r, g, b, a);
         }
@@ -177,11 +176,11 @@ namespace MW.Conversion {
         }
 
         public static Vector3 VColour(Color CColour) {
-            return new Vector3(CColour.r / Generic.k1To255RGB, CColour.g / Generic.k1To255RGB, CColour.b / Generic.k1To255RGB);
+            return new Vector3(CColour.r / Utils.k1To255RGB, CColour.g / Utils.k1To255RGB, CColour.b / Utils.k1To255RGB);
 		}
 
         public static Vector4 VColourA(Color CColour) {
-            return new Vector4(CColour.r / Generic.k1To255RGB, CColour.g / Generic.k1To255RGB, CColour.b / Generic.k1To255RGB, CColour.a / Generic.k1To255RGB);
+            return new Vector4(CColour.r / Utils.k1To255RGB, CColour.g / Utils.k1To255RGB, CColour.b / Utils.k1To255RGB, CColour.a / Utils.k1To255RGB);
         }
     }
 

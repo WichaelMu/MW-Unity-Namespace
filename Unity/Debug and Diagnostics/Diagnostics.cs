@@ -1,8 +1,8 @@
-﻿
+﻿using System;
 
 namespace MW.Diagnostics {
 
-	/// <summary>UnityEngine.Debug.[MW.Diagnostics.Stacktrace.EVerbosity]</summary>
+	/// <summary>UnityEngine.Debug.Log<see cref="EVerbosity"/>().</summary>
 	public enum EVerbosity { Log, Warning, Error };
 
 	/// <summary>Track execution time of code.</summary>
@@ -21,15 +21,17 @@ namespace MW.Diagnostics {
 		}
 
 		/// <summary>Start Stopwatch.</summary>
-		public void Start() => sw.Start();
+		public void Start() { 
+			sw.Start();
+		}
 
-		/// <summary>Stop Stopwatch and get the elapsed time.</summary>
+		/// <summary>Stop Stopwatch and get the elapsed <see cref="Time"/>.</summary>
 		public long Stop() {
 			sw.Stop();
 			return Time();
 		}
 
-		/// <summary>Restarts Stopwatch and get the time before restarting.</summary>
+		/// <summary>Restarts Stopwatch and get the <see cref="Time"/> before restarting.</summary>
 		public long Restart() {
 			long now = Time();
 			sw.Restart();
@@ -51,45 +53,45 @@ namespace MW.Diagnostics {
 	/// <summary>Provides a stacktrace for code.</summary>
 	public static class Stacktrace {
 
-		/// <summary>Stacktrace using UnityEngine.Debug with verbosity.</summary>
-		/// <param name="verbosity">The verbosity of the UnityEngine.Debug.</param>
+		/// <summary>Stacktrace using <see cref="Log.Print"/> with <see cref="EVerbosity"/> verbosity.</summary>
+		/// <param name="verbosity">The <see cref="EVerbosity"/> verbosity of the <see cref="Log.Print"/>.</param>
 		public static void Here(EVerbosity verbosity = EVerbosity.Log) {
 			switch (verbosity) {
 				case EVerbosity.Log:
-					UnityEngine.Debug.Log(System.Environment.StackTrace);
+					Log.Print(Environment.StackTrace);
 					return;
 				case EVerbosity.Error:
-					UnityEngine.Debug.LogError(System.Environment.StackTrace);
+					Log.PrintError(Environment.StackTrace);
 					return;
 				case EVerbosity.Warning:
-					UnityEngine.Debug.LogWarning(System.Environment.StackTrace);
+					Log.PrintWarning(Environment.StackTrace);
 					return;
 			}
 		}
 
-		/// <summary>Stacktrace using UnityEngine.Debug with verbosity and a message.</summary>
-		/// <param name="sMessage">The message to show.</param>
-		/// <param name="verbosity">The verbosity og the UnityEngine.Debug.</param>
+		/// <summary>Stacktrace using <see cref="Log.Print"/> with <see cref="EVerbosity"/> verbosity and a <see cref="string"/> message.</summary>
+		/// <param name="sMessage">The <see cref="string"/> message to show.</param>
+		/// <param name="verbosity">The <see cref="EVerbosity"/> of the <see cref="Log.Print"/>.</param>
 		public static void Here(string sMessage, EVerbosity verbosity = EVerbosity.Log) {
-			string stacktrace = sMessage + ' ' + System.Environment.StackTrace;
+			string stacktrace = sMessage + ' ' + Environment.StackTrace;
 
 			switch (verbosity) {
 				case EVerbosity.Log:
-					UnityEngine.Debug.Log(stacktrace);
+					Log.Print(stacktrace);
 					return;
 				case EVerbosity.Error:
-					UnityEngine.Debug.LogError(stacktrace);
+					Log.PrintError(stacktrace);
 					return;
 				case EVerbosity.Warning:
-					UnityEngine.Debug.LogWarning(stacktrace);
+					Log.PrintWarning(stacktrace);
 					return;
 			}
 		}
 	}
 
 	public static class Log {
-		/// <summary>UnityEngine.Logs every object.</summary>
-		/// <param name="debug">The list of objects to log separated by a space.</param>
+		/// <summary><see cref="UnityEngine.Debug.Log(object)"/> every object.</summary>
+		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
 		public static void Print(params object[] debug) {
 			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
@@ -99,8 +101,8 @@ namespace MW.Diagnostics {
 			UnityEngine.Debug.Log(print);
 		}
 
-		/// <summary>UnityEngine.LogErrors every object.</summary>
-		/// <param name="debug">The list of objects to log separated by a space.</param>
+		/// <summary><see cref="UnityEngine.Debug.LogError(object)"/> every object.</summary>
+		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
 		public static void PrintError(params object[] debug) {
 			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
@@ -110,8 +112,8 @@ namespace MW.Diagnostics {
 			UnityEngine.Debug.LogError(print);
 		}
 
-		/// <summary>UnityEngine.LogWarnings every object.</summary>
-		/// <param name="debug">The list of objects to log separated by a space.</param>
+		/// <summary><see cref="UnityEngine.Debug.LogWarning(object)"/> every object.</summary>
+		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
 		public static void PrintWarning(params object[] debug) {
 			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {

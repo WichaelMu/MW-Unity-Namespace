@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using MW.Diagnostics;
 
 namespace MW.IO
 {
 	public static class I
 	{
-		/// <param name="BMouse">The mouse press to listen for.</param>
+		/// <param name="BMouse">The <see cref="EButton"/> press to listen for.</param>
 		/// <param name="bHold">Whether or not to check if this button is held down.</param>
 		/// <param name="bUp">Whether or not to check if this button is released.</param>
 		/// <returns>If the BMouse was clicked or held.</returns>
@@ -38,7 +39,7 @@ namespace MW.IO
 			return false;
 		}
 
-		/// <param name="KCStroke">The key that was pressed on the keyboard.</param>
+		/// <param name="KCStroke">The <see cref="KeyCode"/> that was pressed on the keyboard.</param>
 		/// <param name="bHold">Whether or not to check if this button is held down.</param>
 		/// <param name="bUp">Whether or not to check if this button is released.</param>
 		/// <returns>If Stroke was pressed or Held.</returns>
@@ -50,6 +51,16 @@ namespace MW.IO
 			if (bHold)
 				return Input.GetKey(KCStroke);
 			return Input.GetKeyDown(KCStroke);
+		}
+	}
+
+	public static class O
+	{
+		/// <summary>Identical to <see cref="Log.Print"/>.</summary>
+		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
+		public static void Out(params object[] debug)
+		{
+			Log.Print(debug);
 		}
 	}
 }

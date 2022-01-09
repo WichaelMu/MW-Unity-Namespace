@@ -17,7 +17,14 @@ namespace MW
 			this.Second = Second;
 		}
 
-		public override int GetHashCode() => System.HashCode.Combine<TFirst, TSecond>(First, Second);
+		public override int GetHashCode() {
+			int hash = 17;
+
+			hash = hash * 31 + First.GetHashCode();
+			hash = hash * 31 + Second.GetHashCode();
+
+			return hash;
+		}
 	}
 
 	/// <summary>Generates a new variable of three types of values.</summary>
@@ -37,6 +44,15 @@ namespace MW
 			this.Third = Third;
 		}
 
-		public override int GetHashCode() => System.HashCode.Combine<TFirst, TSecond, TThird>(First, Second, Third);
+		public override int GetHashCode()
+		{
+			int hash = 17;
+
+			hash = hash * 31 + First.GetHashCode();
+			hash = hash * 31 + Second.GetHashCode();
+			hash = hash * 31 + Third.GetHashCode();
+
+			return hash;
+		}
 	}
 }

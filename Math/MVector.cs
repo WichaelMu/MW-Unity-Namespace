@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using MW.General;
 using MW.Diagnostics;
 using MW.Math;
 
@@ -68,20 +67,20 @@ namespace MW.Vector {
 		/// <summary>Short for writing MVector(0, 0, 1).</summary>
 		public static readonly MVector Forward = forward;
 
-		/// <summary>Converts an MVector to a Vector3.</summary>
+		/// <summary>Converts an <see cref="MVector"/> to a <see cref="Vector3"/>.</summary>
 		/// <param name="mVector">The MVector to convert.</param>
 		public static Vector3 ToVector3(MVector mVector) => new Vector3(mVector.X, mVector.Y, mVector.Z);
-		/// <summary>Converts a Vector3 to an MWVector.</summary>
+		/// <summary>Converts a <see cref="Vector3"/> to an <see cref="MVector"/>.</summary>
 		/// <param name="vVector">The Vector3 to convert.</param>
 		public static MVector ToMVector(Vector3 vVector) => new MVector(vVector.x, vVector.y, vVector.z);
 
 		/// <summary>Normalises mVector.</summary>
 		public static MVector Normalise(MVector mVector) => mVector.Normalise();
-		/// <summary>The vector cross product of left and right.</summary>
+		/// <summary>The vector cross ^ product of left and right.</summary>
 		public static MVector Cross(MVector left, MVector right) => left ^ right;
-		/// <summary>The vector dot product of left and right.</summary>
+		/// <summary>The vector dot | product of left and right.</summary>
 		public static float Dot(MVector left, MVector right) => left | right;
-		/// <summary>Whether left and right are parallel to each other.</summary>
+		/// <summary>Whether left and right are <see cref="Mathematics.Parallel(MVector, MVector, float)"/> to each other.</summary>
 		public static bool Parallel(MVector left, MVector right) => Mathematics.Parallel(left, right);
 		/// <summary>A normalised MVector at fDegrees, relative to dirForward.</summary>
 		/// <param name="fDegrees">The angle offset.</param>
@@ -103,7 +102,7 @@ namespace MW.Vector {
 		public float SqrMagnitude { get => X * X + Y * Y + Z * Z; }
 		/// <summary>The magnitude of this MVector.</summary>
 		public float Magnitude { get => Mathf.Sqrt(SqrMagnitude); }
-		/// <summary>The absolute value of this MVector.</summary>
+		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
 		public MVector Abs { get => new MVector(Mathf.Abs(X), Mathf.Abs(Y), Mathf.Abs(Z)); }
 		/// <summary>The normalised version of this MVector.</summary>
 		public MVector Normalised { get {
@@ -125,7 +124,7 @@ namespace MW.Vector {
 			this.Z = Z;
 		}
 
-		/// <summary>Whether this MVector is a unit vector. (If this MVector is normalised)</summary>
+		/// <summary>Whether this MVector is a unit vector. (If this MVector is <see cref="Mathematics.IsNormalised(MVector)"/>)</summary>
 		/// <returns></returns>
 		public bool IsNormalised() => Mathematics.IsNormalised(this);
 
@@ -162,7 +161,7 @@ namespace MW.Vector {
 		}
 
 		/// <summary>The direction and length of this MVector.</summary>
-		/// <returns>TPair::First The direction of this MVector. TPair::Second The length of this MVector.</returns>
+		/// <returns><see cref="TPair{TFirst, TSecond}.First"/> The direction of this MVector. <see cref="TPair{TFirst, TSecond}.Second"/> The length of this MVector.</returns>
 		public TPair<MVector, float> DirectionAndLength() => new TPair<MVector, float>(Normalised, Magnitude);
 
 		/// <summary>This MVector's projection.</summary>
@@ -171,15 +170,15 @@ namespace MW.Vector {
 			return new MVector(X * fZ, Y * fZ, 1);
 		}
 
-		/// <summary>The Quaternion this MVector represents.</summary>
+		/// <summary>The <see cref="Quaternion"/> this MVector represents.</summary>
 		public Quaternion Rotation() {
 			float fYAxis = Mathf.Atan2(Y, X);
 			float fXAxis = Mathf.Atan2(Z, Mathf.Sqrt(X * X + Y * Y));
 
 			float sq = 0, sw = 0;
 			float cq = 0, cw = 0;
-			Mathematics.SinCos(ref sq, ref sw, fXAxis * Generic.kHalf);
-			Mathematics.SinCos(ref cq, ref cw, fYAxis * Generic.kHalf);
+			Mathematics.SinCos(ref sq, ref sw, fXAxis * Utils.kHalf);
+			Mathematics.SinCos(ref cq, ref cw, fYAxis * Utils.kHalf);
 
 			return new Quaternion {
 				x = sq * sw,
@@ -222,14 +221,14 @@ namespace MW.Vector {
 		public static MVector operator *(float m, MVector v) => new MVector(v.X * m, v.Y * m, v.Z * m);
 		public static MVector operator /(MVector v, float d) => new MVector(v.X / d, v.Y / d, v.Z / d);
 
-		/// <summary>The vector cross product.</summary>
+		/// <summary>The vector cross ^ product.</summary>
 		public static MVector operator ^(MVector l, MVector r) => new MVector(l.Y * r.Z - l.Z * r.Y, l.Z * r.X - l.X * r.Z, l.X * r.Y - l.Y * r.X);
-		/// <summary>The vector dot product.</summary>
+		/// <summary>The vector dot | product.</summary>
 		public static float operator |(MVector l, MVector r) => l.X * r.X + l.Y + r.Y + l.Z + r.Z;
 
-		/// <summary>Normalised direction from to.</summary>
+		/// <summary><see cref="Normalised"/> direction from to.</summary>
 		public static MVector operator >(MVector From, MVector To) => (To - From).Normalised;
-		/// <summary>Normalised direction from to.</summary>
+		/// <summary><see cref="Normalised"/> direction from to.</summary>
 		public static MVector operator <(MVector To, MVector From) => From > To;
 
 		public static MVector operator >>(MVector v, int i)
@@ -271,7 +270,7 @@ namespace MW.Vector {
 		public static implicit operator MVector(Vector3 vVector) => new MVector(vVector);
 		public static implicit operator MVector(Vector2 vVector) => new MVector(vVector);
 		
-		/// <summary>The colour representation of this MVector, in 0-255 XYZ/RGB.</summary>
+		/// <summary>The <see cref="Color"/> representation of this MVector, in 0-255 XYZ/RGB.</summary>
 		public static implicit operator Color(MVector mVector) {
 			return Conversion.Colour.Colour255(mVector.X, mVector.Y, mVector.Z);
 		}

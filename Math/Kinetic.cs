@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using MW.Easing;
-using MW.General;
 using MW.Math;
 
 namespace MW.Kinetic {
@@ -91,7 +90,7 @@ namespace MW.Kinetic {
 
             for (int i = 0; i < colliders.Length; i++) {
                 Vector3 closestPoint = colliders[i].ClosestPoint(ASelf.position);
-                if (Generic.InFOV(EDirection.Forward, ASelf, closestPoint, fAngle)) {
+                if (Utils.InFOV(EDirection.Forward, ASelf, closestPoint, fAngle)) {
                     float distance = Vector3.Distance(ASelf.position, closestPoint);
                     if (distance < min) {
                         min = distance;

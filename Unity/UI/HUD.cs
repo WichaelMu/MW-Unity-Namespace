@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-using MW.Audible;
+using MW.Audio;
 using TMPro;
 
 namespace MW.HUD {

@@ -1,11 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MW.General
+namespace MW
 {
-
-
-	public static class Generic
+	public static class Utils
 	{
 		/// <summary>Shorthand for writing / 1000. (Always faster to multiply than to divide)</summary>
 		public const float kThousandth = .001f;
@@ -29,18 +27,18 @@ namespace MW.General
 		public const float kSqrt2 = 1.4142135623730950488016887242097f;
 		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3). (Always faster to multiply than to divide)</summary>
 		public const float kSqrt3 = 1.7320508075688772935274463415059f;
-		/// <summary>Shorthand for writing 1 / Mathf.PI.</summary>
+		/// <summary>Shorthand for writing 1 / <see cref="Mathf.PI"/>.</summary>
 		public const float kInversePI = .31830988618379067153776752674503f;
-		/// <summary>Shorthand for writing Mathf.PI * kHalf.</summary>
+		/// <summary>Shorthand for writing <see cref="Mathf.PI"/> * <see cref="kHalf"/>.</summary>
 		public const float kHalfPI = 1.5707963267948966192313216916398f;
 
 		/// <summary>The ratio between 1 and 255.</summary>
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
-		/// <summary>If self can see target within SearchAngle degrees while facing face.</summary>
-		/// <param name="dirFace">The direction self is facing.</param>
-		/// <param name="ASelf">The transform searching for target.</param>
-		/// <param name="ATarget">The transform to look out for.</param>
+		/// <summary>If self can see <see cref="Transform"/> target within SearchAngle degrees while facing <see cref="EDirection"/>.</summary>
+		/// <param name="dirFace">The <see cref="EDirection"/> self is facing.</param>
+		/// <param name="ASelf">The <see cref="Transform"/> searching for target.</param>
+		/// <param name="ATarget">The <see cref="Transform"/> to look out for.</param>
 		/// <param name="fSearchAngle">The maximum degrees to search for target.</param>
 		public static bool InFOV(EDirection dirFace, Transform ASelf, Transform ATarget, float fSearchAngle)
 		{
@@ -65,10 +63,10 @@ namespace MW.General
 			}
 		}
 
-		/// <summary>If self can see target within SearchAngle degrees while facing face.</summary>
-		/// <param name="dirFace">The direction self is facing.</param>
-		/// <param name="ASelf">The transform searching for target.</param>
-		/// <param name="vTarget">The position to look out for.</param>
+		/// <summary>If self can see <see cref="Transform"/> target within SearchAngle degrees while facing <see cref="EDirection"/>.</summary>
+		/// <param name="dirFace">The <see cref="EDirection"/> self is facing.</param>
+		/// <param name="ASelf">The <see cref="Transform"/> searching for target.</param>
+		/// <param name="vTarget">The <see cref="Vector3"/> position to look out for.</param>
 		/// <param name="fSearchAngle">The maximum degrees to search for target.</param>
 		public static bool InFOV(EDirection dirFace, Transform ASelf, Vector3 vTarget, float fSearchAngle)
 		{
@@ -94,17 +92,17 @@ namespace MW.General
 		}
 
 		/// <summary>If self has an unobstructed line of sight to to.</summary>
-		/// <param name="vSelf">The position to look from.</param>
-		/// <param name="vTo">The position to look to.</param>
-		/// <param name="lmObstacles">The obstacles to consider obtrusive.</param>
+		/// <param name="vSelf">The <see cref="Vector3"/> position to look from.</param>
+		/// <param name="vTo">The <see cref="Vector3"/> position to look to.</param>
+		/// <param name="lmObstacles">The <see cref="LayerMask"/> obstacles to consider obtrusive.</param>
 		public static bool LineOfSight(Vector3 vSelf, Vector3 vTo, LayerMask lmObstacles)
 		{
 			return !Physics.Linecast(vSelf, vTo, lmObstacles);
 		}
 
-		/// <summary>If self has an unobstructed line of sight to to.</summary>
-		/// <param name="vSelf">The position to look from.</param>
-		/// <param name="vTo">The position to look to.</param>
+		/// <summary>If <see cref="Vector3"/> self has an unobstructed line of sight to to.</summary>
+		/// <param name="vSelf">The <see cref="Vector3"/> position to look from.</param>
+		/// <param name="vTo">The <see cref="Vector3"/> position to look to.</param>
 		public static bool LineOfSight(Vector3 vSelf, Vector3 vTo)
 		{
 			return !Physics.Linecast(vSelf, vTo);
@@ -172,7 +170,7 @@ namespace MW.General
 			return (fFrom + fLimit > fValue) && (fValue > fFrom - fLimit);
 		}
 
-		/// <summary>The largest vector between L and R, according to magnitude.</summary>
+		/// <summary>The largest <see cref="Vector3"/> between L and R, according to <see cref="Vector3.magnitude"/>.</summary>
 		/// <param name="vL"></param>
 		/// <param name="vR"></param>
 		public static Vector3 Max(Vector3 vL, Vector3 vR)
@@ -180,7 +178,7 @@ namespace MW.General
 			return (vL.magnitude < vR.magnitude) ? vR : vL;
 		}
 
-		/// <summary>The smallest vector vector between L and R, according to magnitude.</summary>
+		/// <summary>The smallest <see cref="Vector3"/> between L and R, according to <see cref="Vector3.magnitude"/>.</summary>
 		/// <param name="vL"></param>
 		/// <param name="vR"></param>
 		public static Vector3 Min(Vector3 vL, Vector3 vR)
@@ -196,7 +194,7 @@ namespace MW.General
 		{
 			if (fib_dp == null)
 				fib_dp = new int[int.MaxValue];
-			if (fib_dp[n] != 0)
+			else if (fib_dp[n] != 0)
 				return fib_dp[n];
 			if (n <= 2)
 				return 1;
@@ -209,7 +207,7 @@ namespace MW.General
 		/// <summary>Generates spherical points with an equal distribution.</summary>
 		/// <param name="nResolution">The number of points to generate.</param>
 		/// <param name="fGoldenRationModifier">Adjusts the golden ratio.</param>
-		/// <returns>The Vector3[] points for the sphere.</returns>
+		/// <returns>The <see cref="Vector3"/>[] points for the sphere.</returns>
 		public static Vector3[] GenerateEqualSphere(int nResolution, float fGoldenRationModifier)
 		{
 			Vector3[] vDirections = new Vector3[nResolution];
@@ -234,11 +232,11 @@ namespace MW.General
 		}
 
 		/// <summary>Generates the points to 'bridge' origin and target together at a height as an arc.</summary>
-		/// <param name="vOrigin">The starting point of the bridge.</param>
-		/// <param name="vTarget">The ending point of the bridge.</param>
+		/// <param name="vOrigin">The <see cref="Vector3"/> starting point of the bridge.</param>
+		/// <param name="vTarget">The <see cref="Vector3"/> ending point of the bridge.</param>
 		/// <param name="nResolution">The number of points for the bridge.</param>
 		/// <param name="fHeight">The maximum height of the bridge.</param>
-		/// <returns>The Vector3[] points for the bridge.</returns>
+		/// <returns>The <see cref="Vector3"/>[] points for the bridge.</returns>
 		public static Vector3[] Bridge(Vector3 vOrigin, Vector3 vTarget, int nResolution, float fHeight)
 		{
 			Vector3[] points = new Vector3[nResolution];
@@ -276,5 +274,19 @@ namespace MW.General
 		}
 
 		public static string AsString(object convert) => convert.ToString();
+
+		/// <summary>Mirrors Number about Minimum and Maximum, inclusive.</summary>
+		/// <param name="Number">The number to anchor a reflection.</param>
+		/// <param name="Minimum">The minimum number that can be reflected.</param>
+		/// <param name="Maximum">The maximum number that can be reflected.</param>
+		/// <returns>The reflected number.</returns>
+		public static float MirrorNumber(float Number, float Minimum, float Maximum) => (Minimum + Maximum) - Number;
+
+		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with <see cref="MArray{T}.Mirror(int, int)"/>.</summary>
+		/// <param name="Number">The number to anchor a reflection.</param>
+		/// <param name="Minimum">The minimum number that can be reflected.</param>
+		/// <param name="Maximum">The maximum number that can be reflected.</param>
+		/// <returns>The reflected number.</returns>
+		public static int MirrorNumber(int Number, int Minimum, int Maximum) => (Minimum + Maximum) - Number;
 	}
 }

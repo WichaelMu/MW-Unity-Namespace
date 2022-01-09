@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using MW.Kinetic;
 using MW.Easing;
-using MW.General;
 using MW.Vector;
 
 namespace MW.Math {
@@ -77,10 +76,10 @@ namespace MW.Math {
             //  At a velocity of 950, the cannon travels at ~633 m/s.
             //  ~2279 kmph.
 
-            float fSecondsPerKM = 1000 / (RSelf.velocity.magnitude * Generic.kTwoThirds);
+            float fSecondsPerKM = 1000 / (RSelf.velocity.magnitude * Utils.kTwoThirds);
 
             //  Distance between the RSelf and RBTarget in thousands.
-            float fDistanceBetweenPlayer = Vector3.Distance(RSelf.position, RBTarget.position) * Generic.kThousandth;
+            float fDistanceBetweenPlayer = Vector3.Distance(RSelf.position, RBTarget.position) * Utils.kThousandth;
 
                         MVector vForwardPrediction = new MVector(RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer);
 
@@ -148,12 +147,12 @@ namespace MW.Math {
         /// <param name="v1">Whether this vector is parallel to the other.</param>
         /// <param name="v2">Whether this vector is parallel to the other.</param>
         /// <param name="fParallelThreshold">The threshold to consider parallel vectors.</param>
-        public static bool Parallel(Vector3 v1, Vector3 v2, float fParallelThreshold = 0.999845f)
+        public static bool Parallel(MVector v1, MVector v2, float fParallelThreshold = 0.999845f)
             => Mathf.Abs(Vector3.Dot(v1, v2)) >= fParallelThreshold;
 
         /// <summary>Whether vVector has been normalised.</summary>
         /// <param name="vVector">The vector to check.</param>
-        public static bool IsNormalised(Vector3 vVector) => Mathf.Abs(1f - vVector.sqrMagnitude) < .01f;
+        public static bool IsNormalised(MVector vVector) => Mathf.Abs(1f - vVector.SqrMagnitude) < .01f;
 
         /// <summary>The angle in degrees pointing towards vDirection using the X-Axis and Z-Axis. (For 3D space)</summary>
         /// <param name="vDirection">The direction to calculate an angle towards.</param>
@@ -184,7 +183,7 @@ namespace MW.Math {
         }
 
         public static void SinCos(ref float fSine, ref float fCosine, float fValue) {
-            float quotient = (Generic.kInversePI * 0.5f) * fValue;
+            float quotient = (Utils.kInversePI * 0.5f) * fValue;
             if (fValue >= 0.0f) {
                 quotient = (int)(quotient + 0.5f);
             } else {
@@ -194,10 +193,10 @@ namespace MW.Math {
 
             // Map y to [-pi/2,pi/2] with sin(y) = sin(Value).
             float sign;
-            if (y > Generic.kHalfPI) {
+            if (y > Utils.kHalfPI) {
                 y = Mathf.PI - y;
                 sign = -1.0f;
-            } else if (y < -Generic.kHalfPI) {
+            } else if (y < -Utils.kHalfPI) {
                 y = -Mathf.PI - y;
                 sign = -1.0f;
             } else {

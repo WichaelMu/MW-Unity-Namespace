@@ -195,7 +195,7 @@ namespace MW.Pathfinding
 		bool bIsPaused = false;
 		uint FrameTracker = 0;
 
-		void Update()
+		public virtual void Update()
 		{
 			#region First Compute Skip Explanation.
 			/* Assume ComputationsPerFrame = 1. Assume FramesBeforeComputation = 1.
