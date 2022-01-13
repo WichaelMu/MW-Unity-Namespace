@@ -37,7 +37,7 @@ namespace MW
 		{
 			try
 			{
-				HashMap.Add(Item, Num + 1);
+				HashMap.Add(Item, Num);
 
 				Items.Add(Item);
 			}
@@ -147,25 +147,29 @@ namespace MW
 		public bool IsEmpty() => Num == 0;
 
 		/// <returns>The mirror position of index over minimum zero, maximum <see cref="Num"/>.</returns>
-		public T Mirror(int Index) {
+		public T Mirror(int Index)
+		{
 			InRange(Index);
 			return Mirror(0, Index);
 		}
 
 		/// <returns>The mirror position of index over Minimum, maximum <see cref="Num"/>.</returns>
-		public T Mirror(int Minimum, int Index) {
+		public T Mirror(int Minimum, int Index)
+		{
 			InRange(Index);
 			return Items[Minimum + Num - 1 - Index];
 		}
 
 		/// <returns>The incoming and reflected Item of this mirror over minimum zero, maximum <see cref="Num"/>.</returns>
-		public TPair<T, T> Reflect(int Index) {
+		public TPair<T, T> Reflect(int Index)
+		{
 			InRange(Index);
 			return Reflect(0, Index);
 		}
 
 		/// <returns>The incoming and reflected Item of this mirror of Minimum, maximum <see cref="Num"/>. <see cref="TPair{TFirst, TSecond}.First"/>: The source reflection; <see cref="TPair{TFirst, TSecond}.Second"/>: The reflected element.</returns>
-		public TPair<T, T> Reflect(int Minimum, int Index) {
+		public TPair<T, T> Reflect(int Minimum, int Index)
+		{
 			InRange(Index);
 			return new TPair<T, T>(Items[Index], Mirror(Minimum, Index));
 		}

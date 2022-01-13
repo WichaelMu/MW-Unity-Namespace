@@ -10,6 +10,8 @@
     <OutputPath></OutputPath>
     <DocumentationFile>C:\Users\table\Documents\Machine Code\MW\MW\bin\Debug\netstandard2.0\MW.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
