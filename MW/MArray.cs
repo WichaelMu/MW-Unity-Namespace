@@ -244,7 +244,9 @@ namespace MW
 		/// <returns>The Item at the specified index.</returns>
 		public T this[int i] => Items[i];
 
-		static bool CheckNull(MArray<T> Check) => Check == null;
+		/// <param name="Check">The MArray to check for initialisation.</param>
+		/// <returns>True if Check is null.</returns>
+		public static bool CheckNull(MArray<T> Check) => Check == null;
 
 		/// <summary>If this MArray is null or <see cref="IsEmpty"/>.</summary>
 		/// <param name="CheckIfNullOrEmpty">The MArray to check for null or emptiness.</param>
