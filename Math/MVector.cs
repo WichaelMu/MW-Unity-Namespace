@@ -2,9 +2,11 @@
 using MW.Diagnostics;
 using MW.Math;
 
-namespace MW.Vector {
+namespace MW.Vector
+{
 	[System.Serializable]
-	public struct MVector {
+	public struct MVector
+	{
 		public const float kEpsilon = 1E-05f;
 
 		public float X, Y, Z;
@@ -24,14 +26,16 @@ namespace MW.Vector {
 		}
 
 		/// <summary>Construct with X and Y components only.</summary>
-		public MVector(float X, float Y) {
+		public MVector(float X, float Y)
+		{
 			this.X = X;
 			this.Y = Y;
 			Z = 0;
 		}
 
 		/// <summary>Construct an MVector with X, Y, and Z components.</summary>
-		public MVector(float X, float Y, float Z) {
+		public MVector(float X, float Y, float Z)
+		{
 			this.X = X;
 			this.Y = Y;
 			this.Z = Z;
@@ -46,7 +50,8 @@ namespace MW.Vector {
 			Z = xyz.z;
 		}
 
-		public float this[int i] => i switch {
+		public float this[int i] => i switch
+		{
 			0 => X,
 			1 => Y,
 			2 => Z,
@@ -105,7 +110,10 @@ namespace MW.Vector {
 		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
 		public MVector Abs { get => new MVector(Mathf.Abs(X), Mathf.Abs(Y), Mathf.Abs(Z)); }
 		/// <summary>The normalised version of this MVector.</summary>
-		public MVector Normalised { get {
+		public MVector Normalised
+		{
+			get
+			{
 				float m = Magnitude;
 				if (m > kEpsilon) return this / m;
 
@@ -115,10 +123,11 @@ namespace MW.Vector {
 		}
 
 		/// <summary>Normalises this MVector.</summary>
-		public MVector Normalise() => Normalised;
+		public MVector Normalise() => this = Normalised;
 
 		/// <summary>Sets this MVector's components.</summary>
-		public void Set(float X, float Y, float Z) {
+		public void Set(float X, float Y, float Z)
+		{
 			this.X = X;
 			this.Y = Y;
 			this.Z = Z;
@@ -135,7 +144,8 @@ namespace MW.Vector {
 		/// <summary>Rotates this MVector at an angle of fAngleDegrees around mAxis.</summary>
 		/// <param name="fAngleDegrees">The degrees at which to rotate this MVector.</param>
 		/// <param name="mAxis">The axis to rotate this MVector around.</param>
-		public MVector RotateAngleAxis(float fAngleDegrees, MVector mAxis) {
+		public MVector RotateAngleAxis(float fAngleDegrees, MVector mAxis)
+		{
 			float S = 0, C = 0;
 			Mathematics.SinCos(ref S, ref C, fAngleDegrees * Mathf.Deg2Rad);
 
@@ -161,26 +171,32 @@ namespace MW.Vector {
 		}
 
 		/// <summary>The direction and length of this MVector.</summary>
-		/// <returns><see cref="TPair{TFirst, TSecond}.First"/> The direction of this MVector. <see cref="TPair{TFirst, TSecond}.Second"/> The length of this MVector.</returns>
-		public TPair<MVector, float> DirectionAndLength() => new TPair<MVector, float>(Normalised, Magnitude);
+		public void DirectionAndLength(out MVector Direction, out float Length)
+		{
+			Direction = Normalised;
+			Length = Magnitude;
+		}
 
 		/// <summary>This MVector's projection.</summary>
-		public MVector Projection() {
+		public MVector Projection()
+		{
 			float fZ = 1f / Z;
 			return new MVector(X * fZ, Y * fZ, 1);
 		}
 
 		/// <summary>The <see cref="Quaternion"/> this MVector represents.</summary>
-		public Quaternion Rotation() {
-			float fYAxis = Mathf.Atan2(Y, X);
-			float fXAxis = Mathf.Atan2(Z, Mathf.Sqrt(X * X + Y * Y));
+		public Quaternion Rotation()
+		{
+			float fYAxis = Mathf.Atan2(Z, X);
+			float fXAxis = Mathf.Atan2(Y, Mathf.Sqrt(X * X + Z * Z));
 
 			float sq = 0, sw = 0;
 			float cq = 0, cw = 0;
-			Mathematics.SinCos(ref sq, ref sw, fXAxis * Utils.kHalf);
-			Mathematics.SinCos(ref cq, ref cw, fYAxis * Utils.kHalf);
+			Mathematics.SinCos(ref sq, ref cq, fXAxis * Utils.kHalf);
+			Mathematics.SinCos(ref sw, ref cw, fYAxis * Utils.kHalf);
 
-			return new Quaternion {
+			return new Quaternion
+			{
 				x = sq * sw,
 				y = -sq * cw,
 				z = cq * sw,
@@ -189,21 +205,24 @@ namespace MW.Vector {
 		}
 
 		/// <summary>Ignores the X component of this MVector.</summary>
-		public MVector IgnoreX() {
+		public MVector IgnoreX()
+		{
 			X = 0;
 
 			return this;
 		}
 
 		/// <summary>Ignores the Y component of this MVector.</summary>
-		public MVector IgnoreY() {
+		public MVector IgnoreY()
+		{
 			Y = 0;
 
 			return this;
 		}
 
 		/// <summary>Ignores the Z component of this MVector.</summary>
-		public MVector IgnoreZ() {
+		public MVector IgnoreZ()
+		{
 			Z = 0;
 
 			return this;
@@ -224,7 +243,7 @@ namespace MW.Vector {
 		/// <summary>The vector cross ^ product.</summary>
 		public static MVector operator ^(MVector l, MVector r) => new MVector(l.Y * r.Z - l.Z * r.Y, l.Z * r.X - l.X * r.Z, l.X * r.Y - l.Y * r.X);
 		/// <summary>The vector dot | product.</summary>
-		public static float operator |(MVector l, MVector r) => l.X * r.X + l.Y + r.Y + l.Z + r.Z;
+		public static float operator |(MVector l, MVector r) => l.X * r.X + l.Y * r.Y + l.Z * r.Z;
 
 		/// <summary><see cref="Normalised"/> direction from to.</summary>
 		public static MVector operator >(MVector From, MVector To) => (To - From).Normalised;
@@ -251,7 +270,8 @@ namespace MW.Vector {
 			};
 		}
 
-		public static bool operator ==(MVector l, MVector r) {
+		public static bool operator ==(MVector l, MVector r)
+		{
 			float x = l.X - r.X;
 			float y = l.Y - r.Y;
 			float z = l.Z - r.Z;
@@ -266,12 +286,13 @@ namespace MW.Vector {
 
 		public static implicit operator Vector3(MVector mVector) => new Vector3(mVector.X, mVector.Y, mVector.Z);
 		public static implicit operator Vector2(MVector mVector) => new Vector2(mVector.X, mVector.Y);
-		
+
 		public static implicit operator MVector(Vector3 vVector) => new MVector(vVector);
 		public static implicit operator MVector(Vector2 vVector) => new MVector(vVector);
-		
+
 		/// <summary>The <see cref="Color"/> representation of this MVector, in 0-255 XYZ/RGB.</summary>
-		public static implicit operator Color(MVector mVector) {
+		public static implicit operator Color(MVector mVector)
+		{
 			return Conversion.Colour.Colour255(mVector.X, mVector.Y, mVector.Z);
 		}
 

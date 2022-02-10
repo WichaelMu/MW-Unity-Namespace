@@ -153,25 +153,42 @@ namespace MW
 			return Mirror(0, Index);
 		}
 
-		/// <returns>The mirror position of index over Minimum, maximum <see cref="Num"/>.</returns>
+		/// <returns>The mirror position of index over Minimum to maximum <see cref="Num"/>.</returns>
 		public T Mirror(int Minimum, int Index)
 		{
 			InRange(Index);
 			return Items[Minimum + Num - 1 - Index];
 		}
 
-		/// <returns>The incoming and reflected Item of this mirror over minimum zero, maximum <see cref="Num"/>.</returns>
-		public TPair<T, T> Reflect(int Index)
+		/// <summary>The incoming and reflected Item of this mirror from zero to maximum <see cref="Num"/>.</summary>
+		/// <returns><see cref="Reflected"/></returns>
+		public Reflected Reflect(int Index)
 		{
 			InRange(Index);
 			return Reflect(0, Index);
 		}
 
-		/// <returns>The incoming and reflected Item of this mirror of Minimum, maximum <see cref="Num"/>. <see cref="TPair{TFirst, TSecond}.First"/>: The source reflection; <see cref="TPair{TFirst, TSecond}.Second"/>: The reflected element.</returns>
-		public TPair<T, T> Reflect(int Minimum, int Index)
+		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum <see cref="Num"/>.</summary>
+		/// <returns><see cref="Reflected"/></returns>
+		public Reflected Reflect(int Minimum, int Index)
 		{
 			InRange(Index);
-			return new TPair<T, T>(Items[Index], Mirror(Minimum, Index));
+			return new Reflected(Items[Index], Mirror(Minimum, Index));
+		}
+
+		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum <see cref="Num"/>.</summary>
+		public struct Reflected
+		{
+			/// <summary>In reflection.</summary>
+			T Source;
+			/// <summary>Out reflection.</summary>
+			T Reflection;
+
+			public Reflected(T Source, T Reflection)
+			{
+				this.Source = Source;
+				this.Reflection = Reflection;
+			}
 		}
 
 		/// <returns>Outs the incoming and reflected Item of this mirror of Minimum, maximum <see cref="Num"/>.</returns>
@@ -329,6 +346,7 @@ namespace MW
 
 		public static implicit operator int(MArray<T> Any) => Any.Num;
 		public static implicit operator List<T>(MArray<T> Any) => Any.Items;
+		public static implicit operator T[](MArray<T> Any) => Any.TArray();
 	}
 
 	public struct PushRangeFailed<T>

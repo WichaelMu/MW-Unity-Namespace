@@ -1109,19 +1109,30 @@ namespace MW.Easing
 		/// <param name="Equation">The <see cref="EEquation"/> to use to Tick.</param>
 		/// <param name="DurationInSeconds">The duration of this update loop in seconds.</param>
 		/// <param name="OnTick">The method to call every tick. T is passed as a parameter.</param>
-		/// <param name="StartInterpolation">Where to begin interpolation.</param>
-		/// <param name="EndInterpolation">Where to end interpolation.</param>
-		public Tick(EEquation Equation, float DurationInSeconds, Action<T> OnTick, float StartInterpolation = 0, float EndInterpolation = 1)
+		public Tick(EEquation Equation, float DurationInSeconds, Action<T> OnTick)
 		{
 			this.Equation = Equation;
 			this.DurationInSeconds = DurationInSeconds;
-			this.StartInterpolation = StartInterpolation;
-			this.EndInterpolation = EndInterpolation;
+			this.StartInterpolation = 0;
+			this.EndInterpolation = 1;
 			InverseEndInterpolation = 1 / EndInterpolation;
 			this.OnTick = OnTick;
 
 			ThisTick = Run();
 			StartCoroutine(ThisTick);
+		}
+
+		/// <summary>Creates a new separate update loop.</summary>
+		/// <param name="Equation">The <see cref="EEquation"/> to use to Tick.</param>
+		/// <param name="DurationInSeconds">The duration of this update loop in seconds.</param>
+		/// <param name="OnTick">The method to call every tick. T is passed as a parameter.</param>
+		/// <param name="StartInterpolation">Where to begin interpolation.</param>
+		/// <param name="EndInterpolation">Where to end interpolation.</param>
+		public Tick(EEquation Equation, float DurationInSeconds, Action<T> OnTick, float StartInterpolation, float EndInterpolation)
+			: this(Equation, DurationInSeconds, OnTick)
+		{
+			this.StartInterpolation = StartInterpolation;
+			this.EndInterpolation = EndInterpolation;
 		}
 
 		public void SetData(MArray<T> Data)

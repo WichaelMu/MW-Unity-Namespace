@@ -26,7 +26,7 @@ namespace MW.Behaviour
 		#region Player Movement
 
 		/// <summary>Moves this player forward. Default direction is transform.forward.</summary>
-		/// <remarks>Uses UnityEngine.Rigibody.MovePosition to enforce movement.</remarks>
+		/// <remarks>Uses <see cref="Rigidbody.MovePosition"/> to enforce movement, by default.</remarks>
 		/// <param name="Throw">Input vector.</param>
 		public virtual void ForwardInput(float Throw)
 		{
@@ -34,7 +34,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Moves this player right. Default direction is transform.right.</summary>
-		/// <remarks>Uses UnityEngine.Rigibody.MovePosition to enforce movement.</remarks>
+		/// <remarks>Uses <see cref="Rigidbody.MovePosition"/> to enforce movement, by default.</remarks>
 		/// <param name="Throw">Input vector.</param>
 		public virtual void RightInput(float Throw)
 		{
@@ -42,7 +42,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Adds force upwards to this player. Default direction is MVector.Up.</summary>
-		/// <remarks>Uses UnityEngine.Rigibody.AddForce.</remarks>
+		/// <remarks>Uses <see cref="Rigidbody.AddForce(Vector3)"/> to enforce jumping, by default.</remarks>
 		/// <param name="Force">The amount of force to apply.</param>
 		public virtual void Jump(float Force)
 		{
@@ -50,7 +50,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Sets MovementSpeed to NewMovementSpeed.</summary>
-		/// <remarks>Also updates the default, initial movement speed. TemporaryMovementSpeed(float, float) will revert to NewMovementSpeed.</remarks>
+		/// <remarks>Also updates the default, <see cref="InitialMovementSpeed"/>. <see cref="TemporaryMovementSpeed"/> will revert to NewMovementSpeed.</remarks>
 		/// <param name="NewMovementSpeed">The new Movement Speed of this player.</param>
 		public void SetMovementSpeed(float NewMovementSpeed)
 		{
@@ -79,7 +79,7 @@ namespace MW.Behaviour
 			MovementSpeed = InitialMovementSpeed;
 		}
 
-		/// <summary>Set this player's MovementSpeed to the initial.</summary>
+		/// <summary>Set this player's <see cref="MovementSpeed"/> to <see cref="InitialMovementSpeed"/>.</summary>
 		public void ResetMovementSpeed()
 		{
 			MovementSpeed = InitialMovementSpeed;

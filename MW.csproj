@@ -4,6 +4,8 @@
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>10.0</LangVersion>
 	  <EnableNETAnalyzers>true</EnableNETAnalyzers>
+	  <OutputType>Library</OutputType>
+	  <StartupObject></StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

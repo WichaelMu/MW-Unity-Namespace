@@ -3,7 +3,7 @@
 namespace MW
 {
 	/// <summary>Units of measurement of speed.</summary>
-	public enum EUnits
+	public enum EUnit
 	{
 		MetresPerSecond,
 		KilometresPerSecond,
