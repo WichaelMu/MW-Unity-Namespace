@@ -74,10 +74,10 @@ namespace MW.Vector
 
 		/// <summary>Converts an <see cref="MVector"/> to a <see cref="Vector3"/>.</summary>
 		/// <param name="mVector">The MVector to convert.</param>
-		public static Vector3 ToVector3(MVector mVector) => new Vector3(mVector.X, mVector.Y, mVector.Z);
+		public static Vector3 V3(MVector mVector) => new Vector3(mVector.X, mVector.Y, mVector.Z);
 		/// <summary>Converts a <see cref="Vector3"/> to an <see cref="MVector"/>.</summary>
 		/// <param name="vVector">The Vector3 to convert.</param>
-		public static MVector ToMVector(Vector3 vVector) => new MVector(vVector.x, vVector.y, vVector.z);
+		public static MVector MV(Vector3 vVector) => new MVector(vVector.x, vVector.y, vVector.z);
 
 		/// <summary>Normalises mVector.</summary>
 		public static MVector Normalise(MVector mVector) => mVector.Normalise();
@@ -146,8 +146,7 @@ namespace MW.Vector
 		/// <param name="mAxis">The axis to rotate this MVector around.</param>
 		public MVector RotateAngleAxis(float fAngleDegrees, MVector mAxis)
 		{
-			float S = 0, C = 0;
-			Mathematics.SinCos(ref S, ref C, fAngleDegrees * Mathf.Deg2Rad);
+			Mathematics.SinCos(out float S, out float C, fAngleDegrees * Mathf.Deg2Rad);
 
 			float XX = mAxis.X * mAxis.X;
 			float YY = mAxis.Y * mAxis.Y;
@@ -187,21 +186,31 @@ namespace MW.Vector
 		/// <summary>The <see cref="Quaternion"/> this MVector represents.</summary>
 		public Quaternion Rotation()
 		{
-			float fYAxis = Mathf.Atan2(Z, X);
-			float fXAxis = Mathf.Atan2(Y, Mathf.Sqrt(X * X + Z * Z));
+			// Make Pitch, Yaw, Roll out of this MVector.
+			MVector PYR = new MVector();
+			PYR.X = Mathf.Atan2(Z, Mathf.Sqrt(X * X + Y * Y)) * Mathf.Rad2Deg;
+			PYR.Y = Mathf.Atan2(Y, X) * Mathf.Rad2Deg;
+			PYR.Z = 0;
 
-			float sq = 0, sw = 0;
-			float cq = 0, cw = 0;
-			Mathematics.SinCos(ref sq, ref cq, fXAxis * Utils.kHalf);
-			Mathematics.SinCos(ref sw, ref cw, fYAxis * Utils.kHalf);
+			// Assign target angles on axes.
+			float Pitch = PYR.X % 360f;
+			float Yaw = PYR.Y % 360f;
+			float Roll = PYR.Z % 360f;
 
-			return new Quaternion
-			{
-				x = sq * sw,
-				y = -sq * cw,
-				z = cq * sw,
-				w = cq * cw
-			};
+			// <Angle> / 2.
+			const float kRadOver2 = Mathf.Deg2Rad * .5f;
+
+			Mathematics.SinCos(out float SinePitch, out float CosinePitch, Pitch * kRadOver2);
+			Mathematics.SinCos(out float SineYaw, out float CosineYaw, Yaw * kRadOver2);
+			Mathematics.SinCos(out float SineRaw, out float CosineRoll, Roll * kRadOver2);
+
+			Quaternion Q = new Quaternion();
+			Q.x = CosineRoll * SinePitch * SineYaw - SineRaw * CosinePitch * CosineYaw;
+			Q.y = -CosineRoll * SinePitch * CosineYaw - SineRaw * CosinePitch * SineYaw;
+			Q.z = CosineRoll * CosinePitch * SineYaw - SineRaw * SinePitch * CosineYaw;
+			Q.w = CosineRoll * CosinePitch * CosineYaw + SineRaw * SinePitch * SineYaw;
+
+			return Q;
 		}
 
 		/// <summary>Ignores the X component of this MVector.</summary>

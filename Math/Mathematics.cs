@@ -203,7 +203,7 @@ namespace MW.Math
 			};
 		}
 
-		public static void SinCos(ref float fSine, ref float fCosine, float fValue)
+		public static void SinCos(out float fSine, out float fCosine, float fValue)
 		{
 			float quotient = (Utils.kInversePI * 0.5f) * fValue;
 			if (fValue >= 0.0f)
