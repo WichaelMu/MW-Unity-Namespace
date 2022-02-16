@@ -124,7 +124,7 @@ namespace MW
 		{
 			bool bInRange = Index >= 0 && Index < Num;
 
-			if (!bInRange) throw new IndexOutOfRangeException("Index check failed. (Index >= 0 && Index < Num) == false with an index of " + Index);
+			//if (!bInRange) throw new IndexOutOfRangeException("Index check failed. (Index >= 0 && Index < Num) == false with an index of " + Index);
 
 			return bInRange;
 		}
