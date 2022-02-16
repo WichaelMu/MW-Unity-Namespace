@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using MW.Vector;
+using MW.Diagnostics;
 
 namespace MW.Behaviour
 {
@@ -59,6 +60,22 @@ namespace MW.Behaviour
 		public Rigidbody2D GetRigidbody()
 		{
 			return Rigidbody;
+		}
+
+		public RaycastHit2D? RayUnderMouse(Camera ReferenceCamera, float Distance, int LayerMask)
+		{
+			if (!ReferenceCamera.orthographic)
+			{
+				Log.E(ReferenceCamera.name, "is not orthographic.");
+
+				return null;
+			}
+
+			Vector3 MouseScreenCoordinates = Input.mousePosition;
+			MouseScreenCoordinates += new Vector3(0, 0, ReferenceCamera.transform.position.z);
+			Vector3 WorldMouseCoordinates = ReferenceCamera.ScreenToWorldPoint(MouseScreenCoordinates);
+
+			return Physics2D.Raycast(WorldMouseCoordinates, Vector3.forward, Distance, LayerMask);
 		}
 	}
 }
