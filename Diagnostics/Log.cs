@@ -6,9 +6,9 @@ namespace MW.Diagnostics {
 	public enum EVerbosity { Log, Warning, Error };
 
 	public class Log {
-		/// <summary><see cref="UnityEngine.Debug.Log(object)"/> every object.</summary>
+		/// <summary><see cref="UnityEngine.Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
-		public static void Print(params object[] debug) {
+		public static void P(params object[] debug) {
 			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
 				print += debug[i].ToString() + ' ';
@@ -17,9 +17,9 @@ namespace MW.Diagnostics {
 			UnityEngine.Debug.Log(print);
 		}
 
-		/// <summary><see cref="UnityEngine.Debug.LogError(object)"/> every object.</summary>
+		/// <summary><see cref="UnityEngine.Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
-		public static void PrintError(params object[] debug) {
+		public static void E(params object[] debug) {
 			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
 				print += debug[i].ToString() + ' ';
@@ -28,9 +28,9 @@ namespace MW.Diagnostics {
 			UnityEngine.Debug.LogError(print);
 		}
 
-		/// <summary><see cref="UnityEngine.Debug.LogWarning(object)"/> every object.</summary>
+		/// <summary><see cref="UnityEngine.Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <param name="debug">The list of <see cref="object"/>s to log separated by a space.</param>
-		public static void PrintWarning(params object[] debug) {
+		public static void W(params object[] debug) {
 			string print = "";
 			for (int i = 0; i < debug.Length; ++i) {
 				print += debug[i].ToString() + ' ';

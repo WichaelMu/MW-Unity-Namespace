@@ -51,7 +51,7 @@ namespace MW.Audio
 			}
 			else
 			{
-				Log.PrintWarning("Ensure there is only one Audio object in the scene and that only one is being initialised");
+				Log.W("Ensure there is only one Audio object in the scene and that only one is being initialised");
 				Destroy(gameObject);
 			}
 
@@ -79,7 +79,7 @@ namespace MW.Audio
 			if (s != null && (bOverlapSound || !IsPlaying(s)))
 				s.ASSound.Play();
 			if (s == null)
-				Log.PrintWarning(kErr1 + sName + kErr2 + "played!");
+				Log.W(kErr1 + sName + kErr2 + "played!");
 		}
 
 		/// <summary>Stops sound of name n.</summary>
@@ -92,7 +92,7 @@ namespace MW.Audio
 			if (s != null && IsPlaying(s))
 				s.ASSound.Stop();
 			if (s == null)
-				Log.PrintWarning(kErr1 + sName + kErr2 + "stopped!");
+				Log.W(kErr1 + sName + kErr2 + "stopped!");
 		}
 
 		/// <summary>Stop every sound in the game.</summary>

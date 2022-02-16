@@ -2,6 +2,7 @@
 using MW.Kinetic;
 using MW.Easing;
 using MW.Vector;
+using MW.Diagnostics;
 
 namespace MW.Math
 {
@@ -19,7 +20,7 @@ namespace MW.Math
 			fTerminal *= Kinematics.kVelocityRatio;
 
 			if (fRateOfAcceleration == 0)
-				Debug.LogError(nameof(fRateOfAcceleration) + " cannot be zero");
+				Log.E(nameof(fRateOfAcceleration) + " cannot be zero");
 
 			return Mathf.Clamp(Mathf.Lerp(fCurrentSpeed / Time.deltaTime, fTerminal, Interpolate.Ease(EEquation, 0, 1, fRateOfAcceleration)), 0, fTerminal);
 		}

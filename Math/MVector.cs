@@ -117,7 +117,7 @@ namespace MW.Vector
 				float m = Magnitude;
 				if (m > kEpsilon) return this / m;
 
-				Log.PrintError("MVector is zero!", "Returning MVector.Zero instead.");
+				Log.E("MVector is zero!", "Returning MVector.Zero instead.");
 				return Zero;
 			}
 		}

@@ -80,7 +80,7 @@ namespace MW.Pathfinding
 
 				if (bUseDiagnostics)
 				{
-					Log.Print("Path found in:", Time, "ms. Path reversed in:", sw.Stop());
+					Log.P("Path found in:", Time, "ms. Path reversed in:", sw.Stop());
 				}
 
 				OnPathFound?.Invoke(Path);
@@ -263,7 +263,7 @@ namespace MW.Pathfinding
 		/// <returns>If this Path Manager is currently Paused, or Running.</returns>
 		public EStatus Status()
 		{
-			Log.Print(nameof(MPathManager<T>), "is", bIsPaused ? "Paused." : "Running.");
+			Log.P(nameof(MPathManager<T>), "is", bIsPaused ? "Paused." : "Running.");
 
 			return bIsPaused ? EStatus.Paused : EStatus.Running;
 		}

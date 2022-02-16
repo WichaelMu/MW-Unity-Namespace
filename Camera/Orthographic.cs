@@ -11,7 +11,7 @@ namespace MW.CameraUtils
 		/// <returns><see cref="OrthographicRaycast"/></returns>
 		public static OrthographicRaycast Raycast(Camera CCamera)
 		{
-			if (!CCamera.orthographic) { Diagnostics.Log.Print(CCamera.name + kCameraIsNotOrthographicError); }
+			if (!CCamera.orthographic) { Diagnostics.Log.P(CCamera.name + kCameraIsNotOrthographicError); }
 
 			Ray r = CCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -49,7 +49,7 @@ namespace MW.CameraUtils
 		/// <param name="fInterpolateSpeed">The speed to ease the camera's movement.</param>
 		public static void Pan(Camera CCamera, EButton BButtonToActivate, float fInterpolateSpeed)
 		{
-			if (!CCamera.orthographic) { Diagnostics.Log.Print(CCamera.name + kCameraIsNotOrthographicError); }
+			if (!CCamera.orthographic) { Diagnostics.Log.P(CCamera.name + kCameraIsNotOrthographicError); }
 
 			if (I.Click(BButtonToActivate))
 			{
