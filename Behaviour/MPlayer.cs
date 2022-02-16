@@ -5,40 +5,34 @@ using MW.Vector;
 namespace MW.Behaviour
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class MPlayer : MonoBehaviour
+	public class MPlayer : Player
 	{
-		/// <summary>The world position of this player.</summary>
-		public MVector Position { get => transform.position; set { transform.position = value; } }
-
-		[Tooltip("The normal movement speed for this player.")]
-		public float MovementSpeed = 1;
-		float InitialMovementSpeed;
-
 		Rigidbody Rigidbody;
 
-		public virtual void Awake()
+		public override void Awake()
 		{
-			Rigidbody = GetComponent<Rigidbody>();
+			InitialisePlayer();
 
-			InitialMovementSpeed = MovementSpeed;
+			Rigidbody = GetComponent<Rigidbody>();
 		}
 
 		#region Player Movement
 
-		/// <summary>Moves this player forward. Default direction is transform.forward.</summary>
-		/// <remarks>Uses <see cref="Rigidbody.MovePosition"/> to enforce movement, by default.</remarks>
-		/// <param name="Throw">Input vector.</param>
-		public virtual void ForwardInput(float Throw)
+		public virtual void FixedUpdate()
 		{
-			Rigidbody.MovePosition(Position + transform.forward * Throw * MovementSpeed * Time.deltaTime);
+			if (HasStoppedReceivingMovementInput())
+				return;
+
+			Rigidbody.MovePosition(Position + Velocity * Time.fixedDeltaTime);
 		}
 
-		/// <summary>Moves this player right. Default direction is transform.right.</summary>
-		/// <remarks>Uses <see cref="Rigidbody.MovePosition"/> to enforce movement, by default.</remarks>
-		/// <param name="Throw">Input vector.</param>
-		public virtual void RightInput(float Throw)
+		public override void MovementInput(float ForwardThrow, float RightThrow)
 		{
-			Rigidbody.MovePosition(Position + transform.right * Throw * MovementSpeed * Time.deltaTime);
+			if (HasStoppedReceivingMovementInput())
+				return;
+
+			Velocity = new MVector(RightThrow, 0, ForwardThrow).Normalise();
+			Velocity *= MovementSpeed;
 		}
 
 		/// <summary>Adds force upwards to this player. Default direction is MVector.Up.</summary>
@@ -49,40 +43,15 @@ namespace MW.Behaviour
 			Rigidbody.AddForce(MVector.Up * Force);
 		}
 
-		/// <summary>Sets MovementSpeed to NewMovementSpeed.</summary>
-		/// <remarks>Also updates the default, <see cref="InitialMovementSpeed"/>. <see cref="TemporaryMovementSpeed"/> will revert to NewMovementSpeed.</remarks>
-		/// <param name="NewMovementSpeed">The new Movement Speed of this player.</param>
-		public void SetMovementSpeed(float NewMovementSpeed)
+		public float GetSpeed()
 		{
-			MovementSpeed = NewMovementSpeed;
-			InitialMovementSpeed = NewMovementSpeed;
+			return Rigidbody.velocity.magnitude;
 		}
 
-		/// <summary>Temporarily modifies this player's MovementSpeed.</summary>
-		/// <remarks>Calling StopCoroutine on the returned IEnumerator will not reset the player's MovementSpeed.</remarks>
-		/// <param name="TemporaryMovementSpeed">The temporary MovementSpeed.</param>
-		/// <param name="Duration">The time in seconds in which TemporaryMovementSpeed will be in effect.</param>
-		/// <returns>The IEnumerator that handles timing.</returns>
-		public IEnumerator TemporaryMovementSpeed(float TemporaryMovementSpeed, float Duration)
+		public void GetSpeedAndDirection(out float Speed, out MVector Direction)
 		{
-			IEnumerator Temporary = Internal_TemporaryMovementSpeed(TemporaryMovementSpeed, Duration);
-
-			return Temporary;
-		}
-
-		IEnumerator Internal_TemporaryMovementSpeed(float TemporaryMovementSpeed, float Duration)
-		{
-			MovementSpeed = TemporaryMovementSpeed;
-
-			yield return new WaitForSeconds(Duration);
-
-			MovementSpeed = InitialMovementSpeed;
-		}
-
-		/// <summary>Set this player's <see cref="MovementSpeed"/> to <see cref="InitialMovementSpeed"/>.</summary>
-		public void ResetMovementSpeed()
-		{
-			MovementSpeed = InitialMovementSpeed;
+			Speed = GetSpeed();
+			Direction = Rigidbody.velocity;
 		}
 
 		#endregion
