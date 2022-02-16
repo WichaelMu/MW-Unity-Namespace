@@ -28,8 +28,8 @@ namespace MW.Audio
 	public class MAudio : MonoBehaviour
 	{
 		/// <summary>A unique reference to the only Audio object in the scene.</summary>
-		public static MAudio AAudioInstance { get => aAudioInstance; set => aAudioInstance = value; }
-		static MAudio aAudioInstance;
+		public static MAudio AudioInstance { get => _AudioInstance; set => _AudioInstance = value; }
+		static MAudio _AudioInstance;
 
 		/// <summary>Whether or not to mute every sound by default.</summary>
 		[Tooltip("Whether or not to mute every sound by default.")]
@@ -44,9 +44,9 @@ namespace MW.Audio
 		/// <summary>Populates the Sounds array to match the settings.</summary>
 		public virtual void Initialise(MSound[] SSounds)
 		{
-			if (AAudioInstance == null)
+			if (AudioInstance == null)
 			{
-				AAudioInstance = this;
+				AudioInstance = this;
 				gameObject.name = "Audio";
 			}
 			else
@@ -106,9 +106,9 @@ namespace MW.Audio
 
 		/// <summary>Returns a sound in the Sounds array.</summary>
 		/// <param name="n">The name of the requested sound.</param>
-		/// <returns>The sound clip of the requested sound.</returns>
+		/// <returns>The <see cref="MSound"/> of the requested sound.</returns>
 
-		MSound Find(string n) => Array.Find(SSounds, sound => sound.sName == n);
+		public MSound Find(string n) => Array.Find(SSounds, sound => sound.sName == n);
 
 		/// <summary>Whether or not sound of name n is playing.</summary>
 		/// <param name="sName">The name of the sound to query.</param>
