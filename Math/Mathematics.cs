@@ -203,6 +203,10 @@ namespace MW.Math
 			};
 		}
 
+		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
+		/// <param name="fSine">The Sine result over fValue.</param>
+		/// <param name="fCosine">The Cosine result over fValue.</param>
+		/// <param name="fValue">The angle.</param>
 		public static void SinCos(out float fSine, out float fCosine, float fValue)
 		{
 			float quotient = (Utils.kInversePI * 0.5f) * fValue;
@@ -216,7 +220,7 @@ namespace MW.Math
 			}
 			float y = fValue - (2.0f * Mathf.PI) * quotient;
 
-			// Map y to [-pi/2,pi/2] with sin(y) = sin(Value).
+			// Map y to [-PI / 2, PI / 2] with Sin(y) = Sin(Value).
 			float sign;
 			if (y > Utils.kHalfPI)
 			{
