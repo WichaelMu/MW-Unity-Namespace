@@ -52,5 +52,12 @@ namespace MW.IO
 				return Input.GetKey(KCStroke);
 			return Input.GetKeyDown(KCStroke);
 		}
+
+		/// <summary>Identical to <see cref="Input.anyKey"/>.</summary>
+		/// <returns>True if a key or a mouse button was pressed.</returns>
+		public static bool Any()
+		{
+			return Input.anyKey;
+		}
 	}
 }
