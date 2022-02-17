@@ -29,14 +29,14 @@ namespace MW.Diagnostics
 			sw.Start();
 		}
 
-		/// <summary>Stop Stopwatch and get the elapsed <see cref="Time"/>.</summary>
+		/// <summary>Stop Stopwatch and get the elapsed Time.</summary>
 		public long Stop()
 		{
 			sw.Stop();
 			return Time();
 		}
 
-		/// <summary>Restarts Stopwatch and get the <see cref="Time"/> before restarting.</summary>
+		/// <summary>Restarts Stopwatch and get the Time before restarting.</summary>
 		public long Restart()
 		{
 			long now = Time();

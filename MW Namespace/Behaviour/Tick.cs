@@ -19,7 +19,7 @@ namespace MW.Behaviour
 		float InverseEndInterpolation;
 
 		/// <summary>Creates a new separate update loop.</summary>
-		/// <param name="Equation">The <see cref="EEquation"/> to use to Tick.</param>
+		/// <param name="Equation">The Equation to use to Tick.</param>
 		/// <param name="DurationInSeconds">The duration of this update loop in seconds.</param>
 		/// <param name="OnTick">The method to call every tick. The executed T and interpolated Time is passed as a parameter.</param>
 		public Tick(EEquation Equation, float DurationInSeconds, Action<T, float> OnTick)
@@ -47,9 +47,9 @@ namespace MW.Behaviour
 			this.EndInterpolation = EndInterpolation;
 		}
 
-		/// <summary>Sets the data for the next execution of <see cref="OnTick"/>.</summary>
-		/// <remarks>All entries in <see cref="Data"/> will be executed linearly.</remarks>
-		/// <param name="Data">The data to set for the next <see cref="OnTick"/>.</param>
+		/// <summary>Sets the data for the next execution of OnTick.</summary>
+		/// <remarks>All entries in Data will be executed linearly.</remarks>
+		/// <param name="Data">The data to set for the next OnTick.</param>
 		public void SetData(MArray<T> Data)
 		{
 			if (MArray<T>.CheckNull(Data))
@@ -80,7 +80,7 @@ namespace MW.Behaviour
 			}
 		}
 
-		/// <summary>Pauses this Tick from executing until this (<see cref="TogglePauseTick"/>) is called again.</summary>
+		/// <summary>Pauses this Tick from executing until this (TogglePauseTick) is called again.</summary>
 		/// <remarks>This is a toggle.</remarks>
 		public void TogglePauseTick()
 		{

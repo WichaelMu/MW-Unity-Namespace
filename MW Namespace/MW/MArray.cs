@@ -51,7 +51,7 @@ namespace MW
 
 		/// <summary>Adds Range of items.</summary>
 		/// <param name="Range">The list of elements to add.</param>
-		/// <returns>An MArray of <see cref="PushRangeFailed{T}"/> that failed to be pushed into this MArray.</returns>
+		/// <returns>An MArray of PushRangeFailed{T} that failed to be pushed into this MArray.</returns>
 		public MArray<PushRangeFailed<T>> Push(params T[] Range)
 		{
 			MArray<PushRangeFailed<T>> Failed = new();
@@ -130,7 +130,7 @@ namespace MW
 		}
 
 		/// <param name="Item">Item to check for existence.</param>
-		/// <returns>Whether the HashCode of Item exists within the internal <see cref="HashMap"/>.</returns>
+		/// <returns>Whether the HashCode of Item exists within the internal HashMap.</returns>
 		public bool Contains(T Item)
 		{
 			return HashMap.ContainsKey(Item);
@@ -146,37 +146,37 @@ namespace MW
 		/// <returns>If this MArray is considered empty; Num == 0.</returns>
 		public bool IsEmpty() => Num == 0;
 
-		/// <returns>The mirror position of index over minimum zero, maximum <see cref="Num"/>.</returns>
+		/// <returns>The mirror position of index over minimum zero, maximum Num.</returns>
 		public T Mirror(int Index)
 		{
 			InRange(Index);
 			return Mirror(0, Index);
 		}
 
-		/// <returns>The mirror position of index over Minimum to maximum <see cref="Num"/>.</returns>
+		/// <returns>The mirror position of index over Minimum to maximum Num.</returns>
 		public T Mirror(int Minimum, int Index)
 		{
 			InRange(Index);
 			return Items[Minimum + Num - 1 - Index];
 		}
 
-		/// <summary>The incoming and reflected Item of this mirror from zero to maximum <see cref="Num"/>.</summary>
-		/// <returns><see cref="Reflected"/></returns>
+		/// <summary>The incoming and reflected Item of this mirror from zero to maximum Num.</summary>
+		/// <returns>Reflected</returns>
 		public Reflected Reflect(int Index)
 		{
 			InRange(Index);
 			return Reflect(0, Index);
 		}
 
-		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum <see cref="Num"/>.</summary>
-		/// <returns><see cref="Reflected"/></returns>
+		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum Num.</summary>
+		/// <returns>Reflected</returns>
 		public Reflected Reflect(int Minimum, int Index)
 		{
 			InRange(Index);
 			return new Reflected(Items[Index], Mirror(Minimum, Index));
 		}
 
-		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum <see cref="Num"/>.</summary>
+		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>
 		public struct Reflected
 		{
 			/// <summary>In reflection.</summary>
@@ -191,7 +191,7 @@ namespace MW
 			}
 		}
 
-		/// <returns>Outs the incoming and reflected Item of this mirror of Minimum, maximum <see cref="Num"/>.</returns>
+		/// <returns>Outs the incoming and reflected Item of this mirror of Minimum, maximum Num.</returns>
 		public void Reflect(int Minimum, int Index, out T Source, out T Reflected)
 		{
 			InRange(Index);
@@ -265,7 +265,7 @@ namespace MW
 		/// <returns>True if Check is null.</returns>
 		public static bool CheckNull(MArray<T> Check) => Check == null;
 
-		/// <summary>If this MArray is null or <see cref="IsEmpty"/>.</summary>
+		/// <summary>If this MArray is null or IsEmpty.</summary>
 		/// <param name="CheckIfNullOrEmpty">The MArray to check for null or emptiness.</param>
 		/// <returns>True if CheckIfNullOrEmpty is null or empty.</returns>
 		public static bool operator !(MArray<T> CheckIfNullOrEmpty) => CheckNull(CheckIfNullOrEmpty) || CheckIfNullOrEmpty.IsEmpty();

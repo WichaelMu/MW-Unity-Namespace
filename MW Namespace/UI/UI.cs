@@ -5,14 +5,14 @@ using TMPro;
 
 namespace MW.HUD
 {
-	/// <summary>World space <see cref="Canvas"/> scaling and <see cref="TextMeshProUGUI"/> utilities.</summary>
+	/// <summary>World space Canvas scaling and TextMeshProUGUI utilities.</summary>
 	public static class UI
 	{
 		public enum ETypewriterMode
 		{
-			/// <summary>Append to the current <see cref="TextMeshProUGUI"/>.</summary>
+			/// <summary>Append to the current TextMeshProUGUI.</summary>
 			Append,
-			/// <summary>Clear the current <see cref="TextMeshProUGUI"/> before typewriting.</summary>
+			/// <summary>Clear the current TextMeshProUGUI before typewriting.</summary>
 			Clear
 		}
 
@@ -27,13 +27,13 @@ namespace MW.HUD
 			return new Vector2(scale, scale) * .03f;
 		}
 
-		/// <summary>Animates a <see cref="TextMeshProUGUI"/> to display Content like a typewriter.</summary>
-		/// <remarks>This is an extension function on <see cref="TextMeshProUGUI"/>.</remarks>
-		/// <param name="TMPro">The extended <see cref="TextMeshProUGUI"/> <see cref="GameObject"/>.</param>
-		/// <param name="Game">The <see cref="MonoBehaviour"/> that will be responsible for invoking the Typewriter coroutine.</param>
+		/// <summary>Animates a TextMeshProUGUI to display Content like a typewriter.</summary>
+		/// <remarks>This is an extension function on TextMeshProUGUI.</remarks>
+		/// <param name="TMPro">The extended TextMeshProUGUI GameObject.</param>
+		/// <param name="Game">The MonoBehaviour that will be responsible for invoking the Typewriter coroutine.</param>
 		/// <param name="Content">The content to typewrite.</param>
 		/// <param name="Delay">The time gap between writing a new character.</param>
-		/// <param name="EMode">Should the text <see cref="ETypewriterMode.Append"/>, or <see cref="ETypewriterMode.Clear"/>?</param>
+		/// <param name="EMode">Should the text ETypewriterMode.Append, or ETypewriterMode.Clear?</param>
 		/// <returns>The instance of the Typewriter coroutine.</returns>
 		public static IEnumerator Typewrite(this TextMeshProUGUI TMPro, MonoBehaviour Game, string Content, float Delay, ETypewriterMode EMode)
 		{
@@ -45,7 +45,7 @@ namespace MW.HUD
 
 		/// <inheritdoc cref="Typewrite(TextMeshProUGUI, MonoBehaviour, string, float, ETypewriterMode)"/>
 		/// <param name="TMPro"></param> <param name="Game"></param> <param name="Content"></param> <param name="Delay"></param> <param name="EMode"></param>
-		/// <param name="Sound">The <see cref="MSound"/> in <see cref="MAudio._AudioInstance"/> to play when writing a character.</param>
+		/// <param name="Sound">The MSound in MAudio._AudioInstance to play when writing a character.</param>
 		/// <param name="bOverlapSound"></param>
 		public static IEnumerator Typewrite(this TextMeshProUGUI TMPro, MonoBehaviour Game, string Content, float Delay, ETypewriterMode EMode, string Sound, bool bOverlapSound = false)
 		{
@@ -55,11 +55,11 @@ namespace MW.HUD
 			return Typewriter;
 		}
 
-		/// <summary>Animates a <see cref="TextMeshProUGUI"/> to display Content like a typewriter.</summary>
+		/// <summary>Animates a TextMeshProUGUI to display Content like a typewriter.</summary>
 		/// <param name="TMPro">The text to animate.</param>
 		/// <param name="Content">The content to typewrite.</param>
 		/// <param name="Delay">The time gap between writing a new character.</param>
-		/// <param name="EMode">Should the text <see cref="ETypewriterMode.Append"/>, or <see cref="ETypewriterMode.Clear"/>?</param>
+		/// <param name="EMode">Should the text ETypewriterMode.Append, or ETypewriterMode.Clear?</param>
 		public static IEnumerator TypewriterText(TextMeshProUGUI TMPro, string Content, float Delay, ETypewriterMode EMode)
 		{
 			if (EMode == ETypewriterMode.Clear)
@@ -74,12 +74,12 @@ namespace MW.HUD
 			}
 		}
 
-		/// <summary>Animates a <see cref="TextMeshProUGUI"/> to display Content like a typewriter.</summary>
+		/// <summary>Animates a TextMeshProUGUI to display Content like a typewriter.</summary>
 		/// <param name="TMPro">The text to animate.</param>
 		/// <param name="Content">The content to typewrite.</param>
 		/// <param name="Delay">The time gap between writing a new character.</param>
-		/// <param name="EMode">Should the text <see cref="ETypewriterMode.Append"/>, or <see cref="ETypewriterMode.Clear"/>?</param>
-		/// <param name="Sound">The <see cref="MSound"/> in <see cref="MAudio._AudioInstance"/> to play when writing a character.</param>
+		/// <param name="EMode">Should the text ETypewriterMode.Append, or ETypewriterMode.Clear?</param>
+		/// <param name="Sound">The MSound in MAudio._AudioInstance to play when writing a character.</param>
 		/// <param name="bOverlapSound"></param>
 		public static IEnumerator TypewriterText(TextMeshProUGUI TMPro, string Content, float Delay, ETypewriterMode EMode, string Sound, bool bOverlapSound = false)
 		{

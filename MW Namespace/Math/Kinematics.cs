@@ -8,8 +8,8 @@ namespace MW.Kinetic
 		public const int kVelocityRatio = 50;
 
 		/// <summary>If the distance between From and To is &lt;= Tolerance.</summary>
-		/// <param name="From">The reference <see cref="Vector3"/> to compare.</param>
-		/// <param name="To">The target <see cref="Vector3"/> to compare.</param>
+		/// <param name="From">The reference Vector3 to compare.</param>
+		/// <param name="To">The target Vector3 to compare.</param>
 		/// <param name="Tolerance">The range that is considered if From has 'reached' To.</param>
 		/// <returns>True if the distance between From and To are &lt;= Tolerance.</returns>
 		public static bool HasReached(Vector3 From, Vector3 To, float Tolerance = .1f)
@@ -20,8 +20,8 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
-		/// <param name="Rigidbody">The <see cref="Rigidbody"/> to move.</param>
-		/// <param name="Target">The <see cref="Transform"/> destination.</param>
+		/// <param name="Rigidbody">The Rigidbody to move.</param>
+		/// <param name="Target">The Transform destination.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
 		/// <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
 		public static void HomeTowards(Rigidbody Rigidbody, Transform Target, float Velocity, float MaxDegreesDeltaPerFrame)
@@ -30,7 +30,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
-		/// <param name="Rigidbody">The <see cref="Rigidbody"/> to move.</param>
+		/// <param name="Rigidbody">The Rigidbody to move.</param>
 		/// <param name="Target">The destination coordinates.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
 		/// <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
@@ -42,8 +42,8 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
-		/// <param name="Rigidbody">The <see cref="Rigidbody2D"/> to move.</param>
-		/// <param name="Target">The <see cref="Transform"/> destination.</param>
+		/// <param name="Rigidbody">The Rigidbody2D to move.</param>
+		/// <param name="Target">The Transform destination.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
 		/// <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>
 		public static void HomeTowards(Rigidbody2D Rigidbody, Transform Target, float Velocity, float MaxDegreesDeltaPerFrame)
@@ -52,7 +52,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
-		/// <param name="Rigidbody">The <see cref="Rigidbody2D"/> to move.</param>
+		/// <param name="Rigidbody">The Rigidbody2D to move.</param>
 		/// <param name="Target">The destination coordinates.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
 		/// <param name="MaxDegreesDeltaPerFrame">The maximum degrees self can turn towards target per frame.</param>

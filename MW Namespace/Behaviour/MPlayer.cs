@@ -36,7 +36,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Adds force upwards to this player. Default direction is MVector.Up.</summary>
-		/// <remarks>Uses <see cref="Rigidbody.AddForce(Vector3)"/> to enforce jumping, by default.</remarks>
+		/// <remarks>Uses Rigidbody.AddForce(Vector3) to enforce jumping, by default.</remarks>
 		/// <param name="Force">The amount of force to apply.</param>
 		public virtual void Jump(float Force)
 		{

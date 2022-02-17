@@ -670,10 +670,7 @@ namespace MW.Easing
 
 		public delegate float Function(float s, float e, float v);
 
-		/// <summary>
-		/// Gets the derivative function of the appropriate easing function. If you use an easing function for position then this
-		/// function can get you the speed at a given time (normalised).
-		/// </summary>
+		/// <summary>Gets the derivative function of the appropriate easing function. If you use an easing function for position then this function can get you the speed at a given time (normalised).</summary>
 		/// <param name="Function"></param>
 		/// <returns>The derivative function</returns>
 		public static Function GetEasingFunctionDerivative(EEquation Function)

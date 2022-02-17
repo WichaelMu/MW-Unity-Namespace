@@ -10,11 +10,11 @@ namespace MW.Math
 	public static class Mathematics
 	{
 
-		/// <param name="EEquation">The <see cref="EEquation"/> to use to accelerate.</param>
+		/// <param name="EEquation">The EEquation to use to accelerate.</param>
 		/// <param name="fCurrentSpeed">The current speed of the acceleration.</param>
 		/// <param name="fRateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
 		/// <param name="fTerminal">The maximum speed.</param>
-		/// <returns>The acceleration value using <see cref="EEquation"/>, using the current speed and rate of acceleration towards terminal over <see cref="Time.deltaTime"/>.</returns>
+		/// <returns>The acceleration value using EEquation, using the current speed and rate of acceleration towards terminal over Time.deltaTime.</returns>
 		public static float Acceleration(EEquation EEquation, float fCurrentSpeed, float fRateOfAcceleration, float fTerminal)
 		{
 			fTerminal *= Kinematics.kVelocityRatio;
@@ -32,9 +32,9 @@ namespace MW.Math
 
 		static float fAR = 0;
 
-		/// <param name="RSelf">The <see cref="Rigidbody"/> to calculate an acceleration rate.</param>
-		/// <param name="fSpeed">The current speed of the <see cref="Rigidbody"/> in <see cref="EUnit.MetresPerSecond"/>.</param>
-		/// <returns>The float rate of movement in <see cref="EUnit.MetresPerSecond"/>.</returns>
+		/// <param name="RSelf">The Rigidbody to calculate an acceleration rate.</param>
+		/// <param name="fSpeed">The current speed of the Rigidbody in EUnit.MetresPerSecond.</param>
+		/// <returns>The float rate of movement in EUnit.MetresPerSecond.</returns>
 		public static float AccelerationRate(Rigidbody RSelf, float fSpeed)
 		{
 			float a = RSelf.velocity.magnitude - fSpeed / Time.deltaTime;
@@ -43,9 +43,9 @@ namespace MW.Math
 			return fAccelerationRate;
 		}
 
-		/// <param name="RSelf">The <see cref="Rigidbody"/> to read a speed from.</param>
-		/// <param name="UUnit">The desired <see cref="EUnit"/> of measurement.</param>
-		/// <returns>A speed reading from self in <see cref="EUnit"/> of measurement.</returns>
+		/// <param name="RSelf">The Rigidbody to read a speed from.</param>
+		/// <param name="UUnit">The desired EUnit of measurement.</param>
+		/// <returns>A speed reading from self in EUnit of measurement.</returns>
 		public static float Speed(Rigidbody RSelf, EUnit UUnit = EUnit.MetresPerSecond)
 		{
 			float speed = RSelf.velocity.magnitude;
@@ -76,8 +76,8 @@ namespace MW.Math
 		}
 
 		/// <summary>The direction to intercept RBTarget relative to RSelf.</summary>
-		/// <param name="RSelf">The <see cref="Rigidbody"/> predicting the movement of RBTarget.</param>
-		/// <param name="RBTarget">The <see cref="Rigidbody"/> to predict.</param>
+		/// <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
+		/// <param name="RBTarget">The Rigidbody to predict.</param>
 		public static MVector PredictiveProjectile(Rigidbody RSelf, Rigidbody RBTarget)
 		{
 			//  The approximate conversion from velocity in an rb.AddForce is the 2/3 of the force being applied.
@@ -186,7 +186,7 @@ namespace MW.Math
 			return -Mathf.Atan2(vDirection.x, vDirection.y) * Mathf.Rad2Deg;
 		}
 
-		/// <summary>Returns a normalised <see cref="MVector"/> at fDegrees, relative to dirForward.</summary>
+		/// <summary>Returns a normalised MVector at fDegrees, relative to dirForward.</summary>
 		/// <param name="fDegrees">The angle offset.</param>
 		/// <param name="dirForward">The forward direction.</param>
 		public static MVector VectorFromAngle(float fDegrees, EDirection dirForward)

@@ -7,7 +7,7 @@ namespace MW.Behaviour
 {
 	public class Player : MonoBehaviour
 	{
-		/// <summary>Called when damage is taken. First float is new <see cref="Health"/>, second is the inflicting damage.</summary>
+		/// <summary>Called when damage is taken. First float is new Health, second is the inflicting damage.</summary>
 		public Action<float, float> OnTakeDamage;
 
 		/// <summary>The world position of this player.</summary>
@@ -39,7 +39,7 @@ namespace MW.Behaviour
 		#region Movement Speed
 
 		/// <summary>Sets MovementSpeed to NewMovementSpeed.</summary>
-		/// <remarks>Also updates the default, <see cref="InitialMovementSpeed"/>. <see cref="TemporaryMovementSpeed"/> will revert to NewMovementSpeed.</remarks>
+		/// <remarks>Also updates the default, InitialMovementSpeed. TemporaryMovementSpeed will revert to NewMovementSpeed.</remarks>
 		/// <param name="NewMovementSpeed">The new Movement Speed of this player.</param>
 		public void SetMovementSpeed(float NewMovementSpeed)
 		{
@@ -68,7 +68,7 @@ namespace MW.Behaviour
 			MovementSpeed = InitialMovementSpeed;
 		}
 
-		/// <summary>Set this player's <see cref="MovementSpeed"/> to <see cref="InitialMovementSpeed"/>.</summary>
+		/// <summary>Set this player's MovementSpeed to InitialMovementSpeed.</summary>
 		public void ResetMovementSpeed()
 		{
 			MovementSpeed = InitialMovementSpeed;
@@ -79,7 +79,7 @@ namespace MW.Behaviour
 		#region Movement
 
 		/// <summary>Registers movement from input.</summary>
-		/// <remarks>Needs to be overidden from <see cref="Player"/>.</remarks>
+		/// <remarks>Needs to be overidden from Player.</remarks>
 		/// <param name="ForwardThrow">Horizontal input.</param>
 		/// <param name="RightThrow">Vertical input.</param>
 		/// <exception cref="NotImplementedException"></exception>
@@ -88,15 +88,15 @@ namespace MW.Behaviour
 			throw new NotImplementedException(nameof(MovementInput) + " must be overridden!");
 		}
 
-		/// <summary>Set this Player's ability to receive <see cref="MovementInput(float, float)"/>.</summary>
+		/// <summary>Set this Player's ability to receive MovementInput(float, float).</summary>
 		/// <param name="bStopReceivingInput">True if this Player should stop receiving input.</param>
 		public void ReceiveMovementInput(bool bStopReceivingInput)
 		{
 			bStopReceivingMovementInput = bStopReceivingInput;
 		}
 
-		/// <summary>Whether or not this Player is allowed to receive <see cref="MovementInput(float, float)"/>.</summary>
-		/// <returns>True if this Player is not allowed to receive <see cref="MovementInput(float, float)"/>.</returns>
+		/// <summary>Whether or not this Player is allowed to receive MovementInput(float, float).</summary>
+		/// <returns>True if this Player is not allowed to receive MovementInput(float, float).</returns>
 		public bool HasStoppedReceivingMovementInput()
 		{
 			return bStopReceivingMovementInput;
@@ -113,7 +113,7 @@ namespace MW.Behaviour
 
 		/// <summary>Deduct InDamage from this Player's Health.</summary>
 		/// <param name="InDamage">The damage to inflict on this Player.</param>
-		/// <returns>True if this Player <see cref="IsDead"/>.</returns>
+		/// <returns>True if this Player IsDead.</returns>
 		public bool TakeDamage(float InDamage)
 		{
 			Health -= InDamage;
@@ -134,7 +134,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>If this Player's is considered dead.</summary>
-		/// <returns>True if <see cref="GetHealth"/> &lt;= 0.</returns>
+		/// <returns>True if GetHealth &lt;= 0.</returns>
 		public bool IsDead()
 		{
 			return GetHealth() <= 0;

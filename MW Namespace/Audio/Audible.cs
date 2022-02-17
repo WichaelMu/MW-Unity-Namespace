@@ -106,7 +106,7 @@ namespace MW.Audio
 
 		/// <summary>Returns a sound in the Sounds array.</summary>
 		/// <param name="n">The name of the requested sound.</param>
-		/// <returns>The <see cref="MSound"/> of the requested sound.</returns>
+		/// <returns>The MSound of the requested sound.</returns>
 
 		public MSound Find(string n) => Array.Find(SSounds, sound => sound.sName == n);
 

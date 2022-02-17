@@ -2,7 +2,7 @@
 
 namespace MW.HUD
 {
-	/// <summary>Drawing <see cref="LineRenderer"/>s in the game.</summary>
+	/// <summary>Drawing LineRenderers in the game.</summary>
 	public static class Line
 	{
 		/// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>

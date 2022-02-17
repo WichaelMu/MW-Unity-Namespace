@@ -8,7 +8,7 @@ namespace MW.CameraUtils
 		const string kCameraIsNotOrthographicError = " is not orthographic";
 
 		/// <summary>Fires a ray from CCamera to mouse position.</summary>
-		/// <returns><see cref="OrthographicRaycast"/></returns>
+		/// <returns>OrthographicRaycast</returns>
 		public static OrthographicRaycast Raycast(Camera CCamera)
 		{
 			if (!CCamera.orthographic) { Diagnostics.Log.P(CCamera.name + kCameraIsNotOrthographicError); }
@@ -23,9 +23,9 @@ namespace MW.CameraUtils
 		/// <summary>RaycastHit2D information about the Raycast.</summary>
 		public struct OrthographicRaycast
 		{
-			/// <summary>The <see cref="RaycastHit2D"/> information about the ray itself.</summary>
+			/// <summary>The RaycastHit2D information about the ray itself.</summary>
 			public RaycastHit2D raycast;
-			/// <summary>If <see cref="raycast"/> hit something.</summary>
+			/// <summary>If raycast hit something.</summary>
 			public bool bHit;
 
 			public OrthographicRaycast(RaycastHit2D raycast, bool bHit)

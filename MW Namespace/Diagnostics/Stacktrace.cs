@@ -8,8 +8,8 @@ namespace MW.Diagnostics
 	public static class Stacktrace
 	{
 
-		/// <summary>Stacktrace using <see cref="Log.P"/> with <see cref="EVerbosity"/> verbosity.</summary>
-		/// <param name="verbosity">The <see cref="EVerbosity"/> verbosity of the <see cref="Log.P"/>.</param>
+		/// <summary>Stacktrace using Log.P with EVerbosity verbosity.</summary>
+		/// <param name="verbosity">The EVerbosity verbosity of the Log.P.</param>
 		public static void Here(EVerbosity verbosity = EVerbosity.Log)
 		{
 			switch (verbosity)
@@ -26,9 +26,9 @@ namespace MW.Diagnostics
 			}
 		}
 
-		/// <summary>Stacktrace using <see cref="Log.P"/> with <see cref="EVerbosity"/> verbosity and a <see cref="string"/> message.</summary>
-		/// <param name="sMessage">The <see cref="string"/> message to show.</param>
-		/// <param name="verbosity">The <see cref="EVerbosity"/> of the <see cref="Log.P"/>.</param>
+		/// <summary>Stacktrace using Log.P with EVerbosity verbosity and a string message.</summary>
+		/// <param name="sMessage">The string message to show.</param>
+		/// <param name="verbosity">The EVerbosity of the Log.P.</param>
 		public static void Here(string sMessage, EVerbosity verbosity = EVerbosity.Log)
 		{
 			string stacktrace = sMessage + ' ' + Environment.StackTrace;
