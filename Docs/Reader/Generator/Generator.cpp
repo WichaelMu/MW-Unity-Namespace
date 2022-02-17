@@ -1,10 +1,10 @@
 
 
-#include <iostream>
-
 #include "Reader.h"
+#include "Writer.h"
 
 int main()
 {
-	Reader::OpenFile();
+	std::vector<MW> all_mw = Reader::OpenFile();
+	Writer::Write(all_mw);
 }

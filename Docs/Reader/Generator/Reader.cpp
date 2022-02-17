@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
 #include "Reader.h"
 
@@ -10,8 +9,12 @@
 
 using namespace rapidxml;
 
-void Reader::OpenFile()
+#include "MW.h"
+
+std::vector<MW> Reader::OpenFile()
 {
+	std::vector<MW> all_mw;
+
 	file<> file("../../../bin/Debug/netstandard2.0/MW.xml");
 	xml_document<>* doc = new xml_document<>();
 	doc->parse<0>(file.data());
@@ -53,10 +56,13 @@ void Reader::OpenFile()
 			}
 		}
 
-		m.Print();
+		//m.Print();
+		all_mw.push_back(m);
 	}
 
 	delete doc;
+
+	return all_mw;
 }
 
 MW Reader::ProcessNode(const std::string& chars)

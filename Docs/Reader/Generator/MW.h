@@ -26,6 +26,7 @@ struct MW
 		GENERATE_DEFAULTS
 	}
 
+#if _DEBUG
 	void Print()
 	{
 
@@ -40,5 +41,11 @@ struct MW
 
 		std::cout << '\n' << '\n';
 	}
+#else
+	void Print()
+	{
+		std::cout << "MW.xml file read\n\n";
+	}
+#endif
 };
 

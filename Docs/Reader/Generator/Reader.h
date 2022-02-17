@@ -1,13 +1,16 @@
 #pragma once
 
-#include "MW.h"
+#include <string>
+#include <vector>
+
+struct MW;
 
 class Reader
 {
 
 public:
 
-	static void OpenFile();
+	static std::vector<MW> OpenFile();
 
 private:
 
