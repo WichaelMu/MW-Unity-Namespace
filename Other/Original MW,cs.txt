@@ -15,7 +15,10 @@ namespace MW {
     }
 
     /// <seealso cref="https://easings.net/"/>
-    public enum Equation {
+    public enum 
+    
+    
+    {
         Linear,
         SineEaseOut,
         SineEaseIn,
