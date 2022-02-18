@@ -5,6 +5,7 @@ using MW.Vector;
 
 namespace MW.Behaviour
 {
+	/// <summary>The base class for MPlayer and MPlayer2D.</summary>
 	public class Player : MonoBehaviour
 	{
 		/// <summary>Called when damage is taken. First float is new Health, second is the inflicting damage.</summary>
@@ -18,6 +19,7 @@ namespace MW.Behaviour
 		[SerializeField] float Health;
 		internal float InitialHealth;
 
+		/// <summary>The movement speed of this Player.</summary>
 		[Tooltip("The normal movement speed for this player.")]
 		public float MovementSpeed = 1;
 		protected float InitialMovementSpeed;
@@ -140,6 +142,7 @@ namespace MW.Behaviour
 			return GetHealth() <= 0;
 		}
 
+		/// <summary>What should happen when this Player is removed from the game?</summary>
 		public virtual void OnDestroy()
 		{
 			OnTakeDamage = null;

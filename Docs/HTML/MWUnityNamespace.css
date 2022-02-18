@@ -41,9 +41,10 @@ nav {
 }
 
 .navLinks{
+    background-color: #1c1c1c;
     display: inline-table;
     padding: 15px;
-    margin-left: 20px;
+    width:150px;
     margin-right: 20px;
 
     font-weight: 400;
@@ -169,14 +170,19 @@ nav {
 
 /* PARAGRAPH AND TEXT STYLES */
 
+.classHead {
+  text-align: left;
+  color: #1FBEB9;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
 .basicHead {
   text-align: left;
   padding-left: 5%;
   color: #1FBEB9;
   text-transform: uppercase;
-
-  padding-top: 1%;
-  padding-bottom: 1%;
+  font-size:30px;
 }
 
 .simplePara{
@@ -185,9 +191,6 @@ nav {
 
   padding-left: 5%;
   padding-right: 5%;
-
-  padding-bottom: 1%;
-  padding-top: 0%;
 
   font-weight: 600;
   font-size: 100%;

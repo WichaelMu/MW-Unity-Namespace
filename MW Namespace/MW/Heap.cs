@@ -1,13 +1,14 @@
-﻿
-
-namespace MW
+﻿namespace MW.Core
 {
+	/// <summary>The implementation of a Minimum or Maximum Heap.</summary>
+	/// <typeparam name="T">The type to store in this heap.</typeparam>
 	public class THeap<T> where T : IHeapItem<T>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
 		T[] TItems;
 		int nCount;
 
+		/// <summary>The number of elements in the heap.</summary>
 		public int Count
 		{
 			get
@@ -16,11 +17,15 @@ namespace MW
 			}
 		}
 
+		/// <summary>Generates a new Heap, initialised with uMaxSize.</summary>
+		/// <param name="uMaxSize"></param>
 		public THeap(uint uMaxSize)
 		{
 			TItems = new T[uMaxSize];
 		}
 
+		/// <summary>Adds an item to this Heap.</summary>
+		/// <param name="TItem">The item to add.</param>
 		public void Add(T TItem)
 		{
 			TItem.HeapItemIndex = nCount;
@@ -30,6 +35,8 @@ namespace MW
 			nCount++;
 		}
 
+		/// <summary>Remove the element at the root of this Heap.</summary>
+		/// <returns>The element that was removed.</returns>
 		public T RemoveFirst()
 		{
 			T T_ = TItems[0];
@@ -42,22 +49,31 @@ namespace MW
 			return T_;
 		}
 
+		/// <summary>Updates Item's position in the Heap.</summary>
+		/// <param name="TItem">The item to update.</param>
 		public void UpdateItem(T TItem)
 		{
 			SortUp(TItem);
 			SortDown(TItem);
 		}
 
+		/// <summary>Sorts this Item upawrds.</summary>
+		/// <param name="TItem">The item to update.</param>
 		public void UpdateItemUp(T TItem)
 		{
 			SortUp(TItem);
 		}
 
+		/// <summary>Sorts this Item downwards.</summary>
+		/// <param name="TItem">The item to update.</param>
 		public void UpdateItemDown(T TItem)
 		{
 			SortDown(TItem);
 		}
 
+		/// <summary>Whether or not this Heap contains Item.</summary>
+		/// <param name="TItem">The Item to check.</param>
+		/// <returns>True if Item exists in this Heap.</returns>
 		public bool Contains(T TItem) => Equals(TItems[TItem.HeapItemIndex], TItem);
 
 		void SortDown(T TItem)
@@ -128,8 +144,11 @@ namespace MW
 		}
 	}
 
+	/// <summary>The Interface that T must implement if it is to be used as a Heap.</summary>
+	/// <typeparam name="T">The type to make compatible with THeap.</typeparam>
 	public interface IHeapItem<T> : System.IComparable<T>
 	{
+		/// <summary>The position in a THeap.</summary>
 		int HeapItemIndex { get; set; }
 	}
 }

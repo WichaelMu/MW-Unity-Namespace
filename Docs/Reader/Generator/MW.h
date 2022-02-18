@@ -9,6 +9,8 @@ this->mw_class = mw_class;\
 this->mw_name = mw_name;\
 this->summary = summary;\
 
+#define BUILD !_DEBUG
+
 struct MW
 {
 	std::string mw_type, mw_namespace, mw_class, mw_name;
@@ -27,9 +29,12 @@ struct MW
 	}
 
 #if _DEBUG
+#define VECTOR_SIZE(v) v.size()
+
 	void Print()
 	{
-
+		std::cout << VECTOR_SIZE(function_parameters_type) << " " << VECTOR_SIZE(function_parameters_name) << " " << VECTOR_SIZE(function_parameters_desc) << " " << mw_namespace << " " << mw_class << " " << mw_name << '\n';
+		return;
 		std::cout << mw_namespace << '.' << mw_class << "::" << mw_name << '\n';
 		std::cout << summary << '\n' << '\n';
 		//return;
@@ -44,7 +49,7 @@ struct MW
 #else
 	void Print()
 	{
-		std::cout << "MW.xml file read\n\n";
+		std::cout << mw_namespace << '.' << mw_class << '.' << mw_name << '\n';
 	}
 #endif
 };

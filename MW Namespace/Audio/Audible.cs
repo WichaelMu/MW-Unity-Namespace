@@ -42,7 +42,8 @@ namespace MW.Audio
 		const string kErr2 = " could not be ";
 
 		/// <summary>Populates the Sounds array to match the settings.</summary>
-		public virtual void Initialise(MSound[] SSounds)
+		/// <param name="Sounds">The sounds to initialise into the game.</param>
+		public virtual void Initialise(MSound[] Sounds)
 		{
 			if (AudioInstance == null)
 			{
@@ -55,10 +56,10 @@ namespace MW.Audio
 				Destroy(gameObject);
 			}
 
-			this.SSounds = SSounds;
+			this.SSounds = Sounds;
 
 			if (!bMuteAllByDefault)
-				foreach (MSound s in SSounds)
+				foreach (MSound s in Sounds)
 				{
 					s.ASSound = gameObject.AddComponent<AudioSource>();
 					s.ASSound.clip = s.ACSource;

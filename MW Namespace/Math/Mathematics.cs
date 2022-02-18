@@ -3,6 +3,8 @@ using MW.Kinetic;
 using MW.Easing;
 using MW.Vector;
 using MW.Diagnostics;
+using MW.Core;
+using MW.Enums;
 
 namespace MW.Math
 {

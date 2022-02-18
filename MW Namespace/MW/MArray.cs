@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MW
+namespace MW.MArray
 {
+	[Serializable]
 	/// <summary>A dynamic generic array built off of System.Collections.Generic.List.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
-	[Serializable]
 	public class MArray<T>
 	{
 		[UnityEngine.SerializeField] List<T> Items;
@@ -191,6 +191,7 @@ namespace MW
 			}
 		}
 
+		/// <summary>Reflects over Minimum, Maximum with Index.</summary>
 		/// <returns>Outs the incoming and reflected Item of this mirror of Minimum, maximum Num.</returns>
 		public void Reflect(int Minimum, int Index, out T Source, out T Reflected)
 		{
@@ -348,7 +349,10 @@ namespace MW
 		public static implicit operator List<T>(MArray<T> Any) => Any.Items;
 		public static implicit operator T[](MArray<T> Any) => Any.TArray();
 	}
+}
 
+namespace MW.MArray
+{
 	public struct PushRangeFailed<T>
 	{
 		public T AttemptedItemToAdd;

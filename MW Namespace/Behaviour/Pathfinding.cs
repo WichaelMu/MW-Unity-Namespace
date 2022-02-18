@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MW.Core;
 using MW.Diagnostics;
 
 namespace MW.Pathfinding
@@ -271,6 +272,8 @@ namespace MW.Pathfinding
 		public enum EStatus { Paused = 1, Running = 2 }
 	}
 
+	/// <summary>The Interface that T must implement if it is to be used by Pathfinding.</summary>
+	/// <typeparam name="T">The type to declare a node.</typeparam>
 	public interface INode<T> where T : IComparable<T>
 	{
 		/// <summary>This Node's F score.</summary>

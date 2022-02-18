@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using MW.IO;
+using MW.Enums;
 
 namespace MW.CameraUtils
 {

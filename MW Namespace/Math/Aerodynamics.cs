@@ -3,6 +3,7 @@ using MW.Math;
 
 namespace MW.Kinetic
 {
+        /// <summary>Computations for Aerodynamics.</summary>
 	public static class Aerodynamics {
 
         /// <summary>The direction of natural air resistance.</summary>

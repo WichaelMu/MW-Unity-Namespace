@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MW.Enums;
+using System;
 using UnityEngine;
 
-namespace MW
+namespace MW.Core
 {
+	/// <summary>Helper Variables and Functions.</summary>
 	public static class Utils
 	{
 		/// <summary>Shorthand for writing / 1000. (Always faster to multiply than to divide)</summary>
@@ -167,7 +169,7 @@ namespace MW
 				fLimit = Mathf.Abs(fLimit);
 			}
 
-			return (fFrom + fLimit > fValue) && (fValue > fFrom - fLimit);
+			return fFrom + fLimit > fValue && fValue > fFrom - fLimit;
 		}
 
 		/// <summary>The largest Vector3 between L and R, according to Vector3.magnitude.</summary>
@@ -175,7 +177,7 @@ namespace MW
 		/// <param name="vR"></param>
 		public static Vector3 Max(Vector3 vL, Vector3 vR)
 		{
-			return (vL.magnitude < vR.magnitude) ? vR : vL;
+			return vL.magnitude < vR.magnitude ? vR : vL;
 		}
 
 		/// <summary>The smallest Vector3 between L and R, according to Vector3.magnitude.</summary>
@@ -183,7 +185,7 @@ namespace MW
 		/// <param name="vR"></param>
 		public static Vector3 Min(Vector3 vL, Vector3 vR)
 		{
-			return (vL.magnitude > vR.magnitude) ? vR : vL;
+			return vL.magnitude > vR.magnitude ? vR : vL;
 		}
 
 		static int[] fib_dp;
@@ -212,7 +214,7 @@ namespace MW
 		{
 			Vector3[] vDirections = new Vector3[nResolution];
 
-			float fPhi = (1 + Mathf.Sqrt(fGoldenRationModifier) * .5f);
+			float fPhi = 1 + Mathf.Sqrt(fGoldenRationModifier) * .5f;
 			float fInc = Mathf.PI * 2 * fPhi;
 
 			for (int i = 0; i < nResolution; i++)
@@ -280,13 +282,13 @@ namespace MW
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
 		/// <returns>The reflected number.</returns>
-		public static float MirrorNumber(float Number, float Minimum, float Maximum) => (Minimum + Maximum) - Number;
+		public static float MirrorNumber(float Number, float Minimum, float Maximum) => Minimum + Maximum - Number;
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with MArray{T}.Mirror(int, int).</summary>
 		/// <param name="Number">The number to anchor a reflection.</param>
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
 		/// <returns>The reflected number.</returns>
-		public static int MirrorNumber(int Number, int Minimum, int Maximum) => (Minimum + Maximum) - Number;
+		public static int MirrorNumber(int Number, int Minimum, int Maximum) => Minimum + Maximum - Number;
 	}
 }

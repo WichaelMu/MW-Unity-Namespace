@@ -11,6 +11,7 @@ class Reader
 public:
 
 	static std::vector<MW> OpenFile();
+	static void ReplaceCharacters(std::string& param, const bool& is_file_name = false);
 
 private:
 

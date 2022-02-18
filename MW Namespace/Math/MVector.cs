@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using MW.Diagnostics;
 using MW.Math;
+using MW.Enums;
 
 namespace MW.Vector
 {
+	/// <summary>Vector representation of coordinates and points with three-dimensions.</summary>
 	[System.Serializable]
 	public struct MVector
 	{
@@ -18,6 +20,7 @@ namespace MW.Vector
 		public readonly MVector XY { get => new MVector(X, Y, 0); }
 
 		/// <summary>Construct all components to U.</summary>
+		/// <param name="U">Uniform component.</param>
 		public MVector(float U)
 		{
 			X = U;
@@ -26,6 +29,8 @@ namespace MW.Vector
 		}
 
 		/// <summary>Construct with X and Y components only.</summary>
+		/// <param name="X">X Component.</param>
+		/// <param name="Y">Y Component.</param>
 		public MVector(float X, float Y)
 		{
 			this.X = X;
@@ -34,6 +39,9 @@ namespace MW.Vector
 		}
 
 		/// <summary>Construct an MVector with X, Y, and Z components.</summary>
+		/// <param name="X">X Component.</param>
+		/// <param name="Y">Y Component.</param>
+		/// <param name="Z">Z Component.</param>
 		public MVector(float X, float Y, float Z)
 		{
 			this.X = X;
@@ -42,7 +50,7 @@ namespace MW.Vector
 		}
 
 		/// <summary>Construct an MVector with respect to a Vector3.</summary>
-		/// <param name="xyz"></param>
+		/// <param name="xyz">The Vector3's Components to set this MVector.</param>
 		public MVector(Vector3 xyz)
 		{
 			X = xyz.x;
@@ -86,12 +94,16 @@ namespace MW.Vector
 		/// <summary>The vector dot | product of left and right.</summary>
 		public static float Dot(MVector left, MVector right) => left | right;
 		/// <summary>Whether left and right are Mathematics.Parallel(MVector, MVector, float) to each other.</summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
 		public static bool Parallel(MVector left, MVector right) => Mathematics.Parallel(left, right);
 		/// <summary>A normalised MVector at fDegrees, relative to dirForward.</summary>
 		/// <param name="fDegrees">The angle offset.</param>
 		/// <param name="dirForward">The forward direction.</param>
 		public static MVector MVectorFromAngle(float fDegrees, EDirection dirForward) => Mathematics.VectorFromAngle(fDegrees, dirForward);
 		/// <summary>The distance between left and right.</summary>
+		/// <param name="left">Source of the distance.</param>
+		/// <param name="right">Distance from source.</param>
 		public static float Distance(MVector left, MVector right) => Mathf.Sqrt(SqrDistance(left, right));
 
 		public static float SqrDistance(MVector left, MVector right)
@@ -255,8 +267,12 @@ namespace MW.Vector
 		public static float operator |(MVector l, MVector r) => l.X * r.X + l.Y * r.Y + l.Z * r.Z;
 
 		/// <summary>Normalised direction from to.</summary>
+		/// <param name="From"></param>
+		/// <param name="To"></param>
 		public static MVector operator >(MVector From, MVector To) => (To - From).Normalised;
 		/// <summary>Normalised direction from to.</summary>
+		/// <param name="From"></param>
+		/// <param name="To"></param>
 		public static MVector operator <(MVector To, MVector From) => From > To;
 
 		public static MVector operator >>(MVector v, int i)

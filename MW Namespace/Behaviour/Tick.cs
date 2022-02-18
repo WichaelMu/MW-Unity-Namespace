@@ -3,9 +3,13 @@ using System.Collections;
 using UnityEngine;
 using MW.Diagnostics;
 using MW.Easing;
+using MW.Enums;
+using MW.MArray;
 
 namespace MW.Behaviour
 {
+	/// <summary>Generates a separate Tick function.</summary>
+	/// <typeparam name="T">The data to perform OnTick.</typeparam>
 	public class Tick<T> : MonoBehaviour
 	{
 		IEnumerator ThisTick;

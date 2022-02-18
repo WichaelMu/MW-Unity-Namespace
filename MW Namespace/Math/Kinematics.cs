@@ -2,6 +2,7 @@
 
 namespace MW.Kinetic
 {
+	/// <summary></summary>
 	public static class Kinematics
 	{
 		/// <summary>Convert inspector speed to m/s.</summary>
