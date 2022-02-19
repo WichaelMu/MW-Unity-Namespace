@@ -11,8 +11,17 @@ using namespace rapidxml;
 
 #include "MW.h"
 
+#if BUILD
+#include "Timer.h"
+#endif
+
 std::vector<MW> Reader::OpenFile()
 {
+#if BUILD
+	PerformanceTimer t;
+	t.StartTime();
+#endif
+
 	std::vector<MW> all_mw;
 #if _DEBUG
 	file<> file("../../../bin/Debug/netstandard2.0/MW.xml");
@@ -36,10 +45,17 @@ std::vector<MW> Reader::OpenFile()
 	xml_document<>* doc = new xml_document<>();
 	doc->parse<0>(file.data());
 
+#if BUILD
+	t.PrintTime("Reading XML File");
+#endif
+
 	xml_node<char>* members = doc->first_node()->first_node()->next_sibling();
 
 	for (xml_node<>* member = members->first_node(); member; member = member->next_sibling())
 	{
+#if BUILD
+		t.StartTime();
+#endif
 		xml_attribute<>* member_name_attribute = member->first_attribute("name");
 
 		MW m = ProcessNode(member_name_attribute->value());
@@ -66,6 +82,9 @@ std::vector<MW> Reader::OpenFile()
 		}
 
 		m.Print();
+#if BUILD
+		t.PrintTime("Processing");
+#endif
 		all_mw.push_back(m);
 	}
 

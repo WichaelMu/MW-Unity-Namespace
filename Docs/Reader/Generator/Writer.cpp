@@ -3,6 +3,10 @@
 
 #include "Writer.h"
 
+#if BUILD
+#include "Timer.h"
+#endif
+
 #define HTML_HEADER "<!DOCTYPE html><html lang="\
 			"en"\
 			"><head>"\
@@ -74,6 +78,10 @@ constexpr const char* CSS_PARAGRAPH = "\"simplePara\"";
 
 void Writer::Write(const std::vector<MW>& all_mw)
 {
+#if BUILD
+	PerformanceTimer t;
+	t.StartTime();
+#endif
 	std::map<std::string, std::string> namespace_to_html;
 
 #if _DEBUG
@@ -111,6 +119,11 @@ void Writer::Write(const std::vector<MW>& all_mw)
 		}
 	}
 
+#if BUILD
+	t.PrintTime("Writing/Creating basic HTML file");
+	t.StartTime();
+#endif
+
 	// Write all namespace links.
 	for (auto& ns : namespace_to_html)
 	{
@@ -124,6 +137,11 @@ void Writer::Write(const std::vector<MW>& all_mw)
 		}
 	}
 
+#if BUILD
+	t.PrintTime("Writing all namespace links");
+	t.StartTime();
+#endif
+
 	// Prepare the right column.
 	for (auto& namespace_file : namespace_to_html)
 	{
@@ -133,6 +151,11 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 		html.close();
 	}
+
+#if BUILD
+	t.PrintTime("Preparing the right column");
+	t.StartTime();
+#endif
 
 	for (auto& mw : all_mw)
 	{
@@ -198,6 +221,11 @@ void Writer::Write(const std::vector<MW>& all_mw)
 		html.close();
 	}
 
+#if BUILD
+	t.PrintTime("Writing summaries");
+	t.StartTime();
+#endif
+
 	// End basic HTML file.
 	for (auto& nth : namespace_to_html)
 	{
@@ -207,4 +235,10 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 		html.close();
 	}
+
+
+#if BUILD
+	t.PrintTime("Ending HTML file");
+	t.StartTime();
+#endif
 }

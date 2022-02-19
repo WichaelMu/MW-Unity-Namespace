@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="MW.h" />
     <ClInclude Include="Reader.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Writer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
