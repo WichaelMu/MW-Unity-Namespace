@@ -50,7 +50,7 @@ constexpr const char* CSS_RIGHT_COL_DIV = "\"display: table-cell;\"";
 constexpr const char* CSS_NAV_LINKS = "\"navLinks\"";
 /*
 * The CSS selector used to define the style for namespace classes or
-  functions, depending on whether the namespace class is a part of 
+  functions, depending on whether the namespace class is a part of
   the root MW namespace.
 */
 constexpr const char* CSS_HEADER_STYLE = "\"basicHead\"";
@@ -67,21 +67,30 @@ constexpr const char* CSS_CLASS_SUMMARY_STYLE = "\"simplePara C\"";
   definitions.
 */
 constexpr const char* CSS_PARAGRAPH = "\"simplePara\"";
+/*
+* The CSS selector used to style keywords for function summaries.
+*/
+constexpr const char* CSS_KEYWORD = "\"keyword\"";
 
-#define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">"
-#define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=" << entry << ".html>" << entry << "</a></div><br>"
-#define HTML_SUMMARY_START "</div><br><br><div style=" << CSS_RIGHT_COL_DIV << ">"
-#define HTML_CLASS_START(entry, summary) "<br><br><h1 class=" << CSS_CLASS_STYLE << ">" << entry << "</h1><br><p class=" << CSS_CLASS_SUMMARY_STYLE << ">" << summary << "</p>"
-#define HTML_SUMMARY_TITLE(title) "<p class=" << CSS_HEADER_STYLE << ">" << title << "</p><br>"
-#define HTML_DECLARE_FUNCTION_PARAMS(title, params) "<h1 class=" << CSS_HEADER_STYLE << ">" << title << " (" << params << ")</h1><br>"
-#define HTML_SUMMARY_ENTRY(entry) "<p class=" << CSS_PARAGRAPH << ">" << entry << "</p>"
+#define INTER_INJECT_TEXT(text) << text
+
+#if _DEBUG
+#define DEBUG_WRITELINE << __LINE__
+#else
+#define DEBUG_WRITELINE
+#endif
+
+#define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">" DEBUG_WRITELINE
+#define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=" << entry << ".html>" << entry << "</a></div><br>" DEBUG_WRITELINE
+#define HTML_SUMMARY_START "</div><br><br><div style=" << CSS_RIGHT_COL_DIV << ">" DEBUG_WRITELINE
+#define HTML_CLASS_START(entry, summary) "<br><br><h1 class=" << CSS_CLASS_STYLE << ">" INTER_INJECT_TEXT(entry) << "</h1><br><p class=" << CSS_CLASS_SUMMARY_STYLE << ">" INTER_INJECT_TEXT(summary) << "</p>" DEBUG_WRITELINE
+#define HTML_SUMMARY_TITLE(title) "<p class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << "</p><br>" DEBUG_WRITELINE
+#define HTML_DECLARE_FUNCTION_PARAMS(title, params) "<h1 class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << " (" INTER_INJECT_TEXT(params) << ")</h1><br>" DEBUG_WRITELINE
+#define HTML_SUMMARY_ENTRY(entry) "<p class=" << CSS_PARAGRAPH << ">" INTER_INJECT_TEXT(entry) << "</p>" DEBUG_WRITELINE
+#define HTML_KEYWORD(keyword) "<p class=" << CSS_KEYWORD << ">" INTER_INJECT_TEXT(keyword) << "</p>" DEBUG_WRITELINE
 
 void Writer::Write(const std::vector<MW>& all_mw)
 {
-#if BUILD
-	PerformanceTimer t;
-	t.StartTime();
-#endif
 	std::map<std::string, std::string> namespace_to_html;
 
 #if _DEBUG
@@ -119,11 +128,6 @@ void Writer::Write(const std::vector<MW>& all_mw)
 		}
 	}
 
-#if BUILD
-	t.PrintTime("Writing/Creating basic HTML file");
-	t.StartTime();
-#endif
-
 	// Write all namespace links.
 	for (auto& ns : namespace_to_html)
 	{
@@ -137,11 +141,6 @@ void Writer::Write(const std::vector<MW>& all_mw)
 		}
 	}
 
-#if BUILD
-	t.PrintTime("Writing all namespace links");
-	t.StartTime();
-#endif
-
 	// Prepare the right column.
 	for (auto& namespace_file : namespace_to_html)
 	{
@@ -151,11 +150,6 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 		html.close();
 	}
-
-#if BUILD
-	t.PrintTime("Preparing the right column");
-	t.StartTime();
-#endif
 
 	for (auto& mw : all_mw)
 	{
@@ -177,13 +171,28 @@ void Writer::Write(const std::vector<MW>& all_mw)
 					// A function.
 					// Becaues this function_parameters_type.size == 0, this has no parameters.
 					// Write the name of the function with empty brackets.
-					html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "") << HTML_SUMMARY_ENTRY(mw.summary);
+					html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "");
+
+					// If there is a summary, write it here.
+					if (mw.summary.length() != 0)
+						html << HTML_KEYWORD("Summary:") << HTML_SUMMARY_ENTRY(mw.summary);
+
+					// If there are remarks, write it here.
+					if (mw.remarks.length() != 0)
+						html << HTML_KEYWORD("Remarks:") << HTML_SUMMARY_ENTRY(mw.remarks);
+
+					// If there is a return value, write it here.
+					if (mw.returns.length() != 0)
+						html << HTML_KEYWORD("Returns:") << HTML_SUMMARY_ENTRY(mw.returns);
 				}
 				else
 				{
 					// Not a function.
 					// Write whatever this is normally.
-					html << HTML_SUMMARY_TITLE(mw.mw_name) << HTML_SUMMARY_ENTRY(mw.summary);
+					if ((mw.mw_class.length() == 0) ^ mw.mw_type == "FIELD" ^ mw.mw_type == "PROPERTY")
+						html << HTML_SUMMARY_TITLE(mw.mw_name) << HTML_SUMMARY_ENTRY(mw.summary);
+					else
+						html << HTML_CLASS_START(mw.mw_name, mw.summary);
 				}
 			}
 			else
@@ -192,39 +201,69 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 				auto size_of_name = mw.function_parameters_name.size();
 
+				// Writing function parameter types.
 				std::string generics = "TYUMNKR";
 				for (int i = 0, generic_count = 0; i < size_of_name; ++i)
 				{
 					// If the type is just a standalone 'T', then we know it's a generic.
 					// Replace the genric 'T' with the std::string generics using generic_count.
 					if (mw.function_parameters_type[i].length() == 1 && mw.function_parameters_type[i][0] == 'T')
+					{
 						params += generics[generic_count++];
+					}
 					else
-						params += mw.function_parameters_type[i];
-						
+					{
+						// For some reason, there may be a generic parameter marked by two T's
+						// (TT), where in reality, they reference only T.
+						// If this is the case, only add one T, the first T, to the params.
+						if (mw.function_parameters_type[i] == "TT")
+						{
+							params += mw.function_parameters_type[i][0];
+						}
+						else
+						{
+							// Otherwise, add the type as normal.
+							params += mw.function_parameters_type[i];
+						}
+					}
+
 					params += " " + mw.function_parameters_name[i];
 
 					if (i != size_of_name - 1)
 						params += ", ";
 				}
 
-				html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, params) << HTML_SUMMARY_ENTRY(mw.summary);
+				// Write the name of the function.
+				html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, params);
 
+				// If there is a summary, write it here.
+				if (mw.summary.length() != 0)
+					html << HTML_KEYWORD("Summary:") << HTML_SUMMARY_ENTRY(mw.summary);
+
+				// If there are remarks, write it here.
+				if (mw.remarks.length() != 0)
+					html << HTML_KEYWORD("Remarks:") << HTML_SUMMARY_ENTRY(mw.remarks);
+
+				// Write the summaries for the parameters (if any).
 				for (int i = 0; i < size_of_name; ++i)
 				{
 					if (mw.function_parameters_desc[i].length() != 0)
+					{
+						if (i == 0)
+							html << HTML_KEYWORD("Params:");
+
 						html << HTML_SUMMARY_ENTRY(mw.function_parameters_name[i] + ": " + mw.function_parameters_desc[i]);
+					}
 				}
+
+				// If there is a return value, write it here.
+				if (mw.returns.length() != 0)
+					html << HTML_KEYWORD("Returns:") << HTML_SUMMARY_ENTRY(mw.returns);
 			}
 		}
 
 		html.close();
 	}
-
-#if BUILD
-	t.PrintTime("Writing summaries");
-	t.StartTime();
-#endif
 
 	// End basic HTML file.
 	for (auto& nth : namespace_to_html)
@@ -235,10 +274,4 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 		html.close();
 	}
-
-
-#if BUILD
-	t.PrintTime("Ending HTML file");
-	t.StartTime();
-#endif
 }
