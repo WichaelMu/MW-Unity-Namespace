@@ -16,6 +16,8 @@ struct MW
 	std::string mw_type, mw_namespace, mw_class, mw_name;
 
 	std::string summary;
+	std::string returns;
+	std::string remarks;
 
 	std::vector<std::string> function_parameters_type;
 	std::vector<std::string> function_parameters_name;
@@ -33,6 +35,9 @@ struct MW
 
 	void Print()
 	{
+		//std::cout << mw_namespace << '\n';
+
+		return;
 		std::cout << VECTOR_SIZE(function_parameters_type) << " " << VECTOR_SIZE(function_parameters_name) << " " << VECTOR_SIZE(function_parameters_desc) << " " << mw_namespace << " " << mw_class << " " << mw_name << '\n';
 		return;
 		std::cout << mw_namespace << '.' << mw_class << "::" << mw_name << '\n';
@@ -47,10 +52,7 @@ struct MW
 		std::cout << '\n' << '\n';
 	}
 #else
-	void Print()
-	{
-		std::cout << mw_namespace << '.' << mw_class << '.' << mw_name << '\n';
-	}
+	void Print() {  }
 #endif
 };
 

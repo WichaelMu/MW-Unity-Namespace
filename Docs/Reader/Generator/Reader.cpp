@@ -17,14 +17,9 @@ using namespace rapidxml;
 
 std::vector<MW> Reader::OpenFile()
 {
-#if BUILD
-	PerformanceTimer t;
-	t.StartTime();
-#endif
-
 	std::vector<MW> all_mw;
 #if _DEBUG
-	file<> file("../../../bin/Debug/netstandard2.0/MW.xml");
+	file<> file("../../../bin/Release/netstandard2.0/MW.xml");
 
 	if (!file.data())
 	{
@@ -32,7 +27,7 @@ std::vector<MW> Reader::OpenFile()
 		return all_mw;
 	}
 #else
-	const char* xml_path = "C:/Users/table/Documents/Machine Code/MW/MW/bin/Debug/netstandard2.0/MW.xml";
+	const char* xml_path = "C:/Users/table/Documents/Machine Code/MW/MW/bin/Release/netstandard2.0/MW.xml";
 	file<> file(xml_path);
 	
 	if (!file.data())
@@ -45,46 +40,51 @@ std::vector<MW> Reader::OpenFile()
 	xml_document<>* doc = new xml_document<>();
 	doc->parse<0>(file.data());
 
-#if BUILD
-	t.PrintTime("Reading XML File");
-#endif
-
 	xml_node<char>* members = doc->first_node()->first_node()->next_sibling();
 
 	for (xml_node<>* member = members->first_node(); member; member = member->next_sibling())
 	{
-#if BUILD
-		t.StartTime();
-#endif
 		xml_attribute<>* member_name_attribute = member->first_attribute("name");
 
 		MW m = ProcessNode(member_name_attribute->value());
 
 		m.summary = member->first_node()->value();
 
+		const std::string param = "param";
+		const std::string returns = "returns";
+		const std::string remarks = "remarks";
+
 		for (xml_node<>* summary_params_etc = member->first_node(); summary_params_etc; summary_params_etc = summary_params_etc->next_sibling())
 		{
-			const std::string param = "param";
-			if (summary_params_etc->name() != param)
-				continue;
 
-			if (summary_params_etc->first_attribute())
-			{
-				// Add the name of the parameters.
-				m.function_parameters_name.push_back(summary_params_etc->first_attribute()->value());
-			}
-			else
-			{
-				m.function_parameters_name.push_back("");
-			}
+			const std::string this_name = summary_params_etc->name();
 
-			m.function_parameters_desc.push_back(summary_params_etc->value());
+			if (this_name == param)
+			{
+				if (summary_params_etc->first_attribute())
+				{
+					// Add the name of the parameters.
+					m.function_parameters_name.push_back(summary_params_etc->first_attribute()->value());
+				}
+				else
+				{
+					m.function_parameters_name.push_back("");
+				}
+
+				m.function_parameters_desc.push_back(summary_params_etc->value());
+			}
+			else if (this_name == returns)
+			{
+				m.returns = summary_params_etc->value();
+			}
+			else if (this_name == remarks)
+			{
+				m.remarks = summary_params_etc->value();
+			}
 		}
 
 		m.Print();
-#if BUILD
-		t.PrintTime("Processing");
-#endif
+
 		all_mw.push_back(m);
 	}
 
@@ -112,6 +112,19 @@ MW Reader::ProcessNode(const std::string& chars)
 	case 'M':
 		mw.mw_type = "MEMBER";
 		break;
+	}
+
+	// Count the number of periods in chars.
+	// This is <member name="..."></member> Where ... is chars.
+	// If there are exactly two periods, we know that this member is part of the base MW namespace.
+	// 
+	// Also, do not go past a '(', this will indicate a function and the counting will be inaccurate,
+	//	if included.
+	uint8_t periods = 0;
+	for (size_t i = 0; i < chars.length() && chars[i] != '('; ++i)
+	{
+		if (chars[i] == '.')
+			periods++;
 	}
 
 	// Skip 5 characters. E.g., T:MW.MArray will skip the T:MW. and begin at 'M' in MArray.
@@ -176,7 +189,20 @@ MW Reader::ProcessNode(const std::string& chars)
 			}
 			else
 			{
-				++iteration;
+				// If the number of periods are NOT exactly two, continue as normal.
+				if (periods != 2)
+				{
+					++iteration;
+				}
+				else
+				{
+					// If periods is exactly two, the namespace IS the class and the 
+					// namespace is the base MW.
+
+					// Skip to writing the name of a property, or a function and it's 
+					// parameters, if any.
+					iteration = 2;
+				}
 			}
 		}
 	}
@@ -184,6 +210,9 @@ MW Reader::ProcessNode(const std::string& chars)
 	ReplaceCharacters(mw.mw_namespace, true);
 	ReplaceCharacters(mw.mw_class);
 	ReplaceCharacters(mw.mw_name);
+
+	if (mw.mw_class.length() == 0)
+		mw.mw_class = mw.mw_namespace;
 
 	return mw;
 }
@@ -194,63 +223,77 @@ void Reader::ReplaceCharacters(std::string& param, const bool& is_file_name)
 	param.erase(remove(param.begin(), param.end(), '{'), param.end());
 	param.erase(remove(param.begin(), param.end(), '}'), param.end());
 	param.erase(remove(param.begin(), param.end(), '1'), param.end());
-	param.erase(remove(param.begin(), param.end(), '3'), param.end());
 
+	// Hard-coded replacements.
 	if (param == "Single")
 	{
 		param = "float";
-		return;
 	}
-
-	if (!is_file_name)
+	else if (param == "Boolean")
 	{
-		// The @ character signifies a ref or out keyword in C#.
-		// In C++, this is the '&' character.
-		// Both 'out' and 'ref' are used throughout the MW namespace.
-		// It is impossible to determine which one the '@' represents,
-		// so just use this to signify an 'out' OR 'ref' parameter.
-		const std::string ref = "& ";
-
-		std::string new_param = "";
-		for (int i = 0; i < param.length(); ++i)
+		param = "bool";
+	}
+	else if (param == "Int32")
+	{
+		param = "int";
+	}
+	else if (param == "Int64")
+	{
+		param = "long";
+	}
+	else
+	{
+		if (!is_file_name)
 		{
-			switch (param[i])
+			// The @ character signifies a ref or out keyword in C#.
+			// In C++, this is the '&' character.
+			// Both 'out' and 'ref' are used throughout the MW namespace.
+			// It is impossible to determine which one the '@' represents,
+			// so just use & to signify an 'out' OR 'ref' parameter.
+			const std::string ref = "& ";
+
+			std::string new_param = "";
+			for (int i = 0; i < param.length(); ++i)
 			{
-			case '`':
-				switch (param[i + 1])
+				switch (param[i])
 				{
-				case '0':
-					new_param += "T";
-					param.erase(remove(param.begin(), param.end(), '0'), param.end());
+				case '`':
+					switch (param[i + 1])
+					{
+					case '0':
+						new_param += "T";
+						param.erase(remove(param.begin(), param.end(), '0'), param.end());
+						break;
+					case '1':
+						new_param += "T";
+						param.erase(remove(param.begin(), param.end(), '1'), param.end());
+						break;
+					case '2':
+						new_param = "T";
+						param.erase(remove(param.begin(), param.end(), '2'), param.end());
+						break;
+					}
+
 					break;
-				case '1':
-					new_param += "&lt;T&gt;";
+				case '@':
+					new_param += ref;
 					break;
-				case '2':
-					new_param += "&lt;T&gt;&lt;Y&gt;";
+				default:
+					new_param += param[i];
 					break;
 				}
-
-				break;
-			case '@':
-				
-				new_param += ref;
-				break;
-			default:
-				new_param += param[i];
-				break;
 			}
+
+			size_t pos = new_param.find('{');
+			if (pos != std::string::npos)
+				new_param.replace(pos, 1, "&lt;");
+
+			pos = new_param.find('}');
+			if (pos != std::string::npos)
+				new_param.replace(pos, 1, "&gt;");
+
+			param = new_param;
 		}
-
-		size_t pos = new_param.find('{');
-		if (pos != std::string::npos)
-			new_param.replace(pos, 1, "&lt;");
-
-		pos = new_param.find('}');
-		if (pos != std::string::npos)
-			new_param.replace(pos, 1, "&gt;");
-
-		param = new_param;
 	}
 
 	param.erase(remove(param.begin(), param.end(), '`'), param.end());
