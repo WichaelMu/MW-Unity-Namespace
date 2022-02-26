@@ -2,6 +2,7 @@
 
 namespace MW.CameraUtils
 {
+	/// <summary>Utilities for a Camera following or looking at something.</summary>
 	public static class Tracking
 	{
 		/// <summary>Have the camera follow target's transform.</summary>

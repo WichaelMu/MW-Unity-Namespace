@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using MW.IO;
-using MW.Enums;
 
 namespace MW.CameraUtils
 {
+	/// <summary>Utilities for an Orthographic camera.</summary>
 	public static class Orthographic
 	{
 		const string kCameraIsNotOrthographicError = " is not orthographic";

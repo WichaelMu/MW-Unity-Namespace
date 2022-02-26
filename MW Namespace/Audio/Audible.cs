@@ -4,19 +4,22 @@ using MW.Diagnostics;
 
 namespace MW.Audio
 {
-
-
+	/// <summary>The settings for audio.</summary>
 	[Serializable]
 	public class MSound
 	{
+		/// <summary>The source of this sound.</summary>
 		[Tooltip("The source of this sound.")]
 		public AudioClip ACSource;
+		/// <summary>The name of this sound.</summary>
 		[Tooltip("The name of the sound.")]
-		public string sName;
+		public string Name;
 
+		/// <summary>Sound settings.</summary>
 		[Range(0f, 1f)]
 		public float fVolume = 1, fPitch = 1;
 
+		/// <summary>Should this sound loop?</summary>
 		[Tooltip("Should this audio clip loop?")]
 		public bool bLoop;
 
@@ -36,7 +39,7 @@ namespace MW.Audio
 		public bool bMuteAllByDefault;
 		/// <summary>Every sound that this Audio object will control.</summary>
 		[Tooltip("Every sound that this Audio object will control.")]
-		public MSound[] SSounds;
+		public MSound[] Sounds;
 
 		const string kErr1 = "Sound of name: ";
 		const string kErr2 = " could not be ";
@@ -56,7 +59,7 @@ namespace MW.Audio
 				Destroy(gameObject);
 			}
 
-			this.SSounds = Sounds;
+			this.Sounds = Sounds;
 
 			if (!bMuteAllByDefault)
 				foreach (MSound s in Sounds)
@@ -101,7 +104,7 @@ namespace MW.Audio
 		{
 			if (bMuteAllByDefault)
 				return;
-			foreach (MSound s in SSounds)
+			foreach (MSound s in Sounds)
 				s.ASSound.Stop();
 		}
 
@@ -109,7 +112,7 @@ namespace MW.Audio
 		/// <param name="n">The name of the requested sound.</param>
 		/// <returns>The MSound of the requested sound.</returns>
 
-		public MSound Find(string n) => Array.Find(SSounds, sound => sound.sName == n);
+		public MSound Find(string n) => Array.Find(Sounds, sound => sound.Name == n);
 
 		/// <summary>Whether or not sound of name n is playing.</summary>
 		/// <param name="sName">The name of the sound to query.</param>

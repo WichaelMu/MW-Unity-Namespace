@@ -185,10 +185,12 @@ namespace MW.Pathfinding
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	public class MPathManager<T> : UnityEngine.MonoBehaviour where T : INode<T>, IHeapItem<T>
 	{
+		/// <summary>The number of paths to compute per frame.</summary>
 		[UnityEngine.SerializeField] [UnityEngine.Min(1)] [UnityEngine.Tooltip("The number of paths to compute per frame.")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
 		uint ComputationsPerFrame = 1;
 
+		/// <summary>The number of frames before path/s are computed.</summary>
 		[UnityEngine.SerializeField] [UnityEngine.Min(1)] [UnityEngine.Tooltip("The number of frames before path/s are computed.")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
 		uint FramesBeforeComputation = 1;

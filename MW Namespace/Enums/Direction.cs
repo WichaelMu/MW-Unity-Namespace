@@ -1,4 +1,4 @@
-﻿namespace MW.Enums
+﻿namespace MW
 {
 	/// <summary>Orientations for specific faces.</summary>
 	public enum EDirection

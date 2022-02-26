@@ -1,9 +1,9 @@
 ﻿using MW.Core;
-using MW.Enums;
 using UnityEngine;
 
 namespace MW.Kinetic
 {
+        /// <summary></summary>
 	public static class Miscellanous {
 
         /// <summary>The direction in which to avoid colliding with obstacles.</summary>

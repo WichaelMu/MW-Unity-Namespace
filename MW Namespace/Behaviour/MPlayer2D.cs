@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using MW.Vector;
 using MW.Diagnostics;
 
 namespace MW.Behaviour
@@ -31,6 +30,7 @@ namespace MW.Behaviour
 			SpriteRenderer = GetComponent<SpriteRenderer>();
 		}
 
+		/// <remarks>Must call base.FixedUpdate().</remarks>
 		public virtual void FixedUpdate()
 		{
 			if (HasStoppedReceivingMovementInput())
@@ -40,8 +40,8 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>The default implementation for movement input.</summary>
-		/// <param name="UpwardThrow">Forward input. Default is Y axis.</param>
-		/// <param name="ForwardThrow">Right input. Default is X axis.</param>
+		/// <param name="UpwardThrow">Upward input. Default is Y axis.</param>
+		/// <param name="ForwardThrow">Forward input. Default is X axis.</param>
 		public override void MovementInput(float UpwardThrow, float ForwardThrow)
 		{
 			if (HasStoppedReceivingMovementInput())
@@ -50,11 +50,19 @@ namespace MW.Behaviour
 			Velocity = new MVector(ForwardThrow, UpwardThrow);
 			Velocity *= MovementSpeed;
 
+			FlipOnInput(ForwardThrow);
+		}
+
+		/// <summary>Flips SpriteRenderer according to a float.</summary>
+		/// <remarks>bFlipOnSpriteInput needs to be true to execute.</remarks>
+		/// <param name="FlipIndependentInput">The input throw to determine a flip of the Sprite Renderer.</param>
+		public void FlipOnInput(float FlipIndependentInput)
+		{
 			if (bFlipSpriteOnInput)
 			{
-				if (ForwardThrow != 0)
+				if (FlipIndependentInput != 0)
 				{
-					SpriteRenderer.flipX = bSpriteIsFacingNegativeX ? ForwardThrow > 0 : ForwardThrow < 0;
+					SpriteRenderer.flipX = bSpriteIsFacingNegativeX ? FlipIndependentInput > 0 : FlipIndependentInput < 0;
 				}
 			}
 		}

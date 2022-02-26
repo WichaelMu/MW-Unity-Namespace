@@ -1,4 +1,4 @@
-﻿namespace MW.Enums
+﻿namespace MW
 {
 	/// <summary>Units of measurement of speed.</summary>
 	public enum EUnit
@@ -10,7 +10,7 @@
 		/// <summary></summary>
 		MetresPerHour,
 		/// <summary></summary>
-		KilometrsePerHour,
+		KilometersPerHour,
 		/// <summary></summary>
 		FeetPerSecond,
 		/// <summary></summary>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace MW.MArray
 {
-	[Serializable]
-	/// <summary>A dynamic generic array built off of System.Collections.Generic.List.</summary>
+	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
+	[Serializable]
 	public class MArray<T>
 	{
 		[UnityEngine.SerializeField] List<T> Items;

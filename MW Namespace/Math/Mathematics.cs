@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using MW.Kinetic;
 using MW.Easing;
-using MW.Vector;
 using MW.Diagnostics;
 using MW.Core;
-using MW.Enums;
 
 namespace MW.Math
 {
-
+	/// <summary></summary>
 	public static class Mathematics
 	{
 
@@ -45,16 +43,17 @@ namespace MW.Math
 			return fAccelerationRate;
 		}
 
+		/// <summary>Converts a Rigidbody's speed from metres per second to UUnit.</summary>
 		/// <param name="RSelf">The Rigidbody to read a speed from.</param>
 		/// <param name="UUnit">The desired EUnit of measurement.</param>
 		/// <returns>A speed reading from self in EUnit of measurement.</returns>
-		public static float Speed(Rigidbody RSelf, EUnit UUnit = EUnit.MetresPerSecond)
+		public static float Speed(Rigidbody RSelf, EUnit UUnit = EUnit.KilometersPerHour)
 		{
 			float speed = RSelf.velocity.magnitude;
 
 			switch (UUnit)
 			{
-				case EUnit.KilometrsePerHour:
+				case EUnit.KilometersPerHour:
 					return speed * 3.6f;
 				case EUnit.MilesPerHour:
 					return speed * 2.23694f;
@@ -78,6 +77,7 @@ namespace MW.Math
 		}
 
 		/// <summary>The direction to intercept RBTarget relative to RSelf.</summary>
+		/// <remarks>Requires movement in BOTH Rigidbodies. This function was designed specifically for aircraft.</remarks>
 		/// <param name="RSelf">The Rigidbody predicting the movement of RBTarget.</param>
 		/// <param name="RBTarget">The Rigidbody to predict.</param>
 		public static MVector PredictiveProjectile(Rigidbody RSelf, Rigidbody RBTarget)
@@ -95,6 +95,26 @@ namespace MW.Math
 			MVector vForwardPrediction = new MVector(RBTarget.velocity * fSecondsPerKM * fDistanceBetweenPlayer);
 
 			return vForwardPrediction;
+		}
+
+		/// <summary>Predicts the path of a target's movement for a projectile to be launched.</summary>
+		/// <param name="LaunchPosition">World location of where a projectile will be launched.</param>
+		/// <param name="ConstantMoveSpeed">The movement speed of the projectile that will be launched.</param>
+		/// <param name="TargetVelocity">The direction of where the target is heading and the speed it is travelling at.</param>
+		/// <param name="TargetPosition">The world location of the target.</param>
+		/// <returns>A world location of where a projectile should aim towards so that it intercepts the target.</returns>
+		public static MVector PredictiveProjectile(MVector LaunchPosition, float ConstantMoveSpeed, MVector TargetVelocity, MVector TargetPosition)
+		{
+			// If the target is not moving, return the target's current position.
+			if (TargetVelocity.SqrMagnitude < MVector.kEpsilon)
+			{
+				return TargetPosition;
+			}
+
+			float DistanceFromCallerToTarget = MVector.Distance(LaunchPosition, TargetPosition) * Utils.kThousandth;
+			MVector ForwardPrediction = TargetVelocity * (1000 / ConstantMoveSpeed) * DistanceFromCallerToTarget;
+
+			return TargetPosition + ForwardPrediction;
 		}
 
 		/// <summary>Whether nNumber is a power of two.</summary>

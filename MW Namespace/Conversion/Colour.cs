@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace MW.Conversion
 {
+	/// <summary>Colour conversions.</summary>
 	public static class Colour
 	{
 

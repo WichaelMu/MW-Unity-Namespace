@@ -1,4 +1,4 @@
-﻿namespace MW.Enums
+﻿namespace MW
 {
 	/// <summary>Interpolating equations.</summary>
 	public enum EEquation

@@ -1,5 +1,4 @@
-﻿using MW.Enums;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MW.Easing
 {

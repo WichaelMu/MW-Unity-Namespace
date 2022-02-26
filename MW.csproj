@@ -6,6 +6,7 @@
 	  <EnableNETAnalyzers>true</EnableNETAnalyzers>
 	  <OutputType>Library</OutputType>
 	  <StartupObject></StartupObject>
+	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

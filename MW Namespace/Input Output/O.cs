@@ -2,6 +2,7 @@
 
 namespace MW.IO
 {
+	/// <summary></summary>
 	public static class O
 	{
 		/// <summary>Identical to Log.P(object[]).</summary>
