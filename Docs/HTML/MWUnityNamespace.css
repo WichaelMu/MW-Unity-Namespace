@@ -31,10 +31,6 @@ body, html{
 
 /* NAV LINKS STYLES */
 
-.ListLeft {
-	width: 200px;
-}
-
 nav {
     background-color: #1c1c1c;
     text-align: left;
@@ -44,7 +40,7 @@ nav {
     background-color: #1c1c1c;
     display: inline-table;
     padding: 15px;
-    width:150px;
+    width:170px;
     margin-right: 20px;
 
     font-weight: 400;
@@ -181,7 +177,7 @@ nav {
   text-align: left;
   padding-left: 5%;
   color: #1FBEB9;
-  text-transform: uppercase;
+  
   font-size:30px;
 }
 
@@ -386,4 +382,11 @@ a {
 
 .big {
   font-size: 150%;
+}
+
+.keyword {
+	color: #1FBEB9;
+	text-transform: uppercase;
+	padding-left: 2%;
+	font-weight: 500;
 }
