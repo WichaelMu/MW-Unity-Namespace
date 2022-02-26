@@ -10,21 +10,21 @@ namespace MW.Audio
 	{
 		/// <summary>The source of this sound.</summary>
 		[Tooltip("The source of this sound.")]
-		public AudioClip ACSource;
+		public AudioClip Source;
 		/// <summary>The name of this sound.</summary>
 		[Tooltip("The name of the sound.")]
 		public string Name;
 
 		/// <summary>Sound settings.</summary>
 		[Range(0f, 1f)]
-		public float fVolume = 1, fPitch = 1;
+		public float Volume = 1, Pitch = 1;
 
 		/// <summary>Should this sound loop?</summary>
 		[Tooltip("Should this audio clip loop?")]
 		public bool bLoop;
 
 		[HideInInspector]
-		public AudioSource ASSound;
+		public AudioSource AudioSource;
 	}
 
 	/// <summary>The Audio controller for in-game sounds.</summary>
@@ -64,39 +64,39 @@ namespace MW.Audio
 			if (!bMuteAllByDefault)
 				foreach (MSound s in Sounds)
 				{
-					s.ASSound = gameObject.AddComponent<AudioSource>();
-					s.ASSound.clip = s.ACSource;
-					s.ASSound.volume = s.fVolume;
-					s.ASSound.pitch = s.fPitch;
-					s.ASSound.loop = s.bLoop;
+					s.AudioSource = gameObject.AddComponent<AudioSource>();
+					s.AudioSource.clip = s.Source;
+					s.AudioSource.volume = s.Volume;
+					s.AudioSource.pitch = s.Pitch;
+					s.AudioSource.loop = s.bLoop;
 				}
 		}
 
 		/// <summary>Plays sound of name n.</summary>
-		/// <param name="sName">The name of the requested sound to play.</param>
+		/// <param name="Name">The name of the requested sound to play.</param>
 		/// <param name="bOverlapSound"></param>
-		public void Play(string sName, bool bOverlapSound = false)
+		public void Play(string Name, bool bOverlapSound = false)
 		{
 			if (bMuteAllByDefault)
 				return;
-			MSound s = Find(sName);
+			MSound s = Find(Name);
 			if (s != null && (bOverlapSound || !IsPlaying(s)))
-				s.ASSound.Play();
+				s.AudioSource.Play();
 			if (s == null)
-				Log.W(kErr1 + sName + kErr2 + "played!");
+				Log.W(kErr1 + Name + kErr2 + "played!");
 		}
 
 		/// <summary>Stops sound of name n.</summary>
-		/// <param name="sName">The name of the requested sound to stop playing.</param>
-		public void Stop(string sName)
+		/// <param name="Name">The name of the requested sound to stop playing.</param>
+		public void Stop(string Name)
 		{
 			if (bMuteAllByDefault)
 				return;
-			MSound s = Find(sName);
+			MSound s = Find(Name);
 			if (s != null && IsPlaying(s))
-				s.ASSound.Stop();
+				s.AudioSource.Stop();
 			if (s == null)
-				Log.W(kErr1 + sName + kErr2 + "stopped!");
+				Log.W(kErr1 + Name + kErr2 + "stopped!");
 		}
 
 		/// <summary>Stop every sound in the game.</summary>
@@ -105,24 +105,24 @@ namespace MW.Audio
 			if (bMuteAllByDefault)
 				return;
 			foreach (MSound s in Sounds)
-				s.ASSound.Stop();
+				s.AudioSource.Stop();
 		}
 
 		/// <summary>Returns a sound in the Sounds array.</summary>
-		/// <param name="n">The name of the requested sound.</param>
+		/// <param name="Name">The name of the requested sound.</param>
 		/// <returns>The MSound of the requested sound.</returns>
 
-		public MSound Find(string n) => Array.Find(Sounds, sound => sound.Name == n);
+		public MSound Find(string Name) => Array.Find(Sounds, sound => sound.Name == Name);
 
 		/// <summary>Whether or not sound of name n is playing.</summary>
-		/// <param name="sName">The name of the sound to query.</param>
-		public bool IsPlaying(string sName)
+		/// <param name="Name">The name of the sound to query.</param>
+		public bool IsPlaying(string Name)
 		{
 			if (bMuteAllByDefault)
 				return false;
-			return Find(sName).ASSound.isPlaying;
+			return Find(Name).AudioSource.isPlaying;
 		}
 
-		static bool IsPlaying(MSound s) => s.ASSound.isPlaying;
+		static bool IsPlaying(MSound s) => s.AudioSource.isPlaying;
 	}
 }

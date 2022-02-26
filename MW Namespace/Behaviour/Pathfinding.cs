@@ -12,24 +12,24 @@ namespace MW.Pathfinding
 		/// <param name="Origin">T position to begin pathfinding.</param>
 		/// <param name="Destination">T position to pathfind to.</param>
 		/// <param name="Path">Reference T List of that make up the path from Origin to Destination.</param>
-		/// <param name="uDepth">The depth to search to.</param>
-		/// <param name="uMapSize">The total size of the map to be traversed. (The number of INodes).</param>
+		/// <param name="Depth">The depth to search to.</param>
+		/// <param name="MapSize">The total size of the map to be traversed. (The number of INodes).</param>
 		/// <param name="OnPathFound">What to do when a path is found? Passes the reference successful Path as a parameter.</param>
 		/// <param name="OnPathFailed">What to do when a path cannot be found? Passes the current state of the Path as a parameter.</param>
 		/// <param name="bUseDiagnostics">Time the duration of Pathfinding?</param>
 		/// <returns>Whether or not a path was found from Origin to Destination within uDepth in uMapSize.</returns>
-		public static bool AStar(T Origin, T Destination, out List<T> Path, uint uDepth = int.MaxValue, uint uMapSize = 10000, Action<List<T>> OnPathFound = null, Action<List<T>> OnPathFailed = null, bool bUseDiagnostics = false)
+		public static bool AStar(T Origin, T Destination, out List<T> Path, uint Depth = int.MaxValue, uint MapSize = 10000, Action<List<T>> OnPathFound = null, Action<List<T>> OnPathFailed = null, bool bUseDiagnostics = false)
 		{
 			Stopwatch sw = new(bUseDiagnostics);
 
 			Path = new ();
 			bool bFoundPath = false;
 
-			THeap<T> Open = new (uMapSize);
+			THeap<T> Open = new (MapSize);
 			HashSet<T> Closed = new ();
 			Open.Add(Origin);
 
-			while (Open.Count > 0 && !bFoundPath && uDepth-- != 0)
+			while (Open.Count > 0 && !bFoundPath && Depth-- != 0)
 			{
 				T Current = Open.RemoveFirst();
 				Closed.Add(Current);
@@ -292,8 +292,8 @@ namespace MW.Pathfinding
 		/// <summary>Is this block traversable?</summary>
 		bool IsTraversable();
 		/// <summary>Get the Neighbouring Node at uDirection.</summary>
-		/// <param name="uDirection">The neighbour of this Node in this direction.</param>
-		INode<T> Neighbour(uint uDirection);
+		/// <param name="Direction">The neighbour of this Node in this direction.</param>
+		INode<T> Neighbour(uint Direction);
 		/// <summary>The distance heuristic to calculate pathfinding scores.</summary>
 		/// <param name="RelativeTo">Distance to from this T to Relative To.</param>
 		/// <returns>An indicative distance from this T, Relative To.</returns>

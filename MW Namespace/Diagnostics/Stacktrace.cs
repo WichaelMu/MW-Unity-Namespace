@@ -9,10 +9,10 @@ namespace MW.Diagnostics
 	{
 
 		/// <summary>Stacktrace using Log.P with EVerbosity verbosity.</summary>
-		/// <param name="verbosity">The EVerbosity verbosity of the Log.P.</param>
-		public static void Here(EVerbosity verbosity = EVerbosity.Log)
+		/// <param name="Verbosity">The EVerbosity verbosity of the Log.P.</param>
+		public static void Here(EVerbosity Verbosity = EVerbosity.Log)
 		{
-			switch (verbosity)
+			switch (Verbosity)
 			{
 				case EVerbosity.Log:
 					Log.P(Environment.StackTrace);
@@ -27,13 +27,13 @@ namespace MW.Diagnostics
 		}
 
 		/// <summary>Stacktrace using Log.P with EVerbosity verbosity and a string message.</summary>
-		/// <param name="sMessage">The string message to show.</param>
-		/// <param name="verbosity">The EVerbosity of the Log.P.</param>
-		public static void Here(string sMessage, EVerbosity verbosity = EVerbosity.Log)
+		/// <param name="Message">The string message to show.</param>
+		/// <param name="Verbosity">The EVerbosity of the Log.P.</param>
+		public static void Here(string Message, EVerbosity Verbosity = EVerbosity.Log)
 		{
-			string stacktrace = sMessage + ' ' + Environment.StackTrace;
+			string stacktrace = Message + ' ' + Environment.StackTrace;
 
-			switch (verbosity)
+			switch (Verbosity)
 			{
 				case EVerbosity.Log:
 					Log.P(stacktrace);

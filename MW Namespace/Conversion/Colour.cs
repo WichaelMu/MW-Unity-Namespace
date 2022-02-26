@@ -7,148 +7,147 @@ namespace MW.Conversion
 	{
 
 		/// <summary>The corresponding colour in RGA using Vector3.</summary>
-		/// <param name="vColour">The RGB/XYZ channel values, respectively.</param>
-		public static Color Colour255(Vector3 vColour)
+		/// <param name="Colour">The RGB/XYZ channel values, respectively.</param>
+		public static Color Colour255(Vector3 Colour)
 		{
-			vColour *= Utils.k1To255RGB;
+			Colour *= Utils.k1To255RGB;
 
 			for (int i = 0; i < 3; i++)
-				vColour[i] = Mathf.Clamp(vColour[i], 0, 255);
+				Colour[i] = Mathf.Clamp(Colour[i], 0, 255);
 
-			return new Color(vColour.x, vColour.y, vColour.z);
+			return new Color(Colour.x, Colour.y, Colour.z);
 		}
 
 		/// <summary>The corresponding colour from 0 - 255 in RGB.</summary>
-		/// <param name="r">The red value.</param>
-		/// <param name="g">The green value.</param>
-		/// <param name="b">The blue value.</param>
-		public static Color Colour255(int r, int g, int b)
+		/// <param name="R">The red value.</param>
+		/// <param name="G">The green value.</param>
+		/// <param name="B">The blue value.</param>
+		public static Color Colour255(int R, int G, int B)
 		{
-
-			float _r = r * Utils.k1To255RGB;
-			float _g = g * Utils.k1To255RGB;
-			float _b = b * Utils.k1To255RGB;
-
-			return new Color(_r, _g, _b);
-		}
-
-		/// <summary>The corresponding colour from 0 - 255 in RGB.</summary>
-		/// <param name="r">The red value.</param>
-		/// <param name="g">The green value.</param>
-		/// <param name="b">The blue value.</param>
-		public static Color Colour255(float r, float g, float b)
-		{
-
-			r *= Utils.k1To255RGB;
-			g *= Utils.k1To255RGB;
-			b *= Utils.k1To255RGB;
+			float r = R * Utils.k1To255RGB;
+			float g = G * Utils.k1To255RGB;
+			float b = B * Utils.k1To255RGB;
 
 			return new Color(r, g, b);
 		}
 
-		/// <summary>The corresponding colour in RGBA using Vector4.</summary>
-		/// <param name="v4Colour">The RGBA/XYZW channel values, respectivaly.</param>
-		public static Color Colour255(Vector4 v4Colour)
+		/// <summary>The corresponding colour from 0 - 255 in RGB.</summary>
+		/// <param name="R">The red value.</param>
+		/// <param name="G">The green value.</param>
+		/// <param name="B">The blue value.</param>
+		public static Color Colour255(float R, float G, float B)
 		{
-			v4Colour *= Utils.k1To255RGB;
+
+			R *= Utils.k1To255RGB;
+			G *= Utils.k1To255RGB;
+			B *= Utils.k1To255RGB;
+
+			return new Color(R, G, B);
+		}
+
+		/// <summary>The corresponding colour in RGBA using Vector4.</summary>
+		/// <param name="ColourWithAlpha">The RGBA/XYZW channel values, respectivaly.</param>
+		public static Color Colour255(Vector4 ColourWithAlpha)
+		{
+			ColourWithAlpha *= Utils.k1To255RGB;
 
 			for (int i = 0; i < 4; i++)
-				v4Colour[i] = Mathf.Clamp(v4Colour[i], 0, 255);
+				ColourWithAlpha[i] = Mathf.Clamp(ColourWithAlpha[i], 0, 255);
 
-			return new Color(v4Colour.x, v4Colour.y, v4Colour.z, v4Colour.w);
+			return new Color(ColourWithAlpha.x, ColourWithAlpha.y, ColourWithAlpha.z, ColourWithAlpha.w);
 		}
 
 		/// <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
-		/// <param name="r">The red value.</param>
-		/// <param name="g">The green value.</param>
-		/// <param name="b">The blue value.</param>
-		/// <param name="a">The alpha value.</param>
-		public static Color Colour255(int r, int g, int b, int a)
+		/// <param name="R">The red value.</param>
+		/// <param name="G">The green value.</param>
+		/// <param name="B">The blue value.</param>
+		/// <param name="A">The alpha value.</param>
+		public static Color Colour255(int R, int G, int B, int A)
 		{
 
-			float _r = r * Utils.k1To255RGB;
-			float _g = g * Utils.k1To255RGB;
-			float _b = b * Utils.k1To255RGB;
-			float _a = a * Utils.k1To255RGB;
-
-			return new Color(_r, _g, _b, _a);
-		}
-
-		/// <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
-		/// <param name="r">The red value.</param>
-		/// <param name="g">The green value.</param>
-		/// <param name="b">The blue value.</param>
-		/// <param name="a">The alpha value.</param>
-		public static Color Colour255(float r, float g, float b, float a)
-		{
-
-			r *= Utils.k1To255RGB;
-			g *= Utils.k1To255RGB;
-			b *= Utils.k1To255RGB;
-			a *= Utils.k1To255RGB;
+			float r = R * Utils.k1To255RGB;
+			float g = G * Utils.k1To255RGB;
+			float b = B * Utils.k1To255RGB;
+			float a = A * Utils.k1To255RGB;
 
 			return new Color(r, g, b, a);
 		}
 
-		///<summary>Converts a hexadecimal to its corresponding colour.</summary>
-		/// <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-		public static Color ColourHex(string sHex)
+		/// <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
+		/// <param name="R">The red value.</param>
+		/// <param name="G">The green value.</param>
+		/// <param name="B">The blue value.</param>
+		/// <param name="A">The alpha value.</param>
+		public static Color Colour255(float R, float G, float B, float A)
 		{
 
-			if (sHex[0] != '#')
+			R *= Utils.k1To255RGB;
+			G *= Utils.k1To255RGB;
+			B *= Utils.k1To255RGB;
+			A *= Utils.k1To255RGB;
+
+			return new Color(R, G, B, A);
+		}
+
+		///<summary>Converts a hexadecimal to its corresponding colour.</summary>
+		/// <param name="Hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+		public static Color ColourHex(string Hex)
+		{
+
+			if (Hex[0] != '#')
 			{
 				Debug.LogWarning("Please use '#' to denote Hex.\nReturning White by default.");
 				return Color.white;
 			}
 
-			if (sHex.Length > 7)
+			if (Hex.Length > 7)
 			{
 				Debug.LogWarning("Please use the format: '#RRGGBB' for hex to colour conversion.\nReturning White by default");
 				return Color.white;
 			}
 
-			int nH1 = int.Parse(sHex[1] + "" + sHex[2] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH2 = int.Parse(sHex[3] + "" + sHex[4] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH3 = int.Parse(sHex[5] + "" + sHex[6] + "", System.Globalization.NumberStyles.HexNumber);
+			int R = int.Parse(Hex[1] + "" + Hex[2] + "", System.Globalization.NumberStyles.HexNumber);
+			int G = int.Parse(Hex[3] + "" + Hex[4] + "", System.Globalization.NumberStyles.HexNumber);
+			int B = int.Parse(Hex[5] + "" + Hex[6] + "", System.Globalization.NumberStyles.HexNumber);
 
 			Vector3 V = new Vector3
 			{
-				x = nH1,
-				y = nH2,
-				z = nH3
+				x = R,
+				y = G,
+				z = B
 			};
 
 			return Colour255(V);
 		}
 
 		/// <summary>The corresponding hexadecimal and alpha colour.</summary>
-		/// <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-		/// <param name="fAlpha">The float alpha.</param>
-		public static Color ColourHex(string sHex, float fAlpha)
+		/// <param name="Hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+		/// <param name="Alpha">The float alpha.</param>
+		public static Color ColourHex(string Hex, float Alpha)
 		{
 
-			if (sHex[0] != '#')
+			if (Hex[0] != '#')
 			{
 				Debug.LogWarning("Please use '#' to denote Hex.\nReturning White by default.");
 				return Color.white;
 			}
 
-			if (sHex.Length > 7)
+			if (Hex.Length > 7)
 			{
 				Debug.LogWarning("Please use the format: '#RRGGBB' for hex to colour conversion.\nReturning White by default");
 				return Color.white;
 			}
 
-			int nH1 = int.Parse(sHex[1] + "" + sHex[2] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH2 = int.Parse(sHex[3] + "" + sHex[4] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH3 = int.Parse(sHex[5] + "" + sHex[6] + "", System.Globalization.NumberStyles.HexNumber);
+			int R = int.Parse(Hex[1] + "" + Hex[2] + "", System.Globalization.NumberStyles.HexNumber);
+			int G = int.Parse(Hex[3] + "" + Hex[4] + "", System.Globalization.NumberStyles.HexNumber);
+			int B = int.Parse(Hex[5] + "" + Hex[6] + "", System.Globalization.NumberStyles.HexNumber);
 
 			Vector4 V = new Vector4
 			{
-				x = nH1,
-				y = nH2,
-				z = nH3,
-				w = fAlpha
+				x = R,
+				y = G,
+				z = B,
+				w = Alpha
 			};
 
 			return Colour255(V);
@@ -156,54 +155,54 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding hexadecimal colour and hexadecimal alpha.</summary>
-		/// <param name="sHex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
-		/// <param name="sAlpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
-		public static Color ColourHex(string sHex, string sAlpha)
+		/// <param name="Hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
+		/// <param name="Alpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
+		public static Color ColourHex(string Hex, string Alpha)
 		{
 
-			if (sHex[0] != '#' || sAlpha[0] != '#')
+			if (Hex[0] != '#' || Alpha[0] != '#')
 			{
 				Debug.LogWarning("Please use '#' to denote Hex.\nReturning White by default.");
 				return Color.white;
 			}
 
-			if (sHex.Length > 7)
+			if (Hex.Length > 7)
 			{
 				Debug.LogWarning("Please use the format: '#RRGGBB' for hex to colour conversion.\nReturning White by default");
 				return Color.white;
 			}
 
-			if (sAlpha.Length > 3)
+			if (Alpha.Length > 3)
 			{
 				Debug.LogWarning("Please use the format: '#AA' for hex to alpha conversion.\nReturning White by default");
 				return Color.white;
 			}
 
-			int nH1 = int.Parse(sHex[1] + "" + sHex[2] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH2 = int.Parse(sHex[3] + "" + sHex[4] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH3 = int.Parse(sHex[5] + "" + sHex[6] + "", System.Globalization.NumberStyles.HexNumber);
-			int nH4 = int.Parse(sAlpha[1] + "" + sAlpha[2] + "", System.Globalization.NumberStyles.HexNumber);
+			int R = int.Parse(Hex[1] + "" + Hex[2] + "", System.Globalization.NumberStyles.HexNumber);
+			int G = int.Parse(Hex[3] + "" + Hex[4] + "", System.Globalization.NumberStyles.HexNumber);
+			int B = int.Parse(Hex[5] + "" + Hex[6] + "", System.Globalization.NumberStyles.HexNumber);
+			int A = int.Parse(Alpha[1] + "" + Alpha[2] + "", System.Globalization.NumberStyles.HexNumber);
 
 			Vector4 V = new Vector4
 			{
-				x = nH1,
-				y = nH2,
-				z = nH3,
-				w = nH4
+				x = R,
+				y = G,
+				z = B,
+				w = A
 			};
 
 			return Colour255(V);
 
 		}
 
-		public static Vector3 VColour(Color CColour)
+		public static Vector3 VColour(Color Colour)
 		{
-			return new Vector3(CColour.r / Utils.k1To255RGB, CColour.g / Utils.k1To255RGB, CColour.b / Utils.k1To255RGB);
+			return new Vector3(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB);
 		}
 
-		public static Vector4 VColourA(Color CColour)
+		public static Vector4 VColourA(Color Colour)
 		{
-			return new Vector4(CColour.r / Utils.k1To255RGB, CColour.g / Utils.k1To255RGB, CColour.b / Utils.k1To255RGB, CColour.a / Utils.k1To255RGB);
+			return new Vector4(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB, Colour.a / Utils.k1To255RGB);
 		}
 	}
 }

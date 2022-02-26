@@ -6,21 +6,21 @@ namespace MW.Kinetic
 	public static class Miscellanous {
 
         /// <summary>The direction in which to avoid colliding with obstacles.</summary>
-        /// <param name="ASelf">The transform wanting to avoid collisions.</param>
-        /// <param name="fAngle">The angle to search for potential collisions.</param>
-        /// <param name="fSearchDistance">The distance to search for collisions.</param>
-        /// <param name="lmObstacles">The layer to avoid colliding with.</param>
+        /// <param name="Self">The transform wanting to avoid collisions.</param>
+        /// <param name="Angle">The angle to search for potential collisions.</param>
+        /// <param name="SearchDistance">The distance to search for collisions.</param>
+        /// <param name="Obstacles">The layer to avoid colliding with.</param>
         /// <param name="bDebug">[EDITOR ONLY] Draw lines of the collision avoidance search. Red is the closest collision. Blue is the moving forward direction.</param>
-        public static Vector3 CollisionAvoidance(Transform ASelf, float fAngle, float fSearchDistance, LayerMask lmObstacles, bool bDebug) {
-            Collider[] colliders = Physics.OverlapSphere(ASelf.position, fSearchDistance, lmObstacles);
+        public static Vector3 CollisionAvoidance(Transform Self, float Angle, float SearchDistance, LayerMask Obstacles, bool bDebug) {
+            Collider[] colliders = Physics.OverlapSphere(Self.position, SearchDistance, Obstacles);
 
             float min = float.MaxValue;
-            Vector3 dir = ASelf.forward;
+            Vector3 dir = Self.forward;
 
             for (int i = 0; i < colliders.Length; i++) {
-                Vector3 closestPoint = colliders[i].ClosestPoint(ASelf.position);
-                if (Utils.InFOV(EDirection.Forward, ASelf, closestPoint, fAngle)) {
-                    float distance = Vector3.Distance(ASelf.position, closestPoint);
+                Vector3 closestPoint = colliders[i].ClosestPoint(Self.position);
+                if (Utils.InFOV(EDirection.Forward, Self, closestPoint, Angle)) {
+                    float distance = Vector3.Distance(Self.position, closestPoint);
                     if (distance < min) {
                         min = distance;
                         dir = closestPoint;
@@ -29,13 +29,13 @@ namespace MW.Kinetic
             }
 
 
-            Vector3 flipped = Vector3.Reflect(ASelf.forward, (dir - ASelf.position).normalized);
+            Vector3 flipped = Vector3.Reflect(Self.forward, (dir - Self.position).normalized);
 
-            Physics.Raycast(ASelf.position, flipped, out RaycastHit hit, 500000f, lmObstacles);
+            Physics.Raycast(Self.position, flipped, out RaycastHit hit, 500000f, Obstacles);
 
             if (bDebug) {
-                Debug.DrawRay(ASelf.position, (dir - ASelf.position).normalized * fSearchDistance, Color.red);
-                Debug.DrawRay(ASelf.position, (flipped - ASelf.position).normalized, Color.blue);
+                Debug.DrawRay(Self.position, (dir - Self.position).normalized * SearchDistance, Color.red);
+                Debug.DrawRay(Self.position, (flipped - Self.position).normalized, Color.blue);
             }
 
             return hit.point;

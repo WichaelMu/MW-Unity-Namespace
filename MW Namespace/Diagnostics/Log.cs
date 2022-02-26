@@ -18,39 +18,39 @@ namespace MW.Diagnostics
 	public class Log
 	{
 		/// <summary>UnityEngine.Debug.Log(object) every object with object.ToString().</summary>
-		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void P(params object[] debug)
+		/// <param name="args">The list of objects to log separated by a space.</param>
+		public static void P(params object[] args)
 		{
 			string print = "";
-			for (int i = 0; i < debug.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
-				print += debug[i].ToString() + ' ';
+				print += args[i].ToString() + ' ';
 			}
 
 			UnityEngine.Debug.Log(print);
 		}
 
 		/// <summary>UnityEngine.Debug.LogError(object) every object with object.ToString().</summary>
-		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void E(params object[] debug)
+		/// <param name="args">The list of objects to log separated by a space.</param>
+		public static void E(params object[] args)
 		{
 			string print = "";
-			for (int i = 0; i < debug.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
-				print += debug[i].ToString() + ' ';
+				print += args[i].ToString() + ' ';
 			}
 
 			UnityEngine.Debug.LogError(print);
 		}
 
 		/// <summary>UnityEngine.Debug.LogWarning(object) every object with object.ToString().</summary>
-		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void W(params object[] debug)
+		/// <param name="args">The list of objects to log separated by a space.</param>
+		public static void W(params object[] args)
 		{
 			string print = "";
-			for (int i = 0; i < debug.Length; ++i)
+			for (int i = 0; i < args.Length; ++i)
 			{
-				print += debug[i].ToString() + ' ';
+				print += args[i].ToString() + ' ';
 			}
 
 			UnityEngine.Debug.LogWarning(print);

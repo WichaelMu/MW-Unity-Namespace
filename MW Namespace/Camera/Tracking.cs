@@ -6,96 +6,96 @@ namespace MW.CameraUtils
 	public static class Tracking
 	{
 		/// <summary>Have the camera follow target's transform.</summary>
-		/// <param name="CCamera">The camera to move.</param>
-		/// <param name="ATarget">The target's transform component.</param>
-		public static void CameraFollow(Camera CCamera, Transform ATarget)
+		/// <param name="ReferenceCamera">The camera to move.</param>
+		/// <param name="Target">The target's transform component.</param>
+		public static void CameraFollow(Camera ReferenceCamera, Transform Target)
 		{
-			CCamera.transform.position += ATarget.position;
+			ReferenceCamera.transform.position += Target.position;
 		}
 
 		/// <summary>Have the camera to follow target's transform at an offset.</summary>
-		/// <param name="CCamera">The camera to move.</param>
-		/// <param name="ATarget">The target's transform component.</param>
-		/// <param name="vOffset">The target's position at an offset.</param>
-		public static void CameraFollow(Camera CCamera, Transform ATarget, Vector3 vOffset)
+		/// <param name="ReferenceCamera">The camera to move.</param>
+		/// <param name="Target">The target's transform component.</param>
+		/// <param name="Offset">The target's position at an offset.</param>
+		public static void CameraFollow(Camera ReferenceCamera, Transform Target, Vector3 Offset)
 		{
-			CCamera.transform.position += ATarget.position + vOffset;
+			ReferenceCamera.transform.position += Target.position + Offset;
 		}
 
 		/// <summary>Have the camera follow target's position.</summary>
-		/// <param name="CCamera">The camera to move.</param>
-		/// <param name="vTarget">The target's position to follow.</param>
-		public static void CameraFollow(Camera CCamera, Vector3 vTarget)
+		/// <param name="ReferenceCamera">The camera to move.</param>
+		/// <param name="Target">The target's position to follow.</param>
+		public static void CameraFollow(Camera ReferenceCamera, Vector3 Target)
 		{
-			CCamera.transform.position += vTarget;
+			ReferenceCamera.transform.position += Target;
 		}
 
 		/// <summary>Have the camera follow target's position at an offset.</summary>
-		/// <param name="CCamera">The camera to move.</param>
-		/// <param name="vTarget">The target's position to follow.</param>
-		/// <param name="vOffset">The target's position at an offset.</param>
-		public static void CameraFollow(Camera CCamera, Vector3 vTarget, Vector3 vOffset)
+		/// <param name="ReferenceCamera">The camera to move.</param>
+		/// <param name="Target">The target's position to follow.</param>
+		/// <param name="Offset">The target's position at an offset.</param>
+		public static void CameraFollow(Camera ReferenceCamera, Vector3 Target, Vector3 Offset)
 		{
-			CCamera.transform.position += vTarget + vOffset;
+			ReferenceCamera.transform.position += Target + Offset;
 		}
 
 		/// <summary>Have the main camera follow target's transform.</summary>
-		public static void CameraFollow(Transform ATarget)
+		public static void CameraFollow(Transform Target)
 		{
-			Camera.main.transform.position = ATarget.position;
+			Camera.main.transform.position = Target.position;
 		}
 
 		/// <summary>Have the main camera follow target's transform at an offset.</summary>
-		/// <param name="ATarget">The target's transform component.</param>
-		/// <param name="vOffset">The target's position at an offset.</param>
-		public static void CameraFollow(Transform ATarget, Vector3 vOffset)
+		/// <param name="Target">The target's transform component.</param>
+		/// <param name="Offset">The target's position at an offset.</param>
+		public static void CameraFollow(Transform Target, Vector3 Offset)
 		{
-			Camera.main.transform.position = ATarget.position + vOffset;
+			Camera.main.transform.position = Target.position + Offset;
 		}
 
 		/// <summary>Have the main camera follow target's position.</summary>
-		public static void CameraFollow(Vector3 vTarget)
+		public static void CameraFollow(Vector3 Target)
 		{
-			Camera.main.transform.position = vTarget;
+			Camera.main.transform.position = Target;
 		}
 
 		/// <summary>Have the main camera follow target's position at an offset.</summary>
-		/// <param name="vTarget">The target's position.</param>
-		/// <param name="vOffset">The target's position at an offset.</param>
-		public static void CameraFollow(Vector3 vTarget, Vector3 vOffset)
+		/// <param name="Target">The target's position.</param>
+		/// <param name="Offset">The target's position at an offset.</param>
+		public static void CameraFollow(Vector3 Target, Vector3 Offset)
 		{
-			Camera.main.transform.position = vTarget + vOffset;
+			Camera.main.transform.position = Target + Offset;
 		}
 
 		/// <summary>Ensures the transform always faces the main camera.</summary>
-		/// <param name="ASelf">The transform to look towards the main camera.</param>
-		public static void Billboard(Transform ASelf)
+		/// <param name="Self">The transform to look towards the main camera.</param>
+		public static void Billboard(Transform Self)
 		{
-			ASelf.LookAt(ASelf.position + Camera.main.transform.rotation * Vector3.forward, Vector3.up);
+			Self.LookAt(Self.position + Camera.main.transform.rotation * Vector3.forward, Vector3.up);
 		}
 
 		/// <summary>Ensures the transform always faces camera.</summary>
-		/// <param name="ASelf">The transform to look towards the camera.</param>
-		/// <param name="CCamera">The camera to look at.</param>
-		public static void Billboard(Transform ASelf, Camera CCamera)
+		/// <param name="Self">The transform to look towards the camera.</param>
+		/// <param name="ReferenceCamera">The camera to look at.</param>
+		public static void Billboard(Transform Self, Camera ReferenceCamera)
 		{
-			ASelf.LookAt(ASelf.position + CCamera.transform.rotation * Vector3.forward, Vector3.up);
+			Self.LookAt(Self.position + ReferenceCamera.transform.rotation * Vector3.forward, Vector3.up);
 		}
 
 		/// <summary>Ensures the transform always faces point.</summary>
-		/// <param name="ASelf">The transform to look towards the point.</param>
-		/// <param name="APoint">The transform of where self needs to look towards</param>
-		public static void Billboard(Transform ASelf, Transform APoint)
+		/// <param name="Self">The transform to look towards the point.</param>
+		/// <param name="Point">The transform of where self needs to look towards</param>
+		public static void Billboard(Transform Self, Transform Point)
 		{
-			ASelf.LookAt(APoint);
+			Self.LookAt(Point);
 		}
 
 		/// <summary>Ensures the transform always faces point.</summary>
-		/// <param name="ASelf">The transform to look towards the point.</param>
-		/// <param name="vPoint">The point in world coordinates.</param>
-		public static void Billboard(Transform ASelf, Vector3 vPoint)
+		/// <param name="Self">The transform to look towards the point.</param>
+		/// <param name="Point">The point in world coordinates.</param>
+		public static void Billboard(Transform Self, Vector3 Point)
 		{
-			ASelf.LookAt(vPoint);
+			Self.LookAt(Point);
 		}
 	}
 }

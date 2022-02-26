@@ -5,100 +5,100 @@
 	public class THeap<T> where T : IHeapItem<T>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
-		T[] TItems;
-		int nCount;
+		T[] Internal_Items;
+		int Internal_Count;
 
 		/// <summary>The number of elements in the heap.</summary>
 		public int Count
 		{
 			get
 			{
-				return nCount;
+				return Internal_Count;
 			}
 		}
 
 		/// <summary>Generates a new Heap, initialised with uMaxSize.</summary>
-		/// <param name="uMaxSize"></param>
-		public THeap(uint uMaxSize)
+		/// <param name="MaxSize"></param>
+		public THeap(uint MaxSize)
 		{
-			TItems = new T[uMaxSize];
+			Internal_Items = new T[MaxSize];
 		}
 
 		/// <summary>Adds an item to this Heap.</summary>
-		/// <param name="TItem">The item to add.</param>
-		public void Add(T TItem)
+		/// <param name="Item">The item to add.</param>
+		public void Add(T Item)
 		{
-			TItem.HeapItemIndex = nCount;
-			TItems[nCount] = TItem;
+			Item.HeapItemIndex = Internal_Count;
+			Internal_Items[Internal_Count] = Item;
 
-			SortUp(TItem);
-			nCount++;
+			SortUp(Item);
+			Internal_Count++;
 		}
 
 		/// <summary>Remove the element at the root of this Heap.</summary>
 		/// <returns>The element that was removed.</returns>
 		public T RemoveFirst()
 		{
-			T T_ = TItems[0];
-			nCount--;
+			T T_ = Internal_Items[0];
+			Internal_Count--;
 
-			TItems[0] = TItems[nCount];
-			TItems[0].HeapItemIndex = 0;
-			SortDown(TItems[0]);
+			Internal_Items[0] = Internal_Items[Internal_Count];
+			Internal_Items[0].HeapItemIndex = 0;
+			SortDown(Internal_Items[0]);
 
 			return T_;
 		}
 
 		/// <summary>Updates Item's position in the Heap.</summary>
-		/// <param name="TItem">The item to update.</param>
-		public void UpdateItem(T TItem)
+		/// <param name="Item">The item to update.</param>
+		public void UpdateItem(T Item)
 		{
-			SortUp(TItem);
-			SortDown(TItem);
+			SortUp(Item);
+			SortDown(Item);
 		}
 
 		/// <summary>Sorts this Item upawrds.</summary>
-		/// <param name="TItem">The item to update.</param>
-		public void UpdateItemUp(T TItem)
+		/// <param name="Item">The item to update.</param>
+		public void UpdateItemUp(T Item)
 		{
-			SortUp(TItem);
+			SortUp(Item);
 		}
 
 		/// <summary>Sorts this Item downwards.</summary>
-		/// <param name="TItem">The item to update.</param>
-		public void UpdateItemDown(T TItem)
+		/// <param name="Item">The item to update.</param>
+		public void UpdateItemDown(T Item)
 		{
-			SortDown(TItem);
+			SortDown(Item);
 		}
 
 		/// <summary>Whether or not this Heap contains Item.</summary>
-		/// <param name="TItem">The Item to check.</param>
+		/// <param name="Item">The Item to check.</param>
 		/// <returns>True if Item exists in this Heap.</returns>
-		public bool Contains(T TItem) => Equals(TItems[TItem.HeapItemIndex], TItem);
+		public bool Contains(T Item) => Equals(Internal_Items[Item.HeapItemIndex], Item);
 
-		void SortDown(T TItem)
+		void SortDown(T Item)
 		{
 			while (true)
 			{
-				int nLeft = TItem.HeapItemIndex * 2 + 1;
-				int nRight = TItem.HeapItemIndex * 2 + 2;
+				int nLeft = Item.HeapItemIndex * 2 + 1;
+				int nRight = Item.HeapItemIndex * 2 + 2;
 				int nSwap;
 
-				if (nLeft < nCount)
+				if (nLeft < Internal_Count)
 				{
 					nSwap = nLeft;
 
-					if (nRight < nCount)
+					if (nRight < Internal_Count)
 					{
-						if (TItems[nLeft].CompareTo(TItems[nRight]) < 0)
+						if (Internal_Items[nLeft].CompareTo(Internal_Items[nRight]) < 0)
 						{
 							nSwap = nRight;
 						}
 					}
 
-					if (TItem.CompareTo(TItems[nSwap]) < 0)
+					if (Item.CompareTo(Internal_Items[nSwap]) < 0)
 					{
-						Swap(TItem, TItems[nSwap]);
+						Swap(Item, Internal_Items[nSwap]);
 					}
 					else
 					{
@@ -112,35 +112,35 @@
 			}
 		}
 
-		void SortUp(T TItem)
+		void SortUp(T Item)
 		{
-			int nParent = (TItem.HeapItemIndex - 1) / 2;
+			int nParent = (Item.HeapItemIndex - 1) / 2;
 
 			while (true)
 			{
-				T TParent = TItems[nParent];
+				T TParent = Internal_Items[nParent];
 
-				if (TItem.CompareTo(TParent) > 0)
+				if (Item.CompareTo(TParent) > 0)
 				{
-					Swap(TItem, TParent);
+					Swap(Item, TParent);
 				}
 				else
 				{
 					break;
 				}
 
-				nParent = (TItem.HeapItemIndex - 1) / 2;
+				nParent = (Item.HeapItemIndex - 1) / 2;
 			}
 		}
 
-		void Swap(T l, T r)
+		void Swap(T T1, T T2)
 		{
-			TItems[l.HeapItemIndex] = r;
-			TItems[r.HeapItemIndex] = l;
+			Internal_Items[T1.HeapItemIndex] = T2;
+			Internal_Items[T2.HeapItemIndex] = T1;
 
-			int _ = l.HeapItemIndex;
-			l.HeapItemIndex = r.HeapItemIndex;
-			r.HeapItemIndex = _;
+			int _ = T1.HeapItemIndex;
+			T1.HeapItemIndex = T2.HeapItemIndex;
+			T2.HeapItemIndex = _;
 		}
 	}
 

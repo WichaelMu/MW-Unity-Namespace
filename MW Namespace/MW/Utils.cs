@@ -37,27 +37,27 @@ namespace MW
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
 		/// <summary>If self can see Transform target within SearchAngle degrees while facing EDirection.</summary>
-		/// <param name="dirFace">The EDirection self is facing.</param>
-		/// <param name="ASelf">The Transform searching for target.</param>
-		/// <param name="ATarget">The Transform to look out for.</param>
-		/// <param name="fSearchAngle">The maximum degrees to search for target.</param>
-		public static bool InFOV(EDirection dirFace, Transform ASelf, Transform ATarget, float fSearchAngle)
+		/// <param name="Face">The EDirection self is facing.</param>
+		/// <param name="Self">The Transform searching for target.</param>
+		/// <param name="Target">The Transform to look out for.</param>
+		/// <param name="SearchAngle">The maximum degrees to search for target.</param>
+		public static bool InFOV(EDirection Face, Transform Self, Transform Target, float SearchAngle)
 		{
 
-			switch (dirFace)
+			switch (Face)
 			{
 				case EDirection.Forward:
-					return Vector3.Angle(ASelf.forward, ATarget.position - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(Self.forward, Target.position - Self.position) < SearchAngle;
 				case EDirection.Right:
-					return Vector3.Angle(ASelf.right, ATarget.position - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(Self.right, Target.position - Self.position) < SearchAngle;
 				case EDirection.Back:
-					return Vector3.Angle(-ASelf.forward, ATarget.position - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(-Self.forward, Target.position - Self.position) < SearchAngle;
 				case EDirection.Left:
-					return Vector3.Angle(-ASelf.right, ATarget.position - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(-Self.right, Target.position - Self.position) < SearchAngle;
 				case EDirection.Up:
-					return Vector3.Angle(ASelf.up, ATarget.position - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(Self.up, Target.position - Self.position) < SearchAngle;
 				case EDirection.Down:
-					return Vector3.Angle(-ASelf.up, ATarget.position - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(-Self.up, Target.position - Self.position) < SearchAngle;
 				default:
 					Debug.LogWarning("There was a problem in determining a face direction");
 					return false;
@@ -65,27 +65,27 @@ namespace MW
 		}
 
 		/// <summary>If self can see Transform target within SearchAngle degrees while facing EDirection.</summary>
-		/// <param name="dirFace">The EDirection self is facing.</param>
-		/// <param name="ASelf">The Transform searching for target.</param>
-		/// <param name="vTarget">The Vector3 position to look out for.</param>
-		/// <param name="fSearchAngle">The maximum degrees to search for target.</param>
-		public static bool InFOV(EDirection dirFace, Transform ASelf, Vector3 vTarget, float fSearchAngle)
+		/// <param name="Face">The EDirection self is facing.</param>
+		/// <param name="Self">The Transform searching for target.</param>
+		/// <param name="Target">The Vector3 position to look out for.</param>
+		/// <param name="SearchAngle">The maximum degrees to search for target.</param>
+		public static bool InFOV(EDirection Face, Transform Self, Vector3 Target, float SearchAngle)
 		{
 
-			switch (dirFace)
+			switch (Face)
 			{
 				case EDirection.Forward:
-					return Vector3.Angle(ASelf.forward, vTarget - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(Self.forward, Target - Self.position) < SearchAngle;
 				case EDirection.Right:
-					return Vector3.Angle(ASelf.right, vTarget - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(Self.right, Target - Self.position) < SearchAngle;
 				case EDirection.Back:
-					return Vector3.Angle(-ASelf.forward, vTarget - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(-Self.forward, Target - Self.position) < SearchAngle;
 				case EDirection.Left:
-					return Vector3.Angle(-ASelf.right, vTarget - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(-Self.right, Target - Self.position) < SearchAngle;
 				case EDirection.Up:
-					return Vector3.Angle(ASelf.up, vTarget - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(Self.up, Target - Self.position) < SearchAngle;
 				case EDirection.Down:
-					return Vector3.Angle(-ASelf.up, vTarget - ASelf.position) < fSearchAngle;
+					return Vector3.Angle(-Self.up, Target - Self.position) < SearchAngle;
 				default:
 					Debug.LogWarning("There was a problem in determining a face direction");
 					return false;
@@ -93,41 +93,41 @@ namespace MW
 		}
 
 		/// <summary>If self has an unobstructed line of sight to to.</summary>
-		/// <param name="vSelf">The Vector3 position to look from.</param>
-		/// <param name="vTo">The Vector3 position to look to.</param>
-		/// <param name="lmObstacles">The LayerMask obstacles to consider obtrusive.</param>
-		public static bool LineOfSight(Vector3 vSelf, Vector3 vTo, LayerMask lmObstacles)
+		/// <param name="Self">The Vector3 position to look from.</param>
+		/// <param name="To">The Vector3 position to look to.</param>
+		/// <param name="Obstacles">The LayerMask obstacles to consider obtrusive.</param>
+		public static bool LineOfSight(Vector3 Self, Vector3 To, LayerMask Obstacles)
 		{
-			return !Physics.Linecast(vSelf, vTo, lmObstacles);
+			return !Physics.Linecast(Self, To, Obstacles);
 		}
 
 		/// <summary>If Vector3 self has an unobstructed line of sight to to.</summary>
-		/// <param name="vSelf">The Vector3 position to look from.</param>
-		/// <param name="vTo">The Vector3 position to look to.</param>
-		public static bool LineOfSight(Vector3 vSelf, Vector3 vTo)
+		/// <param name="Self">The Vector3 position to look from.</param>
+		/// <param name="To">The Vector3 position to look to.</param>
+		public static bool LineOfSight(Vector3 Self, Vector3 To)
 		{
-			return !Physics.Linecast(vSelf, vTo);
+			return !Physics.Linecast(Self, To);
 		}
 
 		///<summary>The fValue rounded to dp decimal places.</summary>
-		/// <param name="fValue">The value to be rounded.</param>
-		/// <param name="nDP">The decimal places to be included.</param>
-		public static float RoundToDP(float fValue, int nDP = 2)
+		/// <param name="Value">The value to be rounded.</param>
+		/// <param name="DecimalPlaces">The decimal places to be included.</param>
+		public static float RoundToDP(float Value, int DecimalPlaces = 2)
 		{
-			if (nDP == 0)
+			if (DecimalPlaces == 0)
 			{
-				Debug.LogWarning("Use Mathf.RoundToInt(" + nameof(fValue) + ") instead.");
-				return Mathf.RoundToInt(fValue);
+				Debug.LogWarning("Use Mathf.RoundToInt(" + nameof(Value) + ") instead.");
+				return Mathf.RoundToInt(Value);
 			}
 
-			if (nDP <= 0)
+			if (DecimalPlaces <= 0)
 			{
 				Debug.LogWarning("Please use a number greater than 0. Rounding to 2 instead.");
-				nDP = 2;
+				DecimalPlaces = 2;
 			}
 
-			float fFactor = Mathf.Pow(10, nDP);
-			return Mathf.Round(fValue * fFactor) / fFactor;
+			float fFactor = Mathf.Pow(10, DecimalPlaces);
+			return Mathf.Round(Value * fFactor) / fFactor;
 		}
 
 		/// <summary>Flip-Flops Bool.</summary>
@@ -139,86 +139,86 @@ namespace MW
 
 		/// <summary>Flip-Flops Bool.</summary>
 		/// <param name="bBool"></param>
-		/// <param name="ACallbackTrue">The method to call if the flip-flop is true.</param>
-		/// <param name="ACallbackFalse">The method to call if the flip-flop is false.</param>
-		public static void FlipFlop(ref bool bBool, Action ACallbackTrue, Action ACallbackFalse)
+		/// <param name="CallbackTrue">The method to call if the flip-flop is true.</param>
+		/// <param name="CallbackFalse">The method to call if the flip-flop is false.</param>
+		public static void FlipFlop(ref bool bBool, Action CallbackTrue, Action CallbackFalse)
 		{
 			bBool = !bBool;
 
 			if (bBool)
-				ACallbackTrue();
+				CallbackTrue();
 			else
-				ACallbackFalse();
+				CallbackFalse();
 		}
 
 		/// <summary>If value is within the +- limit of from.</summary>
-		/// <param name="fValue">The value to check.</param>
-		/// <param name="fFrom">The value to compare.</param>
-		/// <param name="fLimit">The limits to consider.</param>
-		public static bool IsWithin(float fValue, float fFrom, float fLimit)
+		/// <param name="Value">The value to check.</param>
+		/// <param name="From">The value to compare.</param>
+		/// <param name="Limit">The limits to consider.</param>
+		public static bool IsWithin(float Value, float From, float Limit)
 		{
-			if (fLimit == 0)
+			if (Limit == 0)
 			{
 				Debug.LogWarning("Use the '== 0' comparison operator instead.");
-				return fValue == fFrom;
+				return Value == From;
 			}
-			if (fLimit < 0)
+			if (Limit < 0)
 			{
 				Debug.LogWarning("Please use a positive number");
-				fLimit = Mathf.Abs(fLimit);
+				Limit = Mathf.Abs(Limit);
 			}
 
-			return fFrom + fLimit > fValue && fValue > fFrom - fLimit;
+			return From + Limit > Value && Value > From - Limit;
 		}
 
 		/// <summary>The largest Vector3 between L and R, according to Vector3.magnitude.</summary>
-		/// <param name="vL"></param>
-		/// <param name="vR"></param>
-		public static Vector3 Max(Vector3 vL, Vector3 vR)
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		public static Vector3 Max(Vector3 L, Vector3 R)
 		{
-			return vL.magnitude < vR.magnitude ? vR : vL;
+			return L.magnitude < R.magnitude ? R : L;
 		}
 
 		/// <summary>The smallest Vector3 between L and R, according to Vector3.magnitude.</summary>
-		/// <param name="vL"></param>
-		/// <param name="vR"></param>
-		public static Vector3 Min(Vector3 vL, Vector3 vR)
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		public static Vector3 Min(Vector3 L, Vector3 R)
 		{
-			return vL.magnitude > vR.magnitude ? vR : vL;
+			return L.magnitude > R.magnitude ? R : L;
 		}
 
 		static int[] fib_dp;
 
-		/// <summary>Returns the n'th Fibonacci number.</summary>
-		/// <param name="n"></param>
-		public static int Fibonacci(int n)
+		/// <summary>Returns the N'th Fibonacci number.</summary>
+		/// <param name="N"></param>
+		public static int Fibonacci(int N)
 		{
 			if (fib_dp == null)
 				fib_dp = new int[int.MaxValue];
-			else if (fib_dp[n] != 0)
-				return fib_dp[n];
-			if (n <= 2)
+			else if (fib_dp[N] != 0)
+				return fib_dp[N];
+			if (N <= 2)
 				return 1;
 
-			fib_dp[n] = Fibonacci(n - 1) + Fibonacci(n - 2);
+			fib_dp[N] = Fibonacci(N - 1) + Fibonacci(N - 2);
 
-			return fib_dp[n];
+			return fib_dp[N];
 		}
 
 		/// <summary>Generates spherical points with an equal distribution.</summary>
-		/// <param name="nResolution">The number of points to generate.</param>
-		/// <param name="fGoldenRationModifier">Adjusts the golden ratio.</param>
+		/// <param name="Resolution">The number of points to generate.</param>
+		/// <param name="GoldenRationModifier">Adjusts the golden ratio.</param>
 		/// <returns>The Vector3[] points for the sphere.</returns>
-		public static Vector3[] GenerateEqualSphere(int nResolution, float fGoldenRationModifier)
+		public static Vector3[] GenerateEqualSphere(int Resolution, float GoldenRationModifier)
 		{
-			Vector3[] vDirections = new Vector3[nResolution];
+			Vector3[] vDirections = new Vector3[Resolution];
 
-			float fPhi = 1 + Mathf.Sqrt(fGoldenRationModifier) * .5f;
+			float fPhi = 1 + Mathf.Sqrt(GoldenRationModifier) * .5f;
 			float fInc = Mathf.PI * 2 * fPhi;
 
-			for (int i = 0; i < nResolution; i++)
+			for (int i = 0; i < Resolution; i++)
 			{
-				float t = (float)i / nResolution;
+				float t = (float)i / Resolution;
 				float incline = Mathf.Acos(1 - 2 * t);
 				float azimuth = fInc * i;
 
@@ -233,25 +233,25 @@ namespace MW
 		}
 
 		/// <summary>Generates the points to 'bridge' origin and target together at a height as an arc.</summary>
-		/// <param name="vOrigin">The Vector3 starting point of the bridge.</param>
-		/// <param name="vTarget">The Vector3 ending point of the bridge.</param>
-		/// <param name="nResolution">The number of points for the bridge.</param>
-		/// <param name="fHeight">The maximum height of the bridge.</param>
+		/// <param name="Origin">The Vector3 starting point of the bridge.</param>
+		/// <param name="Target">The Vector3 ending point of the bridge.</param>
+		/// <param name="Resolution">The number of points for the bridge.</param>
+		/// <param name="Height">The maximum height of the bridge.</param>
 		/// <returns>The Vector3[] points for the bridge.</returns>
-		public static Vector3[] Bridge(Vector3 vOrigin, Vector3 vTarget, int nResolution, float fHeight)
+		public static Vector3[] Bridge(Vector3 Origin, Vector3 Target, int Resolution, float Height)
 		{
-			Vector3[] points = new Vector3[nResolution];
+			Vector3[] points = new Vector3[Resolution];
 
-			Vector3 dirToTarget = (vTarget - vOrigin).normalized;
+			Vector3 dirToTarget = (Target - Origin).normalized;
 
 			float theta = 0f;
-			float horizontalIncrement = 2 * Mathf.PI / nResolution;
-			float resolutionToDistance = nResolution * .5f - 1;
-			float distanceIncrement = Vector3.Distance(vTarget, vOrigin) / resolutionToDistance;
+			float horizontalIncrement = 2 * Mathf.PI / Resolution;
+			float resolutionToDistance = Resolution * .5f - 1;
+			float distanceIncrement = Vector3.Distance(Target, Origin) / resolutionToDistance;
 
 			int k = 0;
 
-			for (float i = 0; i < nResolution; i += distanceIncrement)
+			for (float i = 0; i < Resolution; i += distanceIncrement)
 			{
 				float y = Mathf.Sin(theta);
 
@@ -261,7 +261,7 @@ namespace MW
 				Vector3 point = new Vector3
 				{
 					x = dirToTarget.x * i,
-					y = y * fHeight,
+					y = y * Height,
 					z = dirToTarget.z * i
 				};
 
@@ -274,7 +274,7 @@ namespace MW
 			return points;
 		}
 
-		public static string AsString(object convert) => convert.ToString();
+		public static string AsString(object Convert) => Convert.ToString();
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive.</summary>
 		/// <param name="Number">The number to anchor a reflection.</param>

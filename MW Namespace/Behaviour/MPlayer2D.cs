@@ -81,7 +81,13 @@ namespace MW.Behaviour
 			return Rigidbody;
 		}
 
-		public RaycastHit2D? RayUnderMouse(Camera ReferenceCamera, float Distance, int LayerMask)
+		/// <summary>Performs a raycast under the mouse.</summary>
+		/// <remarks>ReferenceCamera must be orthographic, otherwise null is returned.</remarks>
+		/// <param name="ReferenceCamera">The Camera to shoot a ray from, screen-wise.</param>
+		/// <param name="Distance">The maximum distance of the ray to shoot.</param>
+		/// <param name="LayerMask">The layers this raycast will intercept.</param>
+		/// <returns>RaycastHit2D information about the raycast. Null if ReferenceCamera is not orthographic.</returns>
+		public static RaycastHit2D? RayUnderMouse(Camera ReferenceCamera, float Distance, int LayerMask)
 		{
 			if (!ReferenceCamera.orthographic)
 			{
