@@ -8,7 +8,6 @@
 		/// <summary></summary>
 		Right,
 		/// <summary></summary>
-		/// <summary></summary>
 		Up,
 		/// <summary></summary>
 		Back,

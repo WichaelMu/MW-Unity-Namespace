@@ -7,8 +7,6 @@ namespace MW.Diagnostics
 	/// <summary>Track execution time of code.</summary>
 	public class Stopwatch
 	{
-		public delegate void Print (params object[] args);
-
 		readonly System.Diagnostics.Stopwatch sw;
 
 		/// <summary>Creates a new Stopwatch.</summary>

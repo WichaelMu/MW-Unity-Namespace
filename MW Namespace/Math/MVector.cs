@@ -267,7 +267,8 @@ namespace MW
 		/// <param name="v">The MVector.</param>
 		/// <param name="d">The denominator under all components.</param>
 		/// <returns>(MVector v, float d) => new MVector(v.X / d, v.Y / d, v.Z / d)</returns>
-		public static MVector operator /(MVector v, float d) {
+		public static MVector operator /(MVector v, float d)
+		{
 			if (d == 0)
 			{
 				throw new System.DivideByZeroException("Attempted division by zero. Input d: " + d);
