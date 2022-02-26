@@ -162,7 +162,7 @@ namespace MW.MArray
 
 		/// <summary>The incoming and reflected Item of this mirror from zero to maximum Num.</summary>
 		/// <returns>Reflected</returns>
-		public Reflected Reflect(int Index)
+		public Reflected<T> Reflect(int Index)
 		{
 			InRange(Index);
 			return Reflect(0, Index);
@@ -170,25 +170,10 @@ namespace MW.MArray
 
 		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum Num.</summary>
 		/// <returns>Reflected</returns>
-		public Reflected Reflect(int Minimum, int Index)
+		public Reflected<T> Reflect(int Minimum, int Index)
 		{
 			InRange(Index);
-			return new Reflected(Items[Index], Mirror(Minimum, Index));
-		}
-
-		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>
-		public struct Reflected
-		{
-			/// <summary>In reflection.</summary>
-			T Source;
-			/// <summary>Out reflection.</summary>
-			T Reflection;
-
-			public Reflected(T Source, T Reflection)
-			{
-				this.Source = Source;
-				this.Reflection = Reflection;
-			}
+			return new Reflected<T>(Items[Index], Mirror(Minimum, Index));
 		}
 
 		/// <summary>Reflects over Minimum, Maximum with Index.</summary>
@@ -349,13 +334,28 @@ namespace MW.MArray
 		public static implicit operator List<T>(MArray<T> Any) => Any.Items;
 		public static implicit operator T[](MArray<T> Any) => Any.TArray();
 	}
-}
 
-namespace MW.MArray
-{
+	/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>
+	public struct Reflected<T>
+	{
+		/// <summary>In reflection.</summary>
+		T Source;
+		/// <summary>Out reflection.</summary>
+		T Reflection;
+
+		public Reflected(T Source, T Reflection)
+		{
+			this.Source = Source;
+			this.Reflection = Reflection;
+		}
+	}
+
+	/// <summary>A struct containing which T failed to be pushed into an MArray of T.</summary>
 	public struct PushRangeFailed<T>
 	{
+		/// <summary>The T that couldn't be added into the MArray.</summary>
 		public T AttemptedItemToAdd;
+		/// <summary>The index of the T in range that couldn't be added.</summary>
 		public int IndexOfAttempt;
 
 		public PushRangeFailed(T AttemptedItemToAdd, int IndexOfAttempt)

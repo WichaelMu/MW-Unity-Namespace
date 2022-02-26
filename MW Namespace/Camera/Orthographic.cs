@@ -9,6 +9,7 @@ namespace MW.CameraUtils
 		const string kCameraIsNotOrthographicError = " is not orthographic";
 
 		/// <summary>Fires a ray from CCamera to mouse position.</summary>
+		/// <param name="CCamera">The camera to fire a ray from using ScreenPointToRay.</param>
 		/// <returns>OrthographicRaycast</returns>
 		public static OrthographicRaycast Raycast(Camera CCamera)
 		{
@@ -20,22 +21,6 @@ namespace MW.CameraUtils
 
 			return new OrthographicRaycast(hit, hit.collider != null);
 		}
-
-		/// <summary>RaycastHit2D information about the Raycast.</summary>
-		public struct OrthographicRaycast
-		{
-			/// <summary>The RaycastHit2D information about the ray itself.</summary>
-			public RaycastHit2D raycast;
-			/// <summary>If raycast hit something.</summary>
-			public bool bHit;
-
-			public OrthographicRaycast(RaycastHit2D raycast, bool bHit)
-			{
-				this.raycast = raycast;
-				this.bHit = bHit;
-			}
-		}
-
 
 		/// <summary>The Plane to pan a Camera for an Orthographic world.</summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "PPlane is intended to be used and modified outside of MW.sln; inside a Unity project. A programmer might want to change the UnityEngine.Plane if the 2D, orthographic, game requires panning to be performed in a different manner than otherwise provided.")]
@@ -79,4 +64,18 @@ namespace MW.CameraUtils
 		}
 	}
 
+	/// <summary>RaycastHit2D information about the Raycast.</summary>
+	public struct OrthographicRaycast
+	{
+		/// <summary>The RaycastHit2D information about the ray itself.</summary>
+		public RaycastHit2D raycast;
+		/// <summary>If raycast hit something.</summary>
+		public bool bHit;
+
+		public OrthographicRaycast(RaycastHit2D raycast, bool bHit)
+		{
+			this.raycast = raycast;
+			this.bHit = bHit;
+		}
+	}
 }

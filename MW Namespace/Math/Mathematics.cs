@@ -2,7 +2,6 @@
 using MW.Kinetic;
 using MW.Easing;
 using MW.Diagnostics;
-using MW.Core;
 
 namespace MW.Math
 {

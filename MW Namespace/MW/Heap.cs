@@ -1,4 +1,4 @@
-﻿namespace MW.Core
+﻿namespace MW
 {
 	/// <summary>The implementation of a Minimum or Maximum Heap.</summary>
 	/// <typeparam name="T">The type to store in this heap.</typeparam>

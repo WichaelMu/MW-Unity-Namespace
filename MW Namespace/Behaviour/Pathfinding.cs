@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MW.Core;
 using MW.Diagnostics;
 
 namespace MW.Pathfinding

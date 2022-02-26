@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MW.Core
+namespace MW
 {
 	/// <summary>Helper Variables and Functions.</summary>
 	public static class Utils

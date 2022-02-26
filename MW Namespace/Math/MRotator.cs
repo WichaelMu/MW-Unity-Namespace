@@ -185,19 +185,19 @@ namespace MW
 		/// <summary>Converts Pitch, Yaw, Roll into it's corresponding Quaternion.</summary>
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
-	}
 
-	/// <summary>Rotation Axes.</summary>
-	/// <remarks>Uses bytes.</remarks>
-	public enum ERotationAxis : byte
-	{
-		/// <summary>No Rotation axis.</summary>
-		NoAxis = 0,
-		/// <summary>Rotation axis describing Pitch.</summary>
-		Pitch = 1,
-		/// <summary>Rotation axis describing Yaw.</summary>
-		Yaw = 2,
-		/// <summary>Rotation axis describing Roll.</summary>
-		Roll = 4
+		/// <summary>Rotation Axes.</summary>
+		/// <remarks>Uses bytes.</remarks>
+		public enum ERotationAxis : byte
+		{
+			/// <summary>No Rotation axis.</summary>
+			NoAxis = 0,
+			/// <summary>Rotation axis describing Pitch.</summary>
+			Pitch = 1,
+			/// <summary>Rotation axis describing Yaw.</summary>
+			Yaw = 2,
+			/// <summary>Rotation axis describing Roll.</summary>
+			Roll = 4
+		}
 	}
 }

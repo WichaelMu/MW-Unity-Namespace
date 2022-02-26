@@ -1,16 +1,29 @@
 ﻿using System;
 
-namespace MW.Diagnostics {
+namespace MW.Diagnostics
+{
 
 	/// <summary>UnityEngine.Debug.LogEVerbosity().</summary>
-	public enum EVerbosity { Log, Warning, Error };
+	public enum EVerbosity
+	{
+		/// <summary></summary>
+		Log,
+		/// <summary></summary>
+		Warning,
+		/// <summary></summary>
+		Error
+	};
 
-	public class Log {
+	/// <summary>Write to the console.</summary>
+	public class Log
+	{
 		/// <summary>UnityEngine.Debug.Log(object) every object with object.ToString().</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void P(params object[] debug) {
+		public static void P(params object[] debug)
+		{
 			string print = "";
-			for (int i = 0; i < debug.Length; ++i) {
+			for (int i = 0; i < debug.Length; ++i)
+			{
 				print += debug[i].ToString() + ' ';
 			}
 
@@ -19,9 +32,11 @@ namespace MW.Diagnostics {
 
 		/// <summary>UnityEngine.Debug.LogError(object) every object with object.ToString().</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void E(params object[] debug) {
+		public static void E(params object[] debug)
+		{
 			string print = "";
-			for (int i = 0; i < debug.Length; ++i) {
+			for (int i = 0; i < debug.Length; ++i)
+			{
 				print += debug[i].ToString() + ' ';
 			}
 
@@ -30,9 +45,11 @@ namespace MW.Diagnostics {
 
 		/// <summary>UnityEngine.Debug.LogWarning(object) every object with object.ToString().</summary>
 		/// <param name="debug">The list of objects to log separated by a space.</param>
-		public static void W(params object[] debug) {
+		public static void W(params object[] debug)
+		{
 			string print = "";
-			for (int i = 0; i < debug.Length; ++i) {
+			for (int i = 0; i < debug.Length; ++i)
+			{
 				print += debug[i].ToString() + ' ';
 			}
 

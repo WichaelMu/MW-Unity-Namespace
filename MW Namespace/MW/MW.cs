@@ -1,4 +1,4 @@
-﻿namespace MW.Core
+﻿namespace MW
 {
 
 	/// <summary>Generates a new pair of two types of values.</summary>
