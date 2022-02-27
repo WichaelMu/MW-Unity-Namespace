@@ -28,6 +28,7 @@ namespace MW.Diagnostics
 		}
 
 		/// <summary>Stop Stopwatch and get the elapsed Time.</summary>
+		/// <returns>The elapsed time before stopping.</returns>
 		public long Stop()
 		{
 			sw.Stop();
@@ -35,6 +36,7 @@ namespace MW.Diagnostics
 		}
 
 		/// <summary>Restarts Stopwatch and get the Time before restarting.</summary>
+		/// <returns>The elapsed time before restarting.</returns>
 		public long Restart()
 		{
 			long now = Time();
