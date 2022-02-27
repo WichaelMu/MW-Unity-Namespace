@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MW.MArray
@@ -6,7 +7,7 @@ namespace MW.MArray
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
 	[Serializable]
-	public class MArray<T>
+	public class MArray<T> : IEnumerable<T>
 	{
 		[UnityEngine.SerializeField] List<T> Items;
 
@@ -250,6 +251,16 @@ namespace MW.MArray
 		/// <param name="Check">The MArray to check for initialisation.</param>
 		/// <returns>True if Check is null.</returns>
 		public static bool CheckNull(MArray<T> Check) => Check == null;
+
+		public IEnumerator<T> GetEnumerator()
+		{
+			return ((IEnumerable<T>)Items).GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return ((IEnumerable)Items).GetEnumerator();
+		}
 
 		/// <summary>If this MArray is null or IsEmpty.</summary>
 		/// <param name="CheckIfNullOrEmpty">The MArray to check for null or emptiness.</param>
