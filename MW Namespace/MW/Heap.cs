@@ -1,4 +1,6 @@
-﻿namespace MW
+﻿
+
+namespace MW
 {
 	/// <summary>The implementation of a Minimum or Maximum Heap.</summary>
 	/// <typeparam name="T">The type to store in this heap.</typeparam>
@@ -141,6 +143,17 @@
 			int _ = T1.HeapItemIndex;
 			T1.HeapItemIndex = T2.HeapItemIndex;
 			T2.HeapItemIndex = _;
+		}
+
+		/// <summary>The Heap as a T[].</summary>
+		/// <returns>T[] in the order of this THeap.</returns>
+		public T[] Array()
+		{
+			T[] Array = new T[Internal_Count];
+			for (int i = 0; i < Internal_Count; ++i)
+				Array[i] = Internal_Items[i];
+
+			return Array;
 		}
 	}
 
