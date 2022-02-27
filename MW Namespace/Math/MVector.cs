@@ -65,12 +65,13 @@ namespace MW
 			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range!")
 		};
 
-		static readonly MVector zero = new MVector(0, 0, 0);
+		static readonly MVector zero = new MVector(0);
 		static readonly MVector right = new MVector(1, 0, 0);
 		static readonly MVector up = new MVector(0, 1, 0);
 		static readonly MVector forward = new MVector(0, 0, 1);
+		static readonly MVector one = new MVector(1);
 
-		/// <summary>Short for writing MVector(0, 0, 0).</summary>
+		/// <summary>Short for writing MVector(0).</summary>
 		public static readonly MVector Zero = zero;
 		/// <summary>Short for writing MVector(1, 0, 0).</summary>
 		public static readonly MVector Right = right;
@@ -78,6 +79,8 @@ namespace MW
 		public static readonly MVector Up = up;
 		/// <summary>Short for writing MVector(0, 0, 1).</summary>
 		public static readonly MVector Forward = forward;
+		/// <summary>Short for writing MVector(1).</summary>
+		public static readonly MVector One = one;
 
 		/// <summary>Converts an MVector to a Vector3.</summary>
 		/// <param name="mVector">The MVector to convert.</param>
@@ -367,5 +370,19 @@ namespace MW
 		/// <summary>A human-readable MVector.</summary>
 		/// <returns>ToString() => "X: " + X + " Y: " + Y + " Z: " + Z</returns>
 		public override string ToString() => "X: " + X + " Y: " + Y + " Z: " + Z;
+	}
+
+	/// <summary>MVector axes.</summary>
+	/// <remarks>Uses bytes.</remarks>
+	public enum EComponentAxis : byte
+	{
+		/// <summary></summary>
+		NoAxis = 0,
+		/// <summary></summary>
+		X = 1,
+		/// <summary></summary>
+		Y = 2,
+		/// <summary></summary>
+		Z = 4
 	}
 }
