@@ -186,7 +186,7 @@ namespace MW
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 
-		/// <summary>Rotation Axes.</summary>
+		/// <summary>Rotation axes.</summary>
 		/// <remarks>Uses bytes.</remarks>
 		public enum ERotationAxis : byte
 		{
