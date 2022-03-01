@@ -45,11 +45,11 @@ namespace MW.HUD
 
 		/// <inheritdoc cref="Typewrite(TextMeshProUGUI, MonoBehaviour, string, float, ETypewriterMode)"/>
 		/// <param name="TMPro"></param> <param name="Game"></param> <param name="Content"></param> <param name="Delay"></param> <param name="Mode"></param>
-		/// <param name="Sound">The MSound in MAudio._AudioInstance to play when writing a character.</param>
+		/// <param name="Sound">The MSound in MAudio.AudioInstance to play when writing a character.</param>
 		/// <param name="bOverlapSound"></param>
 		public static IEnumerator Typewrite(this TextMeshProUGUI TMPro, MonoBehaviour Game, string Content, float Delay, ETypewriterMode Mode, string Sound, bool bOverlapSound = false)
 		{
-			IEnumerator Typewriter = TypewriterText(TMPro, Content, Delay, Mode, Sound);
+			IEnumerator Typewriter = TypewriterTextWithSound(TMPro, Game.gameObject, Content, Delay, Mode, Sound, bOverlapSound);
 			Game.StartCoroutine(Typewriter);
 
 			return Typewriter;
@@ -76,12 +76,13 @@ namespace MW.HUD
 
 		/// <summary>Animates a TextMeshProUGUI to display Content like a typewriter.</summary>
 		/// <param name="TMPro">The text to animate.</param>
+		/// <param name="Caller">The GameObject requesting to play the sound. Only required when bOverlapSound is true.</param>
 		/// <param name="Content">The content to typewrite.</param>
 		/// <param name="Delay">The time gap between writing a new character.</param>
 		/// <param name="Mode">Should the text ETypewriterMode.Append, or ETypewriterMode.Clear?</param>
 		/// <param name="Sound">The MSound in MAudio._AudioInstance to play when writing a character.</param>
 		/// <param name="bOverlapSound"></param>
-		public static IEnumerator TypewriterText(TextMeshProUGUI TMPro, string Content, float Delay, ETypewriterMode Mode, string Sound, bool bOverlapSound = false)
+		public static IEnumerator TypewriterTextWithSound(TextMeshProUGUI TMPro, GameObject Caller, string Content, float Delay, ETypewriterMode Mode, string Sound, bool bOverlapSound = false)
 		{
 			if (Mode == ETypewriterMode.Clear)
 			{
@@ -91,7 +92,22 @@ namespace MW.HUD
 			for (int i = 0; i < Content.Length; ++i)
 			{
 				TMPro.text += Content[i];
-				MAudio.AudioInstance.Play(Sound, bOverlapSound);
+
+				if (!bOverlapSound)
+				{
+					MAudio.AudioInstance.Play(Sound);
+				}
+				else
+				{
+					if (!Caller)
+					{
+						throw new System.ArgumentNullException(nameof(Caller), "A request was made to play a typewriter sound with bOverlapSound = true. " +
+							"This requires a GameObject 'Caller', but null was provided.");
+					}
+
+					MAudio.AudioInstance.PlayWithOverlap(Sound, Caller);
+				}
+
 				yield return new WaitForSeconds(Delay);
 			}
 		}

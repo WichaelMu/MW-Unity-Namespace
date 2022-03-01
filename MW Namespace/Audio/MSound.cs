@@ -9,7 +9,7 @@ namespace MW.Audio
 	{
 		/// <summary>The source of this sound.</summary>
 		[Tooltip("The source of this sound.")]
-		public AudioClip Source;
+		public AudioClip Clip;
 		/// <summary>The name of this sound.</summary>
 		[Tooltip("The name of the sound.")]
 		public string Name;
@@ -31,6 +31,6 @@ namespace MW.Audio
 		public bool bMute;
 
 		[HideInInspector]
-		public AudioSource AudioSource;
+		public AudioSource AudioSourceComponent;
 	}
 }

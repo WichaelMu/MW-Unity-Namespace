@@ -19,7 +19,7 @@ namespace MW.Audio
 		internal Dictionary<string, MSound> Internal_MSound;
 
 		internal const string kErr1 = "Sound of name: ";
-		internal const string kErr2 = " could not be ";
+		internal const string kErr2 = " could not be found!";
 
 		/// <summary>Populates the Sounds array to match the settings.</summary>
 		/// <remarks>If a duplicate name is detected, a failure will occur. In this case,
@@ -48,13 +48,13 @@ namespace MW.Audio
 
 			foreach (MSound s in Sounds)
 			{
-				s.AudioSource = gameObject.AddComponent<AudioSource>();
-				s.AudioSource.clip = s.Source;
-				s.AudioSource.volume = s.Volume;
-				s.AudioSource.pitch = s.Pitch;
-				s.AudioSource.loop = s.bLoop;
-				s.AudioSource.playOnAwake = s.bPlayOnAwake;
-				s.AudioSource.mute = s.bMute;
+				s.AudioSourceComponent = gameObject.AddComponent<AudioSource>();
+				s.AudioSourceComponent.clip = s.Clip;
+				s.AudioSourceComponent.volume = s.Volume;
+				s.AudioSourceComponent.pitch = s.Pitch;
+				s.AudioSourceComponent.loop = s.bLoop;
+				s.AudioSourceComponent.playOnAwake = s.bPlayOnAwake;
+				s.AudioSourceComponent.mute = s.bMute;
 
 				try
 				{
@@ -88,49 +88,143 @@ namespace MW.Audio
 			}
 		}
 
-		/// <summary>Plays sound of name n.</summary>
+		/// <summary>Plays the sound named Name.</summary>
 		/// <param name="Name">The name of the requested sound to play.</param>
-		/// <param name="bOverlapSound"></param>
-		public void Play(string Name, bool bOverlapSound = false)
+		public void Play(string Name)
 		{
-			MSound s = Find(Name);
-			if (s != null && (bOverlapSound || !IsPlaying(s)))
-				s.AudioSource.Play();
-			if (s == null)
-				Log.W(kErr1 + Name + kErr2 + "played!");
+			if (Find(Name, out MSound S) && !IsPlaying(S))
+				S.AudioSourceComponent.Play();
 		}
 
-		/// <summary>Stops sound of name n.</summary>
+		/// <summary>Plays the sound named Name from Emitter.</summary>
+		/// <remarks>An AudioSource component will be added to Emitter.
+		/// The clip will inherit settings from the MSound named Name.</remarks>
+		/// <param name="Name">The name of the requested sound to play from Emitter.</param>
+		/// <param name="Emitter">The GameObject playing the sound.</param>
+		public void PlayWithOverlap(string Name, GameObject Emitter)
+		{
+			if (Find(Name, out MSound S))
+			{
+				AudioSource Overlap = Emitter.AddComponent<AudioSource>();
+
+				Overlap.volume = S.Volume;
+				Overlap.pitch = S.Pitch;
+				Overlap.loop = S.bLoop;
+
+				Overlap.clip = S.Clip;
+				Overlap.Play();
+			}
+		}
+
+
+		/// <summary>Plays the sound named Name from Emitter.</summary>
+		/// <remarks>An AudioSource component will be added to Emitter.
+		/// The clip will inherit settings from the MSound named Name.</remarks>
+		/// <param name="Name">The name of the requested sound to play from Emitter.</param>
+		/// <param name="Emitter">The GameObject playing the sound.</param>
+		/// <param name="EmitterSource">The AudioSource that was added to Emitter.</param>
+		/// <returns>If the sound could be played.</returns>
+		public bool PlayWithOverlap(string Name, GameObject Emitter, out AudioSource EmitterSource)
+		{
+			if (Find(Name, out MSound S))
+			{
+				AudioSource Overlap = Emitter.AddComponent<AudioSource>();
+
+				Overlap.volume = S.Volume;
+				Overlap.pitch = S.Pitch;
+				Overlap.loop = S.bLoop;
+
+				Overlap.clip = S.Clip;
+				Overlap.Play();
+
+				EmitterSource = Overlap;
+
+				return true;
+			}
+
+			EmitterSource = null;
+			return false;
+		}
+
+		/// <summary>Plays the sound named Name from Emitter.</summary>
+		/// <remarks>An AudioSource component will be added to Emitter.</remarks>
+		/// <param name="Name">The name of the requested sound to play from Emitter.</param>
+		/// <param name="Emitter">The GameObject playing the sound.</param>
+		/// <param name="OverrideVolume">The volume to use, instead of the volume setting defined in AudioInstance.</param>
+		/// <param name="OverridePitch">The pitch to use, instead of the pitch setting defined in AudioInstance.</param>
+		/// <param name="OverrideLoop">Should this sound loop?</param>
+		public void PlayWithOverlap(string Name, GameObject Emitter, float OverrideVolume, float OverridePitch, bool OverrideLoop)
+		{
+			if (Find(Name, out MSound S))
+			{
+				AudioSource Overlap = Emitter.AddComponent<AudioSource>();
+
+				Overlap.volume = OverrideVolume;
+				Overlap.pitch = OverridePitch;
+				Overlap.loop = OverrideLoop;
+
+				Overlap.clip = S.Clip;
+				Overlap.Play();
+			}
+		}
+
+		/// <summary>Pauses the sound named Name.</summary>
+		/// <param name="Name">The name of the requested sound to pause.</param>
+		public void Pause(string Name)
+		{
+			if (Find(Name, out MSound S))
+				S.AudioSourceComponent.Pause();
+		}
+
+		/// <summary>Pauses every sound that is playing in the game.</summary>
+		/// <returns>An MArray of all sounds that were previously playing and affected by the pause.</returns>
+		public MArray<MSound> PauseAll()
+		{
+			MArray<MSound> AllAffectedByPause = new MArray<MSound>();
+
+			foreach (MSound S in Sounds)
+				if (IsPlaying(S))
+				{
+					S.AudioSourceComponent.Pause();
+					AllAffectedByPause.Push(S);
+				}
+
+			return AllAffectedByPause;
+		}
+
+		/// <summary>Stops the sound nameed Name.</summary>
 		/// <param name="Name">The name of the requested sound to stop playing.</param>
 		public void Stop(string Name)
 		{
-			MSound s = Find(Name);
-			if (s != null && IsPlaying(s))
-				s.AudioSource.Stop();
-			if (s == null)
-				Log.W(kErr1 + Name + kErr2 + "stopped!");
+			if (Find(Name, out MSound S) && IsPlaying(S))
+				S.AudioSourceComponent.Stop();
 		}
 
 		/// <summary>Stop every sound in the game.</summary>
 		public void StopAll()
 		{
-			foreach (MSound s in Sounds)
-				s.AudioSource.Stop();
+			foreach (MSound S in Sounds)
+				S.AudioSourceComponent.Stop();
 		}
 
 		/// <summary>Returns a sound in the Sounds array.</summary>
 		/// <param name="Name">The name of the requested sound.</param>
+		/// <param name="MSound">The out MSound parameter for the sound named Name, if found, null otherwise.</param>
 		/// <returns>The MSound of the requested sound. Null if Name could not be found.</returns>
 
-		public MSound Find(string Name)
+		public bool Find(string Name, out MSound MSound)
 		{
 			try
 			{
-				return Internal_MSound[Name];
+				MSound = Internal_MSound[Name];
+				return true;
 			}
 			catch (KeyNotFoundException)
 			{
-				return null;
+				MSound = null;
+				Log.W(kErr1 + Name + kErr2);
+
+				return false;
 			}
 		}
 
@@ -138,15 +232,12 @@ namespace MW.Audio
 		/// <param name="Name">The name of the sound to query.</param>
 		public bool IsPlaying(string Name)
 		{
-			MSound S = Find(Name);
+			if (Find(Name, out MSound S))
+				return S.AudioSourceComponent.isPlaying;
 
-			if (S != null)
-				return S.AudioSource.isPlaying;
-
-			Log.W(kErr1 + Name + kErr2 + "couldn't be found!");
 			return false;
 		}
 
-		internal static bool IsPlaying(MSound s) => s.AudioSource.isPlaying;
+		internal static bool IsPlaying(MSound S) => S.AudioSourceComponent.isPlaying;
 	}
 }
