@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MW.MArray
+namespace MW
 {
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
@@ -350,9 +350,9 @@ namespace MW.MArray
 	public struct Reflected<T>
 	{
 		/// <summary>In reflection.</summary>
-		T Source;
+		public T Source;
 		/// <summary>Out reflection.</summary>
-		T Reflection;
+		public T Reflection;
 
 		public Reflected(T Source, T Reflection)
 		{

@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using MW.Diagnostics;
 using MW.Easing;
-using MW.MArray;
 
 namespace MW.Behaviour
 {
