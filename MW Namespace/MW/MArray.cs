@@ -53,12 +53,12 @@ namespace MW
 		/// <summary>Adds Range of items.</summary>
 		/// <param name="Range">The list of elements to add.</param>
 		/// <returns>An MArray of PushRangeFailed{T} that failed to be pushed into this MArray.</returns>
-		public MArray<PushRangeFailed<T>> Push(params T[] Range)
+		public MArray<PushRangeFailed> Push(params T[] Range)
 		{
-			MArray<PushRangeFailed<T>> Failed = new();
+			MArray<PushRangeFailed> Failed = new();
 			for (int i = 0; i < Range.Length; ++i)
 				if (!Push(Range[i])) // If a push failed.
-					Failed.Push(new PushRangeFailed<T>(Range[i], i));
+					Failed.Push(new PushRangeFailed(Range[i], i));
 
 			return Failed;
 		}
@@ -163,7 +163,7 @@ namespace MW
 
 		/// <summary>The incoming and reflected Item of this mirror from zero to maximum Num.</summary>
 		/// <returns>Reflected</returns>
-		public Reflected<T> Reflect(int Index)
+		public Reflected Reflect(int Index)
 		{
 			InRange(Index);
 			return Reflect(0, Index);
@@ -171,10 +171,10 @@ namespace MW
 
 		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum Num.</summary>
 		/// <returns>Reflected</returns>
-		public Reflected<T> Reflect(int Minimum, int Index)
+		public Reflected Reflect(int Minimum, int Index)
 		{
 			InRange(Index);
-			return new Reflected<T>(Items[Index], Mirror(Minimum, Index));
+			return new Reflected(Items[Index], Mirror(Minimum, Index));
 		}
 
 		/// <summary>Reflects over Minimum, Maximum with Index.</summary>
@@ -344,35 +344,35 @@ namespace MW
 		public static implicit operator int(MArray<T> Any) => Any.Num;
 		public static implicit operator List<T>(MArray<T> Any) => Any.Items;
 		public static implicit operator T[](MArray<T> Any) => Any.TArray();
-	}
 
-	/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>
-	public struct Reflected<T>
-	{
-		/// <summary>In reflection.</summary>
-		public T Source;
-		/// <summary>Out reflection.</summary>
-		public T Reflection;
-
-		public Reflected(T Source, T Reflection)
+		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>
+		public struct Reflected
 		{
-			this.Source = Source;
-			this.Reflection = Reflection;
+			/// <summary>In reflection.</summary>
+			public T Source;
+			/// <summary>Out reflection.</summary>
+			public T Reflection;
+
+			public Reflected(T Source, T Reflection)
+			{
+				this.Source = Source;
+				this.Reflection = Reflection;
+			}
 		}
-	}
 
-	/// <summary>A struct containing which T failed to be pushed into an MArray of T.</summary>
-	public struct PushRangeFailed<T>
-	{
-		/// <summary>The T that couldn't be added into the MArray.</summary>
-		public T AttemptedItemToAdd;
-		/// <summary>The index of the T in range that couldn't be added.</summary>
-		public int IndexOfAttempt;
-
-		public PushRangeFailed(T AttemptedItemToAdd, int IndexOfAttempt)
+		/// <summary>A struct containing which T failed to be pushed into an MArray of T.</summary>
+		public struct PushRangeFailed
 		{
-			this.AttemptedItemToAdd = AttemptedItemToAdd;
-			this.IndexOfAttempt = IndexOfAttempt;
+			/// <summary>The T that couldn't be added into the MArray.</summary>
+			public T AttemptedItemToAdd;
+			/// <summary>The index of the T in range that couldn't be added.</summary>
+			public int IndexOfAttempt;
+
+			public PushRangeFailed(T AttemptedItemToAdd, int IndexOfAttempt)
+			{
+				this.AttemptedItemToAdd = AttemptedItemToAdd;
+				this.IndexOfAttempt = IndexOfAttempt;
+			}
 		}
 	}
 }

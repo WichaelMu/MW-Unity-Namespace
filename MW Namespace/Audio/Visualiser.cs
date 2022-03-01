@@ -75,7 +75,13 @@ namespace MW.Audio
 			return Information;
 		}
 
-		/// <summary>Visualises sound emitted by an AudioSource.</summary>
+		/// <summary>Visualises sound emitted by an AudioSource using a LineRenderer.</summary>
+		/// <remarks>Uses decibels to visualise.</remarks>
+		/// <param name="LineRenderer">The LineRenderer to display the visualisation of the AudioSource.</param>
+		/// <param name="Modifier">The height multiplier for the LineRenderer. Negative points downwards.</param>
+		/// <param name="Smooth">The inverse interpolation strength for the LineRenderer as sounds change.</param>
+		/// <param name="MaxHeight">The maximum height that can be displayed with the LineRenderer.</param>
+		/// <param name="DeltaTime">Time.deltaTime. For interpolating the LineRenderer as sounds change.</param>
 		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
 		public VisualInformation Analyse(ref LineRenderer LineRenderer, float Modifier, float Smooth, float MaxHeight, float DeltaTime)
 		{
