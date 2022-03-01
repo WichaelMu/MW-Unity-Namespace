@@ -6,38 +6,92 @@ namespace MW.Audio
 	public class Visualiser
 	{
 		/// <summary>The number of samples in the audio clip.</summary>
-		public static int Samples = 1024;
+		public int Samples = 1024;
 		internal static float RMS0_N1_Db = 0.1f;
 		internal static float Threshold = 0.02f;
 
-		internal static float[] Internal_Samples;
-		internal static float[] Spectrum;
-		internal static float Sample;
+		internal float[] Internal_Samples;
+		internal float[] Spectrum;
+		internal float Sample;
 
-		/// <summary>Visualises sound emitted by an AudioSource.</summary>
-		/// <param name="Source">The source of the sound.</param>
-		/// <param name="Visualiser">The sound visualiser displayed as an array of MVectors.</param>
-		/// <param name="PositiveVisualiserAxis">How to visualise the sound in Visualiser.</param>
-		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
-		public static VisualInformation Analyse(AudioSource Source, out MVector[] Visualiser, EComponentAxis PositiveVisualiserAxis = EComponentAxis.Y)
+		/// <summary>The source of the sound.</summary>
+		public AudioSource Source;
+		internal EComponentAxis Internal_PositiveVisualiserAxis;
+		/// <summary>How to visualise the sound in Visualiser.</summary>
+		public EComponentAxis PositiveVisualiserAxis
 		{
-			PrepareAnalyser();
+			get => Internal_PositiveVisualiserAxis;
+			set
+			{
+				Mask = new MVector();
+				Mask.X = (float)(EComponentAxis.X & value);
+				Mask.Y = (float)(EComponentAxis.Y & value);
+				Mask.Z = (float)(EComponentAxis.Z & value);
 
-			Internal_Analyser(Source, out float RMS, out float Decibels, out float Pitch);
-
-			Visualiser = MakeVisualiser(PositiveVisualiserAxis);
-
-			return new VisualInformation(RMS, Decibels, Pitch);
+				Internal_PositiveVisualiserAxis = value;
+			}
 		}
 
-		static void PrepareAnalyser()
+		MVector Mask;
+
+		/// <summary>Constructs a new Audio Visualiser.</summary>
+		/// <param name="Source">The source of the sound to visualise.</param>
+		/// <param name="Samples">The number of samples to visualise.</param>
+		/// <param name="PositiveVisualiserAxis">Defines axis/es the visualisation is displayed. This takes affect only when Analysed using an MVector[] or a LineRenderer.</param>
+		public Visualiser(AudioSource Source, int Samples, EComponentAxis PositiveVisualiserAxis = EComponentAxis.Y)
+		{
+			this.Source = Source;
+			this.Samples = Samples;
+			this.PositiveVisualiserAxis = PositiveVisualiserAxis;
+
+			PrepareAnalyser();
+		}
+
+		void PrepareAnalyser()
 		{
 			Internal_Samples = new float[Samples];
 			Spectrum = new float[Samples];
 			Sample = AudioSettings.outputSampleRate;
 		}
 
-		static void Internal_Analyser(AudioSource Source, out float RMS, out float Decibels, out float Pitch)
+		/// <summary>Visualises sound emitted by an AudioSource.</summary>
+		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
+		public VisualInformation Analyse()
+		{
+			Internal_Analyser(Source, out float RMS, out float Decibels, out float Pitch);
+
+			return new VisualInformation(RMS, Decibels, Pitch);
+		}
+
+		/// <summary>Visualises sound emitted by an AudioSource.</summary>
+		/// <param name="Visualiser">The sound visualiser displayed as an array of MVectors. Where left indices are low frequencies and right indices are high.</param>
+		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
+		public VisualInformation Analyse(out MVector[] Visualiser)
+		{
+			VisualInformation Information = Analyse();
+
+			Visualiser = MakeVisualiser();
+
+			return Information;
+		}
+
+		/// <summary>Visualises sound emitted by an AudioSource.</summary>
+		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
+		public VisualInformation Analyse(ref LineRenderer LineRenderer, float Modifier, float Smooth, float MaxHeight, float DeltaTime)
+		{
+			if (LineRenderer.positionCount <= 2)
+			{
+				LineRenderer.positionCount = Samples;
+			}
+
+			VisualInformation Information = Analyse();
+
+			VisualiseOnLineRenderer(ref LineRenderer, ref Modifier, ref Smooth, ref MaxHeight, ref DeltaTime);
+
+			return Information;
+		}
+
+		void Internal_Analyser(AudioSource Source, out float RMS, out float Decibels, out float Pitch)
 		{
 			Source.GetOutputData(Internal_Samples, 0);
 			float sum = 0;
@@ -79,26 +133,49 @@ namespace MW.Audio
 			Pitch = Frequency * (Sample * .5f) / Samples;
 		}
 
-		static MVector[] MakeVisualiser(EComponentAxis PositiveVisualiserAxis)
+		MVector[] MakeVisualiser()
 		{
 			MVector[] Ret = new MVector[Samples];
 
 			int VisualIndex = 0;
 			int SpectrumIndex = 0;
 
-			MVector Mask = new MVector();
-			Mask.X = (float)(EComponentAxis.X & PositiveVisualiserAxis);
-			Mask.Y = (float)(EComponentAxis.Y & PositiveVisualiserAxis);
-			Mask.Z = (float)(EComponentAxis.Z & PositiveVisualiserAxis);
-
 			while (VisualIndex < Samples)
 			{
 				float PositionOnSpectrum = Spectrum[SpectrumIndex];
 				Ret[VisualIndex] = Mask * PositionOnSpectrum;
 				++SpectrumIndex;
+				++VisualIndex;
 			}
 
 			return Ret;
+		}
+
+		void VisualiseOnLineRenderer(ref LineRenderer LineRenderer, ref float Modifier, ref float Smooth, ref float MaxHeight, ref float DeltaTime)
+		{
+			float t = DeltaTime * Smooth;
+
+			int VisualIndex = 0;
+			int SpectrumIndex = 0;
+			const int Size = 1;
+
+			while (VisualIndex < Samples)
+			{
+				int i = 0;
+				float sum = 0;
+				while (i < Size)
+				{
+					sum += Spectrum[SpectrumIndex];
+					++SpectrumIndex;
+					++i;
+				}
+
+				float LinePosition = sum * Modifier;
+				Vector3 Interp = Vector3.Lerp(LineRenderer.GetPosition(VisualIndex), new Vector3(SpectrumIndex * .5f, Mathf.Min(LinePosition, MaxHeight)), t);
+				LineRenderer.SetPosition(VisualIndex, Interp);
+
+				VisualIndex++;
+			}
 		}
 	}
 
