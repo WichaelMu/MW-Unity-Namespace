@@ -63,5 +63,61 @@ namespace MW.Kinetic
 			Rigidbody.velocity = _Self.up * Velocity * Time.deltaTime;
 			Rigidbody.MoveRotation(Quaternion.RotateTowards(_Self.rotation, Quaternion.LookRotation(Target - _Self.position, -_Self.forward), MaxDegreesDeltaPerFrame));
 		}
+
+		/// <summary>Calculates a launch velocity towards a target at a given speed.</summary>
+		/// <param name="LaunchVelocity">The out velocity of the launch.</param>
+		/// <param name="Origin">Where the launch will begin.</param>
+		/// <param name="Target">The intended destination of the launched projectile.</param>
+		/// <param name="LaunchSpeed">The speed of the launched projectile.</param>
+		/// <param name="bFavourHighArc">Should the launched projectile attain the maximum height?</param>
+		/// <returns>True if a solution to hit Target from Origin at LaunchSpeed exists.</returns>
+		public static bool LaunchTowards(out MVector LaunchVelocity, Vector3 Origin, Vector3 Target, float LaunchSpeed, bool bFavourHighArc)
+		{
+			MVector RelativeTargetPosition = Target - Origin;
+			MVector DirectionToTargetIgnoringAltitude = RelativeTargetPosition.XZ.Normalised;
+			float DisplacementToTargetIgnoringAltitude = new MVector(RelativeTargetPosition.X, RelativeTargetPosition.Z).Magnitude;
+
+			float YDisplacement = RelativeTargetPosition.Y;
+
+			float LaunchSpeedSquared = LaunchSpeed * LaunchSpeed;
+
+			float Gravity = -Physics.gravity.y;
+			float Radicand = (LaunchSpeedSquared * LaunchSpeedSquared) - Gravity * ((Gravity * (DisplacementToTargetIgnoringAltitude * DisplacementToTargetIgnoringAltitude)) + (2f * YDisplacement * LaunchSpeedSquared));
+			if (Radicand < 0f)
+			{
+				LaunchVelocity = MVector.Zero;
+				return false;
+			}
+
+			float Sqrt = Mathf.Sqrt(Radicand);
+
+			float GravityByDistance = 1 / (Gravity * DisplacementToTargetIgnoringAltitude);
+
+			float Solution1 = (LaunchSpeedSquared + Sqrt) * GravityByDistance;
+			float Solution2 = (LaunchSpeedSquared - Sqrt) * GravityByDistance;
+
+			float ASqr1 = (Solution1 * Solution1) + 1f;
+			float BSqr1 = (Solution2 * Solution2) + 1f;
+
+			float ADisplacement = LaunchSpeedSquared / ASqr1;
+			float BDisplacement = LaunchSpeedSquared / BSqr1;
+
+			float DisplacementArcPreference = bFavourHighArc ? Mathf.Min(ADisplacement, BDisplacement) : Mathf.Max(ADisplacement, BDisplacement);
+			float Sign = bFavourHighArc
+				? (ADisplacement < BDisplacement)
+					? Mathf.Sign(Solution1)
+					: Mathf.Sign(Solution2)
+
+				: (ADisplacement > BDisplacement)
+					? Mathf.Sign(Solution1)
+					: Mathf.Sign(Solution2)
+			;
+
+			float PreferenceMagnitude = Mathf.Sqrt(DisplacementArcPreference);
+			float LaunchHeight = Mathf.Sqrt(LaunchSpeedSquared - DisplacementArcPreference);
+
+			LaunchVelocity = (DirectionToTargetIgnoringAltitude * PreferenceMagnitude) + (MVector.Up * LaunchHeight * Sign);
+			return true;
+		}
 	}
 }
