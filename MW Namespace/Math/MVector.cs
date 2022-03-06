@@ -184,6 +184,20 @@ namespace MW
 			);
 		}
 
+		/// <summary>Converts a normalised vector to a Pitch, Yaw rotation.</summary>
+		/// <remarks>Roll is zero.</remarks>
+		/// <returns>An MRotator defining the pitch and yaw of this direction vector.</returns>
+		public MRotator Rotation()
+		{
+			MRotator R = new MRotator();
+
+			R.Pitch = Mathf.Asin(Y);
+			R.Yaw = Mathf.Atan2(X, Z);
+			R.Roll = 0;
+
+			return R * Mathf.Rad2Deg;
+		}
+
 		/// <summary>The direction and length of this MVector.</summary>
 		public void DirectionAndLength(out MVector Direction, out float Length)
 		{
