@@ -2,7 +2,7 @@
 
 namespace MW.Behaviour
 {
-	/// <summary>Information recording utility over time.</summary>
+	/// <summary>Inter-frame information recording utility.</summary>
 	public struct IntervalInformation
 	{
 		internal LastIntervalInformation Last;
@@ -17,6 +17,7 @@ namespace MW.Behaviour
 		{
 			Last.Position = Player.Position;
 			Last.Rotation = Player.Rotation;
+			Last.Time = UnityEngine.Time.time;
 
 			RecordedPlayer = Player;
 		}
@@ -27,13 +28,14 @@ namespace MW.Behaviour
 		{
 			if (RecordedPlayer.GetHashCode() != Player.GetHashCode())
 			{
-				Log.E("The recorded Player is not the same as the marking Player!\nRecorded Player:", RecordedPlayer.name, "Marked Player:", Player.name);
+				Log.E("The recorded Player is not the same as the marking Player!\nRecorded Player:", RecordedPlayer.name, "Marking Player:", Player.name);
 				Stacktrace.Here(EVerbosity.Error);
 			}
 			else
 			{
 				This.Position = Player.Position;
 				This.Rotation = Player.Rotation;
+				This.Time = UnityEngine.Time.time;
 			}
 		}
 
@@ -65,10 +67,14 @@ namespace MW.Behaviour
 		/// <summary>The Rotation of this Player on the previous record.</summary>
 		public MRotator Rotation;
 
-		internal LastIntervalInformation(MVector Position, MRotator Rotation)
+		public float Time;
+
+		internal LastIntervalInformation(MVector Position, MRotator Rotation, float Time)
 		{
 			this.Position = Position;
 			this.Rotation = Rotation;
+
+			this.Time = Time;
 		}
 	}
 
@@ -80,20 +86,50 @@ namespace MW.Behaviour
 		/// <summary>The Position of this Player on the current record.</summary>
 		public MRotator Rotation;
 
-		internal ThisIntervalInformation(MVector Position, MRotator Rotation)
+		public float Time;
+
+		internal ThisIntervalInformation(MVector Position, MRotator Rotation, float Time)
 		{
 			this.Position = Position;
 			this.Rotation = Rotation;
+
+			this.Time = Time;
 		}
 
+		/// <summary>The difference in positions of This and Last.</summary>
+		/// <param name="Last">The Last position.</param>
+		/// <returns>This.Position - Last.Position.</returns>
 		public MVector DeltaPosition(LastIntervalInformation Last)
 		{
 			return Position - Last.Position;
 		}
 
+		/// <summary>The difference in rotations of This and Last.</summary>
+		/// <param name="Last">The Last rotation.</param>
+		/// <returns>This.Rotation - Last.Rotation.</returns>
 		public MRotator DeltaRotation(LastIntervalInformation Last)
 		{
 			return Rotation - Last.Rotation;
+		}
+
+		/// <summary>The time between the Last Interval and This Interval.</summary>
+		/// <param name="Last">The Last recorded time.</param>
+		/// <returns>This.Time - Last.Time.</returns>
+		public float TimeSinceLast(LastIntervalInformation Last)
+		{
+			return Time - Last.Time;
+		}
+
+		/// <summary>Get Deltas in all respects.</summary>
+		/// <param name="Last">The Last recorded interval.</param>
+		/// <param name="DeltaPosition"></param>
+		/// <param name="DeltaRotation"></param>
+		/// <param name="DeltaTime"></param>
+		public void GetDeltas(LastIntervalInformation Last, out MVector DeltaPosition, out MRotator DeltaRotation, out float DeltaTime)
+		{
+			DeltaPosition = this.DeltaPosition(Last);
+			DeltaRotation = this.DeltaRotation(Last);
+			DeltaTime = TimeSinceLast(Last);
 		}
 	}
 }

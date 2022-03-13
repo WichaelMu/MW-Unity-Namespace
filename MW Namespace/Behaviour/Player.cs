@@ -39,6 +39,7 @@ namespace MW.Behaviour
 
 		internal IntervalInformation IntervalRecorder;
 		internal IntervalInformation FixedIntervalRecorder;
+		[HideInInspector] public float TimeSpawned;
 
 		public virtual void Awake()
 		{
@@ -58,6 +59,8 @@ namespace MW.Behaviour
 
 			InitialMovementSpeed = MovementSpeed;
 			InitialHealth = Health;
+
+			TimeSpawned = Time.time;
 		}
 
 		#region Movement Speed
