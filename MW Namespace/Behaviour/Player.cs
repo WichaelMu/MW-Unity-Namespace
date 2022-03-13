@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using MW.Kinetic;
+using MW.Math;
 
 namespace MW.Behaviour
 {
@@ -12,6 +14,16 @@ namespace MW.Behaviour
 
 		/// <summary>The world position of this player.</summary>
 		public MVector Position { get => transform.position; set { transform.position = value; } }
+		/// <summary>The rotation of this player.</summary>
+		public MRotator Rotation
+		{
+			get
+			{
+				Vector3 E = transform.rotation.eulerAngles;
+				return new MRotator(E.x, E.y, E.z);
+			}
+			set { transform.rotation = value.Quaternion(); }
+		}
 
 		[Header("Player Settings")]
 
@@ -25,14 +37,25 @@ namespace MW.Behaviour
 		protected MVector Velocity;
 		bool bStopReceivingMovementInput = false;
 
+		internal IntervalInformation IntervalRecorder;
+		internal IntervalInformation FixedIntervalRecorder;
+
 		public virtual void Awake()
 		{
 			InitialisePlayer();
 		}
 
+		public virtual void FixedUpdate()
+		{
+			FixedIntervalRecorder.Record(this);
+		}
+
 		/// <summary>Initialises this player's settings.</summary>
 		public void InitialisePlayer()
 		{
+			IntervalRecorder = new IntervalInformation();
+			FixedIntervalRecorder = new IntervalInformation();
+
 			InitialMovementSpeed = MovementSpeed;
 			InitialHealth = Health;
 		}
@@ -103,7 +126,51 @@ namespace MW.Behaviour
 			return bStopReceivingMovementInput;
 		}
 
+		/// <summary>Records this Player on this frame.</summary>
+		public void RecordInterval()
+		{
+			IntervalRecorder.Record(this);
+		}
+
+		/// <summary>Gets the velocity of the Player, relative to the previous interval.</summary>
+		/// <returns>The velocity of this Player, relative to the previous interval.</returns>
+		public MVector GetVelocity()
+		{
+			IntervalRecorder.Mark(this, out LastIntervalInformation Last, out ThisIntervalInformation This);
+
+			return This.DeltaPosition(Last);
+		}
+
+		/// <summary>The rate of acceleration of this Player between FixedUpdate intervals.</summary>
+		/// <returns>The rate of acceleration in metres per second, as per Time.fixedDeltaTime.</returns>
+		public float GetAccelerationRate()
+		{
+			FixedIntervalRecorder.Mark(this, out LastIntervalInformation Last, out ThisIntervalInformation This);
+
+			return Mathematics.AccelerationRate(Last.Position, This.Position, Time.fixedDeltaTime);
+		}
+
+		/// <summary>The G Force experienced by this Player between FixedUpdate intervals.</summary>
+		/// <param name="Gravity">The force of gravity this Palyer experiences at a standstill.</param>
+		/// <returns>The G Force experience by this Player as an MVector.</returns>
+		public MVector V_ComputeGForce(MVector Gravity)
+		{
+			FixedIntervalRecorder.Mark(this, out LastIntervalInformation Last, out ThisIntervalInformation This);
+
+			return Kinematics.V_GForce(Last.Position, This.Position, Time.fixedDeltaTime, Gravity);
+		}
+
+		/// <summary>The G Force experienced by this Player between FixedUpdate intervals.</summary>
+		/// <param name="Gravity">The force of gravity this Player experiences at a standstill.</param>
+		/// <returns>The G Force experienced by this player.</returns>
+		public float F_ComputeGForce(MVector Gravity)
+		{
+			return V_ComputeGForce(Gravity).Magnitude;
+		}
+
 		#endregion
+
+		#region Health And Death
 
 		/// <summary>Get this Player's Health.</summary>
 		/// <returns>Current health.</returns>
@@ -146,5 +213,7 @@ namespace MW.Behaviour
 		{
 			OnTakeDamage = null;
 		}
+
+		#endregion
 	}
 }

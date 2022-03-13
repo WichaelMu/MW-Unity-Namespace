@@ -18,7 +18,7 @@ namespace MW.Behaviour
 
 		#region Player Movement
 
-		public virtual void FixedUpdate()
+		public override void FixedUpdate()
 		{
 			if (HasStoppedReceivingMovementInput())
 				return;

@@ -31,7 +31,7 @@ namespace MW.Behaviour
 		}
 
 		/// <remarks>Must call base.FixedUpdate().</remarks>
-		public virtual void FixedUpdate()
+		public override void FixedUpdate()
 		{
 			if (HasStoppedReceivingMovementInput())
 				return;
