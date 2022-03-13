@@ -173,6 +173,15 @@ namespace MW
 		/// <returns>(MRotator L, MRotator R) => L.Add(R)</returns>
 		public static MRotator operator +(MRotator L, MRotator R) => L.Add(R);
 
+		public static MRotator operator -(MRotator L, MRotator R)
+		{
+			R.Pitch *= -1f;
+			R.Yaw *= -1f;
+			R.Roll *= -1f;
+
+			return L.Add(R);
+		}
+
 		public static MRotator operator *(MRotator R, float S)
 		{
 			R.Pitch *= S;
@@ -198,6 +207,11 @@ namespace MW
 			Yaw = 2,
 			/// <summary>Rotation axis describing Roll.</summary>
 			Roll = 4
+		}
+
+		public override string ToString()
+		{
+			return "Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll;
 		}
 	}
 }
