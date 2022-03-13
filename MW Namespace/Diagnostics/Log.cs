@@ -22,10 +22,8 @@ namespace MW.Diagnostics
 		public static void P(params object[] args)
 		{
 			string print = "";
-			for (int i = 0; i < args.Length; ++i)
-			{
-				print += args[i].ToString() + ' ';
-			}
+			foreach (object arg in args)
+				print += arg.ToString() + ' ';
 
 			UnityEngine.Debug.Log(print);
 		}
@@ -35,10 +33,8 @@ namespace MW.Diagnostics
 		public static void E(params object[] args)
 		{
 			string print = "";
-			for (int i = 0; i < args.Length; ++i)
-			{
-				print += args[i].ToString() + ' ';
-			}
+			foreach (object arg in args)
+				print += arg.ToString() + ' ';
 
 			UnityEngine.Debug.LogError(print);
 		}
@@ -48,10 +44,8 @@ namespace MW.Diagnostics
 		public static void W(params object[] args)
 		{
 			string print = "";
-			for (int i = 0; i < args.Length; ++i)
-			{
-				print += args[i].ToString() + ' ';
-			}
+			foreach (object arg in args)
+				print += arg.ToString() + ' ';
 
 			UnityEngine.Debug.LogWarning(print);
 		}
