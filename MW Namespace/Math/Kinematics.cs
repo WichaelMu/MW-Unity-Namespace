@@ -119,5 +119,32 @@ namespace MW.Kinetic
 			LaunchVelocity = (DirectionToTargetIgnoringAltitude * PreferenceMagnitude) + (MVector.Up * LaunchHeight * Sign);
 			return true;
 		}
+
+		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
+		/// <param name="LastPosition">The position before the current FixedUpdate call.</param>
+		/// <param name="ThisPosition">The current position at this FixedUpdate call.</param>
+		/// <param name="DeltaTime">The time between recording LastPosition and ThisPosition.</param>
+		/// <param name="Gravity">The force of Gravity.</param>
+		/// <returns>The direction/s of the G Force.</returns>
+		public static MVector V_GForce(MVector LastPosition, MVector ThisPosition, float DeltaTime, MVector Gravity)
+		{
+			MVector DeltaPos = ThisPosition - LastPosition;
+
+			float GravityMag = Gravity.Magnitude;
+			DeltaTime *= GravityMag;
+
+			return DeltaPos / (DeltaTime * GravityMag);
+		}
+
+		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
+		/// <param name="LastPosition">The position before the current FixedUpdate call.</param>
+		/// <param name="ThisPosition">The current position at this FixedUpdate call.</param>
+		/// <param name="DeltaTime">The time between recording LastPosition and ThisPosition.</param>
+		/// <param name="Gravity">The force of Gravity.</param>
+		/// <returns>The G Force without an associated direction.</returns>
+		public static float F_GForce(MVector LastPosition, MVector ThisPosition, float DeltaTime, MVector Gravity)
+		{
+			return V_GForce(LastPosition, ThisPosition, DeltaTime, Gravity).Magnitude;
+		}
 	}
 }
