@@ -34,12 +34,20 @@ namespace MW.Math
 		/// <param name="Self">The Rigidbody to calculate an acceleration rate.</param>
 		/// <param name="Speed">The current speed of the Rigidbody in EUnit.MetresPerSecond.</param>
 		/// <returns>The float rate of movement in EUnit.MetresPerSecond.</returns>
+		[System.Obsolete("Use AccelerationRate(LastFrameInformation, ThisFrameInformation, DeltaTime) instead.")]
 		public static float AccelerationRate(Rigidbody Self, float Speed)
 		{
 			float a = Self.velocity.magnitude - Speed / Time.deltaTime;
 			float fAccelerationRate = (a - fAR) * -1;
 			fAR = a;
 			return fAccelerationRate;
+		}
+
+		public static float AccelerationRate(MVector LastPosition, MVector ThisPosition, float DeltaTime)
+		{
+			float DeltaPos = (ThisPosition - LastPosition).Magnitude;
+
+			return DeltaPos / DeltaTime;
 		}
 
 		/// <summary>Converts a Rigidbody's speed from metres per second to UUnit.</summary>
