@@ -29,7 +29,7 @@ std::vector<MW> Reader::OpenFile()
 #else
 	const char* xml_path = "C:/Users/table/Documents/Machine Code/MW/MW/bin/Release/netstandard2.0/MW.xml";
 	file<> file(xml_path);
-	
+
 	if (!file.data())
 	{
 		std::cout << "The MW.xml file at: " << xml_path << " cannot be found, or opened!\n";
@@ -48,10 +48,13 @@ std::vector<MW> Reader::OpenFile()
 
 		MW m = ProcessNode(member_name_attribute->value());
 
+		// Everything that appears in the docs has a summary, write it here.
 		m.summary = member->first_node()->value();
 
+		const std::string docs = "docs";
 		const std::string param = "param";
-		const std::string returns = "returns";
+		const std::string returns_default = "returns";
+		const std::string returns_custom = "ret";
 		const std::string remarks = "remarks";
 
 		for (xml_node<>* summary_params_etc = member->first_node(); summary_params_etc; summary_params_etc = summary_params_etc->next_sibling())
@@ -59,26 +62,38 @@ std::vector<MW> Reader::OpenFile()
 
 			const std::string this_name = summary_params_etc->name();
 
-			if (this_name == param)
+			if (this_name == docs)
 			{
-				if (summary_params_etc->first_attribute())
-				{
-					// Add the name of the parameters.
-					m.function_parameters_name.push_back(summary_params_etc->first_attribute()->value());
-				}
-				else
-				{
-					m.function_parameters_name.push_back("");
-				}
+				// Over-write the summary if a <docs> tag appears.
+				// This overrides the <summary> tag.
+				m.summary = summary_params_etc->value();
+			}
+			else if (this_name == param)
+			{
+				// <param name="name_of_parameter">description</param>
 
+				// Add the name of the parameters.
+				m.function_parameters_name.push_back(summary_params_etc->first_attribute()->value());
+
+				// Add the description of the parameters.
 				m.function_parameters_desc.push_back(summary_params_etc->value());
 			}
-			else if (this_name == returns)
+			else if (this_name == returns_custom)
 			{
+				// <returns>value</returns>
 				m.returns = summary_params_etc->value();
+			}
+			else if (this_name == returns_default)
+			{
+				if (m.returns.length() == 0)
+				{
+					m.returns = summary_params_etc->value();
+				}
 			}
 			else if (this_name == remarks)
 			{
+				// <remarks>remarks</remarks>
+
 				m.remarks = summary_params_etc->value();
 			}
 		}
@@ -220,8 +235,6 @@ MW Reader::ProcessNode(const std::string& chars)
 void Reader::ReplaceCharacters(std::string& param, const bool& is_file_name)
 {
 	param.erase(remove(param.begin(), param.end(), ','), param.end());
-	param.erase(remove(param.begin(), param.end(), '{'), param.end());
-	param.erase(remove(param.begin(), param.end(), '}'), param.end());
 	param.erase(remove(param.begin(), param.end(), '1'), param.end());
 
 	// Hard-coded replacements.
@@ -240,6 +253,10 @@ void Reader::ReplaceCharacters(std::string& param, const bool& is_file_name)
 	else if (param == "Int64")
 	{
 		param = "long";
+	}
+	else if (param == "UInt32")
+	{
+		param = "uint";
 	}
 	else
 	{
@@ -291,6 +308,12 @@ void Reader::ReplaceCharacters(std::string& param, const bool& is_file_name)
 			pos = new_param.find('}');
 			if (pos != std::string::npos)
 				new_param.replace(pos, 1, "&gt;");
+
+			// Remove the trailing curly bracket that exists, for some reason.
+			// Also, can't use the remove method, like above, for some reason.
+			pos = new_param.find('}');
+			if (pos != std::string::npos)
+				new_param.replace(pos, 1, "");
 
 			param = new_param;
 		}
