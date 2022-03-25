@@ -84,20 +84,6 @@ namespace MW.Audio
 				}
 			}
 		}
-
-		/// <summary></summary>
-		public enum ESampleRate : int
-		{
-			/// <summary></summary>
-			[InspectorName("24,000")]
-			SR_24K,
-			/// <summary></summary>
-			[InspectorName("48,000")]
-			SR_48K,
-			/// <summary></summary>
-			[InspectorName("96,000")]
-			SR_96K
-		}
 	}
 
 	/// <summary>The frequency and duration of a synthesised sound.</summary>
@@ -131,5 +117,19 @@ namespace MW.Audio
 		{
 			return "Frequency: " + Frequency + " Duration: " + Duration;
 		}
+	}
+
+	/// <summary></summary>
+	public enum ESampleRate : int
+	{
+		/// <summary>24KHz Sample Rate.</summary>
+		[InspectorName("24,000")]
+		SR_24K,
+		/// <summary>48KHz Sample Rate.</summary>
+		[InspectorName("48,000")]
+		SR_48K,
+		/// <summary>96KHz Sample Rate.</summary>
+		[InspectorName("96,000")]
+		SR_96K
 	}
 }
