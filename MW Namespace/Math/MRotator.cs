@@ -209,6 +209,12 @@ namespace MW
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 
+		/// <returns>"Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll</returns>
+		public override string ToString()
+		{
+			return "Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll;
+		}
+
 		/// <summary>Rotation axes.</summary>
 		/// <remarks>Uses bytes.</remarks>
 		public enum ERotationAxis : byte
@@ -221,12 +227,6 @@ namespace MW
 			Yaw = 2,
 			/// <summary>Rotation axis describing Roll.</summary>
 			Roll = 4
-		}
-
-		/// <returns>"Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll</returns>
-		public override string ToString()
-		{
-			return "Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll;
 		}
 	}
 }
