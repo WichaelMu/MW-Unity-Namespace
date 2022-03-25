@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace MW.Behaviour
 {
-	/// <summary>The base class of a Player in a three-dimensional world. Extends Player.</summary>
+	/// <summary>The base class of a Player in a three-dimensional world. Extends <see cref="PlayerBase"/>.</summary>
+	/// <docs>The base class of a Player in a three-dimensional world. Extends PlayerBase.</docs>
 	[RequireComponent(typeof(Rigidbody))]
-	public class MPlayer : Player
+	public class MPlayer : PlayerBase
 	{
 		Rigidbody Rigidbody;
 
@@ -26,7 +27,8 @@ namespace MW.Behaviour
 			Rigidbody.MovePosition(Position + Velocity * Time.fixedDeltaTime);
 		}
 
-		/// <summary>The default implementation for movement input.</summary>
+		/// <summary>The default implementation for <see cref="MovementInput(float, float)"/>.</summary>
+		/// <docs>The default implementation for movement input.</docs>
 		/// <param name="ForwardThrow">Forward input. Default is Z axis.</param>
 		/// <param name="RightThrow">Right input. Default is X axis.</param>
 		public override void MovementInput(float ForwardThrow, float RightThrow)
@@ -38,7 +40,8 @@ namespace MW.Behaviour
 			Velocity *= MovementSpeed;
 		}
 
-		/// <summary>Adds force upwards to this player. Default direction is MVector.Up.</summary>
+		/// <summary>Adds force upwards to this player. Default direction is <see cref="MVector.Up"/>.</summary>
+		/// <docs>Adds force upwards to this player. Default direction is MVector.Up.</docs>
 		/// <remarks>Uses Rigidbody.AddForce(Vector3) to enforce jumping, by default.</remarks>
 		/// <param name="Force">The amount of force to apply.</param>
 		public virtual void Jump(float Force)
@@ -46,7 +49,8 @@ namespace MW.Behaviour
 			Rigidbody.AddForce(MVector.Up * Force);
 		}
 
-		/// <summary>The velocity of this Player, respective to attached Rigidbody.</summary>
+		/// <summary>The <see cref="Rigidbody.velocity"/> of this Player, respective to <see cref="Rigidbody"/>.</summary>
+		/// <docs>The velocity of this Player, respective to attached Rigidbody.</docs>
 		/// <returns>The speed in Unity-units per second.</returns>
 		public float GetSpeed()
 		{
