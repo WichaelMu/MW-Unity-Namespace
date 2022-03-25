@@ -8,12 +8,12 @@ namespace MW.Behaviour
 		internal LastIntervalInformation Last;
 		internal ThisIntervalInformation This;
 
-		internal Player RecordedPlayer;
+		internal PlayerBase RecordedPlayer;
 
 		/// <summary>Records an Interval.</summary>
 		/// <remarks>Call before Mark.</remarks>
 		/// <param name="Player">The Player to record.</param>
-		public void Record(Player Player)
+		public void Record(PlayerBase Player)
 		{
 			Last.Position = Player.Position;
 			Last.Rotation = Player.Rotation;
@@ -24,7 +24,7 @@ namespace MW.Behaviour
 
 		/// <summary>Marks the end of an Interval.</summary>
 		/// <param name="Player">The Player to get interval information.</param>
-		public void Mark(Player Player)
+		public void Mark(PlayerBase Player)
 		{
 			if (RecordedPlayer.GetHashCode() != Player.GetHashCode())
 			{
@@ -43,7 +43,7 @@ namespace MW.Behaviour
 		/// <param name="Player">The Player to get interval information.</param>
 		/// <param name="LastInterval">Outs the last interval information.</param>
 		/// <param name="ThisInterval">Outs the current interval information.</param>
-		public void Mark(Player Player, out LastIntervalInformation LastInterval, out ThisIntervalInformation ThisInterval)
+		public void Mark(PlayerBase Player, out LastIntervalInformation LastInterval, out ThisIntervalInformation ThisInterval)
 		{
 			Mark(Player);
 

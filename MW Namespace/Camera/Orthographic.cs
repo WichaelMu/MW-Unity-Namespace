@@ -8,7 +8,7 @@ namespace MW.CameraUtils
 	{
 		const string kCameraIsNotOrthographicError = " is not orthographic";
 
-		/// <summary>Fires a ray from CCamera to mouse position.</summary>
+		/// <summary>Fires a ray from ReferenceCamera to mouse position.</summary>
 		/// <param name="ReferenceCamera">The camera to fire a ray from using ScreenPointToRay.</param>
 		/// <returns>OrthographicRaycast</returns>
 		public static OrthographicRaycast Raycast(Camera ReferenceCamera)
@@ -29,7 +29,7 @@ namespace MW.CameraUtils
 		static Vector3 EndDrag;
 		static Vector3 DragPos = Vector3.zero;
 
-		/// <summary>Pan CCamera using BButtonToActivate by linearlly interpolating with fInterpolateSpeed.</summary>
+		/// <summary>Pan ReferenceCamera using ButtonToActivate by linearlly interpolating with InterpolateSpeed.</summary>
 		/// <param name="ReferenceCamera">The camera to pan.</param>
 		/// <param name="ButtonToActivate">The mouse button to start activate panning.</param>
 		/// <param name="InterpolateSpeed">The speed to ease the camera's movement.</param>

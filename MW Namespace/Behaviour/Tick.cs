@@ -82,7 +82,8 @@ namespace MW.Behaviour
 			}
 		}
 
-		/// <summary>Pauses this Tick from executing until this (TogglePauseTick) is called again.</summary>
+		/// <summary>Pauses this Tick from executing until this <see cref="TogglePauseTick"/> is called again.</summary>
+		/// <docs>Pauses this Tick from executing until this (TogglePauseTick) is called again.</docs>
 		/// <remarks>This is a toggle.</remarks>
 		public void TogglePauseTick()
 		{
@@ -92,14 +93,16 @@ namespace MW.Behaviour
 		/// <summary>Stop executing this Tick.</summary>
 		public void Terminate()
 		{
-			StopCoroutine(GetUnityEngineTick());
+			StopCoroutine(GetTickFunction());
 		}
 
-		public IEnumerator GetUnityEngineTick()
+		public IEnumerator GetTickFunction()
 		{
 			return ThisTick;
 		}
 
+		/// <ret>Information about the time and percentage complete on this Tick function.</ret>
+		/// <returns><see cref="TickInformation"/></returns>
 		public TickInformation GetTickInfo()
 		{
 			return new TickInformation(Time, Time * InverseEndInterpolation);

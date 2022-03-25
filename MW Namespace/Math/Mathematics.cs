@@ -43,6 +43,11 @@ namespace MW.Math
 			return fAccelerationRate;
 		}
 
+		/// <summary>The rate of acceleration in m/s^2.</summary>
+		/// <param name="LastPosition"></param>
+		/// <param name="ThisPosition"></param>
+		/// <param name="DeltaTime">The difference in time between LastPosition and ThisPosition in seconds.</param>
+		/// <returns>The rate of acceleration if an object went from LastPosition to ThisPosition in DeltaTime.</returns>
 		public static float AccelerationRate(MVector LastPosition, MVector ThisPosition, float DeltaTime)
 		{
 			float DeltaPos = (ThisPosition - LastPosition).Magnitude;
@@ -50,7 +55,8 @@ namespace MW.Math
 			return DeltaPos / DeltaTime;
 		}
 
-		/// <summary>Converts a Rigidbody's speed from metres per second to UUnit.</summary>
+		/// <summary>Converts a <see cref="Rigidbody"/>'s speed from metres per second to <see cref="EUnit"/>.</summary>
+		/// <docs>Converts a Rigidbody's speed from metres per second to UUnit.</docs>
 		/// <param name="Self">The Rigidbody to read a speed from.</param>
 		/// <param name="Unit">The desired EUnit of measurement.</param>
 		/// <returns>A speed reading from self in EUnit of measurement.</returns>
@@ -83,21 +89,21 @@ namespace MW.Math
 			}
 		}
 
-		/// <summary>The direction to intercept RBTarget relative to RSelf.</summary>
+		/// <summary>The direction to intercept Target relative to Projectile.</summary>
 		/// <remarks>Requires movement in BOTH Rigidbodies. This function was designed specifically for aircraft.</remarks>
-		/// <param name="Self">The Rigidbody predicting the movement of RBTarget.</param>
+		/// <param name="Projectile">The Rigidbody predicting the movement of RBTarget.</param>
 		/// <param name="Target">The Rigidbody to predict.</param>
-		public static MVector PredictiveProjectile(Rigidbody Self, Rigidbody Target)
+		public static MVector PredictiveProjectile(Rigidbody Projectile, Rigidbody Target)
 		{
 			//  The approximate conversion from velocity in an rb.AddForce is the 2/3 of the force being applied.
 
 			//  At a velocity of 950, the cannon travels at ~633 m/s.
 			//  ~2279 kmph.
 
-			float fSecondsPerKM = 1000 / (Self.velocity.magnitude * Utils.kTwoThirds);
+			float fSecondsPerKM = 1000 / (Projectile.velocity.magnitude * Utils.kTwoThirds);
 
 			//  Distance between the RSelf and RBTarget in thousands.
-			float fDistanceBetweenPlayer = Vector3.Distance(Self.position, Target.position) * Utils.kThousandth;
+			float fDistanceBetweenPlayer = Vector3.Distance(Projectile.position, Target.position) * Utils.kThousandth;
 
 			MVector vForwardPrediction = new MVector(Target.velocity * fSecondsPerKM * fDistanceBetweenPlayer);
 
@@ -124,8 +130,9 @@ namespace MW.Math
 			return TargetPosition + ForwardPrediction;
 		}
 
-		/// <summary>Whether nNumber is a power of two.</summary>
+		/// <summary>Whether Number is a power of two.</summary>
 		/// <param name="Number">The number to check.</param>
+		/// <returns>Number &amp; (Number - 1) == 0.</returns>
 		public static bool IsPowerOfTwo(int Number) => (Number & (Number - 1)) == 0;
 
 		/// <summary>The greatest common divisor of na and nb.</summary>
@@ -148,7 +155,7 @@ namespace MW.Math
 			return GCD == 0 ? 0 : (A / GCD) * B;
 		}
 
-		/// <summary>Wraps f between fMin and fMax.</summary>
+		/// <summary>Wraps f between Min and Max.</summary>
 		/// <param name="f">The float number to wrap.</param>
 		/// <param name="Min">The minimum value to wrap.</param>
 		/// <param name="Max">The maximum value to wrap.</param>
@@ -169,7 +176,7 @@ namespace MW.Math
 			return e;
 		}
 
-		/// <summary>Wraps n between nMin and nMax.</summary>
+		/// <summary>Wraps n between Min and Max.</summary>
 		/// <param name="n">The float number to wrap.</param>
 		/// <param name="Min">The minimum value to wrap.</param>
 		/// <param name="Max">The maximum value to wrap.</param>
@@ -190,32 +197,32 @@ namespace MW.Math
 			return e;
 		}
 
-		/// <summary>Whether v1 is parallel to v2 within fParallelThreshold.</summary>
+		/// <summary>Whether M1 is parallel to M2 within ParallelThreshold.</summary>
 		/// <param name="M1">Whether this vector is parallel to the other.</param>
 		/// <param name="M2">Whether this vector is parallel to the other.</param>
 		/// <param name="ParallelThreshold">The threshold to consider parallel vectors.</param>
 		public static bool Parallel(MVector M1, MVector M2, float ParallelThreshold = 0.999845f)
 		    => Mathf.Abs(M1 | M2) >= ParallelThreshold;
 
-		/// <summary>Whether vVector has been normalised.</summary>
+		/// <summary>Whether Vector has been normalised.</summary>
 		/// <param name="Vector">The vector to check.</param>
 		public static bool IsNormalised(MVector Vector) => Mathf.Abs(1f - Vector.SqrMagnitude) < .01f;
 
-		/// <summary>The angle in degrees pointing towards vDirection using the X-Axis and Z-Axis. (For 3D space)</summary>
+		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Z-Axis. (For 3D space)</summary>
 		/// <param name="Direction">The direction to calculate an angle towards.</param>
 		public static float AngleFromVector3D(Vector3 Direction)
 		{
 			return Mathf.Atan2(Direction.x, Direction.z) * Mathf.Rad2Deg;
 		}
 
-		/// <summary>The angle in degrees pointing towards vDirection using the X-Axis and Y-Axis. (For 2D space)</summary>
+		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Y-Axis. (For 2D space)</summary>
 		/// <param name="Direction">The direction to calculate an angle towards.</param>
 		public static float AngleFromVector2D(Vector3 Direction)
 		{
 			return -Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
 		}
 
-		/// <summary>Returns a normalised MVector at fDegrees, relative to dirForward.</summary>
+		/// <summary>Returns a normalised MVector at Degrees, relative to ForwardDirection.</summary>
 		/// <param name="Degrees">The angle offset.</param>
 		/// <param name="ForwardDirection">The forward direction.</param>
 		public static MVector VectorFromAngle(float Degrees, EDirection ForwardDirection)

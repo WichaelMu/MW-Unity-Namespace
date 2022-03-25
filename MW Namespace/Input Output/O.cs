@@ -5,7 +5,8 @@ namespace MW.IO
 	/// <summary></summary>
 	public static class O
 	{
-		/// <summary>Identical to Log.P(object[]).</summary>
+		/// <summary>Identical to <see cref="Log.P(object[])"/>.</summary>
+		/// <docs>Identical to Log.P(object[]).</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void Out(params object[] args)
 		{

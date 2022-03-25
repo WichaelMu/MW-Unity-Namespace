@@ -8,7 +8,8 @@ namespace MW.Diagnostics
 	public static class Stacktrace
 	{
 
-		/// <summary>Stacktrace using Log.P with EVerbosity verbosity.</summary>
+		/// <summary>Stacktrace using <see cref="Log.P(object[])"/> with <see cref="EVerbosity"/>.</summary>
+		/// <docs>Stacktrace using Log.P with EVerbosity verbosity.</docs>
 		/// <param name="Verbosity">The EVerbosity verbosity of the Log.P.</param>
 		public static void Here(EVerbosity Verbosity = EVerbosity.Log)
 		{
@@ -26,7 +27,8 @@ namespace MW.Diagnostics
 			}
 		}
 
-		/// <summary>Stacktrace using Log.P with EVerbosity verbosity and a string message.</summary>
+		/// <summary>Stacktrace using <see cref="Log.P(object[])"/> with <see cref="EVerbosity"/> and a string message.</summary>
+		/// <docs>Stacktrace using Log.P with EVerbosity verbosity and a string message.</docs>
 		/// <param name="Message">The string message to show.</param>
 		/// <param name="Verbosity">The EVerbosity of the Log.P.</param>
 		public static void Here(string Message, EVerbosity Verbosity = EVerbosity.Log)

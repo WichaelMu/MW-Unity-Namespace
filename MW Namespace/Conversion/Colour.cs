@@ -195,12 +195,18 @@ namespace MW.Conversion
 
 		}
 
-		public static Vector3 VColour(Color Colour)
+		/// <summary>Converts a Color to its RGB values as an MVector.</summary>
+		/// <param name="Colour">The colour to split.</param>
+		/// <returns>An MVector where X = R, Y = G, and Z = B in 255 RGB format.</returns>
+		public static MVector Get255RGB(Color Colour)
 		{
-			return new Vector3(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB);
+			return new MVector(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB);
 		}
 
-		public static Vector4 VColourA(Color Colour)
+		/// <summary>Converts a Color to its RGBA values as a Vector4.</summary>
+		/// <param name="Colour">The colour to split.</param>
+		/// <returns>A Vector4 where x = R, y = G, z = B, and w = A in 255 RGBA format.</returns>
+		public static Vector4 Get255RGBA(Color Colour)
 		{
 			return new Vector4(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB, Colour.a / Utils.k1To255RGB);
 		}

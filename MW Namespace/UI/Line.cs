@@ -5,7 +5,7 @@ namespace MW.HUD
 	/// <summary>Drawing LineRenderers in the game.</summary>
 	public static class Line
 	{
-		/// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>
+		/// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an Offset in bUseWorldSpace.</summary>
 		/// <param name="LineRenderer">The LineRenderer of the GameObject calling this.</param>
 		/// <param name="From">The coordinates where the line will originate.</param>
 		/// <param name="To">The coordinates where the line will end.</param>
@@ -17,7 +17,6 @@ namespace MW.HUD
 		/// <param name="bUseWorldSpace">Should this line use world space?</param>
 		public static void DrawLine(LineRenderer LineRenderer, Vector3 From, Vector3 To, Color StartColour, Color EndColour, float LineWidth, Vector3 Offset, Material Material, bool bUseWorldSpace = true)
 		{
-
 			LineRenderer.material = Material;
 			LineRenderer.startColor = StartColour;
 			LineRenderer.endColor = EndColour;
@@ -30,7 +29,7 @@ namespace MW.HUD
 			LineRenderer.SetPosition(1, To + Offset);
 		}
 
-		/// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an offset at UseWorldSpace with NumberOfSegments.</summary>
+		/// <summary>Draws a line from to to in StartColor to EndColor at LineWidth thickness with an Offset in bUseWorldSpace.</summary>
 		/// <param name="Self">The GameObject calling this.</param>
 		/// <param name="From">The coordinates where the line will originate.</param>
 		/// <param name="To">The coordinates where the line will end.</param>
@@ -53,7 +52,7 @@ namespace MW.HUD
 			_LR.SetPosition(1, To + Offset);
 		}
 
-		/// <summary>Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.</summary>
+		/// <summary>Draws a circle with a centre at Around at Radius with a LineColour at LineWidth thickness in bUseWorldSpace with NumberOfSegments.</summary>
 		/// <param name="LineRenderer">The LineRenderer of the GameObject calling this.</param>
 		/// <param name="Around">The centre of the circle to be drawn.</param>
 		/// <param name="Radius">The radius of this circle.</param>
@@ -86,7 +85,7 @@ namespace MW.HUD
 			}
 		}
 
-		/// <summary>Draws a circle with a centre at around at radius with a LineColour at LineWidth thickness at UseWorldSpace with NumberOfSegments.</summary>
+		/// <summary>Draws a circle with a centre at Around at Radius with a LineColour at LineWidth thickness in bUseWorldSpace with NumberOfSegments.</summary>
 		/// <param name="Self">The GameObject calling this.</param>
 		/// <param name="Around">The centre of the circle to be drawn.</param>
 		/// <param name="Radius">The radius of this circle.</param>

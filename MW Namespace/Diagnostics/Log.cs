@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 namespace MW.Diagnostics
 {
@@ -17,7 +17,8 @@ namespace MW.Diagnostics
 	/// <summary>Write to the console.</summary>
 	public class Log
 	{
-		/// <summary>UnityEngine.Debug.Log(object) every object with object.ToString().</summary>
+		/// <summary><see cref="UnityEngine.Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
+		/// <docs>UnityEngine.Debug.Log(object) every object with object.ToString().</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void P(params object[] args)
 		{
@@ -28,7 +29,8 @@ namespace MW.Diagnostics
 			UnityEngine.Debug.Log(print);
 		}
 
-		/// <summary>UnityEngine.Debug.LogError(object) every object with object.ToString().</summary>
+		/// <summary><see cref="UnityEngine.Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
+		/// <docs>UnityEngine.Debug.LogError(object) every object with object.ToString().</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void E(params object[] args)
 		{
@@ -39,7 +41,8 @@ namespace MW.Diagnostics
 			UnityEngine.Debug.LogError(print);
 		}
 
-		/// <summary>UnityEngine.Debug.LogWarning(object) every object with object.ToString().</summary>
+		/// <summary><see cref="UnityEngine.Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
+		/// <docs>UnityEngine.Debug.LogWarning(object) every object with object.ToString().</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void W(params object[] args)
 		{

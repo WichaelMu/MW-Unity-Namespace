@@ -36,7 +36,7 @@ namespace MW
 		/// <summary>The ratio between 1 and 255.</summary>
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
-		/// <summary>If self can see Transform target within SearchAngle degrees while facing EDirection.</summary>
+		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
 		/// <param name="Face">The EDirection self is facing.</param>
 		/// <param name="Self">The Transform searching for target.</param>
 		/// <param name="Target">The Transform to look out for.</param>
@@ -64,7 +64,7 @@ namespace MW
 			}
 		}
 
-		/// <summary>If self can see Transform target within SearchAngle degrees while facing EDirection.</summary>
+		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
 		/// <param name="Face">The EDirection self is facing.</param>
 		/// <param name="Self">The Transform searching for target.</param>
 		/// <param name="Target">The Vector3 position to look out for.</param>
@@ -92,7 +92,7 @@ namespace MW
 			}
 		}
 
-		/// <summary>If self has an unobstructed line of sight to to.</summary>
+		/// <summary>If Self has an unobstructed line of sight to To.</summary>
 		/// <param name="Self">The Vector3 position to look from.</param>
 		/// <param name="To">The Vector3 position to look to.</param>
 		/// <param name="Obstacles">The LayerMask obstacles to consider obtrusive.</param>
@@ -101,7 +101,7 @@ namespace MW
 			return !Physics.Linecast(Self, To, Obstacles);
 		}
 
-		/// <summary>If Vector3 self has an unobstructed line of sight to to.</summary>
+		/// <summary>If Self has an unobstructed line of sight to To.</summary>
 		/// <param name="Self">The Vector3 position to look from.</param>
 		/// <param name="To">The Vector3 position to look to.</param>
 		public static bool LineOfSight(Vector3 Self, Vector3 To)
@@ -109,7 +109,7 @@ namespace MW
 			return !Physics.Linecast(Self, To);
 		}
 
-		///<summary>The fValue rounded to dp decimal places.</summary>
+		///<summary>The Value rounded to DecimalPlaces.</summary>
 		/// <param name="Value">The value to be rounded.</param>
 		/// <param name="DecimalPlaces">The decimal places to be included.</param>
 		public static float RoundToDP(float Value, int DecimalPlaces = 2)
@@ -130,14 +130,14 @@ namespace MW
 			return Mathf.Round(Value * fFactor) / fFactor;
 		}
 
-		/// <summary>Flip-Flops Bool.</summary>
+		/// <summary>Flip-Flops bBool.</summary>
 		/// <param name="bBool"></param>
 		public static void FlipFlop(ref bool bBool)
 		{
 			bBool = !bBool;
 		}
 
-		/// <summary>Flip-Flops Bool.</summary>
+		/// <summary>Flip-Flops bBool.</summary>
 		/// <param name="bBool"></param>
 		/// <param name="CallbackTrue">The method to call if the flip-flop is true.</param>
 		/// <param name="CallbackFalse">The method to call if the flip-flop is false.</param>
@@ -151,7 +151,7 @@ namespace MW
 				CallbackFalse();
 		}
 
-		/// <summary>If value is within the +- limit of from.</summary>
+		/// <summary>If Value is within the +- Limit of From.</summary>
 		/// <param name="Value">The value to check.</param>
 		/// <param name="From">The value to compare.</param>
 		/// <param name="Limit">The limits to consider.</param>
@@ -171,20 +171,22 @@ namespace MW
 			return From + Limit > Value && Value > From - Limit;
 		}
 
-		/// <summary>The largest Vector3 between L and R, according to Vector3.magnitude.</summary>
+		/// <summary>The largest Vector3 between L and R, according to <see cref="Vector3.sqrMagnitude"/>.</summary>
+		/// <docs>The largest Vector3 between L and R, according to Vector3.sqrMagnitude.</docs>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		public static Vector3 Max(Vector3 L, Vector3 R)
 		{
-			return L.magnitude < R.magnitude ? R : L;
+			return L.sqrMagnitude < R.sqrMagnitude ? R : L;
 		}
 
-		/// <summary>The smallest Vector3 between L and R, according to Vector3.magnitude.</summary>
+		/// <summary>The largest Vector3 between L and R, according to <see cref="Vector3.sqrMagnitude"/>.</summary>
+		/// <docs>The largest Vector3 between L and R, according to Vector3.sqrMagnitude.</docs>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		public static Vector3 Min(Vector3 L, Vector3 R)
 		{
-			return L.magnitude > R.magnitude ? R : L;
+			return L.sqrMagnitude > R.sqrMagnitude ? R : L;
 		}
 
 		static int[] fib_dp;
@@ -232,7 +234,7 @@ namespace MW
 			return vDirections;
 		}
 
-		/// <summary>Generates the points to 'bridge' origin and target together at a height as an arc.</summary>
+		/// <summary>Generates the points to 'bridge' Origin and Target together at a Height as an arc.</summary>
 		/// <param name="Origin">The Vector3 starting point of the bridge.</param>
 		/// <param name="Target">The Vector3 ending point of the bridge.</param>
 		/// <param name="Resolution">The number of points for the bridge.</param>

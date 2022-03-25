@@ -19,7 +19,7 @@ namespace MW
 			}
 		}
 
-		/// <summary>Generates a new Heap, initialised with uMaxSize.</summary>
+		/// <summary>Generates a new Heap, initialised with MaxSize.</summary>
 		/// <param name="MaxSize"></param>
 		public THeap(uint MaxSize)
 		{

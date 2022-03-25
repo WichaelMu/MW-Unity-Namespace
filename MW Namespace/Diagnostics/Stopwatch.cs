@@ -27,15 +27,18 @@ namespace MW.Diagnostics
 			sw.Start();
 		}
 
-		/// <summary>Stop Stopwatch and get the elapsed Time.</summary>
-		/// <returns>The elapsed time before stopping.</returns>
+		/// <summary>Stop Stopwatch and get the elapsed <see cref="Time"/>.</summary>
+		/// <docs>Stop Stopwatch and get the elapsed Time.</docs>
+		/// <ret>The elapsed time before stopping.</ret>
+		/// <returns>The elapsed <see cref="Time"/> before stopping.</returns>
 		public long Stop()
 		{
 			sw.Stop();
 			return Time();
 		}
 
-		/// <summary>Restarts Stopwatch and get the Time before restarting.</summary>
+		/// <summary>Restarts Stopwatch and get the <see cref="Time"/> before restarting.</summary>
+		/// <docs>Restarts Stopwatch and get the Time before restarting.</docs>
 		/// <returns>The elapsed time before restarting.</returns>
 		public long Restart()
 		{
@@ -48,11 +51,12 @@ namespace MW.Diagnostics
 		/// <summary>Get the current elapsed time.</summary>
 		public long Time() => sw.ElapsedMilliseconds;
 
-		/// <summary>Get the current elapsed time in seconds.</summary>
+		/// <summary>Get the current elapsed <see cref="Time"/> in seconds.</summary>
+		/// <docs>Get the current elapsed time in seconds.</docs>
 		public long TimeInSeconds() => ToSeconds(Time());
 
 		/// <summary>Converts milliseconds to seconds.</summary>
-		/// <param name="lMilliseconds">Milliseconds to convert.</param>
-		public static long ToSeconds(long lMilliseconds) => lMilliseconds * (long).001;
+		/// <param name="Milliseconds">Milliseconds to convert.</param>
+		public static long ToSeconds(long Milliseconds) => Milliseconds * (long).001;
 	}
 }

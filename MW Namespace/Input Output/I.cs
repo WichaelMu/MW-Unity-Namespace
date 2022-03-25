@@ -2,13 +2,14 @@
 
 namespace MW.IO
 {
-	/// <summary>Mouse Input and Keyboard Input, based off of Input.</summary>
+	/// <summary>Mouse Input and Keyboard Input, based off of <see cref="Input"/>.</summary>
+	/// <docs>Mouse Input and Keyboard Input.</docs>
 	public static class I
 	{
 		/// <param name="MouseButton">The EButton press to listen for.</param>
 		/// <param name="bHold">Whether or not to check if this button is held down.</param>
 		/// <param name="bUp">Whether or not to check if this button is released.</param>
-		/// <returns>If the EButton was clicked or held.</returns>
+		/// <returns>If MouseButton was clicked or held.</returns>
 		public static bool Click(EButton MouseButton, bool bHold = false, bool bUp = false)
 		{
 			switch (MouseButton)
@@ -42,7 +43,7 @@ namespace MW.IO
 		/// <param name="KeyStroke">The KeyCode that was pressed on the keyboard.</param>
 		/// <param name="bHold">Whether or not to check if this button is held down.</param>
 		/// <param name="bUp">Whether or not to check if this button is released.</param>
-		/// <returns>If Stroke was pressed or Held.</returns>
+		/// <returns>If KeyStroke was pressed or Held.</returns>
 		public static bool Key(KeyCode KeyStroke, bool bHold = false, bool bUp = false)
 		{
 			if (bUp)
@@ -53,7 +54,8 @@ namespace MW.IO
 			return Input.GetKeyDown(KeyStroke);
 		}
 
-		/// <summary>Identical to Input.anyKey.</summary>
+		/// <summary>Identical to <see cref="Input.anyKey"/>.</summary>
+		/// <docs>Identical to Input.anyKey.</docs>
 		/// <returns>True if a key or a mouse button was pressed.</returns>
 		public static bool Any()
 		{

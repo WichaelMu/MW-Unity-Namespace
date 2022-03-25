@@ -48,7 +48,8 @@ namespace MW
 			this.Z = Z;
 		}
 
-		/// <summary>Construct an MVector with respect to a Vector3.</summary>
+		/// <summary>Construct an MVector with respect to a <see cref="Vector3"/>.</summary>
+		/// <docs>Construct an MVector with respect to a Vector3.</docs>
 		/// <param name="xyz">The Vector3's Components to set this MVector.</param>
 		public MVector(Vector3 xyz)
 		{
@@ -62,7 +63,7 @@ namespace MW
 			0 => X,
 			1 => Y,
 			2 => Z,
-			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range!")
+			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range! Input i: " + i)
 		};
 
 		static readonly MVector zero = new MVector(0);
@@ -70,6 +71,8 @@ namespace MW
 		static readonly MVector up = new MVector(0, 1, 0);
 		static readonly MVector forward = new MVector(0, 0, 1);
 		static readonly MVector one = new MVector(1);
+		static readonly MVector twod = new MVector(1, 1);
+		static readonly MVector threed = new MVector(1, 0, 1);
 
 		/// <summary>Short for writing MVector(0).</summary>
 		public static readonly MVector Zero = zero;
@@ -81,6 +84,10 @@ namespace MW
 		public static readonly MVector Forward = forward;
 		/// <summary>Short for writing MVector(1).</summary>
 		public static readonly MVector One = one;
+		/// <summary>1 on XY components. 2D MVector Flag.</summary>
+		public static readonly MVector _2D = twod;
+		/// <summary>1 on XZ components. 3D MVector Flag.</summary>
+		public static readonly MVector _3D = threed;
 
 		/// <summary>Converts an MVector to a Vector3.</summary>
 		/// <param name="mVector">The MVector to convert.</param>
@@ -89,31 +96,34 @@ namespace MW
 		/// <param name="vVector">The Vector3 to convert.</param>
 		public static MVector MV(Vector3 vVector) => new MVector(vVector.x, vVector.y, vVector.z);
 
-		/// <summary>Normalises mVector.</summary>
-		public static MVector Normalise(MVector mVector) => mVector.Normalise();
-		/// <summary>The vector cross ^ product of left and right.</summary>
-		public static MVector Cross(MVector left, MVector right) => left ^ right;
-		/// <summary>The vector dot | product of left and right.</summary>
-		/// <remarks>Does not assume left and right are normalised.</remarks>
-		public static float Dot(MVector left, MVector right) => left | right;
+		/// <summary>Normalises V.</summary>
+		public static MVector Normalise(MVector V) => V.Normalise();
+		/// <summary>The vector cross ^ product of Left and Right.</summary>
+		public static MVector Cross(MVector Left, MVector Right) => Left ^ Right;
+		/// <summary>The vector dot | product of Left and Right.</summary>
+		/// <remarks>Does not assume Left and Right are normalised.</remarks>
+		public static float Dot(MVector Left, MVector Right) => Left | Right;
 		/// <summary>Whether left and right are Mathematics.Parallel(MVector, MVector, float) to each other.</summary>
-		/// <param name="left"></param>
-		/// <param name="right"></param>
-		public static bool Parallel(MVector left, MVector right) => Mathematics.Parallel(left, right);
-		/// <summary>A normalised MVector at fDegrees, relative to dirForward.</summary>
-		/// <param name="fDegrees">The angle offset.</param>
-		/// <param name="dirForward">The forward direction.</param>
-		public static MVector MVectorFromAngle(float fDegrees, EDirection dirForward) => Mathematics.VectorFromAngle(fDegrees, dirForward);
-		/// <summary>The distance between left and right.</summary>
-		/// <param name="left">Source of the distance.</param>
-		/// <param name="right">Distance from source.</param>
-		public static float Distance(MVector left, MVector right) => Mathf.Sqrt(SqrDistance(left, right));
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		public static bool Parallel(MVector Left, MVector Right) => Mathematics.Parallel(Left, Right);
+		/// <summary>A normalised MVector at Degrees, relative to Forward.</summary>
+		/// <param name="Degrees">The angle offset.</param>
+		/// <param name="Forward">The forward direction.</param>
+		public static MVector MVectorFromAngle(float Degrees, EDirection Forward) => Mathematics.VectorFromAngle(Degrees, Forward);
+		/// <summary>The distance between Left and Right.</summary>
+		/// <param name="Left">Source of the distance.</param>
+		/// <param name="Right">Distance from source.</param>
+		public static float Distance(MVector Left, MVector Right) => Mathf.Sqrt(SqrDistance(Left, Right));
 
-		public static float SqrDistance(MVector left, MVector right)
+		/// <summary>Square Euclidean distance between Left and Right.</summary>
+		/// <param name="Left"></param>
+		/// <param name="Right"></param>
+		public static float SqrDistance(MVector Left, MVector Right)
 		{
-			float x = left.X - right.X;
-			float y = left.Y - right.Y;
-			float z = left.Z - right.Z;
+			float x = Left.X - Right.X;
+			float y = Left.Y - Right.Y;
+			float z = Left.Z - Right.Z;
 
 			return x * x + y * y + z * z;
 		}
@@ -122,7 +132,8 @@ namespace MW
 		public float SqrMagnitude { get => X * X + Y * Y + Z * Z; }
 		/// <summary>The magnitude of this MVector.</summary>
 		public float Magnitude { get => Mathf.Sqrt(SqrMagnitude); }
-		/// <summary>The Mathf.Abs(float) of this MVector's components.</summary>
+		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
+		/// <docs>The Mathf.Abs(float) of this MVector's components.</docs>
 		public MVector Abs { get => new MVector(Mathf.Abs(X), Mathf.Abs(Y), Mathf.Abs(Z)); }
 		/// <summary>The normalised version of this MVector.</summary>
 		public MVector Normalised
@@ -152,28 +163,28 @@ namespace MW
 		/// <returns>True if this MVector has a magnitude of one.</returns>
 		public bool IsNormalised() => Mathematics.IsNormalised(this);
 
-		/// <summary>This MVector's reflection among mNormal.</summary>
-		/// <param name="mNormal">The normal vector to mirror.</param>
-		public MVector Mirror(MVector mNormal) => this - mNormal * 2f * (this | mNormal);
+		/// <summary>This MVector's reflection among Normal.</summary>
+		/// <param name="Normal">The normal vector to mirror.</param>
+		public MVector Mirror(MVector Normal) => this - Normal * 2f * (this | Normal);
 
-		/// <summary>Rotates this MVector at an angle of fAngleDegrees around mAxis.</summary>
-		/// <param name="fAngleDegrees">The degrees at which to rotate this MVector.</param>
-		/// <param name="mAxis">The axis to rotate this MVector around.</param>
-		public MVector RotateAngleAxis(float fAngleDegrees, MVector mAxis)
+		/// <summary>Rotates this MVector at an angle of AngleDegrees around Axis.</summary>
+		/// <param name="AngleDegrees">The degrees at which to rotate this MVector.</param>
+		/// <param name="Axis">The axis to rotate this MVector around.</param>
+		public MVector RotateAngleAxis(float AngleDegrees, MVector Axis)
 		{
-			Mathematics.SinCos(out float S, out float C, fAngleDegrees * Mathf.Deg2Rad);
+			Mathematics.SinCos(out float S, out float C, AngleDegrees * Mathf.Deg2Rad);
 
-			float XX = mAxis.X * mAxis.X;
-			float YY = mAxis.Y * mAxis.Y;
-			float ZZ = mAxis.Z * mAxis.Z;
+			float XX = Axis.X * Axis.X;
+			float YY = Axis.Y * Axis.Y;
+			float ZZ = Axis.Z * Axis.Z;
 
-			float XY = mAxis.X * mAxis.Y;
-			float YZ = mAxis.Y * mAxis.Z;
-			float ZX = mAxis.Z * mAxis.X;
+			float XY = Axis.X * Axis.Y;
+			float YZ = Axis.Y * Axis.Z;
+			float ZX = Axis.Z * Axis.X;
 
-			float XS = mAxis.X * S;
-			float YS = mAxis.Y * S;
-			float ZS = mAxis.Z * S;
+			float XS = Axis.X * S;
+			float YS = Axis.Y * S;
+			float ZS = Axis.Z * S;
 
 			float OMC = 1f - C;
 
@@ -186,7 +197,8 @@ namespace MW
 
 		/// <summary>Converts a normalised vector to a Pitch, Yaw rotation.</summary>
 		/// <remarks>Roll is zero.</remarks>
-		/// <returns>An MRotator defining the pitch and yaw of this direction vector.</returns>
+		/// <ret>An MRotator defining the pitch and yaw of this direction vector.</ret>
+		/// <returns>An <see cref="MRotator"/> defining the <see cref="MRotator.Pitch"/> and <see cref="MRotator.Yaw"/> of this direction vector.</returns>
 		public MRotator Rotation()
 		{
 			MRotator R = new MRotator();
@@ -199,6 +211,8 @@ namespace MW
 		}
 
 		/// <summary>The direction and length of this MVector.</summary>
+		/// <param name="Direction"></param>
+		/// <param name="Length"></param>
 		public void DirectionAndLength(out MVector Direction, out float Length)
 		{
 			Direction = Normalised;
@@ -236,71 +250,73 @@ namespace MW
 			return this;
 		}
 
-		/// <summary>Euclidean distance between this MVvector and another MVector.</summary>
-		/// <param name="v">The MVector to find distance.</param>
-		/// <returns>The Euclidean distance between this MVector and v.</returns>
-		public float Distance(MVector v) => Distance(this, v);
+		/// <summary>Euclidean distance between this MVector and another V.</summary>
+		/// <param name="V">The MVector to find distance.</param>
+		/// <returns>The Euclidean distance between this MVector and V.</returns>
+		public float Distance(MVector V) => Distance(this, V);
 		/// <summary>The Euclidean distance, but without the square root calculation.</summary>
-		/// <param name="v">The MVector to find square distance.</param>
-		/// <returns>The square distance between this MVector and v.</returns>
-		public float SqrDistance(MVector v) => SqrDistance(this, v);
+		/// <param name="V">The MVector to find square distance.</param>
+		/// <returns>The square distance between this MVector and V.</returns>
+		public float SqrDistance(MVector V) => SqrDistance(this, V);
 
 		/// <summary>Adds two MVectors together.</summary>
-		/// <param name="l">Left-side MVector.</param>
-		/// <param name="r">Right-side MVector.</param>
-		/// <returns>(MVector l, MVector r) => new MVector(l.X + r.X, l.Y + r.Y, l.Z + r.Z)</returns>
-		public static MVector operator +(MVector l, MVector r) => new MVector(l.X + r.X, l.Y + r.Y, l.Z + r.Z);
+		/// <param name="Left">Left-side MVector.</param>
+		/// <param name="Right">Right-side MVector.</param>
+		/// <returns>(MVector Left, MVector Right) => new MVector(Left.X + Right.X, Left.Y + Right.Y, Left.Z + Right.Z)</returns>
+		public static MVector operator +(MVector Left, MVector Right) => new MVector(Left.X + Right.X, Left.Y + Right.Y, Left.Z + Right.Z);
 		/// <summary>Adds a Vector3 to an MVector.</summary>
-		/// <param name="l">The MVector.</param>
-		/// <param name="r">The Vector3.</param>
-		/// <returns>(MVector l, Vector3 r) => l + (MVector)r</returns>
-		public static MVector operator +(MVector l, Vector3 r) => l + (MVector)r;
+		/// <param name="Left">The MVector.</param>
+		/// <param name="Right">The Vector3.</param>
+		/// <returns>(MVector Left, Vector3 Right) => Left + (MVector)Right</returns>
+		public static MVector operator +(MVector Left, Vector3 Right) => Left + (MVector)Right;
 		/// <summary>Adds an MVector to a Vector3.</summary>
-		/// <param name="l">The Vector3.</param>
-		/// <param name="r">The MVector.</param>
-		/// <returns>(Vector3 l, MVector r) => (MVector)l + r</returns>
-		public static MVector operator +(Vector3 l, MVector r) => (MVector)l + r;
+		/// <param name="Left">The Vector3.</param>
+		/// <param name="Right">The MVector.</param>
+		/// <returns>(Vector3 Left, MVector Right) => (MVector)Left + Right</returns>
+		public static MVector operator +(Vector3 Left, MVector Right) => (MVector)Left + Right;
 		/// <summary>Subtracts two MVectors.</summary>
-		/// <param name="l">Left-side MVector.</param>
-		/// <param name="r">Right-side MVector.</param>
-		/// <returns>(MVector l, MVector r) => new MVector(l.X - r.X, l.Y - r.Y, l.Z - r.Z)</returns>
-		public static MVector operator -(MVector l, MVector r) => new MVector(l.X - r.X, l.Y - r.Y, l.Z - r.Z);
+		/// <param name="Left">Left-side MVector.</param>
+		/// <param name="Right">Right-side MVector.</param>
+		/// <returns>(MVector Left, MVector Right) => new MVector(Left.X - Right.X, Left.Y - Right.Y, Left.Z - Right.Z)</returns>
+		public static MVector operator -(MVector Left, MVector Right) => new MVector(Left.X - Right.X, Left.Y - Right.Y, Left.Z - Right.Z);
 		/// <summary>Negates an MVector.</summary>
-		/// <param name="v">The MVector to negate all components.</param>
-		/// <returns>(MVector v) => new MVector(-v.X, -v.Y, -v.Z)</returns>
-		public static MVector operator -(MVector v) => new MVector(-v.X, -v.Y, -v.Z);
+		/// <param name="V">The MVector to negate all components.</param>
+		/// <returns>(MVector V) => V *= -1f</returns>
+		public static MVector operator -(MVector V) => V *= -1f;
 		/// <summary>Multiplies an MVector by a scalar on all components.</summary>
-		/// <param name="v">The MVector.</param>
-		/// <param name="s">The Scalar to multiply.</param>
-		/// <returns>(MVector v, float s) => new MVector(v.X * s, v.Y * s, v.Z * s)</returns>
-		public static MVector operator *(MVector v, float s) => new MVector(v.X * s, v.Y * s, v.Z * s);
+		/// <param name="V">The MVector.</param>
+		/// <param name="S">The Scalar to multiply.</param>
+		/// <returns>(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S)</returns>
+		public static MVector operator *(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S);
 		/// <summary>Multiplies an MVector by a scalar on all components.</summary>
-		/// <param name="s">The Scalar to multiply.</param>
-		/// <param name="v">The MVector.</param>
-		/// <returns>(MVector v, float s) => new MVector(v.X * s, v.Y * s, v.Z * s)</returns>
-		public static MVector operator *(float s, MVector v) => new MVector(v.X * s, v.Y * s, v.Z * s);
+		/// <param name="S">The Scalar to multiply.</param>
+		/// <param name="V">The MVector.</param>
+		/// <returns>(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S)</returns>
+		public static MVector operator *(float S, MVector V) => new MVector(V.X * S, V.Y * S, V.Z * S);
 		/// <summary>Divides an MVector by a scalar on all components.</summary>
 		/// <remarks>If d == 0, this will throw a DivideByZeroException.</remarks>
-		/// <param name="v">The MVector.</param>
-		/// <param name="d">The denominator under all components.</param>
-		/// <returns>(MVector v, float d) => new MVector(v.X / d, v.Y / d, v.Z / d)</returns>
-		public static MVector operator /(MVector v, float d)
+		/// <param name="V">The MVector.</param>
+		/// <param name="D">The denominator under all components.</param>
+		/// <returns>(MVector V, float D) => float S = 1 / D; return V * S</returns>
+		public static MVector operator /(MVector V, float D)
 		{
-			if (d == 0)
+			if (D == 0)
 			{
-				throw new System.DivideByZeroException("Attempted division by zero. Input d: " + d);
+				throw new System.DivideByZeroException("Attempted division by zero.");
 			}
 
-			return new MVector(v.X / d, v.Y / d, v.Z / d);
+			float S = 1 / D;
+
+			return V * S;
 		}
 
 		/// <summary>The vector cross ^ product.</summary>
-		/// <returns>(MVector l, MVector r) => new MVector(l.Y * r.Z - l.Z * r.Y, l.Z * r.X - l.X * r.Z, l.X * r.Y - l.Y * r.X)</returns>
-		public static MVector operator ^(MVector l, MVector r) => new MVector(l.Y * r.Z - l.Z * r.Y, l.Z * r.X - l.X * r.Z, l.X * r.Y - l.Y * r.X);
+		/// <returns>(MVector Left, MVector Right) => new MVector(Left.Y * Right.Z - Left.Z * Right.Y, Left.Z * Right.X - Left.X * Right.Z, Left.X * Right.Y - Left.Y * Right.X)</returns>
+		public static MVector operator ^(MVector Left, MVector Right) => new MVector(Left.Y * Right.Z - Left.Z * Right.Y, Left.Z * Right.X - Left.X * Right.Z, Left.X * Right.Y - Left.Y * Right.X);
 		/// <summary>The vector dot | product.</summary>
-		/// <remarks>Does not assume l and r are normalised.</remarks>
-		/// <returns>(MVector l, MVector r) => l.X * r.X + l.Y * r.Y + l.Z * r.Z</returns>
-		public static float operator |(MVector l, MVector r) => l.X * r.X + l.Y * r.Y + l.Z * r.Z;
+		/// <remarks>Does not assume Left and Right are normalised.</remarks>
+		/// <returns>(MVector Left, MVector Right) => Left.X * Right.X + Left.Y * Right.Y + Left.Z * Right.Z</returns>
+		public static float operator |(MVector Left, MVector Right) => Left.X * Right.X + Left.Y * Right.Y + Left.Z * Right.Z;
 
 		/// <summary>Normalised direction from to.</summary>
 		/// <returns>(MVector From, MVector To) => (To - From).Normalised</returns>
@@ -309,55 +325,55 @@ namespace MW
 		/// <returns>(MVector To, MVector From) => From > To</returns>
 		public static MVector operator <(MVector To, MVector From) => From > To;
 
-		/// <summary>Increments all components by i.</summary>
-		/// <param name="v">The MVector to increment.</param>
-		/// <param name="i">The number to increment.</param>
+		/// <summary>Increments all components by I.</summary>
+		/// <param name="V">The MVector to increment.</param>
+		/// <param name="I">The number to increment.</param>
 		/// <returns>v[1Σ3] + i</returns>
-		public static MVector operator >>(MVector v, int i)
+		public static MVector operator >>(MVector V, int I)
 		{
 			return new MVector
 			{
-				X = v.X + i,
-				Y = v.Y + i,
-				Z = v.Z + i
+				X = V.X + I,
+				Y = V.Y + I,
+				Z = V.Z + I
 			};
 		}
 
-		/// <summary>Decrements all components by i.</summary>
-		/// <param name="v">The MVector to decrement.</param>
-		/// <param name="i">The number to decrement.</param>
+		/// <summary>Decrements all components by I.</summary>
+		/// <param name="V">The MVector to decrement.</param>
+		/// <param name="I">The number to decrement.</param>
 		/// <returns>v[1Σ3] - i</returns>
-		public static MVector operator <<(MVector v, int i)
+		public static MVector operator <<(MVector V, int I)
 		{
 			return new MVector
 			{
-				X = v.X - i,
-				Y = v.Y - i,
-				Z = v.Z - i
+				X = V.X - I,
+				Y = V.Y - I,
+				Z = V.Z - I
 			};
 		}
 
 		/// <summary>Compares two MVectors for equality.</summary>
-		/// <param name="l">Left-side comparison.</param>
-		/// <param name="r">Right-side comparison.</param>
+		/// <param name="Left">Left-side comparison.</param>
+		/// <param name="Right">Right-side comparison.</param>
 		/// <returns>True if the square distance between l and r is less than kEpsilon * kEpsilon.</returns>
-		public static bool operator ==(MVector l, MVector r)
+		public static bool operator ==(MVector Left, MVector Right)
 		{
-			float x = l.X - r.X;
-			float y = l.Y - r.Y;
-			float z = l.Z - r.Z;
+			float x = Left.X - Right.X;
+			float y = Left.Y - Right.Y;
+			float z = Left.Z - Right.Z;
 			float sqr = x * x + y * y + z * z;
 			return sqr < kEpsilon * kEpsilon;
 		}
 
 		/// <summary>Compares two MVectors for inequality.</summary>
-		/// <param name="l">Left-side comparison.</param>
-		/// <param name="r">Right-side comparison.</param>
+		/// <param name="Left">Left-side comparison.</param>
+		/// <param name="Right">Right-side comparison.</param>
 		/// <returns>The opposite of operator ==.</returns>
-		public static bool operator !=(MVector l, MVector r) => !(l == r);
+		public static bool operator !=(MVector Left, MVector Right) => !(Left == Right);
 
-		public override bool Equals(object obj) => obj is MVector && Equals(obj);
-		public bool Equals(MVector mV) => mV.X == X && mV.Y == Y && mV.Z == Z;
+		public override bool Equals(object O) => O is MVector && Equals(O);
+		public bool Equals(MVector V) => V.X == X && V.Y == Y && V.Z == Z;
 
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		public static implicit operator Vector3(MVector MVector) => new Vector3(MVector.X, MVector.Y, MVector.Z);
@@ -372,12 +388,12 @@ namespace MW
 		public static implicit operator MVector(Vector2 Vector) => new MVector(Vector);
 
 		/// <summary>The Color representation of this MVector, in 0-255 XYZ/RGB.</summary>
-		public static implicit operator Color(MVector mVector)
+		public static implicit operator Color(MVector V)
 		{
-			return Conversion.Colour.Colour255(mVector.X, mVector.Y, mVector.Z);
+			return Conversion.Colour.Colour255(V.X, V.Y, V.Z);
 		}
 
-		/// <summary>Hashcode for use in Maps, Sets, Dictionaries, etc.</summary>
+		/// <summary>Hashcode for use in Maps, Sets, MArrays, etc.</summary>
 		/// <returns>GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() &lt;&lt; 2) ^ (Z.GetHashCode() &gt;&gt; 2)</returns>
 		public override int GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2);
 

@@ -40,7 +40,7 @@ namespace MW.Pathfinding
 					break;
 				}
 
-				for (uint i = 0; i < Current.NumberOfDirections; ++i)
+				for (uint i = 0; i < Current.NumberOfDirections(); ++i)
 				{
 					T Neighbour = (T)Current.Neighbour(i);
 					if (!Neighbour.IsTraversable() || Closed.Contains(Neighbour)) { continue; }
@@ -189,10 +189,10 @@ namespace MW.Pathfinding
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
 		uint ComputationsPerFrame = 1;
 
-		/// <summary>The number of frames before path/s are computed.</summary>
+		/// <summary>The number of frames between computing path/s.</summary>
 		[UnityEngine.SerializeField] [UnityEngine.Min(1)] [UnityEngine.Tooltip("The number of frames before path/s are computed.")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
-		uint FramesBeforeComputation = 1;
+		uint FramesBetweenComputations = 1;
 
 		bool bIsPaused = false;
 		uint FrameTracker = 0;
@@ -237,19 +237,19 @@ namespace MW.Pathfinding
 
 			if (!bIsPaused)
 			{
-				if (FrameTracker >= FramesBeforeComputation)
+				if (FrameTracker >= FramesBetweenComputations)
 				{
 					for (uint i = 0; i < ComputationsPerFrame; ++i)
 						PathRegister<T>.ComputeNext();
 
 					FrameTracker = 0;
 				}
-			}
 
-			FrameTracker++;
+				FrameTracker++;
+			}
 		}
 
-		/// <summary>Halt the computation of paths.</summary>
+		/// <summary>Temporarily stop the computation of paths.</summary>
 		public void Pause()
 		{
 			bIsPaused = true;
@@ -273,7 +273,8 @@ namespace MW.Pathfinding
 		public enum EStatus { Paused = 1, Running = 2 }
 	}
 
-	/// <summary>The Interface that T must implement if it is to be used by Pathfinding.</summary>
+	/// <summary>The Interface that T must implement if it is to be used by <see cref="Pathfinding{T}"/>.</summary>
+	/// <docs>The Interface that T must implement if it is to be used by Pathfinding.</docs>
 	/// <typeparam name="T">The type to declare a node.</typeparam>
 	public interface INode<T> where T : IComparable<T>
 	{
@@ -287,11 +288,11 @@ namespace MW.Pathfinding
 		T Parent { get; set; }
 
 		/// <summary>How many directions can this Node point to?</summary>
-		uint NumberOfDirections { get; set; }
+		uint NumberOfDirections();
 
 		/// <summary>Is this block traversable?</summary>
 		bool IsTraversable();
-		/// <summary>Get the Neighbouring Node at uDirection.</summary>
+		/// <summary>Get the Neighbouring Node at Direction.</summary>
 		/// <param name="Direction">The neighbour of this Node in this direction.</param>
 		INode<T> Neighbour(uint Direction);
 		/// <summary>The distance heuristic to calculate pathfinding scores.</summary>

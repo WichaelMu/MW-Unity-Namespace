@@ -52,7 +52,8 @@ namespace MW
 
 		/// <summary>Adds Range of items.</summary>
 		/// <param name="Range">The list of elements to add.</param>
-		/// <returns>An MArray of PushRangeFailed{T} that failed to be pushed into this MArray.</returns>
+		/// <ret>An MArray of PushRangeFailed&lt;T&gt; that failed to be pushed into this MArray.</ret>
+		/// <returns>An <see cref="MArray&lt;T&gt;"/> of <see cref="PushRangeFailed"/> that failed to be pushed into this MArray.</returns>
 		public MArray<PushRangeFailed> Push(params T[] Range)
 		{
 			MArray<PushRangeFailed> Failed = new();
@@ -162,7 +163,8 @@ namespace MW
 		}
 
 		/// <summary>The incoming and reflected Item of this mirror from zero to maximum Num.</summary>
-		/// <returns>Reflected</returns>
+		/// <ret>Source and Reflected information.</ret>
+		/// <returns><see cref="Reflected"/> - Source and Reflected information.</returns>
 		public Reflected Reflect(int Index)
 		{
 			InRange(Index);
@@ -170,7 +172,8 @@ namespace MW
 		}
 
 		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum Num.</summary>
-		/// <returns>Reflected</returns>
+		/// <ret>Source and Reflected information.</ret>
+		/// <returns><see cref="Reflected"/> - Source and Reflected information.</returns>
 		public Reflected Reflect(int Minimum, int Index)
 		{
 			InRange(Index);
@@ -187,6 +190,7 @@ namespace MW
 			Reflected = Mirror(Minimum, Index);
 		}
 
+		/// <summary>Sorts Items.</summary>
 		public void Sort()
 		{
 			Items.Sort();
@@ -194,6 +198,10 @@ namespace MW
 			Remap();
 		}
 
+		/// <summary>Sorts Items from Index for Count using Comparer.</summary>
+		/// <param name="Index"></param>
+		/// <param name="Count"></param>
+		/// <param name="Comparer"></param>
 		public void Sort(int Index, int Count, IComparer<T> Comparer)
 		{
 			Items.Sort(Index, Count, Comparer);
@@ -201,6 +209,8 @@ namespace MW
 			Remap();
 		}
 
+		/// <summary>Sorts Items with a Comparison&lt;T&gt;.</summary>
+		/// <param name="Comparison"></param>
 		public void Sort(Comparison<T> Comparison)
 		{
 			Sort(Comparison);
@@ -208,6 +218,8 @@ namespace MW
 			Remap();
 		}
 
+		/// <summary>Sorts Items with an IComparer&lt;T&gt;.</summary>
+		/// <param name="Comparer"></param>
 		public void Sort(IComparer<T> Comparer)
 		{
 			Items.Sort(Comparer);
@@ -215,6 +227,7 @@ namespace MW
 			Remap();
 		}
 
+		/// <summary>Reverses Items.</summary>
 		public void Reverse()
 		{
 			Items.Reverse();
@@ -222,6 +235,9 @@ namespace MW
 			Remap();
 		}
 
+		/// <summary>Reverses Items from Index for Count.</summary>
+		/// <param name="Index"></param>
+		/// <param name="Count"></param>
 		public void Reverse(int Index, int Count)
 		{
 			Items.Reverse(Index, Count);
@@ -238,6 +254,8 @@ namespace MW
 			}
 		}
 
+		/// <summary>Converts this MArray into T[].</summary>
+		/// <returns>T[].</returns>
 		public T[] TArray()
 		{
 			return Items.ToArray();
@@ -262,10 +280,11 @@ namespace MW
 			return ((IEnumerable)Items).GetEnumerator();
 		}
 
-		/// <summary>If this MArray is null or IsEmpty.</summary>
-		/// <param name="CheckIfNullOrEmpty">The MArray to check for null or emptiness.</param>
-		/// <returns>True if CheckIfNullOrEmpty is null or empty.</returns>
-		public static bool operator !(MArray<T> CheckIfNullOrEmpty) => CheckNull(CheckIfNullOrEmpty) || CheckIfNullOrEmpty.IsEmpty();
+		/// <summary>If this MArray is null.</summary>
+		/// <docs>If this MArray is null.</docs>
+		/// <param name="CheckIfNull">The MArray to check whether it is unintialised.</param>
+		/// <returns>True if CheckIfNullOrEmpty is null.</returns>
+		public static bool operator !(MArray<T> CheckIfNull) => CheckNull(CheckIfNull);
 
 		/// <summary>Adds Right to the end of Left.</summary>
 		/// <param name="Left">The MArray to append to.</param>
@@ -360,7 +379,7 @@ namespace MW
 			}
 		}
 
-		/// <summary>A struct containing which T failed to be pushed into an MArray of T.</summary>
+		/// <summary>Information which T failed to be pushed into an MArray&lt;T&gt;.</summary>
 		public struct PushRangeFailed
 		{
 			/// <summary>The T that couldn't be added into the MArray.</summary>
