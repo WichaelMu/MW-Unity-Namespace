@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using MW.Diagnostics;
 using MW.Math;
+using MW.Conversion;
 
 namespace MW
 {
@@ -8,6 +9,7 @@ namespace MW
 	[System.Serializable]
 	public struct MVector
 	{
+		/// <summary>Vector floating-point precision.</summary>
 		public const float kEpsilon = 1E-05f;
 
 		public float X, Y, Z;
@@ -63,7 +65,7 @@ namespace MW
 			0 => X,
 			1 => Y,
 			2 => Z,
-			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range! Input i: " + i)
+			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range! Expected i >= 0 && i <= 2.\nInput i: " + i)
 		};
 
 		static readonly MVector zero = new MVector(0);
@@ -103,7 +105,8 @@ namespace MW
 		/// <summary>The vector dot | product of Left and Right.</summary>
 		/// <remarks>Does not assume Left and Right are normalised.</remarks>
 		public static float Dot(MVector Left, MVector Right) => Left | Right;
-		/// <summary>Whether left and right are Mathematics.Parallel(MVector, MVector, float) to each other.</summary>
+		/// <summary>Whether Left and Right are <see cref="Mathematics.Parallel(MVector, MVector, float)"/> to each other.</summary>
+		/// <docs>Whether left and right are Mathematics.Parallel(MVector, MVector, float) to each other.</docs>
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		public static bool Parallel(MVector Left, MVector Right) => Mathematics.Parallel(Left, Right);
@@ -165,7 +168,7 @@ namespace MW
 
 		/// <summary>This MVector's reflection among Normal.</summary>
 		/// <param name="Normal">The normal vector to mirror.</param>
-		public MVector Mirror(MVector Normal) => this - Normal * 2f * (this | Normal);
+		public MVector Mirror(MVector Normal) => 2f * (this | Normal) * this - Normal;
 
 		/// <summary>Rotates this MVector at an angle of AngleDegrees around Axis.</summary>
 		/// <param name="AngleDegrees">The degrees at which to rotate this MVector.</param>
@@ -227,6 +230,8 @@ namespace MW
 		}
 
 		/// <summary>Ignores the X component of this MVector.</summary>
+		/// <remarks>Modifies this MVector.</remarks>
+		/// <returns>This MVector with a zeroed X component.</returns>
 		public MVector IgnoreX()
 		{
 			X = 0;
@@ -235,6 +240,8 @@ namespace MW
 		}
 
 		/// <summary>Ignores the Y component of this MVector.</summary>
+		/// <remarks>Modifies this MVector.</remarks>
+		/// <returns>This MVector with a zeroed Y component.</returns>
 		public MVector IgnoreY()
 		{
 			Y = 0;
@@ -243,9 +250,56 @@ namespace MW
 		}
 
 		/// <summary>Ignores the Z component of this MVector.</summary>
+		/// <remarks>Modifies this MVector.</remarks>
+		/// <returns>This MVector with a zeroed Z component.</returns>
 		public MVector IgnoreZ()
 		{
 			Z = 0;
+
+			return this;
+		}
+
+		/// <summary>Ignores a set of <see cref="EComponentAxis"/> from this MVector.</summary>
+		/// <docs>Ignores a set of Components on this MVector.</docs>
+		/// <param name="Components">The vector components to ignore.</param>
+		/// <returns>This MVector zeroed over Components.</returns>
+		public MVector Ignore(EComponentAxis Components)
+		{
+			byte Mask = (byte)((byte)Components & 7);
+
+			if (Mask == 0)
+			{
+				return this;
+			}
+			else if (Mask == 7)
+			{
+				return Zero;
+			}
+
+			switch (Mask)
+			{
+				case 1:
+					IgnoreX();
+					break;
+				case 2:
+					IgnoreY();
+					break;
+				case 3:
+					IgnoreX();
+					IgnoreY();
+					break;
+				case 4:
+					IgnoreZ();
+					break;
+				case 5:
+					IgnoreX();
+					IgnoreZ();
+					break;
+				case 6:
+					IgnoreY();
+					IgnoreZ();
+					break;
+			}
 
 			return this;
 		}
@@ -282,12 +336,7 @@ namespace MW
 		/// <summary>Negates an MVector.</summary>
 		/// <param name="V">The MVector to negate all components.</param>
 		/// <returns>(MVector V) => V *= -1f</returns>
-		public static MVector operator -(MVector V) => V *= -1f;
-		/// <summary>Multiplies an MVector by a scalar on all components.</summary>
-		/// <param name="V">The MVector.</param>
-		/// <param name="S">The Scalar to multiply.</param>
-		/// <returns>(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S)</returns>
-		public static MVector operator *(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S);
+		public static MVector operator -(MVector V) => -1f * V;
 		/// <summary>Multiplies an MVector by a scalar on all components.</summary>
 		/// <param name="S">The Scalar to multiply.</param>
 		/// <param name="V">The MVector.</param>
@@ -297,7 +346,7 @@ namespace MW
 		/// <remarks>If d == 0, this will throw a DivideByZeroException.</remarks>
 		/// <param name="V">The MVector.</param>
 		/// <param name="D">The denominator under all components.</param>
-		/// <returns>(MVector V, float D) => float S = 1 / D; return V * S</returns>
+		/// <returns>(MVector V, float D) => float S = 1 / D; return S * V</returns>
 		public static MVector operator /(MVector V, float D)
 		{
 			if (D == 0)
@@ -307,7 +356,7 @@ namespace MW
 
 			float S = 1 / D;
 
-			return V * S;
+			return S * V;
 		}
 
 		/// <summary>The vector cross ^ product.</summary>
@@ -356,7 +405,8 @@ namespace MW
 		/// <summary>Compares two MVectors for equality.</summary>
 		/// <param name="Left">Left-side comparison.</param>
 		/// <param name="Right">Right-side comparison.</param>
-		/// <returns>True if the square distance between l and r is less than kEpsilon * kEpsilon.</returns>
+		/// <ret>True if the square distance between Left and Right is less than kEpsilon * kEpsilon.</ret>
+		/// <returns>True if the square distance between Left and Right is less than <see cref="kEpsilon"/>^2.</returns>
 		public static bool operator ==(MVector Left, MVector Right)
 		{
 			float x = Left.X - Right.X;
@@ -372,8 +422,8 @@ namespace MW
 		/// <returns>The opposite of operator ==.</returns>
 		public static bool operator !=(MVector Left, MVector Right) => !(Left == Right);
 
-		public override bool Equals(object O) => O is MVector && Equals(O);
-		public bool Equals(MVector V) => V.X == X && V.Y == Y && V.Z == Z;
+		public override bool Equals(object O) => O is MVector V && Equals(V);
+		public bool Equals(MVector V) => Mathf.Abs(V.X - X + V.Y - Y + V.Z - Z) < 4f * kEpsilon;
 
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		public static implicit operator Vector3(MVector MVector) => new Vector3(MVector.X, MVector.Y, MVector.Z);
@@ -388,10 +438,7 @@ namespace MW
 		public static implicit operator MVector(Vector2 Vector) => new MVector(Vector);
 
 		/// <summary>The Color representation of this MVector, in 0-255 XYZ/RGB.</summary>
-		public static implicit operator Color(MVector V)
-		{
-			return Conversion.Colour.Colour255(V.X, V.Y, V.Z);
-		}
+		public static implicit operator Color(MVector V) => Colour.Colour255(V.X, V.Y, V.Z);
 
 		/// <summary>Hashcode for use in Maps, Sets, MArrays, etc.</summary>
 		/// <returns>GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() &lt;&lt; 2) ^ (Z.GetHashCode() &gt;&gt; 2)</returns>

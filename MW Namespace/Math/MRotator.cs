@@ -209,6 +209,7 @@ namespace MW
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 
+		/// <summary>A human-readable MRotator.</summary>
 		/// <returns>"Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll</returns>
 		public override string ToString()
 		{
