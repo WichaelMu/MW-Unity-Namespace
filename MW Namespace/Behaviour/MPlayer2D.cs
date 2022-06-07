@@ -35,7 +35,7 @@ namespace MW.Behaviour
 			if (HasStoppedReceivingMovementInput())
 				return;
 
-			Rigidbody.MovePosition(Position + Velocity * Time.fixedDeltaTime);
+			Rigidbody.MovePosition(Position + (Time.fixedDeltaTime * Velocity));
 		}
 
 		/// <summary>The default implementation for <see cref="MovementInput(float, float)"/>.</summary>
@@ -48,7 +48,7 @@ namespace MW.Behaviour
 				return;
 
 			Velocity = new MVector(ForwardThrow, UpwardThrow);
-			Velocity *= MovementSpeed;
+			Velocity = MovementSpeed * Velocity;
 
 			FlipOnInput(ForwardThrow);
 		}

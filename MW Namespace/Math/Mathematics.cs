@@ -125,7 +125,7 @@ namespace MW.Math
 			}
 
 			float DistanceFromCallerToTarget = MVector.Distance(LaunchPosition, TargetPosition) * Utils.kThousandth;
-			MVector ForwardPrediction = TargetVelocity * (1000 / ConstantMoveSpeed) * DistanceFromCallerToTarget;
+			MVector ForwardPrediction = (1000 / ConstantMoveSpeed) * DistanceFromCallerToTarget * TargetVelocity;
 
 			return TargetPosition + ForwardPrediction;
 		}

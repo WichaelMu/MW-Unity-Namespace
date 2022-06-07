@@ -24,7 +24,7 @@ namespace MW.Behaviour
 			if (HasStoppedReceivingMovementInput())
 				return;
 
-			Rigidbody.MovePosition(Position + Velocity * Time.fixedDeltaTime);
+			Rigidbody.MovePosition(Position + (Time.fixedDeltaTime * Velocity));
 		}
 
 		/// <summary>The default implementation for <see cref="MovementInput(float, float)"/>.</summary>
@@ -37,7 +37,7 @@ namespace MW.Behaviour
 				return;
 
 			Velocity = new MVector(RightThrow, 0, ForwardThrow).Normalise();
-			Velocity *= MovementSpeed;
+			Velocity = MovementSpeed * Velocity;
 		}
 
 		/// <summary>Adds force upwards to this player. Default direction is <see cref="MVector.Up"/>.</summary>
@@ -46,7 +46,7 @@ namespace MW.Behaviour
 		/// <param name="Force">The amount of force to apply.</param>
 		public virtual void Jump(float Force)
 		{
-			Rigidbody.AddForce(MVector.Up * Force);
+			Rigidbody.AddForce(Force * MVector.Up);
 		}
 
 		/// <summary>The <see cref="Rigidbody.velocity"/> of this Player, respective to <see cref="Rigidbody"/>.</summary>

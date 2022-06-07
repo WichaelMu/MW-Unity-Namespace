@@ -149,7 +149,7 @@ namespace MW.Audio
 			while (VisualIndex < Samples)
 			{
 				float PositionOnSpectrum = Spectrum[SpectrumIndex];
-				Ret[VisualIndex] = Mask * PositionOnSpectrum;
+				Ret[VisualIndex] = PositionOnSpectrum * Mask;
 				++SpectrumIndex;
 				++VisualIndex;
 			}

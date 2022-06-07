@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using MW.Diagnostics;
 using MW.Math;
 using MW.Conversion;
 
@@ -75,6 +74,7 @@ namespace MW
 		static readonly MVector one = new MVector(1);
 		static readonly MVector twod = new MVector(1, 1);
 		static readonly MVector threed = new MVector(1, 0, 1);
+		static readonly MVector nan = new MVector(float.NaN);
 
 		/// <summary>Short for writing MVector(0).</summary>
 		public static readonly MVector Zero = zero;
@@ -90,6 +90,9 @@ namespace MW
 		public static readonly MVector _2D = twod;
 		/// <summary>1 on XZ components. 3D MVector Flag.</summary>
 		public static readonly MVector _3D = threed;
+		/// <summary><see cref="float.NaN"/> on all components.</summary>
+		/// <docs>NaN on all components.</docs>
+		public static readonly MVector NaN = nan;
 
 		/// <summary>Converts an MVector to a Vector3.</summary>
 		/// <param name="mVector">The MVector to convert.</param>
@@ -146,7 +149,7 @@ namespace MW
 				float m = Magnitude;
 				if (m > kEpsilon) return this / m;
 
-				Log.E("MVector is zero!", "Returning MVector.Zero instead.");
+				// Log.E("MVector is zero!", "Returning MVector.Zero instead.");
 				return Zero;
 			}
 		}

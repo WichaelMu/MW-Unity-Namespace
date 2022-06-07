@@ -19,7 +19,7 @@ namespace MW
 		/// <summary>Shorthand for writing / 3. (Always faster to multiply than to divide)</summary>
 		public const float kOneThird = .3333333333333333333333333333333333f;
 		/// <summary>Shorthand for writing 1.6 recurring. (Always faster to multiply than to divide)</summary>
-		public const float kTwoThirds = kOneThird * 2;
+		public const float kTwoThirds = .6666666666666666666666666666666666f;
 		/// <summary>The golden ratio.</summary>
 		public const float kPhi = 1.6180339887498948482045868343656381f;
 		/// <summary>Euler's number. (e)</summary>
@@ -209,13 +209,13 @@ namespace MW
 
 		/// <summary>Generates spherical points with an equal distribution.</summary>
 		/// <param name="Resolution">The number of points to generate.</param>
-		/// <param name="GoldenRationModifier">Adjusts the golden ratio.</param>
+		/// <param name="GoldenRatioModifier">Adjusts the golden ratio.</param>
 		/// <returns>The Vector3[] points for the sphere.</returns>
-		public static Vector3[] GenerateEqualSphere(int Resolution, float GoldenRationModifier)
+		public static Vector3[] GenerateEqualSphere(int Resolution, float GoldenRatioModifier)
 		{
 			Vector3[] vDirections = new Vector3[Resolution];
 
-			float fPhi = 1 + Mathf.Sqrt(GoldenRationModifier) * .5f;
+			float fPhi = 1 + Mathf.Sqrt(GoldenRatioModifier) * .5f;
 			float fInc = Mathf.PI * 2 * fPhi;
 
 			for (int i = 0; i < Resolution; i++)
