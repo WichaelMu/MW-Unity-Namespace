@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using MW.Math;
+﻿using MW.Math;
+using UnityEngine;
 
 namespace MW.Kinetic
 {

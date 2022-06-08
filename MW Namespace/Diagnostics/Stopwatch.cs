@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MW.Diagnostics
+﻿namespace MW.Diagnostics
 {
 	/// <summary>Track execution time of code.</summary>
 	public class Stopwatch

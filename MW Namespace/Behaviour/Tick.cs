@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 using MW.Diagnostics;
 using MW.Easing;
+using UnityEngine;
 
 namespace MW.Behaviour
 {

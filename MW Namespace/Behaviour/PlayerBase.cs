@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using UnityEngine;
 using MW.Kinetic;
 using MW.Math;
+using UnityEngine;
 
 namespace MW.Behaviour
 {

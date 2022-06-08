@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using MW.Kinetic;
+﻿using MW.Diagnostics;
 using MW.Easing;
-using MW.Diagnostics;
+using MW.Kinetic;
+using UnityEngine;
 
 namespace MW.Math
 {

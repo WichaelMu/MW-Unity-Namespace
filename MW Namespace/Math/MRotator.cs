@@ -1,7 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using MW.Diagnostics;
 using MW.Math;
+using UnityEngine;
 
 namespace MW
 {
