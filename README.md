@@ -106,7 +106,10 @@ Any text-related function assumes that [TextMeshPro](https://docs.unity3d.com/Ma
 * Canvas UI-element scaling.
 
 ## The Documentation
-The documentation of MW can be found as ` .html` files in ` Docs/HTML/ `.
+Documentation can be found [here](https://wichaelmu.github.io/MW-Unity-Namespace/).
+<br>
+<br>
+The actual documentation files of MW can be found as ` .html` files in ` Docs/HTML/ `.
 <br>
 Open a file in a Web Browser.
 * The left of the page lists the Classes or Namespaces of MW. Navigate using these links.
