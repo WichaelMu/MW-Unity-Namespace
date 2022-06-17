@@ -191,9 +191,16 @@ void Writer::Write(const std::vector<MW>& all_mw)
 					// Not a function.
 					// Write whatever this is normally.
 					if ((mw.mw_class.length() == 0) ^ mw.mw_type == "FIELD" ^ mw.mw_type == "PROPERTY")
+					{
 						html << HTML_SUMMARY_TITLE(mw.mw_name) << HTML_SUMMARY_ENTRY(mw.summary);
+
+						if (mw.remarks.length() != 0)
+							html << HTML_SUMMARY_ENTRY(mw.remarks);
+					}
 					else
-						html << HTML_CLASS_START(mw.mw_name, mw.summary);
+					{
+						html << HTML_CLASS_START(mw.mw_name, mw.summary + "<br>" + mw.remarks);
+					}
 				}
 			}
 			else

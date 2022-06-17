@@ -57,6 +57,16 @@ std::vector<MW> Reader::OpenFile()
 		const std::string returns_default = "returns";
 		const std::string returns_custom = "ret";
 		const std::string remarks = "remarks";
+		const std::string doc_remarks = "docremarks";
+		
+		/*
+		* When using tags that override the normal XML tags, ensure the custom
+		  tag is checked before the normal tag. Before writing values with the
+		  normal tag, check if the value's length is not zero.
+
+		  See returns_custom and returns_default and doc_remarks and remarks
+		  for an example.
+		*/
 
 		for (xml_node<>* summary_params_etc = member->first_node(); summary_params_etc; summary_params_etc = summary_params_etc->next_sibling())
 		{
@@ -81,21 +91,31 @@ std::vector<MW> Reader::OpenFile()
 			}
 			else if (this_name == returns_custom)
 			{
-				// <returns>value</returns>
+				// <ret>custom return value</ret>
 				m.returns = summary_params_etc->value();
 			}
 			else if (this_name == returns_default)
 			{
+				// <returns>return value</returns>
+
 				if (m.returns.length() == 0)
 				{
 					m.returns = summary_params_etc->value();
 				}
 			}
+			else if (this_name == doc_remarks)
+			{
+				// <docremarks>doc remarks</docremarks>
+				m.remarks = summary_params_etc->value();
+			}
 			else if (this_name == remarks)
 			{
 				// <remarks>remarks</remarks>
 
-				m.remarks = summary_params_etc->value();
+				if (m.remarks.length() == 0)
+				{
+					m.remarks = summary_params_etc->value();
+				}
 			}
 		}
 
