@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+	<title>MW Unity Namespace</title>
+	<link rel="stylesheet" href="HTML/MWUnityNamespace.css">
+	<meta charset=UTF-8>
+</head>
+<body>
+	<div class=header id=top>MW UNITY NAMESPACE</div>
+	<div style="width: 100%; display: table;">
+		<div style="display: table-row">
+			<div style="width: 200px; display: table-cell;">
+				<div class="navLinks"><a href=HTML/Audio.html>Audio</a></div><br><div class="navLinks"><a href=HTML/Behaviour.html>Behaviour</a></div><br><div class="navLinks"><a href=HTML/CameraUtils.html>CameraUtils</a></div><br><div class="navLinks"><a href=HTML/Conversion.html>Conversion</a></div><br><div class="navLinks"><a href=HTML/Diagnostics.html>Diagnostics</a></div><br><div class="navLinks"><a href=HTML/EButton.html>EButton</a></div><br><div class="navLinks"><a href=HTML/EComponentAxis.html>EComponentAxis</a></div><br><div class="navLinks"><a href=HTML/EDirection.html>EDirection</a></div><br><div class="navLinks"><a href=HTML/EEquation.html>EEquation</a></div><br><div class="navLinks"><a href=HTML/EUnit.html>EUnit</a></div><br><div class="navLinks"><a href=HTML/Easing.html>Easing</a></div><br><div class="navLinks"><a href=HTML/HUD.html>HUD</a></div><br><div class="navLinks"><a href=HTML/IHeapItem.html>IHeapItem</a></div><br><div class="navLinks"><a href=HTML/IO.html>IO</a></div><br><div class="navLinks"><a href=HTML/Kinetic.html>Kinetic</a></div><br><div class="navLinks"><a href=HTML/MArray.html>MArray</a></div><br><div class="navLinks"><a href=HTML/MRotator.html>MRotator</a></div><br><div class="navLinks"><a href=HTML/MVector.html>MVector</a></div><br><div class="navLinks"><a href=HTML/Math.html>Math</a></div><br><div class="navLinks"><a href=HTML/Pathfinding.html>Pathfinding</a></div><br><div class="navLinks"><a href=HTML/THeap.html>THeap</a></div><br><div class="navLinks"><a href=HTML/TPair2.html>TPair2</a></div><br><div class="navLinks"><a href=HTML/TTriple3.html>TTriple3</a></div><br><div class="navLinks"><a href=HTML/Utils.html>Utils</a></div><br>
+			</div>
+			<br><br>
+			    <div style="display: table-cell;">
+			    	<br>
+			    	<br>
+			    	<h1 class="classHead C">The MW Unity Namespace</h1>
+			    	<p class="simplePara L">
+			    		Welcome to the MW Namespace Source Code!
+			    		<br /><br />
+			    		A library containing helpful classes, methods, functions, and data structures to help with game development in the Unity Engine.
+			    	</p>
+
+			    	<h2 class="basicHead">Usage</h2>
+			    	<p class="simplePara">
+			    		The MW Unity Namespace was built for <pre class="simplePara" style="font-weight: 600; font-size: 120%;">Unity Engine 2021.1.3f1</pre><span class="simplePara"> and previously </span><pre class="simplePara" style="font-weight: 600; font-size: 120%;">Unity Engine 2020.2.4f1</pre>.
+			    		<ul class="simplePara">
+			    			<li>Either:</li>
+			    			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clone, Compile and Build MW as a C# Class Library using .NET Standard 2.0. (MW was developed and built using Visual Studio 2022).
+			    			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download the latest release of MW.</li>
+			    			<li>Drag MW.dll, and MW.xml if you want documentation, somewhere in your Assets/ folder in your Unity Project.</li>
+			    			<li>Unity will recompile with MW.dll.</li>
+			    			<li>In any C# script in your Project, add:</li>
+			    			<li><pre>using MW;</pre></li>
+			    			<li>or any other sub-namespace, such as</li>
+			    			<li><pre>using MW.Math;</pre></li>
+			    			<li>You should now have access to the MW Namespace.</li>
+			    		</ul>
+			    	</p>
+			    	<h2 class="basicHead">Namespaces</h2>
+			    	<p class="simplePara">
+			    		Below is a list of all the namespaces in the MW module.
+			    	</p>
+
+			    	<p class="basicHead">MW</p>
+			    	<p class="simplePara">
+			    		This namespace contains some basic utility functions, containers, and data structures.
+			    		<ul class="simplePara">
+			    			<li>TPair&lt;T, Y&gt; and TTriple&lt;T, Y, U&gt; containers holding two or three variables, respectively.</li>
+			    			<li>A THeap&lt;T&gt; data structure for Maximum or Minimum Heaps.</li>
+			    			<li>A dynamic generic MArray&lt;T&gt; combining the functionality of a List and a Dictionary.</li>
+			    			<li>A Utils class holding many helpful constants and functions.</li>
+			    			<li>A custom three-dimensional Vector representation of coordinates and points.</li>
+			    			<li>A custom three-axis rotations container representing Pitch, Yaw, and Roll.</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Audio</p>
+			    	<p class="simplePara">
+			    		Helps ease the process of playing Audio in games.
+			    		<ul class="simplePara">
+			    			<li>A MonoBehaviour inherited Audio controller used for in-game sounds.</li>
+			    			<li>A class that contains data about an Audio Clip.</li>
+			    			<li>A sound Visualiser.</li>
+			    			<li>A sound Synthesiser with an accompanying list of musical Notes.</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Behaviour</p>
+			    	<p class="simplePara">
+			    		Provides base classes for 2D and 3D players. Also includes:
+			    		<ul class="simplePara">
+			    			<li>Minimum-Heap optimised A* pathfinding.</li>
+			    			<li>A custom Update loop that processes data based on MArray&lt;&gt;.</li>
+			    			<li>An simple method for processing and passing inter-frame information.</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Camera</p>
+			    	<p class="simplePara">
+			    		Camera Controllers for both 2D and 3D games.
+			    		<ul class="simplePara">
+			    			<li>Orthographic panning and mouse clicking logic.</li>
+			    			<li>Billboarding of Transforms to face specific Cameras.</li>
+			    			<li>
+			    				Camera tracking and following.
+			    				<ul><li>Includes a Unity implementation of <a class="link" href="https://docs.unrealengine.com/5.0/en-US/API/Runtime/Engine/GameFramework/USpringArmComponent/">Unreal Engine's USpringArmComponent</a></li></ul>
+			    			</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Conversion</p>
+			    	<p class="simplePara">
+			    		Currently only provides conversion into <a class="link" href="https://docs.unity3d.com/ScriptReference/Color.html">Colours</a>.
+			    		<ul class="simplePara">
+			    			<li>
+			    				Converts RGB values ranging from 0-255 into Unity's Colour struct.
+			    				<ul><li>From Vector3, Vector4, and from Hex strings, with alpha channel manipulation.</li></ul>
+			    			</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Diagnostics</p>
+			    	<p class="simplePara">
+			    		Provides methods and classes used to measure game performance and logging.
+			    		<ul class="simplePara">
+			    			<li>A short-hand version of Debug.Log() with <pre>Log.P();</pre></li>
+			    			<li>Methods to Log Stacktraces to the Unity Editor Console.</li>
+			    			<li>A stopwatch to track the execution time of game functions.</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.IO</p>
+			    	<p class="simplePara">
+			    		Shorthand versions of Mouse and Keyboard Input based on <a class="link" href="https://docs.unity3d.com/ScriptReference/Input.html">Unity's Input System</a>.
+			    		<ul class="simplePara">
+			    			<li>More accessible methods to register Mouse and Keyboard Down, Hold, or Up Inputs.</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Math</p>
+			    	<p class="simplePara">
+			    		Game mathematics functions and utilities.
+			    		<ul class="simplePara">
+			    			<li>Acceleration, Acceleration Rate, and Deceleration calculations.</li>
+			    			<li>Predictive Projectile calculations.</li>
+			    			<li>
+			    				Common Number functions, including:
+			    				<ul>
+			    					<li>GCD and LCM.</li>
+			    					<li>Wrapping.</li>
+			    					<li>Sine and Cosine.</li>
+			    				</ul>
+			    			</li>
+			    			<li>
+			    				Common Vector functions, including:
+			    				<ul>
+			    					<li>Parallel checks.</li>
+			    					<li>Normalised checks.</li>
+			    					<li>Vector angle calculations in 2D and 3D.</li>
+			    				</ul>
+			    			</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.Kinetic</p>
+			    	<p class="simplePara">
+			    		Calculations for any moving GameObject or Rigidbody.
+			    		<ul class="simplePara">
+			    			<li>
+			    				Aerodynamic Computations.
+			    				<ul>
+			    					<li>Air resistance. <a class="link" href="https://www.grc.nasa.gov/www/k-12/airplane/falling.html">Provided by NASA</a></li>
+			    					<li>Lift at a speed. <a class="link" href="https://www.grc.nasa.gov/www/k-12/airplane/lifteq.html#:~:text=The%20lift%20equation%20states%20that,times%20the%20wing%20area%20A.&text=For%20given%20air%20conditions%2C%20shape,Cl%20to%20determine%20the%20lift">Provided by NASA</a></li>
+			    				</ul>
+			    			</li>
+			    			<li>Homing / Close-In tracking function.</li>
+			    			<li>
+			    				Projectile Launching / Motion at a pre-determined:
+			    				<ul>
+			    					<li>Velocity, or</li>
+			    					<li>Height.</li>
+			    				</ul>
+			    			</li>
+			    			<li>G-Forces as a directional Vector, or float Force.</li>
+			    			<li>Calculations of Jumping forces, regardless of 2D or 3D gravity.</li>
+			    			<li>Basic Collision Avoidance.</li>
+			    		</ul>
+			    	</p>
+
+			    	<p class="basicHead">MW.HUD</p>
+			    	<p class="simplePara">
+			    		Utility methods and functions for any in-game on-screen elements.
+			    		<br />
+			    		Any text-related function assumes that <a class="link" href="https://docs.unity3d.com/Manual/com.unity.textmeshpro.html">TextMeshPro</a> is used.
+			    		<ul class="simplePara">
+			    			<li>Text Typewriting with optional sounds.</li>
+			    			<li>Line and Circle draw functions with a Line Renderer.</li>
+			    			<li>Canvas UI-element scaling.</li>
+			    		</ul>
+			    	</p>
+
+			    	<h2 class="basicHead">The Documentation</h2>
+			    	<p class="simplePara">
+			    		Navigate using the links on the left of the page listing the Classes or Namespaces of MW.
+
+			    		The Content Area is everything excluding the left navigation menu.
+			    		<br>
+			    		<br>
+			    		The documentation is structured such that the Main Text in the middle of the Content Area is the name of the class with a summary underneath.
+			    		<br>
+			    		<br>
+			    		Any non-bolded text (without brackets) are variables (properties or fields) of that class.
+			    		<br>
+			    		Any bolded text (with brackets) are publicly callable methods or functions of that class.
+			    		<br>
+			    		<b>Currently, there is no way of determining whether a function is statically called or called through an instance.</b>
+			    		<br>
+			    		<br>
+			    		Underneath the method or function, you will see a summary of what the method or function does, along with any input parameters and return values.
+			    		<pre class="simplePara" style="font-weight: 600; font-size: 120%;">ref</pre><span class="simplePara"> or </span><pre class="simplePara" style="font-weight: 600; font-size: 120%;">out</pre> <span class="simplePara">parameters are denoted with an ` & ` at the end of the parameter type.</span>
+			    		<br>
+			    		<br>
+			    		<span class="simplePara">The documentation is automatically generated. The source code for generation is separate from MW. The Documentation Generator can be found <a class="link" href="https://github.com/WichaelMu/MW-Unity-Namespace/tree/main/Docs/Reader/Generator">here</a>.</span>
+			    	</p>
+
+			    	<h2 class="basicHead">About the MW Namespace</h2>
+			    	<p class="simplePara">
+			    		The MW Unity Namespace was an idea conceived in December 2020, after four months of developing games in the Unity Engine.
+			    		<br>
+			    		<br>
+			    		The mission is to provide as much re-usable code in one place that will help game development in Unity.
+			    		<br>
+			    		<br>
+			    		Other engines, such as CRYENGINE and UnrealEngine, have a significant number of utility classes, methods, and functions that the Unity API lacks.
+			    		The MW Unity Namespace aims to bridge the gap by providing implementations for such utilities for the Unity Engine.
+			    		<br>
+			    		<br>
+			    		The MW Unity Namespace is under constant development.
+			    	</p>
+
+			    	<h2 class="basicHead">Additional Notes</h2>
+				<p class="simplePara">
+					The MW Unity Namespace is purpose-built for a private game project for the simulation of Airplanes.
+					<br>
+					<br>
+					While most, if not all, methods and functions have gone through testing, some, especially Aerodynamics, are purpose-built and tested only on the project mentioned above, which may not work on your project.
+				</p>
+			    </div>
+		</div>
+	</div>
+</body>
+</html>
