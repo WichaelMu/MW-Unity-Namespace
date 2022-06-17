@@ -130,7 +130,7 @@ Underneath the method or function, you will see a summary of what the method or 
 ` ref ` or ` out ` parameters are denoted with an ` & ` at the end of the parameter type.
 <br>
 <br>
-The documentation is automatically generated. The source code for generation is separate from MW. The Documentation Generator can be found [here](https://github.com/WichaelMu/MW-Unity-Namespace/tree/main/Docs/Reader/Generator).
+The documentation is automatically generated. The source code for generation is separate from MW. The Documentation Generator can be found [here](https://github.com/WichaelMu/MW-Unity-Namespace/tree/main/Docs/Generator).
 
 ## About the MW Namespace
 The MW Unity Namespace was an idea conceived in December 2020, after four months of developing games in the Unity Engine.
