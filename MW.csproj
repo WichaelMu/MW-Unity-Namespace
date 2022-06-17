@@ -7,6 +7,12 @@
 	  <OutputType>Library</OutputType>
 	  <StartupObject></StartupObject>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <BaseOutputPath>\Output</BaseOutputPath>
+	  <DocumentationFile></DocumentationFile>
+	  <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <BaseIntermediateOutputPath>Output\</BaseIntermediateOutputPath>
+	  <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,6 +26,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Docs\Generator\**" />
+    <Compile Remove="Docs\Reader\**" />
+    <EmbeddedResource Remove="Docs\Generator\**" />
+    <EmbeddedResource Remove="Docs\Reader\**" />
+    <None Remove="Docs\Generator\**" />
+    <None Remove="Docs\Reader\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Unity.TextMeshPro">
@@ -36,5 +51,16 @@
   <ItemGroup>
     <Folder Include="Docs\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo.&#xD;&#xA;echo -- Running Documentation Generator --&#xD;&#xA;echo.&#xD;&#xA;cd Docs&#xD;&#xA;cd Generator&#xD;&#xA;cd x64&#xD;&#xA;cd Release&#xD;&#xA;Generator.exe&#xD;&#xA;echo.&#xD;&#xA;" />
+  </Target>
 
 </Project>

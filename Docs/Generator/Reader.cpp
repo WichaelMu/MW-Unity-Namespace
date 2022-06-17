@@ -18,8 +18,9 @@ using namespace rapidxml;
 std::vector<MW> Reader::OpenFile()
 {
 	std::vector<MW> all_mw;
-#if _DEBUG
-	file<> file("../../../bin/Release/netstandard2.0/MW.xml");
+#if _DEBUG && WITH_VS
+
+	file<> file("../../Output/Release/netstandard2.0/MW.xml");
 
 	if (!file.data())
 	{
@@ -27,13 +28,13 @@ std::vector<MW> Reader::OpenFile()
 		return all_mw;
 	}
 #else
-	const char* xml_path = "C:/Users/table/Documents/Machine Code/MW/MW/bin/Release/netstandard2.0/MW.xml";
+	const char* xml_path = "../../../../Output/Release/netstandard2.0/MW.xml";
 	file<> file(xml_path);
 
 	if (!file.data())
 	{
 		std::cout << "The MW.xml file at: " << xml_path << " cannot be found, or opened!\n";
-		std::cout << "HTML Generator will not terminate!\n";
+		std::cout << "HTML Generator will now terminate!\n";
 		std::exit(-1);
 	}
 #endif

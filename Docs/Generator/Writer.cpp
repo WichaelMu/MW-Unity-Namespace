@@ -2,6 +2,7 @@
 #include <map>
 
 #include "Writer.h"
+#include "MW.h"
 
 #if BUILD
 #include "Timer.h"
@@ -93,10 +94,10 @@ void Writer::Write(const std::vector<MW>& all_mw)
 {
 	std::map<std::string, std::string> namespace_to_html;
 
-#if _DEBUG
-	const std::string HTML_PATH = "../../HTML/";
+#if _DEBUG && WITH_VS
+	const std::string HTML_PATH = "../HTML/";
 #else
-	const std::string HTML_PATH = "C:/Users/table/Documents/Machine Code/MW/MW/Docs/HTML/";
+	const std::string HTML_PATH = "../../../HTML/";
 #endif
 
 	// Write/Create basic HTML file.
@@ -111,7 +112,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 			html_file << HTML_HEADER << HTML_HOLDING_DIV;
 
-#if BUILD
+#if BUILD || _DEBUG
 			if (html_file.fail())
 			{
 				std::cout << "Failed to create HTML file at " << HTML_PATH << ". Maybe permissions?\n";
@@ -120,7 +121,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 			}
 			else
 			{
-				std::cout << new_file << " created.\n";
+				std::cout << n.mw_namespace << ".html" << " created.\n";
 			}
 #endif
 
@@ -169,7 +170,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 				if (mw.mw_type == "MEMBER")
 				{
 					// A function.
-					// Becaues this function_parameters_type.size == 0, this has no parameters.
+					// Because this function_parameters_type.size == 0, this has no parameters.
 					// Write the name of the function with empty brackets.
 					html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "");
 

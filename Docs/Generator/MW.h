@@ -10,6 +10,8 @@ this->mw_name = mw_name;\
 this->summary = summary;\
 
 #define BUILD !_DEBUG
+#define PRINT_DEBUG_MSGS 0
+#define WITH_VS _MSC_VER >= 1932
 
 struct MW
 {
@@ -30,19 +32,15 @@ struct MW
 		GENERATE_DEFAULTS
 	}
 
-#if _DEBUG
+#if _DEBUG && PRINT_DEBUG_MSGS
 #define VECTOR_SIZE(v) v.size()
 
 	void Print()
 	{
-		//std::cout << mw_namespace << '\n';
-
-		return;
 		std::cout << VECTOR_SIZE(function_parameters_type) << " " << VECTOR_SIZE(function_parameters_name) << " " << VECTOR_SIZE(function_parameters_desc) << " " << mw_namespace << " " << mw_class << " " << mw_name << '\n';
-		return;
 		std::cout << mw_namespace << '.' << mw_class << "::" << mw_name << '\n';
 		std::cout << summary << '\n' << '\n';
-		//return;
+
 		for (int i = 0; i < function_parameters_name.size(); ++i)
 		{
 			std::cout << function_parameters_type[i] << ' ' << function_parameters_name[i] << '\n';

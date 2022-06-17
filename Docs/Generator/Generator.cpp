@@ -7,6 +7,12 @@
 #include "Reader.h"
 #include "Writer.h"
 
+/* 
+* Do not run in Visual Studio with the 'Release' Configuration.
+* 
+* Building MW should automatically call Generator.
+*/
+
 int main()
 {
 #if !_DEBUG
@@ -21,4 +27,6 @@ int main()
 	t.PrintTime("\n\nFull Suite");
 	std::cin.get();
 #endif
+
+	return 0;
 }
