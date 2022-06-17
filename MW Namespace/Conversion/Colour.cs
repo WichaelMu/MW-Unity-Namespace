@@ -46,7 +46,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding colour in RGBA using Vector4.</summary>
-		/// <param name="ColourWithAlpha">The RGBA/XYZW channel values, respectivaly.</param>
+		/// <param name="ColourWithAlpha">The RGBA/XYZW channel values, respectively.</param>
 		public static Color Colour255(Vector4 ColourWithAlpha)
 		{
 			ColourWithAlpha *= Utils.k1To255RGB;
@@ -195,7 +195,7 @@ namespace MW.Conversion
 
 		}
 
-		/// <summary>Converts a Color to its RGB values as an MVector.</summary>
+		/// <summary>Converts a Colour to its RGB values as an MVector.</summary>
 		/// <param name="Colour">The colour to split.</param>
 		/// <returns>An MVector where X = R, Y = G, and Z = B in 255 RGB format.</returns>
 		public static MVector Get255RGB(Color Colour)
@@ -203,7 +203,7 @@ namespace MW.Conversion
 			return new MVector(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB);
 		}
 
-		/// <summary>Converts a Color to its RGBA values as a Vector4.</summary>
+		/// <summary>Converts a Colour to its RGBA values as a Vector4.</summary>
 		/// <param name="Colour">The colour to split.</param>
 		/// <returns>A Vector4 where x = R, y = G, z = B, and w = A in 255 RGBA format.</returns>
 		public static Vector4 Get255RGBA(Color Colour)

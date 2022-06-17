@@ -107,7 +107,7 @@ namespace MW.Behaviour
 		#region Movement
 
 		/// <summary>Registers movement from input.</summary>
-		/// <remarks>Needs to be overidden from <see cref="PlayerBase"/>.</remarks>
+		/// <remarks>Needs to be overridden from <see cref="PlayerBase"/>.</remarks>
 		/// <param name="ForwardThrow">Horizontal input.</param>
 		/// <param name="RightThrow">Vertical input.</param>
 		/// <exception cref="NotImplementedException"></exception>
@@ -160,7 +160,7 @@ namespace MW.Behaviour
 
 		/// <summary>The G Force experienced by this Player between <see cref="FixedUpdate"/> intervals.</summary>
 		/// <docs>The G Force experienced by this Player between FixedUpdate intervals.</docs>
-		/// <param name="Gravity">The force of gravity this Palyer experiences at a standstill.</param>
+		/// <param name="Gravity">The force of gravity this Player experiences at a standstill.</param>
 		/// <returns>The G Force experience by this Player as an MVector.</returns>
 		public MVector V_ComputeGForce(MVector Gravity)
 		{

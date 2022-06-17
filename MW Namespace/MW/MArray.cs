@@ -282,7 +282,7 @@ namespace MW
 
 		/// <summary>If this MArray is null.</summary>
 		/// <docs>If this MArray is null.</docs>
-		/// <param name="CheckIfNull">The MArray to check whether it is unintialised.</param>
+		/// <param name="CheckIfNull">The MArray to check whether it is uninitialised.</param>
 		/// <returns>True if CheckIfNullOrEmpty is null.</returns>
 		public static bool operator !(MArray<T> CheckIfNull) => CheckNull(CheckIfNull);
 

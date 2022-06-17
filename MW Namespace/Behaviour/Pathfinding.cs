@@ -188,14 +188,14 @@ namespace MW.Pathfinding
 		[UnityEngine.SerializeField]
 		[UnityEngine.Min(1)]
 		[UnityEngine.Tooltip("The number of paths to compute per frame.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
 		uint ComputationsPerFrame = 1;
 
 		/// <summary>The number of frames between computing path/s.</summary>
 		[UnityEngine.SerializeField]
 		[UnityEngine.Min(1)]
 		[UnityEngine.Tooltip("The number of frames before path/s are computed.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
 		uint FramesBetweenComputations = 1;
 
 		bool bIsPaused = false;

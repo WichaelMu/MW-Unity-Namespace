@@ -192,7 +192,7 @@ namespace MW.Audio
 			return AllAffectedByPause;
 		}
 
-		/// <summary>Stops the sound nameed Name.</summary>
+		/// <summary>Stops the sound named Name.</summary>
 		/// <param name="Name">The name of the requested sound to stop playing.</param>
 		public void Stop(string Name)
 		{

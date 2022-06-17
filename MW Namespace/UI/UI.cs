@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace MW.HUD
 {
-	/// <summary>World space Canvas scaling and TextMeshProUGUI utilities.</summary>
-	/// <docs>World space <see cref="Canvas"/> scaling and <see cref="TextMeshProUGUI"/> utilities.</docs>
+	/// <summary>World space <see cref="Canvas"/> scaling and <see cref="TextMeshProUGUI"/> utilities.</summary>
+	/// <docs>World space Canvas scaling and TextMeshProUGUI utilities.</docs>
 	public static class UI
 	{
 		public enum ETypewriterMode
@@ -23,9 +23,9 @@ namespace MW.HUD
 		/// <returns>The relative scale size in Vector2.</returns>
 		public static Vector2 ScaleSize(Vector3 Self, Vector3 ScaleWith)
 		{
-			float scale = Mathf.Clamp(Vector3.Distance(Self, ScaleWith), 1, 1000);
-			scale *= .01f;
-			return new Vector2(scale, scale) * .03f;
+			float Scale = Mathf.Clamp(Vector3.Distance(Self, ScaleWith), 1, 1000);
+			Scale *= .01f;
+			return new Vector2(Scale, Scale) * .03f;
 		}
 
 		/// <summary>Animates TMPro to display Content like a typewriter.</summary>
@@ -87,7 +87,7 @@ namespace MW.HUD
 		/// <param name="Content">The content to typewrite.</param>
 		/// <param name="Delay">The time gap between writing a new character.</param>
 		/// <param name="Mode">Should the text ETypewriterMode.Append, or ETypewriterMode.Clear?</param>
-		/// <param name="Sound">The MSound in MAudio._AudioInstance to play when writing a character.</param>
+		/// <param name="Sound">The MSound in MAudio.AudioInstance to play when writing a character.</param>
 		/// <param name="bOverlapSound"></param>
 		public static IEnumerator TypewriterTextWithSound(TextMeshProUGUI TMPro, GameObject Caller, string Content, float Delay, ETypewriterMode Mode, string Sound, bool bOverlapSound = false)
 		{

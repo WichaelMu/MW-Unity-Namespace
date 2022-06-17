@@ -10,7 +10,8 @@ namespace MW.Kinetic
 		/// <param name="Self">The Rigidbody to apply air resistance to.</param>
 		public static Vector3 AirResistance(Rigidbody Self)
 		{
-			return -(.5f * Mathematics.Speed(Self) * Mathematics.Speed(Self) * Self.drag * Self.velocity.normalized);
+			float Speed = Mathematics.Speed(Self);
+			return -(.5f * Speed * Speed * Self.drag * Self.velocity.normalized);
 		}
 
 		/// <summary>The scale of lift applied to a wing with WingArea travelling at Velocity through a fluid at Density with LiftCoefficient.</summary>

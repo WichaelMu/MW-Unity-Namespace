@@ -6,7 +6,7 @@ namespace MW
 	/// <typeparam name="T">The type to store in this heap.</typeparam>
 	public class THeap<T> where T : IHeapItem<T>
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
 		T[] Internal_Items;
 		int Internal_Count;
 
@@ -59,7 +59,7 @@ namespace MW
 			SortDown(Item);
 		}
 
-		/// <summary>Sorts this Item upawrds.</summary>
+		/// <summary>Sorts this Item upwards.</summary>
 		/// <param name="Item">The item to update.</param>
 		public void UpdateItemUp(T Item)
 		{

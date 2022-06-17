@@ -135,7 +135,7 @@ namespace MW.Math
 		/// <returns>Number &amp; (Number - 1) == 0.</returns>
 		public static bool IsPowerOfTwo(int Number) => (Number & (Number - 1)) == 0;
 
-		/// <summary>The greatest common divisor of na and nb.</summary>
+		/// <summary>The greatest common divisor of A and B.</summary>
 		public static int GreatestCommonDivisor(int A, int B)
 		{
 			while (B != 0)
@@ -148,7 +148,7 @@ namespace MW.Math
 			return A;
 		}
 
-		/// <summary>The lowest common multiple of na and nb.</summary>
+		/// <summary>The lowest common multiple of A and B.</summary>
 		public static int LowestCommonMultiple(int A, int B)
 		{
 			int GCD = GreatestCommonDivisor(A, B);

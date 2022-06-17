@@ -59,7 +59,7 @@ namespace MW.Behaviour
 		}
 	}
 
-	/// <summary>Information abot this Player on the previous record.</summary>
+	/// <summary>Information about this Player on the previous record.</summary>
 	public struct LastIntervalInformation
 	{
 		/// <summary>The Position of this Player on the previous record.</summary>

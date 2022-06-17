@@ -285,7 +285,7 @@ namespace MW
 		/// <returns>The reflected number.</returns>
 		public static float MirrorNumber(float Number, float Minimum, float Maximum) => Minimum + Maximum - Number;
 
-		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with MArray{T}.Mirror(int, int).</summary>
+		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with <see cref="MArray{T}.Reflect(int, int)"/>.</summary>
 		/// <param name="Number">The number to anchor a reflection.</param>
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>

@@ -2,7 +2,7 @@
 
 namespace MW.IO
 {
-	/// <summary>Mouse Input and Keyboard Input, based off of <see cref="Input"/>.</summary>
+	/// <summary>Mouse Input and Keyboard Input, based on <see cref="Input"/>.</summary>
 	/// <docs>Mouse Input and Keyboard Input.</docs>
 	public static class I
 	{

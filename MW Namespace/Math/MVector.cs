@@ -440,10 +440,10 @@ namespace MW
 		/// <remarks>The resulting MVector will have a Z equal to zero.</remarks>
 		public static implicit operator MVector(Vector2 Vector) => new MVector(Vector);
 
-		/// <summary>The Color representation of this MVector, in 0-255 XYZ/RGB.</summary>
+		/// <summary>The Colour representation of this MVector, in 0-255 XYZ/RGB.</summary>
 		public static implicit operator Color(MVector V) => Colour.Colour255(V.X, V.Y, V.Z);
 
-		/// <summary>Hashcode for use in Maps, Sets, MArrays, etc.</summary>
+		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
 		/// <returns>GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() &lt;&lt; 2) ^ (Z.GetHashCode() &gt;&gt; 2)</returns>
 		public override int GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2);
 
