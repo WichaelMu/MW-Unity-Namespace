@@ -21,19 +21,30 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <NoWarn>1701;1702;0649</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;0649</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Docs\Generator\**" />
     <Compile Remove="Docs\Reader\**" />
+    <Compile Remove="MTest\**" />
+    <Compile Remove="obj\**" />
+    <Compile Remove="x64\**" />
     <EmbeddedResource Remove="Docs\Generator\**" />
     <EmbeddedResource Remove="Docs\Reader\**" />
+    <EmbeddedResource Remove="MTest\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="x64\**" />
     <None Remove="Docs\Generator\**" />
     <None Remove="Docs\Reader\**" />
+    <None Remove="MTest\**" />
+    <None Remove="obj\**" />
+    <None Remove="x64\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,7 +71,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo.&#xD;&#xA;echo -- Running Documentation Generator --&#xD;&#xA;echo.&#xD;&#xA;cd Docs&#xD;&#xA;cd Generator&#xD;&#xA;cd x64&#xD;&#xA;cd Release&#xD;&#xA;Generator.exe&#xD;&#xA;echo.&#xD;&#xA;" />
+    <Exec Command="cd Docs&#xD;&#xA;call GenerateDocs&#xD;&#xA;echo.&#xD;&#xA;&#xD;&#xA;cd ..&#xD;&#xA;cd ..&#xD;&#xA;cd ..&#xD;&#xA;cd ..&#xD;&#xA;&#xD;&#xA;cd MTest&#xD;&#xA;call RunMTest&#xD;&#xA;echo.&#xD;&#xA;" />
   </Target>
 
 </Project>

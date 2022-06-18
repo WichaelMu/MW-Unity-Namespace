@@ -1,0 +1,430 @@
+﻿
+
+#define WITH_PASS_MESSAGES
+
+using UnityEngine;
+using MW;
+using MW.Math;
+using MTest.Output;
+
+namespace MTest
+{
+	internal class TestRunner
+	{
+		public static void FullSuite()
+		{
+			Execute.CoreTests.RoundToDPTest(out int DPPassed, out int DPTotalTests);
+			Execute.MWTests.MVectorTest(out int MVPassed, out int MVTotalTests);
+			Execute.MWTests.MArrayTests(out int MAPassed, out int MATotalTests);
+			Execute.MWTests.THeapTests(out int THPassed, out int THTotalTests);
+
+#if WITH_PASS_MESSAGES
+			O.Line(nameof(Execute.CoreTests.RoundToDPTest) + $" Completed with: {DPPassed}/{DPTotalTests}");
+			O.Line(nameof(Execute.MWTests.MVectorTest) + $" Completed with: {MVPassed}/{MVTotalTests}");
+			O.Line(nameof(Execute.MWTests.MArrayTests) + $" Completed with: {MAPassed}/{MATotalTests}");
+			O.Line(nameof(Execute.MWTests.THeapTests) + $" Completed with: {THPassed}/{THTotalTests}");
+#endif
+		}
+	}
+
+	internal class Execute
+	{
+		public static void Assert(int TestNumber, bool bCondition, ref int Passed, string Operation = "")
+		{
+			if (!bCondition)
+			{
+				O.Failed(TestNumber, true.ToString(), false.ToString(), Operation);
+			}
+			else
+			{
+				Passed++;
+			}
+		}
+
+		public static void VectorToleranceCheck(int TestNumber, MVector M, Vector3 U, float T, string Operation, ref int Passed)
+		{
+			float X = M.X - U.x;
+			float Y = M.Y - U.y;
+			float Z = M.Z - U.z;
+
+			X = Mathf.Abs(X);
+			Y = Mathf.Abs(Y);
+			Z = Mathf.Abs(Z);
+
+			bool bFailed = X > T || Y > T || Z > T;
+
+			if (bFailed)
+				O.Failed(TestNumber, U, M, Operation);
+			else
+				Passed++;
+		}
+
+		public static void FloatToleranceCheck(int TestNumber, float L, float R, float T, string Operation, ref int Passed)
+		{
+			if (Mathf.Abs(L - R) > T)
+				O.Failed(TestNumber, L, R, Operation);
+			else
+				Passed++;
+		}
+
+		internal class CoreTests
+		{
+			public static void RoundToDPTest(out int Passed, out int TotalTests)
+			{
+				Passed = 0;
+				int TestsPassed = 0;
+				float Number, Result;
+				int DP;
+
+				int TestNumber = 1;
+				Number = 0.00f;
+				DP = 2;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(0.000f, nameof(Utils.RoundToDP));
+
+				TestNumber = 2;
+				Number = -0.00001f;
+				DP = 2;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(0.000f, nameof(Utils.RoundToDP));
+
+				TestNumber = 3;
+				Number = 0.00001f;
+				DP = 2;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(0.000f, nameof(Utils.RoundToDP));
+
+				TestNumber = 4;
+				Number = 127.47329f;
+				DP = 2;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(127.47f, nameof(Utils.RoundToDP));
+
+				TestNumber = 5;
+				Number = -94275.4298347f;
+				DP = 2;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(-94275.43f, nameof(Utils.RoundToDP));
+
+				TestNumber = 6;
+				Number = 5.5f;
+				DP = 0;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(6f, nameof(Utils.RoundToDP));
+
+				TestNumber = 7;
+				Number = 3.14159f;
+				DP = 5;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(3.14159f, nameof(Utils.RoundToDP));
+
+				TestNumber = 8;
+				Number = 3.14159f;
+				DP = 9;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(3.14159f, nameof(Utils.RoundToDP));
+
+				TestNumber = 9;
+				Number = 3.14159f;
+				DP = 1;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(3.1f, nameof(Utils.RoundToDP));
+
+				TestNumber = 10;
+				Number = 273489f;
+				DP = 10;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(273489f, nameof(Utils.RoundToDP));
+
+				TestNumber = 11;
+				Number = .5f;
+				DP = 1;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(.5f, nameof(Utils.RoundToDP));
+
+				TestNumber = 12;
+				Number = .49999999999999f;
+				DP = 1;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(.5f, nameof(Utils.RoundToDP));
+
+				TestNumber = 13;
+				Number = .50000000000001f;
+				DP = 1;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(.5f, nameof(Utils.RoundToDP));
+
+				TestNumber = 14;
+				Number = .49999999999999f;
+				DP = 5;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(.5f, nameof(Utils.RoundToDP));
+
+				TestNumber = 15;
+				Number = .50000000000001f;
+				DP = 5;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(.5f, nameof(Utils.RoundToDP));
+
+				TestNumber = 16;
+				Number = 4333f;
+				DP = -2;
+				Result = Utils.RoundToDP(Number, DP);
+				DiagnosticCheckFailed(4300f, nameof(Utils.RoundToDP));
+
+				void DiagnosticCheckFailed(float Expected, string Function)
+				{
+					if (Expected != Result)
+					{
+						O.Failed(TestNumber, Expected, Result, Function, Number, DP);
+					}
+					else
+					{
+						TestsPassed++;
+					}
+				}
+
+				Passed = TestsPassed;
+				TotalTests = TestNumber;
+			}
+		}
+
+		internal class MWTests
+		{
+			public static void MVectorTest(out int Passed, out int TotalTests, float FloatingPointTolerance = 0.001f)
+			{
+				MVector M = new MVector(1, 2, 3);
+				Vector3 U = new Vector3(1, 2, 3);
+
+				if ((MVector)U != M)
+				{
+					O.Failed(1, M.ToString(), ((MVector)U).ToString(), "MVector -> Vector3 Implicit Conversion", M, U);
+					Environment.Exit(-1);
+				}
+
+				if ((Vector3)M != U)
+				{
+					O.Failed(1, U.ToString(), ((Vector3)M).ToString(), "Vector3 -> MVector Implicit Conversion", U, M);
+					Environment.Exit(-1);
+				}
+
+				MVector ML = new MVector(234, 5.94f, -148);
+				MVector MR = new MVector(-5738, 2847, 19.24f);
+
+				Vector3 UL = new Vector3(234, 5.94f, -148);
+				Vector3 UR = new Vector3(-5738, 2847, 19.24f);
+
+				Passed = 0;
+
+				VectorToleranceCheck(1, ML ^ MR, Vector3.Cross(UL, UR), FloatingPointTolerance, "Cross", ref Passed);
+
+				FloatToleranceCheck(2, ML | MR, Vector3.Dot(UL, UR), FloatingPointTolerance, "Dot", ref Passed);
+
+				VectorToleranceCheck(3, ML.Normalised, UL.normalized, FloatingPointTolerance, "Normalise", ref Passed);
+				VectorToleranceCheck(4, MR.Normalised, UR.normalized, FloatingPointTolerance, "Normalise", ref Passed);
+
+				FloatToleranceCheck(5, ML.SqrMagnitude, UL.sqrMagnitude, FloatingPointTolerance, "Square Magnitude", ref Passed);
+				FloatToleranceCheck(6, MR.SqrMagnitude, UR.sqrMagnitude, FloatingPointTolerance, "Square Magnitude", ref Passed);
+
+				FloatToleranceCheck(7, ML.Distance(MR), Vector3.Distance(UL, UR), FloatingPointTolerance, "Distance", ref Passed);
+				FloatToleranceCheck(8, Mathf.Sqrt(ML.SqrDistance(MR)), Vector3.Distance(UL, UR), FloatingPointTolerance, "MVector SqrDistance -> Vector3 Distance", ref Passed);
+
+				VectorToleranceCheck(9, ML - MR, UL - UR, FloatingPointTolerance, "Subtraction", ref Passed);
+				VectorToleranceCheck(10, MR - ML, UR - UL, FloatingPointTolerance, "Subtraction", ref Passed);
+
+				VectorToleranceCheck(11, -ML, -UL, FloatingPointTolerance, "Negation", ref Passed);
+				VectorToleranceCheck(12, -MR, -UR, FloatingPointTolerance, "Negation", ref Passed);
+
+				VectorToleranceCheck(13, ML + MR, UL + UR, FloatingPointTolerance, "Addition", ref Passed);
+
+				VectorToleranceCheck(14, ML + UR, UR + ML, FloatingPointTolerance, "Cross Addition", ref Passed);
+
+				for (float F = -10f; F <= 10f; F += .7f)
+				{
+					VectorToleranceCheck(15, F * ML, F * UL, FloatingPointTolerance, "Multiplication by: " + F, ref Passed);
+					VectorToleranceCheck(16, ML / F, UL / F, FloatingPointTolerance, "Division by: " + F, ref Passed);
+				}
+
+				VectorToleranceCheck(17, ML > MR, (UR - UL).normalized, FloatingPointTolerance, "Direction", ref Passed);
+				VectorToleranceCheck(18, ML < MR, (UL - UR).normalized, FloatingPointTolerance, "Direction", ref Passed);
+
+				Assert(19, Mathematics.IsNormalised(ML.Normalised), ref Passed, nameof(Mathematics.IsNormalised));
+
+				// Total number of tests (19) + the difference between -10 and 10 divided by .7 (28) * 2 for both Multiplication and Division.
+				TotalTests = 19 + 28 * 2;
+			}
+
+			public static void MArrayTests(out int Passed, out int TotalTests)
+			{
+				Passed = 0;
+				MArray<int> M = new MArray<int>(17);
+				M.Push(17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
+
+				Assert(1, M.Contains(1), ref Passed, "Contains");
+				Assert(2, M.Contains(2), ref Passed, "Contains");
+				Assert(3, M.Contains(3), ref Passed, "Contains");
+				Assert(4, M.Contains(4), ref Passed, "Contains");
+
+				Assert(5, !M.Contains(18), ref Passed, "Contains");
+				Assert(6, !M.Contains(-1), ref Passed, "Contains");
+				Assert(7, !M.Contains(54), ref Passed, "Contains");
+				Assert(8, !M.Contains(00), ref Passed, "Contains");
+
+				Assert(9, M.Num == 17, ref Passed, "Num");
+				M.Push(18);
+				Assert(10, M.Num == 18, ref Passed, "Num");
+
+				// M = (17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18)
+
+				Assert(11, M.Contains(18), ref Passed, "Push");
+
+				Assert(12, M.FirstPop() == 17, ref Passed, "First Pop");
+				Assert(13, M.FirstPop() == 16, ref Passed, "First Pop");
+
+				// M = (15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18)
+
+				Assert(14, M.TopPop() == 18, ref Passed, "Top Pop");
+				Assert(15, M.TopPop() == 1, ref Passed, "Top Pop");
+
+				// M = (15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2)
+
+				Assert(16, M[0] == 15, ref Passed, "Square Bracket Accessor");
+
+				Assert(17, M.Mirror(0) == 2, ref Passed, "Mirror");
+				Assert(18, M.Mirror(M.Num - 1) == 15, ref Passed, "Mirror");
+
+				Assert(19, M.Contains(9), ref Passed, "Contains");
+				Assert(20, M[6] == 9, ref Passed, "Square Bracket Accessor");
+
+				M.Pull(9);
+				Assert(21, !M.Contains(9), ref Passed, "Pull -> Contains");
+
+				// M = (15, 14, 13, 12, 11, 10, 8, 7, 6, 5, 4, 3, 2)
+
+				MArray<int> M2 = new MArray<int>(10);
+				M2.Push(-2, 0, 2, 4, 6, 8, 10, 12, 14, 16);
+
+				MArray<int> And = M2 & M;
+				Assert(22, And.Contains(2), ref Passed, "And -> Contains");
+				Assert(23, And.Contains(10), ref Passed, "And -> Contains");
+				Assert(24, !And.Contains(16), ref Passed, "And -> Contains");
+				Assert(25, !And.Contains(18), ref Passed, "And -> Contains");
+
+				// M   = (15, 14, 13, 12, 11, 10, 8, 7, 6, 5, 4, 3, 2)
+				// M2  = (-2, 0, 2, 4, 6, 8, 10, 12, 14, 16)
+				// And = (14, 12, 10, 8, 6, 4, 2)
+
+				MArray<int> XOR = M2 ^ M;
+				Assert(26, XOR.Contains(-2), ref Passed, "XOR -> Contains");
+				Assert(27, XOR.Contains(0), ref Passed, "XOR -> Contains");
+				Assert(28, XOR.Contains(16), ref Passed, "XOR -> Contains");
+				Assert(29, !XOR.Contains(2), ref Passed, "XOR -> Contains");
+				Assert(30, XOR.Num == 3, ref Passed, "XOR -> Num");
+
+				// M   = (15, 14, 13, 12, 11, 10, 8, 7, 6, 5, 4, 3, 2)
+				// M2  = (-2, 0, 2, 4, 6, 8, 10, 12, 14, 16)
+				// XOR = (-2, 0, 16)
+
+				MArray<float> L, R;
+				L = new MArray<float>();
+				R = new MArray<float>();
+				L.Push(1.5f, 2.75f);
+				R.Push(4f, 5.25f);
+
+				MArray<float> LR = L + R;
+
+				Assert(31, LR.Num == 4, ref Passed, "+ -> Num");
+				Assert(32, LR[0] == L[0], ref Passed, "+ -> []");
+				Assert(33, LR[1] == L[1], ref Passed, "+ -> []");
+				Assert(34, LR[2] == R[0], ref Passed, "+ -> []");
+				Assert(35, LR[3] == R[1], ref Passed, "+ -> []");
+
+				// LR = (1.5, 2.75, 4, 5.25)
+
+				LR.Push(4f, 2.75f, 6.5f);
+
+				// LR = (1.5, 2.75, 4, 5.25, 4, 2.75, 6.5)
+
+				Assert(36, LR.Contains(4f), ref Passed, "+ -> Contains");
+				LR.Pull(4f);
+				Assert(37, LR.Contains(4f), ref Passed, "+ -> Pull -> Contains");
+
+				// LR = (1.5, 2.75, 4, 5.25, 2.75, 6.5)
+
+				LR.Pull(4f);
+				Assert(38, !LR.Contains(4f), ref Passed, "+ -> Pull -> Contains");
+
+				// LR = (1.5, 2.75, 5.25, 4, 2.75, 6.5)
+
+				M.Sort();
+				for (byte i = 0; i < M.Num - 1; ++i)
+					Assert(39, M[i] < M[i + 1], ref Passed, "Sort");
+
+				MArray<byte> Forward = new();
+				MArray<byte> Backward = new();
+				Forward.Push(1, 2, 3, 4, 5, 6, 7);
+				Backward.Push(7, 6, 5, 4, 3, 2, 1);
+
+				for (byte i = 0; i < Forward.Num; ++i)
+					Assert(40, Forward.Mirror(i) == Backward[i], ref Passed, "Mirror");
+
+				Backward.Reverse();
+				for (byte i = 0; i < Forward.Num; ++i)
+					Assert(41, Forward[i] == Backward[i], ref Passed, "Reverse");
+
+				// Total number of tests (41) + M's size after Sort() - 1 (12) + Forward.Num * 2 (14) - one for each loop (3).
+				TotalTests = 41 + 12 + 14 - 3;
+			}
+
+			public static void THeapTests(out int Passed, out int TotalTests)
+			{
+				Passed = 0;
+
+				THeap<TTestItem> Heap = new(11);
+				Heap.Add(new TTestItem(46));
+				Heap.Add(new TTestItem(42));
+				Heap.Add(new TTestItem(52));
+				Heap.Add(new TTestItem(44));
+				Heap.Add(new TTestItem(45));
+				Heap.Add(new TTestItem(50));
+				Heap.Add(new TTestItem(51));
+				Heap.Add(new TTestItem(48));
+				Heap.Add(new TTestItem(43));
+				Heap.Add(new TTestItem(47));
+				Heap.Add(new TTestItem(49));
+
+				for (byte i = 0; i < Heap.Count; ++i)
+					Assert(1, Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, ref Passed, "Remove First is Minimum");
+
+				TotalTests = 4;
+			}
+
+			class TTestItem : IHeapItem<TTestItem>
+			{
+				public int Value;
+
+				int Index;
+
+				public TTestItem(int Value)
+				{
+					this.Value = Value;
+				}
+
+				public int HeapItemIndex { get => Index; set => Index = value; }
+
+				public int CompareTo(TTestItem? Other)
+				{
+					if (Other != null)
+					{
+						if (Value < Other.Value)
+							return 1;
+						if (Value > Other.Value)
+							return -1;
+					}
+
+					return 0;
+				}
+			}
+		}
+	}
+}
