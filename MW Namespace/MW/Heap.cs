@@ -3,6 +3,8 @@
 namespace MW
 {
 	/// <summary>The implementation of a Minimum or Maximum Heap.</summary>
+	/// <remarks><see cref="System.IComparable{T}"/> returns &lt; 0 for Max Heap and &gt; 0 for Min Heap.</remarks>
+	/// <docremarks>IComparable&lt;T&gt; returns &lt; 0 for Max Heap and &gt; 0 for Min Heap.</docremarks>
 	/// <typeparam name="T">The type to store in this heap.</typeparam>
 	public class THeap<T> where T : IHeapItem<T>
 	{

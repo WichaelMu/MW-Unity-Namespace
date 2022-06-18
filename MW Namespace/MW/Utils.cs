@@ -116,14 +116,7 @@ namespace MW
 		{
 			if (DecimalPlaces == 0)
 			{
-				Debug.LogWarning("Use Mathf.RoundToInt(" + nameof(Value) + ") instead.");
 				return Mathf.RoundToInt(Value);
-			}
-
-			if (DecimalPlaces <= 0)
-			{
-				Debug.LogWarning("Please use a number greater than 0. Rounding to 2 instead.");
-				DecimalPlaces = 2;
 			}
 
 			float fFactor = Mathf.Pow(10, DecimalPlaces);

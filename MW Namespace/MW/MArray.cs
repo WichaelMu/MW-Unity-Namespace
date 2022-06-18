@@ -11,7 +11,7 @@ namespace MW
 	{
 		[UnityEngine.SerializeField] List<T> Items;
 
-		internal Dictionary<T, int> HashMap;
+		internal Dictionary<T, Stack<int>> HashMap;
 
 		/// <summary>The number of T in this MArray; the size.</summary>
 		public int Num { get => Items.Count; }
@@ -33,35 +33,23 @@ namespace MW
 
 		/// <summary>Adds Item.</summary>
 		/// <param name="Item">The unique element to add.</param>
-		/// <returns>If Pushing Item was successful. True if Item does not already exist in this MArray.</returns>
-		public bool Push(T Item)
+		public void Push(T Item)
 		{
-			try
+			if (!HashMap.ContainsKey(Item))
 			{
-				HashMap.Add(Item, Num);
-
+				HashMap.Add(Item, new());
 				Items.Add(Item);
 			}
-			catch (ArgumentException)
-			{
-				return false;
-			}
 
-			return true;
+			HashMap[Item].Push(Num - 1);
 		}
 
-		/// <summary>Adds Range of items.</summary>
-		/// <param name="Range">The list of elements to add.</param>
-		/// <ret>An MArray of PushRangeFailed&lt;T&gt; that failed to be pushed into this MArray.</ret>
-		/// <returns>An <see cref="MArray&lt;T&gt;"/> of <see cref="PushRangeFailed"/> that failed to be pushed into this MArray.</returns>
-		public MArray<PushRangeFailed> Push(params T[] Range)
+		/// <summary>Adds a number of Items.</summary>
+		/// <param name="Items">The list of elements to add.</param>
+		public void Push(params T[] Items)
 		{
-			MArray<PushRangeFailed> Failed = new();
-			for (int i = 0; i < Range.Length; ++i)
-				if (!Push(Range[i])) // If a push failed.
-					Failed.Push(new PushRangeFailed(Range[i], i));
-
-			return Failed;
+			foreach (T T in Items)
+				Push(T);
 		}
 
 		/// <summary>Removes Item.</summary>
@@ -69,8 +57,14 @@ namespace MW
 		/// <returns>The new size of this MArray.</returns>
 		public int Pull(T Item)
 		{
-			Items.RemoveAt(HashMap[Item]);
-			HashMap.Remove(Item);
+			Remap();
+
+			Items.RemoveAt(HashMap[Item].Pop());
+
+			if (HashMap[Item].Count == 0)
+				HashMap.Remove(Item);
+
+			Remap();
 
 			return Num;
 		}
@@ -250,8 +244,23 @@ namespace MW
 			HashMap.Clear();
 			for (int i = 0; i < Num; ++i)
 			{
-				HashMap.Add(Items[i], i);
+				if (!HashMap.ContainsKey(Items[i]))
+				{
+					HashMap.Add(Items[i], new());
+				}
+
+				HashMap[Items[i]].Push(i);
 			}
+		}
+
+		public string Print()
+		{
+			string S = "";
+
+			foreach (T T in Items)
+				S += T.ToString() + " ";
+
+			return S;
 		}
 
 		/// <summary>Converts this MArray into T[].</summary>
