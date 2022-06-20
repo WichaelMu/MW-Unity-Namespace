@@ -139,7 +139,8 @@ namespace MW
 			HashMap.Clear();
 		}
 
-		/// <returns>If this MArray is considered empty; Num == 0.</returns>
+		/// <returns><see langword="True"/> <see langword="if"/> (<see cref="Num"/> == 0).</returns>
+		/// <ret>If this MArray is considered empty; Num == 0.</ret>
 		public bool IsEmpty() => Num == 0;
 
 		/// <returns>The mirror position of index over minimum zero, maximum Num.</returns>
