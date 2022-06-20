@@ -33,7 +33,7 @@
       <HintPath>..\Output\Release\netstandard2.0\MW.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.3f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\Extensions\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
 
