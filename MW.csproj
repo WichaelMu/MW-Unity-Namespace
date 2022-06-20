@@ -1,77 +1,71 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>netstandard2.0</TargetFramework>
-	  <LangVersion>10.0</LangVersion>
-	  <EnableNETAnalyzers>true</EnableNETAnalyzers>
-	  <OutputType>Library</OutputType>
-	  <StartupObject></StartupObject>
-	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	  <BaseOutputPath>\Output</BaseOutputPath>
-	  <DocumentationFile></DocumentationFile>
-	  <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-	  <PackageReadmeFile>README.md</PackageReadmeFile>
-	  <BaseIntermediateOutputPath>Output\</BaseIntermediateOutputPath>
-	  <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>10.0</LangVersion>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<OutputType>Library</OutputType>
+		<StartupObject></StartupObject>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<BaseOutputPath>\Output</BaseOutputPath>
+		<DocumentationFile></DocumentationFile>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<BaseIntermediateOutputPath>Output\</BaseIntermediateOutputPath>
+		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
-    <DocumentationFile>C:\Users\table\Documents\Machine Code\MW\MW\bin\Debug\netstandard2.0\MW.xml</DocumentationFile>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <NoWarn>1701;1702;0649</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>true</Optimize>
+		<NoWarn>1701;1702;0649</NoWarn>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1701;1702;0649</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>true</Optimize>
+		<NoWarn>1701;1702;0649</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Docs\Generator\**" />
-    <Compile Remove="Docs\Reader\**" />
-    <Compile Remove="MTest\**" />
-    <Compile Remove="obj\**" />
-    <Compile Remove="x64\**" />
-    <EmbeddedResource Remove="Docs\Generator\**" />
-    <EmbeddedResource Remove="Docs\Reader\**" />
-    <EmbeddedResource Remove="MTest\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <EmbeddedResource Remove="x64\**" />
-    <None Remove="Docs\Generator\**" />
-    <None Remove="Docs\Reader\**" />
-    <None Remove="MTest\**" />
-    <None Remove="obj\**" />
-    <None Remove="x64\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Docs\**" />
+		<Compile Remove="Extensions\**" />
+		<Compile Remove="MTest\**" />
+		<Compile Remove="obj\**" />
+		<Compile Remove="Other\**" />
+		<Compile Remove="x64\**" />
+		<EmbeddedResource Remove="Docs\**" />
+		<EmbeddedResource Remove="Extensions\**" />
+		<EmbeddedResource Remove="MTest\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<EmbeddedResource Remove="Other\**" />
+		<EmbeddedResource Remove="x64\**" />
+		<None Remove="Docs\**" />
+		<None Remove="Extensions\**" />
+		<None Remove="MTest\**" />
+		<None Remove="obj\**" />
+		<None Remove="Other\**" />
+		<None Remove="x64\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.3f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.3f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="Unity.TextMeshPro">
+		  <HintPath>Extensions\Unity.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+		  <HintPath>Extensions\UnityEngine.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Docs\" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd Docs&#xD;&#xA;call GenerateDocs&#xD;&#xA;echo.&#xD;&#xA;&#xD;&#xA;cd ..&#xD;&#xA;cd ..&#xD;&#xA;cd ..&#xD;&#xA;cd ..&#xD;&#xA;&#xD;&#xA;cd MTest&#xD;&#xA;call RunMTest&#xD;&#xA;echo.&#xD;&#xA;" />
-  </Target>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="&#xD;&#xA;color 2&#xD;&#xA;&#xD;&#xA;cd Docs&#xD;&#xA;call GenerateDocs&#xD;&#xA;&#xD;&#xA;cd MTest&#xD;&#xA;call RunMTest&#xD;&#xA;echo.&#xD;&#xA;" />
+	</Target>
 
 </Project>
