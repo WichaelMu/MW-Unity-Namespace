@@ -9,7 +9,7 @@ A library containing helpful classes, methods, functions, and data structures to
 ## Usage
 The MW Unity Namespace was built for ` Unity Engine 2021.1.3f1 ` and previously ` Unity Engine 2020.2.4f1 `.
 * Either:
-  * Clone, Compile and Build MW as a C# Class Library using .NET Standard 2.0. (MW was developed and built using Visual Studio 2022).
+  * See [Building and Compiling MW](#building-and-compiling-mw).
   * Download the latest release of MW.
 * Drag MW.dll, and MW.xml if you want documentation, somewhere in your Assets/ folder in your Unity Project.
 * Unity will recompile with MW.dll.
@@ -23,6 +23,34 @@ The MW Unity Namespace was built for ` Unity Engine 2021.1.3f1 ` and previously 
 * You should now have access to the MW Namespace.
 
 You can view the documentation explaining each namespace and its classes in [The Documentation](#the-documentation).
+
+### Building and Compiling MW
+MW was developed and built using Visual Studio 2022.
+<br>
+1. Download this repository with the <b>Download ZIP</b> option under the <b>Code</b> dropdown.
+1. Extract the downloaded ZIP into a directory of your choosing.
+1. Open MW.sln. This is the main Visual Studio Solution file that contains the MW Namespace, including the MTest and the automatic documentation generator.
+1. Before you can build MW, you need to ensure that:
+    1. You have ` UnityEngine.dll ` and ` Unity.TextMeshPro.dll ` both in ` Extensions/ `.
+    1. You have built Generator.
+        * Open the Generator solution.
+        * Ensure that the Solution Configuration is set to ` Release `.
+        * Ensure that the Solution Platform is set to ` Any CPU `.
+        * Build the solution.
+        * <b>NOTE: These are the settings that were used to build Generator.</b>
+    1. Ensure that Generator.exe is in ` Docs/Generator/Output/ `. Otherwise, place it there.
+    1. You may also need to build MTest - this automatically tests aspects of the MW Namespace and reports any issues.
+        * Open the MTest solution.
+        * Ensure that the Solution Configuration is set to ` Release `.
+        * Ensure that the Solution Platform is set to ` Any CPU `.
+        * Build the solution.
+        * <b>NOTE: These are the settings that were used to build MTest.</b>
+    1. Ensure that MTest.exe is in ` MTest/Output/Release/net6.0/ `. Otherwise, place it there.
+1. Open and Build the MW solution.
+<br>
+
+You should have MW.dll and MW.xml in ` Output/Release/netstandard2.0/ `. Otherwise, re-attempt the steps above.
+    
 
 ## Namespaces
 Below is a list of all the namespaces in the MW module.
