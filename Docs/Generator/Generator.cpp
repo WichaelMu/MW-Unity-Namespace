@@ -24,7 +24,7 @@ int main()
 	Writer::Write(all_mw);
 
 #if !_DEBUG
-	t.PrintTime("\n\nFull Suite");
+	t.PrintTime("\nFiles Generated in:");
 	std::cin.get();
 #endif
 

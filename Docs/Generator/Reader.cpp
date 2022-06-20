@@ -28,7 +28,7 @@ std::vector<MW> Reader::OpenFile()
 		return all_mw;
 	}
 #else
-	const char* xml_path = "../../../../Output/Release/netstandard2.0/MW.xml";
+	const char* xml_path = "../../../Output/Release/netstandard2.0/MW.xml";
 	file<> file(xml_path);
 
 	if (!file.data())

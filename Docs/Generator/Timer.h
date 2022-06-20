@@ -34,7 +34,7 @@ inline void PerformanceTimer::PrintTime(const std::string& message)
 	}
 	else
 	{
-		std::cout << message << " took: " << std::chrono::duration_cast<std::chrono::milliseconds>(Now()).count() << "ms.\n";
+		std::cout << message << " " << std::chrono::duration_cast<std::chrono::milliseconds>(Now()).count() << "ms.\n";
 	}
 }
 

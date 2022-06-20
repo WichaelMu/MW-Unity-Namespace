@@ -97,7 +97,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 #if _DEBUG && WITH_VS
 	const std::string HTML_PATH = "../HTML/";
 #else
-	const std::string HTML_PATH = "../../../HTML/";
+	const std::string HTML_PATH = "../../HTML/";
 #endif
 
 	// Write/Create basic HTML file.
