@@ -8,7 +8,7 @@ namespace MW.Behaviour
 {
 	/// <summary>The base class for <see cref="MPlayer"/> and <see cref="MPlayer2D"/>.</summary>
 	/// <docs>The base class for MPlayer and MPlayer2D.</docs>
-	public class PlayerBase : MonoBehaviour
+	public class PlayerBase : MBehaviour
 	{
 		/// <summary>Called when damage is taken. First float is new Health, second is the inflicting damage.</summary>
 		public Action<float, float> OnTakeDamage;
