@@ -377,32 +377,54 @@ namespace MW
 		/// <returns>(MVector To, MVector From) => From > To</returns>
 		public static MVector operator <(MVector To, MVector From) => From > To;
 
-		/// <summary>Increments all components by I.</summary>
-		/// <param name="V">The MVector to increment.</param>
-		/// <param name="I">The number to increment.</param>
-		/// <returns>v[1Σ3] + i</returns>
+		/// <summary>Shifts all components to the right.</summary>
+		/// <param name="V">The MVector to shift.</param>
+		/// <param name="I">The number of times to shift right.</param>
+		/// <returns>X = Y, Y = Z, Z = X.</returns>
 		public static MVector operator >>(MVector V, int I)
 		{
-			return new MVector
+			if (I == 0)
+				return V;
+
+			if (I < 0)
+				return V << I;
+
+			I %= 3;
+
+			for (int Shift = 0; Shift < I; ++Shift)
 			{
-				X = V.X + I,
-				Y = V.Y + I,
-				Z = V.Z + I
-			};
+				float X = V.X;
+				Utils.Swap(ref V.X, ref V.Y);
+				Utils.Swap(ref V.Y, ref V.Z);
+				Utils.Swap(ref V.Z, ref X);
+			}
+
+			return V;
 		}
 
-		/// <summary>Decrements all components by I.</summary>
-		/// <param name="V">The MVector to decrement.</param>
-		/// <param name="I">The number to decrement.</param>
-		/// <returns>v[1Σ3] - i</returns>
+		/// <summary>Shifts all components to the left.</summary>
+		/// <param name="V">The MVector to shift.</param>
+		/// <param name="I">The number of times to shift left.</param>
+		/// <returns>X = Z, Y = X, Z = Y.</returns>
 		public static MVector operator <<(MVector V, int I)
 		{
-			return new MVector
+			if (I == 0)
+				return V;
+
+			if (I < 0)
+				return V >> I;
+
+			I %= 3;
+
+			for (int Shift = 0; Shift < I; ++Shift)
 			{
-				X = V.X - I,
-				Y = V.Y - I,
-				Z = V.Z - I
-			};
+				float X = V.X;
+				Utils.Swap(ref V.X, ref V.Y);
+				Utils.Swap(ref V.Y, ref V.Z);
+				Utils.Swap(ref V.Z, ref X);
+			}
+
+			return V;
 		}
 
 		/// <summary>Compares two MVectors for equality.</summary>
@@ -426,7 +448,7 @@ namespace MW
 		public static bool operator !=(MVector Left, MVector Right) => !(Left == Right);
 
 		public override bool Equals(object O) => O is MVector V && Equals(V);
-		public bool Equals(MVector V) => Mathf.Abs(V.X - X + V.Y - Y + V.Z - Z) < 4f * kEpsilon;
+		public bool Equals(MVector V) => this == V || Mathf.Abs(V.X - X + V.Y - Y + V.Z - Z) < 4f * kEpsilon;
 
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		public static implicit operator Vector3(MVector MVector) => new Vector3(MVector.X, MVector.Y, MVector.Z);
