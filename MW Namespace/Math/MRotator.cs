@@ -159,6 +159,7 @@ namespace MW
 		}
 
 		/// <summary>An <see cref="MW.MVector"/> where X = Pitch, Y = Yaw, Z = Roll.</summary>
+		/// <docs>An MVector where X = Pitch, Y = Yaw, Z = Roll.</docs>
 		public MVector MVector()
 		{
 			return new MVector(Pitch, Yaw, Roll);

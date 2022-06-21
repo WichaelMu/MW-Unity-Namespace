@@ -5,6 +5,7 @@ namespace MW.CameraUtils
 	/// <summary>A Spring Arm Component that allows <see cref="Boom"/> to track a <see cref="Target"/>.</summary>
 	/// <docs>A Spring Arm Component that allows a Boom to track a Target.</docs>
 	/// <remarks>While commonly used as for Camera tracking, this can be used for any object that needs to track <see cref="Target"/>.</remarks>
+	/// <docremarks>While commonly used as for Camera tracking, this can be used for any object that needs to track a Target.</docremarks>
 	public class SpringArm : MonoBehaviour
 	{
 		[Header("Debug Options.")]
