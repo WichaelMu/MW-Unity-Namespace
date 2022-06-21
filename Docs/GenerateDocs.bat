@@ -1,11 +1,11 @@
 
-echo -- Running Documentation Generator --
-echo.
+@echo -- Running Documentation Generator --
+@echo.
 
-cd Generator
-cd Output
-Generator.exe
+@cd Generator
+@cd Output
+@Generator.exe
 
-cd ..
-cd ..
-cd ..
+@cd ..
+@cd ..
+@cd ..
