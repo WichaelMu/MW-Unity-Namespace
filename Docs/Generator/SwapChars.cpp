@@ -31,37 +31,35 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 	{
 		if (!is_file_name)
 		{
-			// This is an implicit operator.
-			if (1>2)
+			// This is an overloaded operator.
+			if (param.length() > 3 && param[2] == '_')
 			{
 				if (param == "op_Addition")
-					param = "operator +";
+					param = "operator+";
 				else if (param == "op_Subtraction")
-					param = "operator -";
+					param = "operator-";
 				else if (param == "op_UnaryNegation")
-					param = "operator -";
+					param = "operator-";
 				else if (param == "op_Multiply")
-					param = "operator *";
+					param = "operator*";
 				else if (param == "op_Division")
-					param = "operator /";
+					param = "operator/";
 				else if (param == "op_ExclusiveOr")
-					param = "operator ^";
+					param = "operator^";
 				else if (param == "op_BitwiseOr")
-					param = "operator |";
+					param = "operator|";
 				else if (param == "op_GreaterThan")
-					param = "&gt;";
+					param = "operator&gt;";
 				else if (param == "op_LessThan")
-					param = "&lt;";
+					param = "operator&lt;";
 				else if (param == "op_RightShift")
-					param = "&gt;&gt;";
+					param = "operator&gt;&gt;";
 				else if (param == "op_LeftShift")
-					param = "&lt;&lt";
+					param = "operator&lt;&lt";
 				else if (param == "op_Equality")
-					param = "operator =";
+					param = "operator=";
 				else if (param == "op_Inequality")
-					param = "operator !=";
-				else if (param == "op_Implicit")
-					param = "implicit ";
+					param = "operator!=";
 			}
 			else
 			{

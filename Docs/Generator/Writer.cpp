@@ -74,6 +74,8 @@ constexpr const char* CSS_PARAGRAPH = "\"simplePara\"";
 constexpr const char* CSS_KEYWORD = "\"keyword\"";
 
 #define INTER_INJECT_TEXT(text) << text
+#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=\"C\" style=\"padding-right:25%;color:rgb(40,255,120);\">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=\"padding-right:25%;color:rgb(78,201,176);font-weight:549\">" INTER_INJECT_TEXT(decorations) << "</pre>"
 
 #define WRITE_DEBUG_LINES 0
 
@@ -86,9 +88,10 @@ constexpr const char* CSS_KEYWORD = "\"keyword\"";
 #define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">" DEBUG_WRITELINE
 #define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=" << entry << ".html>" << entry << "</a></div><br>" DEBUG_WRITELINE
 #define HTML_SUMMARY_START "</div><br><br><div style=" << CSS_RIGHT_COL_DIV << ">" DEBUG_WRITELINE
-#define HTML_CLASS_START(entry, summary) "<br><br><h1 class=" << CSS_CLASS_STYLE << ">" INTER_INJECT_TEXT(entry) << "</h1><br><p class=" << CSS_CLASS_SUMMARY_STYLE << ">" INTER_INJECT_TEXT(summary) << "</p>" DEBUG_WRITELINE
-#define HTML_SUMMARY_TITLE(title) "<p class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << "</p><br>" DEBUG_WRITELINE
-#define HTML_DECLARE_FUNCTION_PARAMS(title, params) "<h1 class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << " (" INTER_INJECT_TEXT(params) << ")</h1><br>" DEBUG_WRITELINE
+#define HTML_CLASS_START(entry, summary, decorations) INTER_INJECT_CLASS_DECORATIONS(decorations) << "</pre><h1 class=" << CSS_CLASS_STYLE << ">" INTER_INJECT_TEXT(entry) << "</h1><br><p class=" << CSS_CLASS_SUMMARY_STYLE << ">" INTER_INJECT_TEXT(summary) << "</p>" DEBUG_WRITELINE
+#define HTML_SUMMARY_TITLE(title, decorations) INTER_INJECT_FUNCTION_DECORATIONS(decorations) << "<p class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << "</p>" DEBUG_WRITELINE
+#define HTML_DECLARE_FUNCTION_PARAMS(title, params, decorations) INTER_INJECT_FUNCTION_DECORATIONS(decorations) << "<h1 class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << " (" INTER_INJECT_TEXT(params) << ")</h1>" DEBUG_WRITELINE
+#define HTML_DECLARE_OPERATOR_OVERLOAD(overload, params, decorations) INTER_INJECT_FUNCTION_DECORATIONS(decorations) << "<br><h1 class" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(overload) INTER_INJECT_TEXT(params) << "</h1>" DEBUG_WRITELINE
 #define HTML_SUMMARY_ENTRY(entry) "<p class=" << CSS_PARAGRAPH << ">" INTER_INJECT_TEXT(entry) << "</p>" DEBUG_WRITELINE
 #define HTML_KEYWORD(keyword) "<p class=" << CSS_KEYWORD << ">" INTER_INJECT_TEXT(keyword) << "</p>" DEBUG_WRITELINE
 
@@ -163,7 +166,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 				(mw.mw_class.length() != 0
 					? mw.mw_class
 					: mw.mw_namespace)
-				, mw.summary);
+				, mw.summary, GetDecorations(mw.decorations));
 		}
 		else
 		{
@@ -176,12 +179,12 @@ void Writer::Write(const std::vector<MW>& all_mw)
 						// A function.
 						// Because this function_parameters_type.size == 0, this has no parameters.
 						// Write the name of the function with empty brackets.
-						html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "");
+						html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "", GetDecorations(mw.decorations));
 					}
 					else
 					{
 						// An implicit operator.
-						html << HTML_DECLARE_FUNCTION_PARAMS(mw.implicit, "");
+						html << HTML_DECLARE_FUNCTION_PARAMS(mw.implicit, "", GetDecorations(mw.decorations));
 					}
 
 					// If there is a summary, write it here.
@@ -202,14 +205,14 @@ void Writer::Write(const std::vector<MW>& all_mw)
 					// Write whatever this is normally.
 					if ((mw.mw_class.length() == 0) ^ mw.mw_type == "FIELD" ^ mw.mw_type == "PROPERTY")
 					{
-						html << HTML_SUMMARY_TITLE(mw.mw_name) << HTML_SUMMARY_ENTRY(mw.summary);
+						html << HTML_SUMMARY_TITLE(mw.mw_name, GetDecorations(mw.decorations)) << HTML_SUMMARY_ENTRY(mw.summary);
 
 						if (mw.remarks.length() != 0)
 							html << HTML_SUMMARY_ENTRY(mw.remarks);
 					}
 					else
 					{
-						html << HTML_CLASS_START(mw.mw_name, mw.summary + "<br>" + mw.remarks);
+						html << HTML_CLASS_START(mw.mw_name, mw.summary + "<br>" + mw.remarks, GetDecorations(mw.decorations));
 					}
 				}
 			}
@@ -252,7 +255,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 				}
 
 				// Write the name of the function.
-				html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, params);
+				html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, params, GetDecorations(mw.decorations));
 
 				// If there is a summary, write it here.
 				if (mw.summary.length() != 0)
@@ -292,4 +295,20 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 		html.close();
 	}
+}
+
+
+std::string Writer::GetDecorations(const VT(std::string)& decorations)
+{
+	if (decorations.empty())
+		return std::string();
+
+	std::string decor = "<br>";
+
+	for (size_t i = 0; i < decorations.size(); ++i)
+	{
+		decor += decorations[i] + " ";
+	}
+
+	return decor;
 }

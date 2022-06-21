@@ -36,6 +36,18 @@ struct MW
 		GENERATE_DEFAULTS()
 	}
 
+	__forceinline bool IsOverloadedOperator() const
+	{
+		if (mw_name.length() > 8)
+		{
+			std::string first_eight = mw_name.substr(0, 8);
+			
+			return first_eight == "operator";
+		}
+
+		return false;
+	}
+
 #if _DEBUG && PRINT_DEBUG_MSGS
 #define VECTOR_SIZE(v) v.size()
 

@@ -11,6 +11,7 @@
 using namespace rapidxml;
 
 #include "MW.h"
+#include "MMacros.h"
 
 #if BUILD
 #include "Timer.h"
@@ -122,12 +123,8 @@ std::vector<MW> Reader::OpenFile()
 			else if (this_name == decorations)
 			{
 				// <decorations name="value"...></decorations>
-
-				for (xml_attribute<char>* decoration_value = summary_params_etc->first_attribute(); decoration_value; decoration_value->next_attribute())
-				{
-					m.decorations.push_back(decoration_value->name());
-					m.decorations.push_back(decoration_value->value());
-				}
+				
+				m.decorations.push_back(summary_params_etc->first_attribute()->value());
 			}
 		}
 
