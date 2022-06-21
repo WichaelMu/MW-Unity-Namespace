@@ -103,7 +103,7 @@ namespace MW.Math
 			float fSecondsPerKM = 1000 / (Projectile.velocity.magnitude * Utils.kTwoThirds);
 
 			//  Distance between the RSelf and RBTarget in thousands.
-			float fDistanceBetweenPlayer = Vector3.Distance(Projectile.position, Target.position) * Utils.kThousandth;
+			float fDistanceBetweenPlayer = Vector3.Distance(Projectile.position, Target.position) * .001f;
 
 			MVector vForwardPrediction = new MVector(Target.velocity * fSecondsPerKM * fDistanceBetweenPlayer);
 
@@ -124,7 +124,7 @@ namespace MW.Math
 				return TargetPosition;
 			}
 
-			float DistanceFromCallerToTarget = MVector.Distance(LaunchPosition, TargetPosition) * Utils.kThousandth;
+			float DistanceFromCallerToTarget = MVector.Distance(LaunchPosition, TargetPosition) * .001f;
 			MVector ForwardPrediction = (1000 / ConstantMoveSpeed) * DistanceFromCallerToTarget * TargetVelocity;
 
 			return TargetPosition + ForwardPrediction;

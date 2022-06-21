@@ -6,34 +6,23 @@ namespace MW
 	/// <summary>Helper Variables and Functions.</summary>
 	public static class Utils
 	{
-		/// <summary>Shorthand for writing / 1000. (Always faster to multiply than to divide)</summary>
-		public const float kThousandth = .001f;
-		/// <summary>Shorthand for writing / 100. (Always faster to multiply than to divide)</summary>
-		public const float kHundreth = .01f;
-		/// <summary>Shorthand for writing / 10. (Always faster to multiply than to divide)</summary>
-		public const float k10Percent = .1f;
-		/// <summary>Shorthand for writing / 4. (Always faster to multiply than to divide)</summary>
-		public const float kQuarter = .25f;
-		/// <summary>Shorthand for writing / 2. (Always faster to multiply than to divide)</summary>
-		public const float kHalf = .5f;
-		/// <summary>Shorthand for writing / 3. (Always faster to multiply than to divide)</summary>
+		/// <summary>Shorthand for writing / 3.</summary>
 		public const float kOneThird = .3333333333333333333333333333333333f;
-		/// <summary>Shorthand for writing 1.6 recurring. (Always faster to multiply than to divide)</summary>
+		/// <summary>Shorthand for writing / 1.5.</summary>
 		public const float kTwoThirds = .6666666666666666666666666666666666f;
 		/// <summary>The golden ratio.</summary>
 		public const float kPhi = 1.6180339887498948482045868343656381f;
 		/// <summary>Euler's number. (e)</summary>
 		public const float kE = 2.71828182845904523536f;
-		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(2). (Always faster to multiply than to divide)</summary>
+		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(2).</summary>
 		public const float kSqrt2 = 1.4142135623730950488016887242097f;
-		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3). (Always faster to multiply than to divide)</summary>
+		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3).</summary>
 		public const float kSqrt3 = 1.7320508075688772935274463415059f;
 		/// <summary>Shorthand for writing 1 / Mathf.PI.</summary>
 		public const float kInversePI = .31830988618379067153776752674503f;
 		/// <summary>Shorthand for writing Mathf.PI * kHalf.</summary>
 		public const float kHalfPI = 1.5707963267948966192313216916398f;
-
-		/// <summary>The ratio between 1 and 255.</summary>
+		/// <summary>The conversion from 0-1 to 0-255.</summary>
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
 		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
@@ -237,31 +226,31 @@ namespace MW
 		{
 			Vector3[] points = new Vector3[Resolution];
 
-			Vector3 dirToTarget = (Target - Origin).normalized;
+			Vector3 DirectionToTarget = (Target - Origin).normalized;
 
-			float theta = 0f;
-			float horizontalIncrement = 2 * Mathf.PI / Resolution;
-			float resolutionToDistance = Resolution * .5f - 1;
-			float distanceIncrement = Vector3.Distance(Target, Origin) / resolutionToDistance;
+			float Theta = 0f;
+			float HorizontalIncrement = 2 * Mathf.PI / Resolution;
+			float ResolutionToDistance = Resolution * .5f - 1;
+			float DistanceIncrement = Vector3.Distance(Target, Origin) / ResolutionToDistance;
 
 			int k = 0;
 
-			for (float i = 0; i < Resolution; i += distanceIncrement)
+			for (float i = 0; i < Resolution; i += DistanceIncrement)
 			{
-				float y = Mathf.Sin(theta);
+				float y = Mathf.Sin(Theta);
 
 				if (y < 0)
 					break;
 
 				Vector3 point = new Vector3
 				{
-					x = dirToTarget.x * i,
+					x = DirectionToTarget.x * i,
 					y = y * Height,
-					z = dirToTarget.z * i
+					z = DirectionToTarget.z * i
 				};
 
 				points[k] = point;
-				theta += horizontalIncrement;
+				Theta += HorizontalIncrement;
 
 				k++;
 			}
@@ -284,5 +273,31 @@ namespace MW
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
 		/// <returns>The reflected number.</returns>
 		public static int MirrorNumber(int Number, int Minimum, int Maximum) => Minimum + Maximum - Number;
+
+		/// <summary>Swaps L and R.</summary>
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		public static void Swap<T>(ref T L, ref T R)
+		{
+			(R, L) = (L, R);
+		}
+
+		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
+		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>
+		/// <param name="bLockCursor">True to lock the Cursor.</param>
+		/// <param name="bHideCursorOnLock">True to hide the Cursor when it's locked.</param>
+		public static void LockCursor(bool bLockCursor, bool bHideCursorOnLock = true)
+		{
+			if (bLockCursor)
+			{
+				Cursor.lockState = CursorLockMode.Locked;
+				Cursor.visible = bHideCursorOnLock;
+			}
+			else
+			{
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+			}
+		}
 	}
 }
