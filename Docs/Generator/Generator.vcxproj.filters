@@ -24,6 +24,9 @@
     <ClCompile Include="Writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SwapChars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Reader.h">
@@ -36,6 +39,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

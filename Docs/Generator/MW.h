@@ -3,15 +3,14 @@
 #include <string>
 #include <vector>
 
-#define GENERATE_DEFAULTS this->mw_type = mw_type;\
+#include "MMacros.h"
+
+#define GENERATE_DEFAULTS() this->mw_type = mw_type;\
 this->mw_namespace = mw_namespace;\
 this->mw_class = mw_class;\
 this->mw_name = mw_name;\
 this->summary = summary;\
-
-#define BUILD !_DEBUG
-#define PRINT_DEBUG_MSGS 0
-#define WITH_VS _MSC_VER >= 1932
+this->implicit = "";
 
 struct MW
 {
@@ -21,15 +20,20 @@ struct MW
 	std::string returns;
 	std::string remarks;
 
-	std::vector<std::string> function_parameters_type;
-	std::vector<std::string> function_parameters_name;
-	std::vector<std::string> function_parameters_desc;
+	// Parameter information.
+	VT(std::string) function_parameters_type;
+	VT(std::string) function_parameters_name;
+	VT(std::string) function_parameters_desc;
+
+	std::string implicit;
+
+	VT(std::string) decorations;
 
 	MW() {}
 
 	MW(const std::string mw_type, std::string mw_namespace, std::string mw_class, std::string mw_name, std::string summary)
 	{
-		GENERATE_DEFAULTS
+		GENERATE_DEFAULTS()
 	}
 
 #if _DEBUG && PRINT_DEBUG_MSGS

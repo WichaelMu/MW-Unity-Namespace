@@ -204,8 +204,8 @@ namespace MW
 			return R;
 		}
 
-		/// <summary>Converts Pitch, Yaw, Roll into it's corresponding <see cref="UnityEngine.Quaternion"/>.</summary>
-		/// <docs>Converts Pitch, Yaw, Roll into it's corresponding Quaternion.</docs>
+		/// <summary>Converts Pitch, Yaw, Roll into its corresponding <see cref="UnityEngine.Quaternion"/>.</summary>
+		/// <docs>Converts Pitch, Yaw, Roll into its corresponding Quaternion.</docs>
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 

@@ -78,6 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>Output\Debug</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -142,11 +143,14 @@
   <ItemGroup>
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="Reader.cpp" />
+    <ClCompile Include="SwapChars.cpp" />
     <ClCompile Include="Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MMacros.h" />
     <ClInclude Include="MW.h" />
     <ClInclude Include="Reader.h" />
+    <ClInclude Include="SwapChars.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Writer.h" />
   </ItemGroup>

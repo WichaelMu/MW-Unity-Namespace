@@ -75,8 +75,10 @@ constexpr const char* CSS_KEYWORD = "\"keyword\"";
 
 #define INTER_INJECT_TEXT(text) << text
 
-#if _DEBUG
-#define DEBUG_WRITELINE << __LINE__
+#define WRITE_DEBUG_LINES 0
+
+#if WRITE_DEBUG_LINES
+#define DEBUG_WRITELINE << "<p style=\"color:white\">" INTER_INJECT_TEXT(__LINE__) << "</p>"
 #else
 #define DEBUG_WRITELINE
 #endif
@@ -169,10 +171,18 @@ void Writer::Write(const std::vector<MW>& all_mw)
 			{
 				if (mw.mw_type == "MEMBER")
 				{
-					// A function.
-					// Because this function_parameters_type.size == 0, this has no parameters.
-					// Write the name of the function with empty brackets.
-					html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "");
+					if (mw.implicit.length() == 0)
+					{
+						// A function.
+						// Because this function_parameters_type.size == 0, this has no parameters.
+						// Write the name of the function with empty brackets.
+						html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, "");
+					}
+					else
+					{
+						// An implicit operator.
+						html << HTML_DECLARE_FUNCTION_PARAMS(mw.implicit, "");
+					}
 
 					// If there is a summary, write it here.
 					if (mw.summary.length() != 0)

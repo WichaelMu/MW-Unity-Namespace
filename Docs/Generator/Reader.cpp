@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "Reader.h"
+#include "SwapChars.h"
 
 #include "XML/rapidxml.hpp"
 #include "XML/rapidxml_print.hpp"
@@ -58,7 +59,8 @@ std::vector<MW> Reader::OpenFile()
 		const std::string returns_custom = "ret";
 		const std::string remarks = "remarks";
 		const std::string doc_remarks = "docremarks";
-		
+		const std::string decorations = "decorations";
+
 		/*
 		* When using tags that override the normal XML tags, ensure the custom
 		  tag is checked before the normal tag. Before writing values with the
@@ -117,6 +119,16 @@ std::vector<MW> Reader::OpenFile()
 					m.remarks = summary_params_etc->value();
 				}
 			}
+			else if (this_name == decorations)
+			{
+				// <decorations name="value"...></decorations>
+
+				for (xml_attribute<char>* decoration_value = summary_params_etc->first_attribute(); decoration_value; decoration_value->next_attribute())
+				{
+					m.decorations.push_back(decoration_value->name());
+					m.decorations.push_back(decoration_value->value());
+				}
+			}
 		}
 
 		m.Print();
@@ -171,7 +183,7 @@ MW Reader::ProcessNode(const std::string& chars)
 			switch (iteration)
 			{
 			case 0:
-				// Classes in the global MW namespace will be reference in mw_namespace.
+				// Classes in the global MW namespace will be referenced in mw_namespace.
 				mw.mw_namespace += chars[i];
 				break;
 			case 1:
@@ -180,7 +192,7 @@ MW Reader::ProcessNode(const std::string& chars)
 				// Only classes in an extension of MW.* will have their classes stored here.
 				mw.mw_class += chars[i];
 				break;
-			case 2:
+			case 2: // Function and its parameters.
 				if (chars[i] != '(')
 				{
 					mw.mw_name += chars[i];
@@ -196,10 +208,10 @@ MW Reader::ProcessNode(const std::string& chars)
 						if (chars[k] == '.')
 							param = "";
 
-						// Checks if a parameter has been termined. (1, 2). Adds only 1 and 2.
+						// Checks if a parameter has been terminated. (1, 2). Adds only 1 and 2.
 						if (chars[k] == ',' || chars[k] == ')')
 						{
-							ReplaceCharacters(param);
+							SwapChars::Replace(param);
 
 							// Add the type of the parameter after replacing illegals.
 							mw.function_parameters_type.push_back(param);
@@ -208,7 +220,35 @@ MW Reader::ProcessNode(const std::string& chars)
 
 					i = chars.length() + 1;
 				}
+				break;
+			case 3: // Implicit operator.
+				std::string implicit_from_to;
 
+				if (chars[i] == '(')
+				{
+					for (size_t k = i + 1; k < chars.length(); ++k)
+					{
+						if (chars[k] != ')')
+							implicit_from_to += chars[k];
+
+						if (chars[k] == '.')
+							implicit_from_to = "";
+
+						if (chars[k] == ')' || k == chars.length() - 1)
+						{
+							mw.implicit += implicit_from_to;
+						}
+
+						if (chars[k] == '~')
+						{
+							implicit_from_to = "";
+							mw.implicit += " -> ";
+						}
+					}
+				}
+
+				SwapChars::Replace(mw.implicit);
+				
 				break;
 			}
 		}
@@ -229,116 +269,46 @@ MW Reader::ProcessNode(const std::string& chars)
 				if (periods != 2)
 				{
 					++iteration;
+
+					// The iteration can only go to 3 if it meets the conditions below.
+					if (iteration == 3)
+						break;
 				}
 				else
 				{
-					// If periods is exactly two, the namespace IS the class and the 
-					// namespace is the base MW.
+					// Checks if i + 5 is within the string.
+					// An substring of length 5 will present 'op_Im' which means that this is an op_Implicit (implicit operator).
+					// These 5 characters are all we need to identify an implicit operator.
+					// TODO: An implicit operator always has a '_' at position 3, a 'p' in 6 and 'y' in 11. We can make this faster.
+					if (i + 6 < chars.length() && chars[i + 3] == '_' && chars[i + 6] == 'p')
+					{
+						// This is just here so that Writer doesn't consider this Implicit Operator as a Class.
+						mw.mw_name = "Implicit Operator: ";
 
-					// Skip to writing the name of a property, or a function and it's 
-					// parameters, if any.
-					iteration = 2;
+						// This is an implicit operator.
+						i += 11; // Skip op_Implicit (11 characters, go straight to the parameter [beginning with a '('] ).
+						iteration = 3;
+					}
+					else
+					{
+						// If periods is exactly two, the namespace IS the class and the 
+						// namespace is the base MW.
+
+						// Skip to writing the name of a property, or a function and it's 
+						// parameters, if any.
+						iteration = 2;
+					}
 				}
 			}
 		}
 	}
 
-	ReplaceCharacters(mw.mw_namespace, true);
-	ReplaceCharacters(mw.mw_class);
-	ReplaceCharacters(mw.mw_name);
+	SwapChars::Replace(mw.mw_namespace, true);
+	SwapChars::Replace(mw.mw_class);
+	SwapChars::Replace(mw.mw_name);
 
 	if (mw.mw_class.length() == 0)
 		mw.mw_class = mw.mw_namespace;
 
 	return mw;
-}
-
-void Reader::ReplaceCharacters(std::string& param, const bool& is_file_name)
-{
-	param.erase(remove(param.begin(), param.end(), ','), param.end());
-	param.erase(remove(param.begin(), param.end(), '1'), param.end());
-
-	// Hard-coded replacements.
-	if (param == "Single")
-	{
-		param = "float";
-	}
-	else if (param == "Boolean")
-	{
-		param = "bool";
-	}
-	else if (param == "Int32")
-	{
-		param = "int";
-	}
-	else if (param == "Int64")
-	{
-		param = "long";
-	}
-	else if (param == "UInt32")
-	{
-		param = "uint";
-	}
-	else
-	{
-		if (!is_file_name)
-		{
-			// The @ character signifies a ref or out keyword in C#.
-			// In C++, this is the '&' character.
-			// Both 'out' and 'ref' are used throughout the MW namespace.
-			// It is impossible to determine which one the '@' represents,
-			// so just use & to signify an 'out' OR 'ref' parameter.
-			const std::string ref = "& ";
-
-			std::string new_param = "";
-			for (int i = 0; i < param.length(); ++i)
-			{
-				switch (param[i])
-				{
-				case '`':
-					switch (param[i + 1])
-					{
-					case '0':
-						new_param += "T";
-						param.erase(remove(param.begin(), param.end(), '0'), param.end());
-						break;
-					case '1':
-						new_param += "T";
-						param.erase(remove(param.begin(), param.end(), '1'), param.end());
-						break;
-					case '2':
-						new_param = "T";
-						param.erase(remove(param.begin(), param.end(), '2'), param.end());
-						break;
-					}
-
-					break;
-				case '@':
-					new_param += ref;
-					break;
-				default:
-					new_param += param[i];
-					break;
-				}
-			}
-
-			size_t pos = new_param.find('{');
-			if (pos != std::string::npos)
-				new_param.replace(pos, 1, "&lt;");
-
-			pos = new_param.find('}');
-			if (pos != std::string::npos)
-				new_param.replace(pos, 1, "&gt;");
-
-			// Remove the trailing curly bracket that exists, for some reason.
-			// Also, can't use the remove method, like above, for some reason.
-			pos = new_param.find('}');
-			if (pos != std::string::npos)
-				new_param.replace(pos, 1, "");
-
-			param = new_param;
-		}
-	}
-
-	param.erase(remove(param.begin(), param.end(), '`'), param.end());
 }
