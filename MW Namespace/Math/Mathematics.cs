@@ -283,5 +283,18 @@ namespace MW.Math
 			float p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
 			Cosine = sign * p;
 		}
+
+		/// <summary>1 / sqrt(N).</summary>
+		/// <remarks>Modified from: <see href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"/></remarks>
+		/// <param name="N">1 / sqrt(x) where x is N.</param>
+		/// <returns>1 / sqrt(N) within 1% accuracy.</returns>
+		public static unsafe float FastInverseSqrt(float N)
+		{
+			int F = *(int*)&N;
+			F = 0x5F3759DF - (F >> 1);
+			float X = *(float*)&F;
+
+			return X * (1.5f - .5f * N * X * X);
+		}
 	}
 }
