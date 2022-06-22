@@ -12,7 +12,7 @@
 		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<BaseIntermediateOutputPath>Output\</BaseIntermediateOutputPath>
-		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -65,7 +65,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="@cd Docs&#xD;&#xA;call GenerateDocs&#xD;&#xA;&#xD;&#xA;@cd MTest&#xD;&#xA;call RunMTest&#xD;&#xA;@echo.&#xD;&#xA;" />
+		<Exec Command="@cd Docs&#xD;&#xA;call GenerateDocs&#xD;&#xA;&#xD;&#xA;@cd MTest&#xD;&#xA;call BuildMTest&#xD;&#xA;call RunMTest&#xD;&#xA;@echo.&#xD;&#xA;" />
 	</Target>
 
 </Project>
