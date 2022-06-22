@@ -18,5 +18,10 @@ namespace MW.VectorExtensions
 		{
 			return V * Mathematics.FastInverseSqrt(V.sqrMagnitude);
 		}
+
+		public static float Distance(Vector3 L, Vector3 R)
+		{
+			return Mathematics.FastSqrt(SqrDistance(L, R));
+		}
 	}
 }

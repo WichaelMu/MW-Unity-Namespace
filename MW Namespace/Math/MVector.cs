@@ -130,7 +130,7 @@ namespace MW
 		/// <decorations decors="float"></decorations>
 		/// <param name="Left">Source of the distance.</param>
 		/// <param name="Right">Distance from source.</param>
-		public static float Distance(MVector Left, MVector Right) => Mathf.Sqrt(SqrDistance(Left, Right));
+		public static float Distance(MVector Left, MVector Right) => Mathematics.FastSqrt(SqrDistance(Left, Right));
 
 		/// <summary>Square Euclidean distance between Left and Right.</summary>
 		/// <decorations decors="float"></decorations>

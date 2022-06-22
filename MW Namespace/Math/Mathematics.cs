@@ -296,5 +296,18 @@ namespace MW.Math
 
 			return X * (1.5f - .5f * N * X * X);
 		}
+
+		public static float FastSqrt(float N, float FloatTolerance = .01f)
+		{
+			float Sqrt = N * .5f;
+			float T = 0f;
+			while (Mathf.Abs(Sqrt - T) > FloatTolerance)
+			{
+				T = Sqrt;
+				Sqrt = (N / T + T) * .5f;
+			}
+
+			return Sqrt;
+		}
 	}
 }
