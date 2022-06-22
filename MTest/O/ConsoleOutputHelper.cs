@@ -79,7 +79,7 @@ namespace MTest.Output
 			}
 
 			ErrorMessage += SB.ToString();
-			ErrorMessage += $") Expected: {Expected}. Returned: {Result}.";
+			ErrorMessage += $") Expected: x: {Expected.x}, y: {Expected.y}, z: {Expected.z}. Returned: {Result}.";
 
 			Line(ErrorMessage, 2);
 		}

@@ -20,23 +20,27 @@ namespace MTest
 			return bCondition;
 		}
 
-		public static void AssertEquals<T>(int TestNumber, T Result, T Expected, ref int Passed, string Operation = "")
+		public static void AssertEquals(int TestNumber, float Result, float Expected, ref int Passed, string Operation = "")
 		{
-			if (Assert(TestNumber, Result != null, ref Passed, Operation + " L is null."))
-				return;
-			if (Assert(TestNumber, Expected != null, ref Passed, Operation + " R is null."))
-				return;
-
-			if (Result != null && Expected != null)
+			if (Result != Expected)
 			{
-				if (!Result.Equals(Expected))
-				{
-					O.Failed(TestNumber, Result.ToString() + " == " + Expected.ToString(), false.ToString(), Operation, Result, Expected);
-				}
-				else
-				{
-					Passed++;
-				}
+				O.Failed(TestNumber, Expected, Result, Operation);
+			}
+			else
+			{
+				Passed++;
+			}
+		}
+
+		public static void AssertEquals(int TestNumber, MVector Result, MVector Expected, ref int Passed, string Operation = "")
+		{
+			if (Result != Expected)
+			{
+				O.Failed(TestNumber, Expected.ToString(), Result.ToString(), Operation);
+			}
+			else
+			{
+				Passed++;
 			}
 		}
 	}

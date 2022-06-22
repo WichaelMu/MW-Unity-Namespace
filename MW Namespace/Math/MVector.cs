@@ -159,14 +159,7 @@ namespace MW
 		/// <decorations decors="MVector"></decorations>
 		public MVector Normalised
 		{
-			get
-			{
-				float m = Magnitude;
-				if (m > kEpsilon) return this / m;
-
-				// Log.E("MVector is zero!", "Returning MVector.Zero instead.");
-				return Zero;
-			}
+			get => Mathematics.FastInverseSqrt(SqrMagnitude) * this;
 		}
 
 		/// <summary>Normalises this MVector.</summary>
@@ -443,9 +436,9 @@ namespace MW
 			for (int Shift = 0; Shift < I; ++Shift)
 			{
 				float X = V.X;
-				Utils.Swap(ref V.X, ref V.Y);
-				Utils.Swap(ref V.Y, ref V.Z);
-				Utils.Swap(ref V.Z, ref X);
+				Utils.Swap(ref V.X, ref V.Z);
+				Utils.Swap(ref V.Z, ref V.Y);
+				Utils.Swap(ref V.Y, ref X);
 			}
 
 			return V;

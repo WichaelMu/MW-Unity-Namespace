@@ -3,6 +3,7 @@
 using UnityEngine;
 using MW;
 using MW.Math;
+using MW.VectorExtensions;
 using MTest.Output;
 
 namespace MTest
@@ -175,7 +176,7 @@ namespace MTest
 
 		internal class MWTests
 		{
-			public static void MVectorTest(out int Passed, out int TotalTests, float FloatingPointTolerance = 0.001f)
+			public static void MVectorTest(out int Passed, out int TotalTests)
 			{
 				MVector M = new MVector(1, 2, 3);
 				Vector3 U = new Vector3(1, 2, 3);
@@ -199,29 +200,29 @@ namespace MTest
 				Vector3 UR = new Vector3(-5738, 2847, 19.24f);
 
 				Passed = 0;
-				Tolerance.VectorToleranceCheck(1, ML ^ MR, Vector3.Cross(UL, UR), FloatingPointTolerance, "Cross", ref Passed);
-				Tolerance.FloatToleranceCheck(2, ML | MR, Vector3.Dot(UL, UR), FloatingPointTolerance, "Dot", ref Passed);
-				Tolerance.VectorToleranceCheck(3, ML.Normalised, UL.normalized, FloatingPointTolerance, "Normalise", ref Passed);
-				Tolerance.VectorToleranceCheck(4, MR.Normalised, UR.normalized, FloatingPointTolerance, "Normalise", ref Passed);
-				Tolerance.FloatToleranceCheck(5, ML.SqrMagnitude, UL.sqrMagnitude, FloatingPointTolerance, "Square Magnitude", ref Passed);
-				Tolerance.FloatToleranceCheck(6, MR.SqrMagnitude, UR.sqrMagnitude, FloatingPointTolerance, "Square Magnitude", ref Passed);
-				Tolerance.FloatToleranceCheck(7, ML.Distance(MR), Vector3.Distance(UL, UR), FloatingPointTolerance, "Distance", ref Passed);
-				Tolerance.FloatToleranceCheck(8, Mathf.Sqrt(ML.SqrDistance(MR)), Vector3.Distance(UL, UR), FloatingPointTolerance, "MVector SqrDistance -> Vector3 Distance", ref Passed);
-				Tolerance.VectorToleranceCheck(9, ML - MR, UL - UR, FloatingPointTolerance, "Subtraction", ref Passed);
-				Tolerance.VectorToleranceCheck(10, MR - ML, UR - UL, FloatingPointTolerance, "Subtraction", ref Passed);
-				Tolerance.VectorToleranceCheck(11, -ML, -UL, FloatingPointTolerance, "Negation", ref Passed);
-				Tolerance.VectorToleranceCheck(12, -MR, -UR, FloatingPointTolerance, "Negation", ref Passed);
-				Tolerance.VectorToleranceCheck(13, ML + MR, UL + UR, FloatingPointTolerance, "Addition", ref Passed);
-				Tolerance.VectorToleranceCheck(14, ML + UR, UR + ML, FloatingPointTolerance, "Cross Addition", ref Passed);
+				Tolerance.VectorToleranceCheck(1, ML ^ MR, Vector3.Cross(UL, UR), "Cross", ref Passed);
+				Tolerance.FloatToleranceCheck(2, ML | MR, Vector3.Dot(UL, UR), "Dot", ref Passed);
+				Tolerance.VectorToleranceCheck(3, ML.Normalised, UL.normalized, "Normalise", ref Passed);
+				Tolerance.VectorToleranceCheck(4, MR.Normalised, UR.normalized, "Normalise", ref Passed);
+				Tolerance.FloatToleranceCheck(5, ML.SqrMagnitude, UL.sqrMagnitude, "Square Magnitude", ref Passed);
+				Tolerance.FloatToleranceCheck(6, MR.SqrMagnitude, UR.sqrMagnitude, "Square Magnitude", ref Passed);
+				Tolerance.FloatToleranceCheck(7, ML.Distance(MR), Vector3.Distance(UL, UR), "Distance", ref Passed);
+				Tolerance.FloatToleranceCheck(8, Mathf.Sqrt(ML.SqrDistance(MR)), Vector3.Distance(UL, UR), "MVector SqrDistance -> Vector3 Distance", ref Passed);
+				Tolerance.VectorToleranceCheck(9, ML - MR, UL - UR, "Subtraction", ref Passed);
+				Tolerance.VectorToleranceCheck(10, MR - ML, UR - UL, "Subtraction", ref Passed);
+				Tolerance.VectorToleranceCheck(11, -ML, -UL, "Negation", ref Passed);
+				Tolerance.VectorToleranceCheck(12, -MR, -UR, "Negation", ref Passed);
+				Tolerance.VectorToleranceCheck(13, ML + MR, UL + UR, "Addition", ref Passed);
+				Tolerance.VectorToleranceCheck(14, ML + UR, UR + ML, "Cross Addition", ref Passed);
 
 				for (float F = -10f; F <= 10f; F += .7f)
 				{
-					Tolerance.VectorToleranceCheck(15, F * ML, F * UL, FloatingPointTolerance, "Multiplication by: " + F, ref Passed);
-					Tolerance.VectorToleranceCheck(16, ML / F, UL / F, FloatingPointTolerance, "Division by: " + F, ref Passed);
+					Tolerance.VectorToleranceCheck(15, F * ML, F * UL, "Multiplication by: " + F, ref Passed);
+					Tolerance.VectorToleranceCheck(16, ML / F, UL / F, "Division by: " + F, ref Passed);
 				}
 
-				Tolerance.VectorToleranceCheck(17, ML > MR, (UR - UL).normalized, FloatingPointTolerance, "Direction", ref Passed);
-				Tolerance.VectorToleranceCheck(18, ML < MR, (UL - UR).normalized, FloatingPointTolerance, "Direction", ref Passed);
+				Tolerance.VectorToleranceCheck(17, ML > MR, (UR - UL).normalized, "Direction", ref Passed);
+				Tolerance.VectorToleranceCheck(18, ML < MR, (UL - UR).normalized, "Direction", ref Passed);
 
 				Assert(19, Mathematics.IsNormalised(ML.Normalised), ref Passed, nameof(Mathematics.IsNormalised));
 
@@ -239,8 +240,11 @@ namespace MTest
 				AssertEquals(27, M >> 4, M >> 1, ref Passed, "Right Shift 4 = 1");
 				AssertEquals(28, M << 4, M << 1, ref Passed, "Left Shift 4 = 1");
 
-				// Total number of tests (19) + the difference between -10 and 10 divided by .7 (28) * 2 for both Multiplication and Division.
-				TotalTests = 28 + 28 * 2;
+				AssertEquals(29, Fast.SqrDistance(UL, Vector3.zero), ML.SqrMagnitude, ref Passed, "V3 Extension SqrDist");
+				AssertEquals(30, UL.Normalise(), UL.normalized, ref Passed, "V3 Extension Normalise");
+
+				// Total number of tests (31) + the difference between -10 and 10 divided by .7 (28) * 2 for both Multiplication and Division.
+				TotalTests = 30 + 28 * 2;
 			}
 
 			public static void MArrayTests(out int Passed, out int TotalTests)
