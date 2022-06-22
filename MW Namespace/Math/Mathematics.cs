@@ -297,10 +297,18 @@ namespace MW.Math
 			return X * (1.5f - .5f * N * X * X);
 		}
 
+		/// <summary><see cref="Mathf.Sqrt(float)"/> with a Tolerance allowing for inaccuracies.</summary>
+		/// <docs>Sqrt(N) with a Tolerance allowing for inaccuracies.</docs>
+		/// <param name="N">The Number to get the Square Root of.</param>
+		/// <param name="FloatTolerance">How close should FastSqrt get to the actual Sqrt value?</param>
+		/// <returns>Sqrt(N) within FloatTolerance of the actual value.</returns>
 		public static float FastSqrt(float N, float FloatTolerance = .01f)
 		{
 			float Sqrt = N * .5f;
 			float T = 0f;
+
+			FloatTolerance = Mathf.Clamp(FloatTolerance, 0, float.MaxValue);
+
 			while (Mathf.Abs(Sqrt - T) > FloatTolerance)
 			{
 				T = Sqrt;
