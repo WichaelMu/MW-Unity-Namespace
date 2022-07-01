@@ -5,6 +5,7 @@ namespace MW.Diagnostics
 	/// <summary>Provides a stacktrace for code.</summary>
 	public static class Stacktrace
 	{
+		public static string Here() => Environment.StackTrace;
 
 		/// <summary>Stacktrace using <see cref="Log.P(object[])"/> with <see cref="EVerbosity"/>.</summary>
 		/// <docs>Stacktrace using Log.P with EVerbosity verbosity.</docs>
@@ -14,13 +15,13 @@ namespace MW.Diagnostics
 			switch (Verbosity)
 			{
 				case EVerbosity.Log:
-					Log.P(Environment.StackTrace);
+					Log.P(Here());
 					return;
 				case EVerbosity.Error:
-					Log.E(Environment.StackTrace);
+					Log.E(Here());
 					return;
 				case EVerbosity.Warning:
-					Log.W(Environment.StackTrace);
+					Log.W(Here());
 					return;
 			}
 		}
@@ -31,7 +32,7 @@ namespace MW.Diagnostics
 		/// <param name="Verbosity">The EVerbosity of the Log.P.</param>
 		public static void Here(string Message, EVerbosity Verbosity = EVerbosity.Log)
 		{
-			string stacktrace = Message + ' ' + Environment.StackTrace;
+			string stacktrace = Message + ' ' + Here();
 
 			switch (Verbosity)
 			{
