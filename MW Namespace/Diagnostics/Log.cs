@@ -52,5 +52,24 @@ namespace MW.Diagnostics
 
 			UnityEngine.Debug.LogWarning(print);
 		}
+
+		public static void Auto(string Content, EVerbosity Verbosity)
+		{
+			switch (Verbosity)
+			{
+				case EVerbosity.Log:
+					P(Content);
+					break;
+				case EVerbosity.Warning:
+					W(Content);
+					break;
+				case EVerbosity.Error:
+					E(Content);
+					break;
+				default:
+					P(Content);
+					break;
+			}
+		}
 	}
 }
