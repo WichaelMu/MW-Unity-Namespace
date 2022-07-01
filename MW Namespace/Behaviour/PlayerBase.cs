@@ -13,19 +13,6 @@ namespace MW.Behaviour
 		/// <summary>Called when damage is taken. First float is new Health, second is the inflicting damage.</summary>
 		public Action<float, float> OnTakeDamage;
 
-		/// <summary>The world position of this player.</summary>
-		public MVector Position { get => transform.position; set { transform.position = value; } }
-		/// <summary>The rotation of this player.</summary>
-		public MRotator Rotation
-		{
-			get
-			{
-				Vector3 E = transform.rotation.eulerAngles;
-				return new MRotator(E.x, E.y, E.z);
-			}
-			set { transform.rotation = value.Quaternion(); }
-		}
-
 		[Header("Player Settings")]
 
 		[SerializeField] float Health;

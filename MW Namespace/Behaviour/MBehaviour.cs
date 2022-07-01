@@ -5,6 +5,29 @@ namespace MW.Behaviour
 	/// <summary></summary>
 	public class MBehaviour : MonoBehaviour
 	{
+		/// <summary>The world position of this player.</summary>
+		public MVector Position { get => transform.position; set { transform.position = value; } }
+		/// <summary>The rotation of this player.</summary>
+		public MRotator Rotation
+		{
+			get
+			{
+				Vector3 E = transform.rotation.eulerAngles;
+				return new MRotator(E.x, E.y, E.z);
+			}
+			set { transform.rotation = value.Quaternion(); }
+		}
+
+		protected bool bVisibleInGame;
+
+		protected void Awake()
+		{
+			if (bVisibleInGame && TryGetComponent(out MeshRenderer MR))
+			{
+				MR.enabled = false;
+			}
+		}
+
 		/// <summary>
 		/// Sets <see cref="Transform.position"/> to <paramref name="NewPosition"/>
 		/// or the first <see cref="SweepInteraction"/> if <paramref name="bDoSweep"/>
@@ -29,7 +52,7 @@ namespace MW.Behaviour
 			if (bDoSweep && Interactions)
 			{
 				Sweeped = new MArray<Collider>();
-				MVector PreMove = transform.position;
+				MVector PreMove = Position;
 				MVector Direction = PreMove > NewPosition;
 
 				const int kMaxSweepInteractionCount = 256;
@@ -50,11 +73,11 @@ namespace MW.Behaviour
 
 			if (bTeleportToPosition || !Sweeped || Sweeped.IsEmpty())
 			{
-				transform.position = NewPosition;
+				Position = NewPosition;
 			}
 			else
 			{
-				transform.position = Sweeped[0].transform.position;
+				Position = Sweeped[0].transform.position;
 			}
 
 			return Sweeped;
@@ -84,7 +107,7 @@ namespace MW.Behaviour
 			if (bDoSweep && Interactions)
 			{
 				Sweeped = new MArray<Collider2D>();
-				MVector PreMove = transform.position;
+				MVector PreMove = Position;
 				MVector Direction = PreMove > NewPosition;
 				const int kMaxSweepInteractionCount = 256;
 
@@ -104,11 +127,11 @@ namespace MW.Behaviour
 
 			if (bTeleportToPosition || !Sweeped || Sweeped.IsEmpty())
 			{
-				transform.position = NewPosition;
+				Position = NewPosition;
 			}
 			else
 			{
-				transform.position = Sweeped[0].transform.position;
+				Position = Sweeped[0].transform.position;
 			}
 
 			return Sweeped;
