@@ -2,3 +2,5 @@
 * text=auto
 Docs/* linguist-documentation=false
 Docs/* linguist-vendored
+Docs/Generator/* linguist-documentation=false
+Docs/Generator/* linguist-vendored
