@@ -7,23 +7,23 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 	param.erase(remove(param.begin(), param.end(), '1'), param.end());
 
 	// Hard-coded replacements.
-	if (param == "Single")
+	if (param == "Single" || param == "Single@")
 	{
 		param = "float";
 	}
-	else if (param == "Boolean")
+	else if (param == "Boolean" || param == "Boolean@")
 	{
 		param = "bool";
 	}
-	else if (param == "Int32")
+	else if (param == "Int32" || param == "Int32@")
 	{
 		param = "int";
 	}
-	else if (param == "Int64")
+	else if (param == "Int64" || param == "Int64@")
 	{
 		param = "long";
 	}
-	else if (param == "UInt32")
+	else if (param == "UInt32" || param == "UInt32@")
 	{
 		param = "uint";
 	}
