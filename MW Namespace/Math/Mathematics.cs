@@ -286,9 +286,10 @@ namespace MW.Math
 
 		/// <summary>1 / sqrt(N).</summary>
 		/// <remarks>Modified from: <see href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"/></remarks>
+		/// <docremarks>Modified from: &lt;a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"&gt;The 'Quake III Fast Inv. Sqrt Algorithm'&lt;/a&gt;</docremarks>
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
 		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
-		/// <returns>1 / sqrt(N) within 1% accuracy.</returns>
+		/// <returns>An approximation for calculating: 1 / sqrt(N).</returns>
 		public static unsafe float FastInverseSqrt(float N, int Iterations = 1)
 		{
 			int F = *(int*)&N;
@@ -302,30 +303,10 @@ namespace MW.Math
 		}
 
 		/// <summary>Faster version of <see cref="Mathf.Sqrt(float)"/>.</summary>
+		/// <docs>Faster version of Mathf.Sqrt().</docs>
 		/// <param name="F"></param>
 		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
-		/// <returns>The Square Root of F.</returns>
+		/// <returns>An approximation for the Square Root of F.</returns>
 		public static float FastSqrt(float F, int Iterations = 2) => FastInverseSqrt(Mathf.Max(F, Vector3.kEpsilon), Iterations) * F;
-
-		/// <summary><see cref="Mathf.Sqrt(float)"/> with a Tolerance allowing for inaccuracies.</summary>
-		/// <docs>Sqrt(N) with a Tolerance allowing for inaccuracies.</docs>
-		/// <param name="N">The Number to get the Square Root of.</param>
-		/// <param name="FloatTolerance">How close should FastSqrt get to the actual Sqrt value?</param>
-		/// <returns>Sqrt(N) within FloatTolerance of the actual value.</returns>
-		public static float FastSqrtTolerance(float N, float FloatTolerance)
-		{
-			float Sqrt = N * .5f;
-			float T = 0f;
-
-			FloatTolerance = Mathf.Clamp(FloatTolerance, 0, float.MaxValue);
-
-			while (Mathf.Abs(Sqrt - T) > FloatTolerance)
-			{
-				T = Sqrt;
-				Sqrt = (N / T + T) * .5f;
-			}
-
-			return Sqrt;
-		}
 	}
 }
