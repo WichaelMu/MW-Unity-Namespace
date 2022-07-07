@@ -282,6 +282,38 @@ namespace MW
 			(R, L) = (L, R);
 		}
 
+		/// <summary>Clamps I to be between Min and Max.</summary>
+		/// <param name="I">A reference to the Integer to clamp.</param>
+		/// <param name="Min">The Minimum value of I.</param>
+		/// <param name="Max">The Maximum value of I.</param>
+		public static void Clamp(ref int I, int Min, int Max)
+		{
+			if (I < Min)
+			{
+				I = Min;
+			}
+			else if (I > Max)
+			{
+				I = Max;
+			}
+		}
+
+		/// <summary>Clamps F to be between Min and Max.</summary>
+		/// <param name="F">A reference to the Float to clamp.</param>
+		/// <param name="Min">The Minimum value of F.</param>
+		/// <param name="Max">The Maximum value of F.</param>
+		public static void Clamp(ref float F, float Min, float Max)
+		{
+			if (F < Min)
+			{
+				F = Min;
+			}
+			else if (F > Max)
+			{
+				F = Max;
+			}
+		}
+
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
 		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>
 		/// <param name="bLockCursor">True to lock the Cursor.</param>
