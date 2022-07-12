@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using MW.Math;
+using static MW.Math.Magic.Fast;
 
 namespace MW.VectorExtensions
 {
@@ -16,12 +16,12 @@ namespace MW.VectorExtensions
 
 		public static Vector3 Normalise(this Vector3 V)
 		{
-			return V * Mathematics.FastInverseSqrt(V.sqrMagnitude);
+			return V * InverseSqrt(V.sqrMagnitude);
 		}
 
 		public static float Distance(Vector3 L, Vector3 R)
 		{
-			return Mathematics.FastSqrt(SqrDistance(L, R));
+			return Sqrt(SqrDistance(L, R));
 		}
 	}
 }

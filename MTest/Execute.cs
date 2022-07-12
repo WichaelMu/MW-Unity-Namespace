@@ -177,7 +177,7 @@ namespace MTest
 				TotalTests = 50;
 				for (float f = 0; f < TotalTests; f += .23f)
 				{
-					Tolerance.FloatToleranceCheck(1, Mathf.Sqrt(f), Mathematics.FastSqrt(f), "Fast Sqrt", ref Passed);
+					Tolerance.FloatToleranceCheck(1, Mathf.Sqrt(f), MW.Math.Magic.Fast.Sqrt(f), "Fast Sqrt", ref Passed);
 				}
 
 				TotalTests = (int)(TotalTests / .23f) + 1;

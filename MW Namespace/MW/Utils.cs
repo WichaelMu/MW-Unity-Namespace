@@ -316,34 +316,15 @@ namespace MW
 			}
 		}
 
-		/// <summary>Absolute Value of I.</summary>
-		/// <param name="I">The int to get the Absolute Value of.</param>
-		/// <returns>The value of I regardless of its sign.</returns>
-		public static int FastAbs(int I)
+		public static float Max(float F1, float F2)
 		{
-			return 0x7FFFFFFF & I;
+			return F1 < F2 ? F2 : F1;
 		}
 
-		/// <summary>Modifies I to be its Absolute Value.</summary>
-		/// <remarks><see langword="ref"/> version of <see cref="FastAbs(int)"/>.</remarks>
-		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
-		/// <param name="I">A reference to the int to modify.</param>
-		public static void FastAbs(ref int I) => I = FastAbs(I);
-
-		/// <summary>Absolute Value of F.</summary>
-		/// <param name="F">The float to get the Absolute Value of.</param>
-		/// <returns>The value of F regardless of its sign.</returns>
-		public static unsafe float FastAbs(float F)
+		public static float Min(float F1, float F2)
 		{
-			int T = FastAbs(*(int*)&F);
-			return *(float*)&T;
+			return F1 < F2 ? F1 : F2;
 		}
-
-		/// <summary>Modifies F to be its Absolute Value.</summary>
-		/// <remarks><see langword="ref"/> version of <see cref="FastAbs(float)"/></remarks>
-		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
-		/// <param name="F">A ference to the float to modify.</param>
-		public static void FastAbs(ref float F) => F = FastAbs(F);
 
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
 		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>

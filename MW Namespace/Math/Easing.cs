@@ -981,13 +981,6 @@ namespace MW.Easing
 
 		}
 
-		/// <summary>Delegate Function for Easing.</summary>
-		/// <param name="s">Start.</param>
-		/// <param name="e">End</param>
-		/// <param name="d">Duration.</param>
-		/// <returns>The interpolated between s and e over d.</returns>
-		public delegate float Function(float s, float e, float d);
-
 		/// <summary>Gets the derivative function of the appropriate easing function. If you use an easing function for position then this function can get you the speed at a given time (normalised).</summary>
 		/// <param name="Function"></param>
 		/// <returns>The derivative function</returns>
@@ -1147,4 +1140,11 @@ namespace MW.Easing
 			}
 		}
 	}
+
+	/// <summary>Delegate Function for Easing.</summary>
+	/// <param name="Start">Start.</param>
+	/// <param name="End">End</param>
+	/// <param name="Duration">Duration.</param>
+	/// <returns>The interpolated between Start and End over D.</returns>
+	public delegate float Function(float Start, float End, float Duration);
 }

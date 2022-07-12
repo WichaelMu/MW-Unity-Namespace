@@ -284,30 +284,5 @@ namespace MW.Math
 			float p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
 			Cosine = sign * p;
 		}
-
-		/// <summary>1 / sqrt(N).</summary>
-		/// <remarks>Modified from: <see href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"/></remarks>
-		/// <docremarks>Modified from: &lt;a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"&gt;The 'Quake III Fast Inv. Sqrt Algorithm'&lt;/a&gt;</docremarks>
-		/// <param name="N">1 / sqrt(x) where x is N.</param>
-		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
-		/// <returns>An approximation for calculating: 1 / sqrt(N).</returns>
-		public static unsafe float FastInverseSqrt(float N, int Iterations = 1)
-		{
-			int F = *(int*)&N;
-			F = 0x5F3759DF - (F >> 1);
-			float X = *(float*)&F;
-
-			float ISqrt = X * (1.5f - .5f * N * X * X);
-			for (int i = 0; i < Iterations; ++i)
-				ISqrt *= (1.5f - .5f * N * ISqrt * ISqrt);
-			return ISqrt;
-		}
-
-		/// <summary>Faster version of <see cref="Mathf.Sqrt(float)"/>.</summary>
-		/// <docs>Faster version of Mathf.Sqrt().</docs>
-		/// <param name="F"></param>
-		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
-		/// <returns>An approximation for the Square Root of F.</returns>
-		public static float FastSqrt(float F, int Iterations = 2) => FastInverseSqrt(Mathf.Max(F, Vector3.kEpsilon), Iterations) * F;
 	}
 }

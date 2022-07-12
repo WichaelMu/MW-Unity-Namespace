@@ -9,14 +9,6 @@ namespace MW.HUD
 	/// <docs>World space Canvas scaling and TextMeshProUGUI utilities.</docs>
 	public static class UI
 	{
-		public enum ETypewriterMode
-		{
-			/// <summary>Append to the current TextMeshProUGUI.</summary>
-			Append,
-			/// <summary>Clear the current TextMeshProUGUI before typewriting.</summary>
-			Clear
-		}
-
 		/// <summary>Scales the canvas element relative to Self.</summary>
 		/// <param name="Self">The position to scale from.</param>
 		/// <param name="ScaleWith">The position to scale with.</param>
