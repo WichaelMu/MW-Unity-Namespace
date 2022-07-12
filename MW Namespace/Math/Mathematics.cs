@@ -2,6 +2,7 @@
 using MW.Easing;
 using MW.Kinetic;
 using UnityEngine;
+using static MW.Utils;
 
 namespace MW.Math
 {
@@ -246,7 +247,7 @@ namespace MW.Math
 		/// <param name="Value">The angle.</param>
 		public static void SinCos(out float Sine, out float Cosine, float Value)
 		{
-			float quotient = (Utils.kInversePI * 0.5f) * Value;
+			float quotient = (kInversePI * 0.5f) * Value;
 			if (Value >= 0.0f)
 			{
 				quotient = (int)(quotient + 0.5f);
@@ -259,12 +260,12 @@ namespace MW.Math
 
 			// Map y to [-PI / 2, PI / 2] with Sin(y) = Sin(Value).
 			float sign;
-			if (y > Utils.kHalfPI)
+			if (y > kHalfPI)
 			{
 				y = Mathf.PI - y;
 				sign = -1.0f;
 			}
-			else if (y < -Utils.kHalfPI)
+			else if (y < -kHalfPI)
 			{
 				y = -Mathf.PI - y;
 				sign = -1.0f;

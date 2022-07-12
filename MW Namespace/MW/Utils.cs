@@ -22,6 +22,8 @@ namespace MW
 		public const float kInversePI = .31830988618379067153776752674503f;
 		/// <summary>Shorthand for writing Mathf.PI * kHalf.</summary>
 		public const float kHalfPI = 1.5707963267948966192313216916398f;
+		/// <summary>Shorthand for writing Mathf.PI * 2f</summary>
+		public const float k2PI = 6.283185307179586476925286766559f;
 		/// <summary>The conversion from 0-1 to 0-255.</summary>
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
@@ -313,6 +315,35 @@ namespace MW
 				F = Max;
 			}
 		}
+
+		/// <summary>Absolute Value of I.</summary>
+		/// <param name="I">The int to get the Absolute Value of.</param>
+		/// <returns>The value of I regardless of its sign.</returns>
+		public static int FastAbs(int I)
+		{
+			return 0x7FFFFFFF & I;
+		}
+
+		/// <summary>Modifies I to be its Absolute Value.</summary>
+		/// <remarks><see langword="ref"/> version of <see cref="FastAbs(int)"/>.</remarks>
+		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
+		/// <param name="I">A reference to the int to modify.</param>
+		public static void FastAbs(ref int I) => I = FastAbs(I);
+
+		/// <summary>Absolute Value of F.</summary>
+		/// <param name="F">The float to get the Absolute Value of.</param>
+		/// <returns>The value of F regardless of its sign.</returns>
+		public static unsafe float FastAbs(float F)
+		{
+			int T = FastAbs(*(int*)&F);
+			return *(float*)&T;
+		}
+
+		/// <summary>Modifies F to be its Absolute Value.</summary>
+		/// <remarks><see langword="ref"/> version of <see cref="FastAbs(float)"/></remarks>
+		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
+		/// <param name="F">A ference to the float to modify.</param>
+		public static void FastAbs(ref float F) => F = FastAbs(F);
 
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
 		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>
