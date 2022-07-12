@@ -9,15 +9,15 @@ namespace MW
 	public class THeap<T> where T : IHeapItem<T>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
-		T[] Internal_Items;
-		int Internal_Count;
+		T[] Items;
+		int Count;
 
 		/// <summary>The number of elements in the heap.</summary>
-		public int Count
+		public int Num
 		{
 			get
 			{
-				return Internal_Count;
+				return Count;
 			}
 		}
 
@@ -25,30 +25,30 @@ namespace MW
 		/// <param name="MaxSize"></param>
 		public THeap(uint MaxSize)
 		{
-			Internal_Items = new T[MaxSize];
+			Items = new T[MaxSize];
 		}
 
 		/// <summary>Adds an item to this Heap.</summary>
 		/// <param name="Item">The item to add.</param>
 		public void Add(T Item)
 		{
-			Item.HeapItemIndex = Internal_Count;
-			Internal_Items[Internal_Count] = Item;
+			Item.HeapItemIndex = Count;
+			Items[Count] = Item;
 
 			SortUp(Item);
-			Internal_Count++;
+			Count++;
 		}
 
 		/// <summary>Remove the element at the root of this Heap.</summary>
 		/// <returns>The element that was removed.</returns>
 		public T RemoveFirst()
 		{
-			T T_ = Internal_Items[0];
-			Internal_Count--;
+			T T_ = Items[0];
+			Count--;
 
-			Internal_Items[0] = Internal_Items[Internal_Count];
-			Internal_Items[0].HeapItemIndex = 0;
-			SortDown(Internal_Items[0]);
+			Items[0] = Items[Count];
+			Items[0].HeapItemIndex = 0;
+			SortDown(Items[0]);
 
 			return T_;
 		}
@@ -78,7 +78,7 @@ namespace MW
 		/// <summary>Whether or not this Heap contains Item.</summary>
 		/// <param name="Item">The Item to check.</param>
 		/// <returns>True if Item exists in this Heap.</returns>
-		public bool Contains(T Item) => Equals(Internal_Items[Item.HeapItemIndex], Item);
+		public bool Contains(T Item) => Equals(Items[Item.HeapItemIndex], Item);
 
 		void SortDown(T Item)
 		{
@@ -88,21 +88,21 @@ namespace MW
 				int nRight = Item.HeapItemIndex * 2 + 2;
 				int nSwap;
 
-				if (nLeft < Internal_Count)
+				if (nLeft < Count)
 				{
 					nSwap = nLeft;
 
-					if (nRight < Internal_Count)
+					if (nRight < Count)
 					{
-						if (Internal_Items[nLeft].CompareTo(Internal_Items[nRight]) < 0)
+						if (Items[nLeft].CompareTo(Items[nRight]) < 0)
 						{
 							nSwap = nRight;
 						}
 					}
 
-					if (Item.CompareTo(Internal_Items[nSwap]) < 0)
+					if (Item.CompareTo(Items[nSwap]) < 0)
 					{
-						Swap(Item, Internal_Items[nSwap]);
+						Swap(Item, Items[nSwap]);
 					}
 					else
 					{
@@ -122,7 +122,7 @@ namespace MW
 
 			while (true)
 			{
-				T TParent = Internal_Items[nParent];
+				T TParent = Items[nParent];
 
 				if (Item.CompareTo(TParent) > 0)
 				{
@@ -139,8 +139,8 @@ namespace MW
 
 		void Swap(T T1, T T2)
 		{
-			Internal_Items[T1.HeapItemIndex] = T2;
-			Internal_Items[T2.HeapItemIndex] = T1;
+			Items[T1.HeapItemIndex] = T2;
+			Items[T2.HeapItemIndex] = T1;
 
 			int _ = T1.HeapItemIndex;
 			T1.HeapItemIndex = T2.HeapItemIndex;
@@ -151,9 +151,9 @@ namespace MW
 		/// <returns>T[] in the order of this THeap.</returns>
 		public T[] Array()
 		{
-			T[] Array = new T[Internal_Count];
-			for (int i = 0; i < Internal_Count; ++i)
-				Array[i] = Internal_Items[i];
+			T[] Array = new T[Count];
+			for (int i = 0; i < Count; ++i)
+				Array[i] = Items[i];
 
 			return Array;
 		}

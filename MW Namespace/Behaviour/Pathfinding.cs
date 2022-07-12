@@ -29,7 +29,7 @@ namespace MW.Pathfinding
 			HashSet<T> Closed = new();
 			Open.Add(Origin);
 
-			while (Open.Count > 0 && !bFoundPath && Depth-- != 0)
+			while (Open.Num > 0 && !bFoundPath && Depth-- != 0)
 			{
 				T Current = Open.RemoveFirst();
 				Closed.Add(Current);

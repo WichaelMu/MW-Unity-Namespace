@@ -397,7 +397,7 @@ namespace MTest
 				Heap.Add(new TTestClass(47));
 				Heap.Add(new TTestClass(49));
 
-				for (byte i = 0; i < Heap.Count; ++i)
+				for (byte i = 0; i < Heap.Num; ++i)
 					Assert(1, Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, ref Passed, "Remove First is Minimum");
 
 				TotalTests = 4;
