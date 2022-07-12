@@ -9,11 +9,11 @@
 #include "Timer.h"
 #endif
 
-#define HTML_HEADER "<!DOCTYPE html><html lang="\
+#define HTML_HEADER(title) "<!DOCTYPE html><html lang="\
 			"en"\
 			"><head>"\
-			"<title>Home | MICHAEL WU</title><link rel=""stylesheet"" href="\
-			"MWUnityNamespace.css"\
+			"<title>" << title << " | MW Unity Namespace</title><link rel=""stylesheet"" href="\
+			"CSS/MWUnityNamespace.css"\
 			"><meta charset="\
 			"UTF-8"\
 			"></head><body><div class=""header"" id=""top"">"\
@@ -96,7 +96,7 @@ constexpr const char* CSS_KEYWORD = "\"keyword\"";
 #define HTML_SUMMARY_ENTRY(entry) "<p class=" << CSS_PARAGRAPH << ">" INTER_INJECT_TEXT(entry) << "</p>" DEBUG_WRITELINE
 #define HTML_KEYWORD(keyword) "<p class=" << CSS_KEYWORD << ">" INTER_INJECT_TEXT(keyword) << "</p>" DEBUG_WRITELINE
 
-void Writer::Write(const std::vector<MW>& all_mw)
+void Writer::Write(const VT(MW)& all_mw)
 {
 	std::map<std::string, std::string> namespace_to_html;
 
@@ -116,7 +116,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 
 			std::ofstream html_file(new_file);
 
-			html_file << HTML_HEADER << HTML_HOLDING_DIV;
+			html_file << HTML_HEADER(n.mw_namespace) << HTML_HOLDING_DIV;
 
 #if BUILD || _DEBUG
 			if (html_file.fail())
@@ -202,9 +202,10 @@ void Writer::Write(const std::vector<MW>& all_mw)
 				}
 				else
 				{
+					bool no_class = mw.mw_class.length() == 0;
 					// Not a function.
 					// Write whatever this is normally.
-					if ((mw.mw_class.length() == 0) ^ mw.mw_type == FIELD ^ mw.mw_type == PROPERTY)
+					if (no_class ^ mw.mw_type == FIELD ^ mw.mw_type == PROPERTY)
 					{
 						html << HTML_SUMMARY_TITLE(mw.mw_name, GetDecorations(mw.decorations)) << HTML_SUMMARY_ENTRY(mw.summary);
 

@@ -11,7 +11,7 @@ class Writer
 
 public:
 
-	static void Write(const std::vector<MW>& all_mw);
+	static void Write(const VT(MW)& all_mw);
 
 private:
 
