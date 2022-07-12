@@ -139,8 +139,8 @@ namespace MW
 			HashMap.Clear();
 		}
 
+		/// <docreturns>If this MArray is considered empty; Num == 0.</docreturns>
 		/// <returns><see langword="True"/> <see langword="if"/> (<see cref="Num"/> == 0).</returns>
-		/// <ret>If this MArray is considered empty; Num == 0.</ret>
 		public bool IsEmpty() => Num == 0;
 
 		/// <returns>The mirror position of index over minimum zero, maximum Num.</returns>
@@ -158,7 +158,7 @@ namespace MW
 		}
 
 		/// <summary>The incoming and reflected Item of this mirror from zero to maximum Num.</summary>
-		/// <ret>Source and Reflected information.</ret>
+		/// <docreturns>Source and Reflected information.</docreturns>
 		/// <returns><see cref="Reflected"/> - Source and Reflected information.</returns>
 		public Reflected Reflect(int Index)
 		{
@@ -167,7 +167,7 @@ namespace MW
 		}
 
 		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum Num.</summary>
-		/// <ret>Source and Reflected information.</ret>
+		/// <docreturns>Source and Reflected information.</docreturns>
 		/// <returns><see cref="Reflected"/> - Source and Reflected information.</returns>
 		public Reflected Reflect(int Minimum, int Index)
 		{

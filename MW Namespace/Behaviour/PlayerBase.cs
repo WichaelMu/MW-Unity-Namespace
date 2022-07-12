@@ -171,7 +171,7 @@ namespace MW.Behaviour
 
 		/// <summary>Get this Player's <see cref="Health"/>.</summary>
 		/// <docs>Get this Player's Health.</docs>
-		/// <ret>Current health.</ret>
+		/// <docreturns>Current health.</docreturns>
 		/// <returns>Current <see cref="Health"/>.</returns>
 		public float GetHealth()
 		{
@@ -181,7 +181,7 @@ namespace MW.Behaviour
 		/// <summary>Deduct InDamage from this Player's <see cref="Health"/>.</summary>
 		/// <docs>Deduct InDamage from this Player's Health.</docs>
 		/// <param name="InDamage">The damage to inflict on this Player.</param>
-		/// <ret>True if this Player IsDead.</ret>
+		/// <docreturns>True if this Player IsDead.</docreturns>
 		/// <returns>True if this Player <see cref="IsDead"/>.</returns>
 		public bool TakeDamage(float InDamage)
 		{
@@ -196,7 +196,7 @@ namespace MW.Behaviour
 		/// <docs>Deduct InDamage from this Player's Health.</docs>
 		/// <param name="InDamage">The damage to inflict on this Player.</param>
 		/// <param name="HealthPercentageRemaining">The percentage of health remaining after taking InDamage.</param>
-		/// <ret>True if this Player IsDead.</ret>
+		/// <docreturns>True if this Player IsDead.</docreturns>
 		/// <returns>True if this Player <see cref="IsDead"/>.</returns>
 		public bool TakeDamage(float InDamage, out float HealthPercentageRemaining)
 		{
@@ -207,7 +207,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>If this Player's is considered dead.</summary>
-		/// <ret>True if GetHealth &lt;= 0.</ret>
+		/// <docreturns>True if GetHealth &lt;= 0.</docreturns>
 		/// <returns>True if <see cref="GetHealth"/> &lt;= 0.</returns>
 		public bool IsDead()
 		{

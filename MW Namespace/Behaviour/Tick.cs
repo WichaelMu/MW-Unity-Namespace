@@ -101,7 +101,7 @@ namespace MW.Behaviour
 			return ThisTick;
 		}
 
-		/// <ret>Information about the time and percentage complete on this Tick function.</ret>
+		/// <docreturns>Information about the time and percentage complete on this Tick function.</docreturns>
 		/// <returns><see cref="TickInformation"/></returns>
 		public TickInformation GetTickInfo()
 		{

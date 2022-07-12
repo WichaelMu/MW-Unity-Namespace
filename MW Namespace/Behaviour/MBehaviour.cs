@@ -43,7 +43,7 @@ namespace MW.Behaviour
 		/// True to teleport to the first Sweeped interaction, rather than NewPosition,
 		/// if this transform intercepted another GameObject within the referenced SweepInteraction's Radius.</param>
 		/// <param name="Interactions">Data containing how this transform interacts with other objects during Sweep.</param>
-		/// <ret>An MArray&lt;Collider&gt; of GameObjects that were interacted with during sweeping, or null if bDoSweep is false.</ret>
+		/// <docreturns>An MArray&lt;Collider&gt; of GameObjects that were interacted with during sweeping, or null if bDoSweep is false.</docreturns>
 		/// <returns><see cref="MArray{T}"/> of interacted <see cref="Collider"/>s during sweeping, or <see langword="null"/> if <paramref name="bDoSweep"/> is <see langword="false"/>.</returns>
 		public MArray<Collider> SetObjectPosition3D(MVector NewPosition, bool bTeleportToPosition = true, bool bDoSweep = false, SweepInteraction Interactions = SweepInteraction.kNoInteraction)
 		{
@@ -98,7 +98,7 @@ namespace MW.Behaviour
 		/// True to teleport to the first Sweeped interaction, rather than NewPosition,
 		/// if this transform intercepted another GameObject within the referenced SweepInteraction's Radius.</param>
 		/// <param name="Interactions">Data containing how this transform interacts with other objects during Sweep.</param>
-		/// <ret>An MArray&lt;Collider2D&gt; of GameObjects that were interacted with during sweeping, or null if bDoSweep is false.</ret>
+		/// <docreturns>An MArray&lt;Collider2D&gt; of GameObjects that were interacted with during sweeping, or null if bDoSweep is false.</docreturns>
 		/// <returns><see cref="MArray{T}"/> of interacted <see cref="Collider2D"/>s during sweeping, or <see langword="null"/> if <paramref name="bDoSweep"/> is <see langword="false"/>.</returns>
 		public MArray<Collider2D> SetObjectPosition2D(MVector NewPosition, bool bTeleportToPosition = true, bool bDoSweep = false, SweepInteraction Interactions = SweepInteraction.kNoInteraction)
 		{

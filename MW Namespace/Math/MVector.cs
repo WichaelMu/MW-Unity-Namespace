@@ -217,7 +217,7 @@ namespace MW
 		/// <summary>Converts a normalised vector to a Pitch, Yaw rotation.</summary>
 		/// <remarks>Roll is zero.</remarks>
 		/// <decorations decors="MRotator"></decorations>
-		/// <ret>An MRotator defining the pitch and yaw of this direction vector.</ret>
+		/// <docreturns>An MRotator defining the pitch and yaw of this direction vector.</docreturns>
 		/// <returns>An <see cref="MRotator"/> defining the <see cref="MRotator.Pitch"/> and <see cref="MRotator.Yaw"/> of this direction vector.</returns>
 		public MRotator Rotation()
 		{
@@ -474,7 +474,7 @@ namespace MW
 		/// <decorations decors="bool"></decorations>
 		/// <param name="Left">Left-side comparison.</param>
 		/// <param name="Right">Right-side comparison.</param>
-		/// <ret>True if the square distance between Left and Right is less than kEpsilon * kEpsilon.</ret>
+		/// <docreturns>True if the square distance between Left and Right is less than kEpsilon * kEpsilon.</docreturns>
 		/// <returns>True if the square distance between Left and Right is less than <see cref="kEpsilon"/>^2.</returns>
 		public static bool operator ==(MVector Left, MVector Right)
 		{

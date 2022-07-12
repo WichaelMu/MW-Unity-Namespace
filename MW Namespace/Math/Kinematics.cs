@@ -130,7 +130,7 @@ namespace MW.Kinetic
 		/// True to ignore the height limitation and compute a velocity anyway.
 		/// May be inaccurate.
 		/// </param>
-		/// <ret>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</ret>
+		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
 		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, bool b3DGravity = true, bool bLaunchRegardless = false)
 		{
@@ -147,7 +147,7 @@ namespace MW.Kinetic
 		/// True to ignore the height limitation and compute a velocity anyway.
 		/// May be inaccurate.
 		/// </param>
-		/// <ret>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</ret>
+		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
 		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, bool bLaunchRegardless)
 		{

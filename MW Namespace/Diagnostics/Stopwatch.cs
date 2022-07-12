@@ -25,7 +25,7 @@
 
 		/// <summary>Stop Stopwatch and get the elapsed <see cref="Time"/>.</summary>
 		/// <docs>Stop Stopwatch and get the elapsed Time.</docs>
-		/// <ret>The elapsed time before stopping.</ret>
+		/// <docreturns>The elapsed time before stopping.</docreturns>
 		/// <returns>The elapsed <see cref="Time"/> before stopping.</returns>
 		public long Stop()
 		{

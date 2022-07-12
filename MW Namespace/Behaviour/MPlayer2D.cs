@@ -85,7 +85,7 @@ namespace MW.Behaviour
 		/// <param name="ReferenceCamera">The Camera to shoot a ray from, screen-wise.</param>
 		/// <param name="Distance">The maximum distance of the ray to shoot.</param>
 		/// <param name="LayerMask">The layers this raycast will intercept.</param>
-		/// <ret>RaycastHit2D information about the raycast. Null if ReferenceCamera is not orthographic.</ret>
+		/// <docreturns>RaycastHit2D information about the raycast. Null if ReferenceCamera is not orthographic.</docreturns>
 		/// <returns><see cref="RaycastHit2D"/> information about the raycast. Null if ReferenceCamera is not <see cref="Camera.orthographic"/>.</returns>
 		public static RaycastHit2D? RayUnderMouse(Camera ReferenceCamera, float Distance, int LayerMask)
 		{

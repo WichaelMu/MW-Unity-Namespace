@@ -57,7 +57,7 @@ std::vector<MW> Reader::OpenFile()
 		const std::string docs = "docs";
 		const std::string param = "param";
 		const std::string returns_default = "returns";
-		const std::string returns_custom = "ret";
+		const std::string returns_custom = "docreturns";
 		const std::string remarks = "remarks";
 		const std::string doc_remarks = "docremarks";
 		const std::string decorations = "decorations";
@@ -94,7 +94,7 @@ std::vector<MW> Reader::OpenFile()
 			}
 			else if (this_name == returns_custom)
 			{
-				// <ret>custom return value</ret>
+				// <docreturns>custom return value</docreturns>
 				m.returns = summary_params_etc->value();
 			}
 			else if (this_name == returns_default)
