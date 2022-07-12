@@ -119,6 +119,11 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 				param = new_param;
 			}
 		}
+
+		if (param[param.length() - 1] == '.')
+		{
+			param.erase(param.length() - 1, 1);
+		}
 	}
 
 	param.erase(remove(param.begin(), param.end(), '`'), param.end());

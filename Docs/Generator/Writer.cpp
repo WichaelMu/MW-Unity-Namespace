@@ -1,6 +1,7 @@
 #include <fstream>
 #include <map>
 
+#include "MMacros.h"
 #include "Writer.h"
 #include "MW.h"
 
@@ -172,7 +173,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 		{
 			if (mw.function_parameters_type.size() == 0)
 			{
-				if (mw.mw_type == "MEMBER")
+				if (mw.mw_type == MEMBER)
 				{
 					if (mw.implicit.length() == 0)
 					{
@@ -203,7 +204,7 @@ void Writer::Write(const std::vector<MW>& all_mw)
 				{
 					// Not a function.
 					// Write whatever this is normally.
-					if ((mw.mw_class.length() == 0) ^ mw.mw_type == "FIELD" ^ mw.mw_type == "PROPERTY")
+					if ((mw.mw_class.length() == 0) ^ mw.mw_type == FIELD ^ mw.mw_type == PROPERTY)
 					{
 						html << HTML_SUMMARY_TITLE(mw.mw_name, GetDecorations(mw.decorations)) << HTML_SUMMARY_ENTRY(mw.summary);
 

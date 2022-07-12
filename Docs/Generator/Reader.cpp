@@ -123,7 +123,7 @@ std::vector<MW> Reader::OpenFile()
 			else if (this_name == decorations)
 			{
 				// <decorations name="value"...></decorations>
-				
+
 				m.decorations.push_back(summary_params_etc->first_attribute()->value());
 			}
 		}
@@ -146,27 +146,27 @@ MW Reader::ProcessNode(const std::string& chars)
 	switch (chars[0])
 	{
 	case 'T':
-		mw.mw_type = "TYPE";
+		mw.mw_type = TYPE;
 		break;
 	case 'P':
-		mw.mw_type = "PROPERTY";
+		mw.mw_type = PROPERTY;
 		break;
 	case 'F':
-		mw.mw_type = "FIELD";
+		mw.mw_type = FIELD;
 		break;
 	case 'M':
-		mw.mw_type = "MEMBER";
+		mw.mw_type = MEMBER;
 		break;
 	}
 
 	// Count the number of periods in chars.
 	// This is <member name="..."></member> Where ... is chars.
-	// If there are exactly two periods, we know that this member is part of the base MW namespace.
+	// If there are exactly two periods, this Node is part of the base MW namespace.
 	// 
 	// Also, do not go past a '(', this will indicate a function and the counting will be inaccurate,
 	//	if included.
-	uint8_t periods = 0;
-	for (size_t i = 0; i < chars.length() && chars[i] != '('; ++i)
+	uint8_t periods = 0, period_count = 0;
+	for (uint8_t i = 0; i < chars.length() && chars[i] != '('; ++i)
 	{
 		if (chars[i] == '.')
 			periods++;
@@ -245,12 +245,13 @@ MW Reader::ProcessNode(const std::string& chars)
 				}
 
 				SwapChars::Replace(mw.implicit);
-				
+
 				break;
 			}
 		}
 		else
 		{
+			// Constructor check.
 			if (chars[i] == '#')
 			{
 				mw.mw_name = "CONSTRUCTOR";
@@ -260,12 +261,50 @@ MW Reader::ProcessNode(const std::string& chars)
 				// Set mw_name to CONSTRUCTOR and skip 4 characters, the 'CTOR'.
 				i += 4;
 			}
+			// Everything else.
 			else
 			{
-				// If the number of periods are NOT exactly two, continue as normal.
-				if (periods != 2)
+				++period_count;
+
+				if (mw.mw_type == TYPE)
 				{
-					++iteration;
+					if (period_count == periods - 1)
+					{
+						++iteration;
+					}
+					else
+					{
+						mw.mw_namespace += '.';
+					}
+				}
+				else if (period_count != periods - 1)
+				{
+					/*
+					* Continue as normal IF:
+					*	- We are not in the global MW namespace (periods != 2).
+					*	- We are the second-last period. (period_count == periods - 2).
+					*		- Consider: <member name="M:MW.Math.Magic.Fast.InverseSqrt(...)">
+					*		- The namespace continues until we are the second-last period;
+					*			* Namespace = MW.Math.Magic (Math.Magic in Docs).
+					*			* Continue onwards where Class = Fast...
+					*/
+					if (periods != 2 && period_count == periods - 2)
+					{
+						++iteration;
+					}
+					/*
+					* Consider: <member name="M:MW.Math.Magic.Fast.InverseSqrt(...)">
+					*
+					* If we have reached the first period (the period in Math.Magic), do not increment
+					* out iteration and instead add a period in the Namespace for Docs.
+					* 
+					* This *should* support namespaces branching through multiple levels.
+					*/
+					else
+					{
+						if (period_count != periods - 1)
+							mw.mw_namespace += '.';
+					}
 
 					// The iteration can only go to 3 if it meets the conditions below.
 					if (iteration == 3)
