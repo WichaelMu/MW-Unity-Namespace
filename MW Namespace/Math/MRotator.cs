@@ -1,6 +1,9 @@
 ﻿using System;
 using MW.Diagnostics;
 using MW.Math;
+using MW.Math.Magic;
+using static MW.Utils;
+using MW.Extensions;
 using UnityEngine;
 
 namespace MW
@@ -17,6 +20,10 @@ namespace MW
 		/// <summary>The rotation in degrees around the Z axis. 0 = Up is 12 o'clock, +Clockwise, -Counter-clockwise.</summary>
 		public float Roll;
 
+		static readonly MRotator zero = new MRotator(0, 0, 0);
+		/// <summary>An MRotator with no rotation.</summary>
+		public static readonly MRotator Zero = zero;
+
 		/// <summary>Makes a rotation with Pitch, Yaw and Roll.</summary>
 		/// <param name="P">Pitch.</param>
 		/// <param name="Y">Yaw.</param>
@@ -28,9 +35,16 @@ namespace MW
 			Roll = R;
 		}
 
-		static readonly MRotator zero = new MRotator(0, 0, 0);
-		/// <summary>An MRotator with no rotation.</summary>
-		public static readonly MRotator Zero = zero;
+		/// <summary>Makes a rotation with an MVector.</summary>
+		/// <param name="PYR">An MVector where X = Pitch, Y = Yaw, and Z = Roll.</param>
+		public MRotator(MVector PYR) : this(PYR.X, PYR.Y, PYR.Z) { }
+
+		/// <summary>Makes an MRotator with a Quaternion.</summary>
+		/// <param name="Quaternion">The Quaternion defining the Pitch, Yaw, and Roll.</param>
+		public MRotator (Quaternion Quaternion)
+		{
+			this = Quaternion.MakeRotator();
+		}
 
 		/// <summary>Computes a <see cref="UnityEngine.Quaternion"/> with a rotation of Pitch, Yaw and Roll.</summary>
 		/// <docs>Computes a Quaternion with a rotation of Pitch, Yaw and Roll.</docs>
@@ -54,6 +68,43 @@ namespace MW
 			Q.w = CosineRoll * CosinePitch * CosineYaw + SineRoll * SinePitch * SineYaw;
 
 			return Q;
+		}
+
+		/// <summary>Converts a <see cref="UnityEngine.Quaternion"/> to an MRotator.</summary>
+		/// <docs>Converts a Quaternion to an MRotator.</docs>
+		/// <param name="Q">The Quaternion to extract Pitch, Yaw and Roll.</param>
+		/// <docreturns>An MRotator rotated according to a Quaternion.</docreturns>
+		/// <returns>An MRotator rotated according to a <see cref="UnityEngine.Quaternion"/>.</returns>
+		public static MRotator Rotator(Quaternion Q)
+		{
+			float W2 = Q.w * Q.w;
+			float X2 = Q.x * Q.x;
+			float Y2 = Q.y * Q.y;
+			float Z2 = Q.z * Q.z;
+
+			float Unit = X2 + Y2 + Z2 + W2;
+			float SingularityTest = Q.x * Q.w - Q.y * Q.z;
+
+			MRotator R;
+			if (SingularityTest > .4995f * Unit)
+			{
+				R.Yaw = 2f * Mathf.Atan2(Q.y, Q.x);
+				R.Pitch = kHalfPI;
+				R.Roll = 0f;
+				return R.NormaliseAngles();
+			}
+			else if (SingularityTest < .4995f * Unit)
+			{
+				R.Yaw = -2f * Mathf.Atan2(Q.y, Q.x);
+				R.Pitch = kHalfPI;
+				R.Roll = 0f;
+				return R.NormaliseAngles();
+			}
+
+			R.Yaw = Mathf.Atan2(2f * Q.x * Q.w + 2f * Q.y * Q.z, 1 - 2f * (Q.z * Q.z + Q.w * Q.w));
+			R.Pitch = Fast.ArcSine(2f * (Q.x * Q.z - Q.w * Q.y));
+			R.Roll = Mathf.Atan2(2f * Q.x * Q.y + 2f * Q.z * Q.w, 1 - 2f * (Q.y * Q.y + Q.z * Q.z));
+			return R.NormaliseAngles();
 		}
 
 		static float ModTowardsZero(float X, float Y)
@@ -171,6 +222,22 @@ namespace MW
 			Pitch %= 360f;
 			Yaw %= 360f;
 			Roll %= 360f;
+		}
+
+		/// <summary>Forces the Angles to be within 0 - 360 degrees.</summary>
+		/// <returns>The normalised MRotator.</returns>
+		public MRotator NormaliseAngles()
+		{
+			Wrap360();
+
+			if (Pitch < 0f)
+				Pitch += 360f;
+			if (Yaw < 0f)
+				Yaw += 360f;
+			if (Roll < 0f)
+				Roll += 360f;
+
+			return this;
 		}
 
 		/// <summary>Adds two MRotators together.</summary>
