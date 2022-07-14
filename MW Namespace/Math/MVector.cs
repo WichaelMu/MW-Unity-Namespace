@@ -386,7 +386,7 @@ namespace MW
 		{
 			if (D == 0)
 			{
-				throw new System.DivideByZeroException("Attempted division by zero.");
+				throw new DivideByZeroException("Attempted division by zero.");
 			}
 
 			float S = 1 / D;

@@ -23,5 +23,15 @@ namespace MW.Extensions
 		{
 			return MRotator.Rotator(Q);
 		}
+
+		/// <summary>Converts an MVector to a Vector3.</summary>
+		/// <decorations decors="[Extension] Vector3"></decorations>
+		/// <param name="M">The MVector to convert.</param>
+		public static Vector3 V3(this MVector M) => new Vector3(M.X, M.Y, M.Z);
+
+		/// <summary>Converts a Vector3 to an MVector.</summary>
+		/// <decorations decors="[Extension] MVector"></decorations>
+		/// <param name="V">The Vector3 to convert.</param>
+		public static MVector MV(this Vector3 V) => new MVector(V.x, V.y, V.z);
 	}
 }
