@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using MW;
 using MW.Math;
-using MW.VectorExtensions;
+using static MW.Math.Magic.Fast;
+using MW.Extensions;
 using MTest.Output;
 
 namespace MTest
@@ -250,9 +251,9 @@ namespace MTest
 				AssertEquals(27, M >> 4, M >> 1, ref Passed, "Right Shift 4 = 1");
 				AssertEquals(28, M << 4, M << 1, ref Passed, "Left Shift 4 = 1");
 
-				AssertEquals(29, Fast.SqrDistance(UL, Vector3.zero), ML.SqrMagnitude, ref Passed, "V3 Extension SqrDist");
+				AssertEquals(29, Mathematics.SqrDistance(UL, Vector3.zero), ML.SqrMagnitude, ref Passed, "V3 Extension SqrDist");
 				AssertEquals(30, UL.Normalise(), UL.normalized, ref Passed, "V3 Extension Normalise");
-				AssertEquals(31, Fast.Distance(UL, UR), Vector3.Distance(UL, UR), ref Passed, "V3 Extension Dist");
+				AssertEquals(31, Mathematics.Distance(UL, UR), Vector3.Distance(UL, UR), ref Passed, "V3 Extension Dist");
 
 				// Total number of tests (31) + the difference between -10 and 10 divided by .7 (28) * 2 for both Multiplication and Division.
 				TotalTests = 31 + 28 * 2;
@@ -401,6 +402,21 @@ namespace MTest
 					Assert(1, Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, ref Passed, "Remove First is Minimum");
 
 				TotalTests = 4;
+			}
+		}
+
+		internal class FastTests
+		{
+			public static void ASin(out int Passed, out int TotalTests)
+			{
+				Passed = 0;
+				for (float F = -50f; F <= 50f; F += .23f)
+				{
+					Tolerance.FloatToleranceCheck(1, Mathf.Asin(F), ArcSine(F), "Fast ASin", ref Passed);
+				}
+
+				// 100 / .23;
+				TotalTests = (int)(434.78260869565217391304347826087f) + 1;
 			}
 		}
 

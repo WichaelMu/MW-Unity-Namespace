@@ -7,7 +7,7 @@ namespace MTest
 	internal static class Tolerance
 	{
 		const float kFloatingPointTolerancePercentage = .001f; // .001 = .1% error.
-		const float kVectorTolerancePercentage = .01f; // .01 = 1% error.
+		const float kVectorTolerancePercentage = .001f; // .001 = .1% error.
 
 		public static void FloatToleranceCheck(int TestNumber, float L, float R, string Operation, ref int Passed)
 		{
