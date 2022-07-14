@@ -1,4 +1,6 @@
-﻿using MW.Conversion;
+﻿using System;
+using System.Globalization;
+using MW.Conversion;
 using MW.Math;
 using UnityEngine;
 using MW.Math.Magic;
@@ -525,6 +527,35 @@ namespace MW
 		/// <returns>ToString() => "X: " + X + " Y: " + Y + " Z: " + Z</returns>
 		/// <decorations decors="string"></decorations>
 		public override string ToString() => "X: " + X + " Y: " + Y + " Z: " + Z;
+
+		/// <summary>A human-readable MVector with formatting.</summary>
+		/// <param name="Format">The format to present float values.</param>
+		/// <returns>A string with X, Y, and Z formatted according to Format.</returns>
+		/// <decorations decors="string"></decorations>
+		public string ToString(string Format)
+		{
+			return ToString(Format, null);
+		}
+
+		/// <summary>A human-readable MVector with formatting and a format provider.</summary>
+		/// <param name="Format">The format to present the float values.</param>
+		/// <param name="Provider">The format provider to present the float values.</param>
+		/// <returns>A string with X, Y, and Z formatting according to Format and Provider.</returns>
+		/// <decorations decors="string"></decorations>
+		public string ToString(string Format, IFormatProvider Provider)
+		{
+			if (string.IsNullOrEmpty(Format))
+			{
+				Format = "F1";
+			}
+
+			if (Provider == null)
+			{
+				Provider = CultureInfo.InvariantCulture.NumberFormat;
+			}
+
+			return $"X: {X.ToString(Format, Provider)} Y: {Y.ToString(Format, Provider)} Z: {Z.ToString(Format, Provider)}";
+		}
 	}
 
 	/// <summary>MVector axes.</summary>
