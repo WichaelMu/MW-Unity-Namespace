@@ -1,9 +1,11 @@
-﻿
+﻿using System.Text;
+using UnityEngine;
+using MW.Conversion;
 
 namespace MW.Diagnostics
 {
 
-	/// <summary>UnityEngine.Debug.LogEVerbosity().</summary>
+	/// <summary>Debug.LogEVerbosity().</summary>
 	public enum EVerbosity
 	{
 		/// <summary></summary>
@@ -17,8 +19,8 @@ namespace MW.Diagnostics
 	/// <summary>Write to the console.</summary>
 	public class Log
 	{
-		/// <summary><see cref="UnityEngine.Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
-		/// <docs>UnityEngine.Debug.Log(object) every object with object.ToString().</docs>
+		/// <summary><see cref="Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
+		/// <docs>Debug.Log(object) every object with object.ToString().</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void P(params object[] args)
 		{
@@ -26,11 +28,11 @@ namespace MW.Diagnostics
 			foreach (object arg in args)
 				print += arg.ToString() + ' ';
 
-			UnityEngine.Debug.Log(print);
+			Debug.Log(print);
 		}
 
-		/// <summary><see cref="UnityEngine.Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
-		/// <docs>UnityEngine.Debug.LogError(object) every object with object.ToString().</docs>
+		/// <summary><see cref="Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
+		/// <docs>Debug.LogError(object) every object with object.ToString().</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void E(params object[] args)
 		{
@@ -38,11 +40,11 @@ namespace MW.Diagnostics
 			foreach (object arg in args)
 				print += arg.ToString() + ' ';
 
-			UnityEngine.Debug.LogError(print);
+			Debug.LogError(print);
 		}
 
-		/// <summary><see cref="UnityEngine.Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
-		/// <docs>UnityEngine.Debug.LogWarning(object) every object with object.ToString().</docs>
+		/// <summary><see cref="Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
+		/// <docs>Debug.LogWarning(object) every object with object.ToString().</docs>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void W(params object[] args)
 		{
@@ -50,9 +52,12 @@ namespace MW.Diagnostics
 			foreach (object arg in args)
 				print += arg.ToString() + ' ';
 
-			UnityEngine.Debug.LogWarning(print);
+			Debug.LogWarning(print);
 		}
 
+		/// <summary>Prints Content to the Console with Verbosity.</summary>
+		/// <param name="Content">The string to print to the console.</param>
+		/// <param name="Verbosity">The verbosity to print Content with.</param>
 		public static void Auto(string Content, EVerbosity Verbosity)
 		{
 			switch (Verbosity)
@@ -70,6 +75,22 @@ namespace MW.Diagnostics
 					P(Content);
 					break;
 			}
+		}
+
+		/// <summary>Prints Content to the Console with Colour and Verbosity.</summary>
+		/// <param name="Content">The string to colour and print to the console.</param>
+		/// <param name="Colour">The colour to display Content.</param>
+		/// <param name="Verbosity">The verbosity to print Content with.</param>
+		public static void Colourise(string Content, MVector Colour, EVerbosity Verbosity = EVerbosity.Log)
+		{
+			StringBuilder SB = new StringBuilder();
+			SB.Append("<color=");
+			SB.Append(Conversion.Colour.RGBToHex((byte)Colour.X, (byte)Colour.Y, (byte)Colour.Z));
+			SB.Append(">");
+			SB.Append(Content);
+			SB.Append("</color>");
+
+			Auto(SB.ToString(), Verbosity);
 		}
 	}
 }
