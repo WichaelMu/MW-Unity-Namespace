@@ -30,6 +30,28 @@ namespace MW.Math.Magic
 		/// <returns>An approximation for the Square Root of F.</returns>
 		public static float Sqrt(float F, int Iterations = 2) => InverseSqrt(Max(F, MVector.kEpsilon), Iterations) * F;
 
+		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Asin(float)"/>.</summary>
+		/// <docs>Faster version of Mathf.Asin().</docs>
+		/// <param name="Angle">The angle to get the inverse Sine of.</param>
+		/// <returns>Inverse Sine of Angle.</returns>
+		public static float ArcSine(float Angle)
+		{
+			bool bIsPositive = Angle >= 0f;
+			float FAbs = Abs(Angle);
+
+			float OneMinusFAbs = 1f - FAbs;
+			ClampMin(ref OneMinusFAbs, 0f);
+
+			float Root = Sqrt(OneMinusFAbs);
+
+			const float kASinHalfPI = 1.5707963050f;
+
+			float Approximation = ((((((-0.0012624911f * FAbs + 0.0066700901f) * FAbs - 0.0170881256f) * FAbs + 0.0308918810f) * FAbs - 0.0501743046f) * FAbs + 0.0889789874f) * FAbs - 0.2145988016f) * FAbs + kASinHalfPI;
+			Approximation *= Root;
+
+			return bIsPositive ? kASinHalfPI - Approximation : Approximation - kASinHalfPI;
+		}
+
 		/// <summary>Absolute Value of I.</summary>
 		/// <param name="I">The int to get the Absolute Value of.</param>
 		/// <returns>The value of I regardless of its sign.</returns>
