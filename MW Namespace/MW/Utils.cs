@@ -300,6 +300,42 @@ namespace MW
 			}
 		}
 
+		/// <summary>Clamps I to not fall below Min.</summary>
+		/// <param name="I">A reference to the Integer to clamp.</param>
+		/// <param name="Min">The Minimum value I can be.</param>
+		public static void ClampMin(ref int I, int Min)
+		{
+			if (I < Min)
+				I = Min;
+		}
+
+		/// <summary>Clamps I to not exceed Max.</summary>
+		/// <param name="I">A reference to the Integer to clamp.</param>
+		/// <param name="Max">The Maximum value I can be.</param>
+		public static void ClampMax(ref int I, int Max)
+		{
+			if (I > Max)
+				I = Max;
+		}
+
+		/// <summary>Clamps F to not fall below Min.</summary>
+		/// <param name="F">A reference to the Float to clamp.</param>
+		/// <param name="Min">The Minimum value F can be.</param>
+		public static void ClampMin(ref float F, float Min)
+		{
+			if (F < Min)
+				F = Min;
+		}
+
+		/// <summary>Clamps F to not exceed Max.</summary>
+		/// <param name="F">A reference to the Float to clamp.</param>
+		/// <param name="Max">The Maximum value F can be.</param>
+		public static void ClampMax(ref float F, float Max)
+		{
+			if (F > Max)
+				F = Max;
+		}
+
 		/// <summary>Clamps F to be between Min and Max.</summary>
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Min">The Minimum value of F.</param>
@@ -316,11 +352,19 @@ namespace MW
 			}
 		}
 
+		/// <summary>The larger value between F1 and F2.</summary>
+		/// <param name="F1"></param>
+		/// <param name="F2"></param>
+		/// <returns>The larger of the two given floats.</returns>
 		public static float Max(float F1, float F2)
 		{
 			return F1 < F2 ? F2 : F1;
 		}
 
+		/// <summary>The smaller value between F1 and F2.</summary>
+		/// <param name="F1"></param>
+		/// <param name="F2"></param>
+		/// <returns>The smaller of the two given floats.</returns>
 		public static float Min(float F1, float F2)
 		{
 			return F1 < F2 ? F1 : F2;
