@@ -4,34 +4,14 @@ using MW.Diagnostics;
 namespace MW.Behaviour
 {
 	/// <summary>A custom utility class that assists in debugging game data.</summary>
-	public class VDebug : MonoBehaviour
+	public class VisualDebugger : MUnique<VisualDebugger>
 	{
-		internal static VDebug _Instance;
-
-		/// <summary>A unique reference to a VDebug object.</summary>
-		/// <remarks><see langword="Null"/> if there are no VDebug objects in the scene.</remarks>
-		/// <docremarks>Null if no VDebug Objects exist.</docremarks>
-		public static VDebug Instance { get => _Instance; set => _Instance = value; }
-
 		/// <docs>True to disable GUI draws to the game screen.</docs>
 		[Tooltip("True to disable GUI draws to the game screen.")] public bool bDisableGUI;
 		/// <docs>True to disable VDebug Logs to the console.</docs>
 		[Tooltip("True to disable VDebug Logs to the console.")] public bool bDisableLogs;
 
 		[SerializeField, Min(0f), Tooltip("How often should GUI be updated in seconds? 0 is every frame.")] float GUIUpdateInterval = 0f;
-
-		void Awake()
-		{
-			if (!Instance)
-			{
-				Instance = this;
-			}
-			else
-			{
-				Diagnostics.Log.W("Ensure there is only one " + nameof(VDebug) + " object in the scene!");
-				Destroy(gameObject);
-			}
-		}
 
 		/// <summary><see cref="Log.Auto(string, EVerbosity)"/> <paramref name="Content"/> with <paramref name="Verbosity"/> in <paramref name="HexColour"/>.</summary>
 		/// <docs>Log.Auto() Content with Verbosity in HexColour.</docs>
