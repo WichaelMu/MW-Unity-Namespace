@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using MTest.Output;
 using MW;
-using MW.Math;
-using static MW.Math.Magic.Fast;
 using MW.Extensions;
-using MTest.Output;
+using MW.Math;
+using UnityEngine;
+using static MW.Math.Magic.Fast;
 
 namespace MTest
 {
@@ -222,7 +222,7 @@ namespace MTest
 				Tolerance.VectorToleranceCheck(9, UL - UR, ML - MR, "Subtraction", ref Passed);
 				Tolerance.VectorToleranceCheck(10, UR - UL, MR - ML, "Subtraction", ref Passed);
 				Tolerance.VectorToleranceCheck(11, -UL, -ML, "Negation", ref Passed);
-				Tolerance.VectorToleranceCheck(12, -UR , -MR, "Negation", ref Passed);
+				Tolerance.VectorToleranceCheck(12, -UR, -MR, "Negation", ref Passed);
 				Tolerance.VectorToleranceCheck(13, UL + UR, ML + MR, "Addition", ref Passed);
 				Tolerance.VectorToleranceCheck(14, UR + ML, ML + UR, "Cross Addition", ref Passed);
 

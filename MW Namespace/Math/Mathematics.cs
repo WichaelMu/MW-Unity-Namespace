@@ -1,9 +1,9 @@
 ﻿using MW.Diagnostics;
 using MW.Easing;
 using MW.Kinetic;
+using MW.Math.Magic;
 using UnityEngine;
 using static MW.Utils;
-using MW.Math.Magic;
 
 namespace MW.Math
 {

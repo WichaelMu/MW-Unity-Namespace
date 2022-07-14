@@ -1,10 +1,10 @@
-﻿using System;
-using MW.Diagnostics;
+﻿using MW.Diagnostics;
+using MW.Extensions;
 using MW.Math;
 using MW.Math.Magic;
-using static MW.Utils;
-using MW.Extensions;
+using System;
 using UnityEngine;
+using static MW.Utils;
 
 namespace MW
 {
@@ -41,7 +41,7 @@ namespace MW
 
 		/// <summary>Makes an MRotator with a Quaternion.</summary>
 		/// <param name="Quaternion">The Quaternion defining the Pitch, Yaw, and Roll.</param>
-		public MRotator (Quaternion Quaternion)
+		public MRotator(Quaternion Quaternion)
 		{
 			this = Quaternion.MakeRotator();
 		}

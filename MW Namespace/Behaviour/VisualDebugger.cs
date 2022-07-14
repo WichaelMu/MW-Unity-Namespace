@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using MW.Diagnostics;
+﻿using MW.Diagnostics;
+using UnityEngine;
 
 namespace MW.Behaviour
 {

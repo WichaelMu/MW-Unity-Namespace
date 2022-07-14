@@ -1,6 +1,4 @@
-﻿using MTest.Output;
-
-namespace MTest
+﻿namespace MTest
 {
 	class Entry
 	{
