@@ -210,5 +210,21 @@ namespace MW.Conversion
 		{
 			return new Vector4(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB, Colour.a / Utils.k1To255RGB);
 		}
+
+		/// <summary>Converts RGB bytes to a Hex string.</summary>
+		/// <remarks>Alpha is always 255.</remarks>
+		/// <param name="R">The Red channel.</param>
+		/// <param name="G">The Green channel.</param>
+		/// <param name="B">The Blue channel.</param>
+		/// <returns>A string in the format "#FFFFFF" of the representative colour.</returns>
+		public static string RGBToHex(byte R, byte G, byte B)
+		{
+			string Hex = "#";
+			Hex += R.ToString("X");
+			Hex += G.ToString("X");
+			Hex += B.ToString("X");
+
+			return Hex;
+		}
 	}
 }
