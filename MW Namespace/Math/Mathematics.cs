@@ -3,6 +3,7 @@ using MW.Easing;
 using MW.Kinetic;
 using UnityEngine;
 using static MW.Utils;
+using MW.Math.Magic;
 
 namespace MW.Math
 {
@@ -242,47 +243,70 @@ namespace MW.Math
 		}
 
 		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
-		/// <param name="Sine">The Sine result over fValue.</param>
-		/// <param name="Cosine">The Cosine result over fValue.</param>
-		/// <param name="Value">The angle.</param>
-		public static void SinCos(out float Sine, out float Cosine, float Value)
+		/// <param name="Sine">The Sine result over AngleInDegrees.</param>
+		/// <param name="Cosine">The Cosine result over AngleInDegrees.</param>
+		/// <param name="Angle">The angle in degrees.</param>
+		public static void SinCos(out float Sine, out float Cosine, float Angle)
 		{
-			float quotient = (kInversePI * 0.5f) * Value;
-			if (Value >= 0.0f)
+			float Quotient = (kInversePI * 0.5f) * Angle;
+			if (Angle >= 0.0f)
 			{
-				quotient = (int)(quotient + 0.5f);
+				Quotient = (int)(Quotient + 0.5f);
 			}
 			else
 			{
-				quotient = (int)(quotient - 0.5f);
+				Quotient = (int)(Quotient - 0.5f);
 			}
-			float y = Value - (2.0f * Mathf.PI) * quotient;
 
-			// Map y to [-PI / 2, PI / 2] with Sin(y) = Sin(Value).
-			float sign;
-			if (y > kHalfPI)
+			float Y = Angle - (2.0f * Mathf.PI) * Quotient;
+
+			// Map Y to [-PI / 2, PI / 2] with Sin(Y) = Sin(Value).
+			float Sign;
+			if (Y > kHalfPI)
 			{
-				y = Mathf.PI - y;
-				sign = -1.0f;
+				Y = Mathf.PI - Y;
+				Sign = -1.0f;
 			}
-			else if (y < -kHalfPI)
+			else if (Y < -kHalfPI)
 			{
-				y = -Mathf.PI - y;
-				sign = -1.0f;
+				Y = -Mathf.PI - Y;
+				Sign = -1.0f;
 			}
 			else
 			{
-				sign = +1.0f;
+				Sign = +1.0f;
 			}
 
-			float y2 = y * y;
+			float Y2 = Y * Y;
 
 			// 11-degree minimax approximation
-			Sine = (((((-2.3889859e-08f * y2 + 2.7525562e-06f) * y2 - 0.00019840874f) * y2 + 0.0083333310f) * y2 - 0.16666667f) * y2 + 1.0f) * y;
+			Sine = (((((-2.3889859e-08f * Y2 + 2.7525562e-06f) * Y2 - 0.00019840874f) * Y2 + 0.0083333310f) * Y2 - 0.16666667f) * Y2 + 1.0f) * Y;
 
 			// 10-degree minimax approximation
-			float p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
-			Cosine = sign * p;
+			Cosine = Sign * ((((-2.6051615e-07f * Y2 + 2.4760495e-05f) * Y2 - 0.0013888378f) * Y2 + 0.041666638f) * Y2 - 0.5f) * Y2 + 1.0f;
+		}
+
+		/// <summary>Calculates the Square Distance between two Vector3s.</summary>
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		/// <returns>The Square Distance between L and R.</returns>
+		public static float SqrDistance(Vector3 L, Vector3 R)
+		{
+			float x = L.x - R.x;
+			float y = L.y - R.y;
+			float z = L.z - R.z;
+
+			return x * x + y * y + z * z;
+		}
+
+		/// <summary>A fast version of <see cref="Vector3.Distance"/>.</summary>
+		/// <docs>A fast version of Vector3.Distance().</docs>
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		/// <returns>The distance between L and R.</returns>
+		public static float Distance(Vector3 L, Vector3 R)
+		{
+			return Fast.Sqrt(SqrDistance(L, R));
 		}
 	}
 }
