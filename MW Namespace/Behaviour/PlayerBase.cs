@@ -32,8 +32,10 @@ namespace MW.Behaviour
 		internal IntervalInformation FixedIntervalRecorder;
 		[HideInInspector] public float TimeSpawned;
 
-		public virtual void Awake()
+		public override void Awake()
 		{
+			base.Awake();
+
 			InitialisePlayer();
 		}
 

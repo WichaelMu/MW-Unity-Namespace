@@ -426,7 +426,7 @@ namespace MW
 		/// <returns>(MVector From, MVector To) => (To - From).Normalised</returns>
 		public static MVector operator >(MVector From, MVector To) => (To - From).Normalised;
 		/// <summary>Normalised direction from to.</summary>
-		/// <decorations decors="public static MVector operator<"></decorations>
+		/// <decorations decors="public static MVector operator&lt;"></decorations>
 		/// <param name="From"></param>
 		/// <param name="To"></param>
 		/// <returns>(MVector To, MVector From) => From > To</returns>
@@ -459,7 +459,7 @@ namespace MW
 		}
 
 		/// <summary>Shifts all components to the left.</summary>
-		/// <decorations decors="public static MVector operator<<"></decorations>
+		/// <decorations decors="public static MVector operator&lt;&lt;"></decorations>
 		/// <param name="V">The MVector to shift.</param>
 		/// <param name="I">The number of times to shift left.</param>
 		/// <returns>X = Z, Y = X, Z = Y.</returns>

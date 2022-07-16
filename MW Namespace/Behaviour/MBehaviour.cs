@@ -23,9 +23,9 @@ namespace MW.Behaviour
 
 		protected bool bVisibleInGame;
 
-		protected void Awake()
+		public virtual void Awake()
 		{
-			if (bVisibleInGame && TryGetComponent(out MeshRenderer MR))
+			if (!bVisibleInGame && TryGetComponent(out MeshRenderer MR))
 			{
 				MR.enabled = false;
 			}
