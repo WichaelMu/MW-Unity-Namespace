@@ -3,6 +3,7 @@
 namespace MW.Easing
 {
 	/// <summary>Interpolation equations.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Interpolate
 	{
 
@@ -11,6 +12,7 @@ namespace MW.Easing
 		const float kNaturalLogOf2 = 0.693147181f;
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -21,6 +23,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -33,6 +36,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -44,6 +48,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -55,6 +60,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -69,6 +75,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -80,6 +87,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -92,6 +100,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -106,6 +115,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -117,6 +127,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -129,6 +140,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -143,6 +155,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -154,6 +167,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -166,6 +180,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -180,6 +195,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -191,6 +207,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -202,6 +219,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -213,6 +231,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -224,6 +243,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -235,6 +255,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -249,6 +270,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -260,6 +282,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -272,6 +295,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -286,6 +310,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -298,6 +323,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -328,6 +354,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -341,6 +368,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -354,6 +382,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -367,6 +396,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -387,6 +417,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -418,6 +449,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -449,6 +481,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -483,6 +516,7 @@ namespace MW.Easing
 		// Derivatives.
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -493,6 +527,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -503,6 +538,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -514,6 +550,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -534,6 +571,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -544,6 +582,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -556,6 +595,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -576,6 +616,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -586,6 +627,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -598,6 +640,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -618,6 +661,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -628,6 +672,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -640,6 +685,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -660,6 +706,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -670,6 +717,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -681,6 +729,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -691,6 +740,7 @@ namespace MW.Easing
 			return End * 0.5f * Mathf.PI * Mathf.Sin(Mathf.PI * Duration);
 		}
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -712,6 +762,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -732,6 +783,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -742,6 +794,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -754,6 +807,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -774,6 +828,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -787,6 +842,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -818,6 +874,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -838,6 +895,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -850,6 +908,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -864,6 +923,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -886,6 +946,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -896,6 +957,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -925,6 +987,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -963,6 +1026,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>
@@ -982,6 +1046,7 @@ namespace MW.Easing
 		}
 
 		/// <summary>Gets the derivative function of the appropriate easing function. If you use an easing function for position then this function can get you the speed at a given time (normalised).</summary>
+		/// <decorations decor="public static Function"></decorations>
 		/// <param name="Function"></param>
 		/// <returns>The derivative function</returns>
 		public static Function GetEasingFunctionDerivative(EEquation Function)
@@ -1061,6 +1126,7 @@ namespace MW.Easing
 		#endregion
 
 		/// <summary>Ease with EEquation through Start to End over Duration.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="EEquation">EEquation to for interpolation..</param>
 		/// <param name="Start">Starting value.</param>
 		/// <param name="End">Ending value.</param>
@@ -1141,10 +1207,5 @@ namespace MW.Easing
 		}
 	}
 
-	/// <summary>Delegate Function for Easing.</summary>
-	/// <param name="Start">Start.</param>
-	/// <param name="End">End</param>
-	/// <param name="Duration">Duration.</param>
-	/// <returns>The interpolated between Start and End over D.</returns>
 	public delegate float Function(float Start, float End, float Duration);
 }

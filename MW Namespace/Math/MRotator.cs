@@ -10,18 +10,23 @@ namespace MW
 {
 	/// <summary>A <see cref="UnityEngine.Quaternion"/> rotation implementation defined by Pitch, Yaw and Roll in degrees.</summary>
 	/// <docs>A Quaternion rotation implementation defined by Pitch, Yaw and Roll in degrees.</docs>
+	/// <decorations decor="[Serializable] public struct"></decorations>
 	[Serializable]
 	public struct MRotator
 	{
 		/// <summary>The rotation in degrees around the X axis. 0 = Forward, +Up, -Down.</summary>
+		/// <decorations decor="public static float"></decorations>
 		public float Pitch;
 		/// <summary>The rotation in degrees around the Y axis. 0 = Straight, +Right, -Left.</summary>
+		/// <decorations decor="public static float"></decorations>
 		public float Yaw;
 		/// <summary>The rotation in degrees around the Z axis. 0 = Up is 12 o'clock, +Clockwise, -Counter-clockwise.</summary>
+		/// <decorations decor="public static float"></decorations>
 		public float Roll;
 
 		static readonly MRotator zero = new MRotator(0, 0, 0);
 		/// <summary>An MRotator with no rotation.</summary>
+		/// <decorations decor="public static readonly MVector"></decorations>
 		public static readonly MRotator Zero = zero;
 
 		/// <summary>Makes a rotation with Pitch, Yaw and Roll.</summary>
@@ -48,6 +53,7 @@ namespace MW
 
 		/// <summary>Computes a <see cref="UnityEngine.Quaternion"/> with a rotation of Pitch, Yaw and Roll.</summary>
 		/// <docs>Computes a Quaternion with a rotation of Pitch, Yaw and Roll.</docs>
+		/// <decorations decor="public Quaternion"></decorations>
 		/// <returns>A Quaternion with Pitch, Yaw, Roll.</returns>
 		public Quaternion Quaternion()
 		{
@@ -72,6 +78,7 @@ namespace MW
 
 		/// <summary>Converts a <see cref="UnityEngine.Quaternion"/> to an MRotator.</summary>
 		/// <docs>Converts a Quaternion to an MRotator.</docs>
+		/// <decorations decor="public static MRotator"></decorations>
 		/// <param name="Q">The Quaternion to extract Pitch, Yaw and Roll.</param>
 		/// <docreturns>An MRotator rotated according to a Quaternion.</docreturns>
 		/// <returns>An MRotator rotated according to a <see cref="UnityEngine.Quaternion"/>.</returns>
@@ -130,6 +137,7 @@ namespace MW
 		}
 
 		/// <summary>Adds a rotation to the respective rotation component.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		/// <returns>This MRotator after adding the deltas.</returns>
 		public MRotator Add(float DeltaPitch, float DeltaYaw, float DeltaRoll)
 		{
@@ -143,6 +151,7 @@ namespace MW
 		}
 
 		/// <summary>Adds an MRotator to this MRotator on their respective components.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		/// <param name="DeltaPYR">The MRotator to add.</param>
 		/// <returns>See Add(float DeltaPitch, float DeltaYaw, float DeltaRoll).</returns>
 		public MRotator Add(MRotator DeltaPYR)
@@ -152,6 +161,7 @@ namespace MW
 
 		/// <summary>The opposite of this MRotator over OpposeAxes, defined by <see cref="ERotationAxis"/>.</summary>
 		/// <docs>The opposite of this MRotator over OpposeAxes.</docs>
+		/// <decorations decor="public MRotator"></decorations>
 		/// <param name="OpposeAxes">The axes to oppose.</param>
 		/// <returns>An MRotator in the opposite direction over the supplied axes.</returns>
 		public MRotator Oppose(ERotationAxis OpposeAxes)
@@ -166,6 +176,7 @@ namespace MW
 		}
 
 		/// <summary>Interpolates between two MRotators.</summary>
+		/// <decorations decor="public static MRotator"></decorations>
 		/// <param name="From">The beginning rotation.</param>
 		/// <param name="To">The target rotation.</param>
 		/// <param name="NormalisedAlpha">The percentage of interpolation, from zero to one.</param>
@@ -184,6 +195,7 @@ namespace MW
 		}
 
 		/// <summary>Interpolates between two MRotators.</summary>
+		/// <decorations decor="public static MRotator"></decorations>
 		/// <param name="From">The beginning rotation.</param>
 		/// <param name="To">The target rotation.</param>
 		/// <param name="NormalisedAlpha">The percentage of interpolation, from zero to one.</param>
@@ -211,12 +223,14 @@ namespace MW
 
 		/// <summary>An <see cref="MW.MVector"/> where X = Pitch, Y = Yaw, Z = Roll.</summary>
 		/// <docs>An MVector where X = Pitch, Y = Yaw, Z = Roll.</docs>
+		/// <decorations decor="public MVector"></decorations>
 		public MVector MVector()
 		{
 			return new MVector(Pitch, Yaw, Roll);
 		}
 
 		/// <summary>This MRotator % 360 on all components.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Wrap360()
 		{
 			Pitch %= 360f;
@@ -225,6 +239,7 @@ namespace MW
 		}
 
 		/// <summary>Forces the Angles to be within 0 - 360 degrees.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		/// <returns>The normalised MRotator.</returns>
 		public MRotator NormaliseAngles()
 		{
@@ -241,12 +256,14 @@ namespace MW
 		}
 
 		/// <summary>Adds two MRotators together.</summary>
+		/// <decorations decor="public static MRotator operator+"></decorations>
 		/// <param name="L">Left-side MRotator.</param>
 		/// <param name="R">Right-side MRotator.</param>
 		/// <returns>(MRotator L, MRotator R) => L.Add(R)</returns>
 		public static MRotator operator +(MRotator L, MRotator R) => L.Add(R);
 
 		/// <summary>Subtracts L from R.</summary>
+		/// <decorations decor="public static MRotator operator-"></decorations>
 		/// <param name="L">Left-side MRotator.</param>
 		/// <param name="R">Right-side MRotator.</param>
 		/// <returns>L.Add(-R).</returns>
@@ -260,6 +277,7 @@ namespace MW
 		}
 
 		/// <summary>Multiplies an MRotator by a Scalar value.</summary>
+		/// <decorations decor="public static MRotator operator*"></decorations>
 		/// <param name="R">Rotator.</param>
 		/// <param name="S">Scalar.</param>
 		/// <returns>R[P..Y..R] * S.</returns>
@@ -274,10 +292,12 @@ namespace MW
 
 		/// <summary>Converts Pitch, Yaw, Roll into its corresponding <see cref="UnityEngine.Quaternion"/>.</summary>
 		/// <docs>Converts Pitch, Yaw, Roll into its corresponding Quaternion.</docs>
+		/// <decorations decor="public static implicit operator Quaternion"></decorations>
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 
 		/// <summary>A human-readable MRotator.</summary>
+		/// <decorations decor="public override string"></decorations>
 		/// <returns>"Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll</returns>
 		public override string ToString()
 		{
@@ -286,6 +306,7 @@ namespace MW
 
 		/// <summary>Rotation axes.</summary>
 		/// <remarks>Uses bytes.</remarks>
+		/// <decorations decor="public enum : byte"></decorations>
 		public enum ERotationAxis : byte
 		{
 			/// <summary>No Rotation axis.</summary>

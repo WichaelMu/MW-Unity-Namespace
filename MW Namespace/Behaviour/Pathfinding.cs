@@ -6,9 +6,11 @@ namespace MW.Pathfinding
 {
 	/// <summary>Provides the A* Pathfinding implementation for T.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
+	/// <decorations decor="public static class {T} where T : INode{T}, IHeapItem{T}"></decorations>
 	public static class Pathfinding<T> where T : INode<T>, IHeapItem<T>
 	{
 		/// <summary>A* pathfinds from Origin to Destination looking uDepth times within a uMapSize.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Origin">T position to begin pathfinding.</param>
 		/// <param name="Destination">T position to pathfind to.</param>
 		/// <param name="Path">Reference T List of that make up the path from Origin to Destination.</param>
@@ -96,6 +98,7 @@ namespace MW.Pathfinding
 
 	/// <summary>Computes a number of paths over a number of frames.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
+	/// <decorations decor="public static class {T} where T : INode{T}, IHeapItem{T}"></decorations>
 	public static class PathRegister<T> where T : INode<T>, IHeapItem<T>
 	{
 		static Queue<PathRequest> PathsToCompute = new();
@@ -103,6 +106,7 @@ namespace MW.Pathfinding
 
 		/// <summary>Register a path to compute when possible.</summary>
 		/// <remarks>This is on a first-in, first-out basis. A Queue.</remarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Origin">T position to begin pathfinding.</param>
 		/// <param name="Destination">T position to pathfind to.</param>
 		/// <param name="OnPathCalculated">What to do when a path is found? List of T pathway.</param>
@@ -114,6 +118,7 @@ namespace MW.Pathfinding
 		}
 
 		/// <summary>Computes the next path in FIFO.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <returns>Whether or not a computation was executed.</returns>
 		public static bool ComputeNext()
 		{
@@ -144,6 +149,7 @@ namespace MW.Pathfinding
 		}
 
 		/// <summary>Computes BatchSize paths in a single call.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="BatchSize">The number of paths to compute.</param>
 		public static void ComputeBatch(uint BatchSize)
 		{
@@ -155,6 +161,7 @@ namespace MW.Pathfinding
 		}
 
 		/// <summary>Gets the number of agents waiting to compute paths.</summary>
+		/// <decorations decor="public static uint"></decorations>
 		/// <returns>Unsigned integer number of T's awaiting a path.</returns>
 		public static uint GetPathQueueSize()
 		{
@@ -182,9 +189,11 @@ namespace MW.Pathfinding
 
 	/// <summary>The MonoBehavior script that manages pathfinding over frames.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
+	/// <decorations decor="public class {T} : MonoBehaviour where T : INode{T}, IHeapItem{T}"></decorations>
 	public class MPathManager<T> : UnityEngine.MonoBehaviour where T : INode<T>, IHeapItem<T>
 	{
 		/// <summary>The number of paths to compute per frame.</summary>
+		/// <decorations decor="[SerializeField] [Min(1)] uint"></decorations>
 		[UnityEngine.SerializeField]
 		[UnityEngine.Min(1)]
 		[UnityEngine.Tooltip("The number of paths to compute per frame.")]
@@ -192,6 +201,7 @@ namespace MW.Pathfinding
 		uint ComputationsPerFrame = 1;
 
 		/// <summary>The number of frames between computing path/s.</summary>
+		/// <decorations decor="[SerializeField] [Min(1)] uint"></decorations>
 		[UnityEngine.SerializeField]
 		[UnityEngine.Min(1)]
 		[UnityEngine.Tooltip("The number of frames before path/s are computed.")]
@@ -254,18 +264,21 @@ namespace MW.Pathfinding
 		}
 
 		/// <summary>Temporarily stop the computation of paths.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Pause()
 		{
 			bIsPaused = true;
 		}
 
 		/// <summary>Continue the computation of paths.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Resume()
 		{
 			bIsPaused = false;
 		}
 
 		/// <summary>Prints the current status of this Path Manager.</summary>
+		/// <decorations decor="public EStatus"></decorations>
 		/// <returns>If this Path Manager is currently Paused, or Running.</returns>
 		public EStatus Status()
 		{
@@ -274,32 +287,40 @@ namespace MW.Pathfinding
 			return bIsPaused ? EStatus.Paused : EStatus.Running;
 		}
 
-		public enum EStatus { Paused = 1, Running = 2 }
+		public enum EStatus { Paused, Running }
 	}
 
 	/// <summary>The Interface that T must implement if it is to be used by <see cref="Pathfinding{T}"/>.</summary>
 	/// <docs>The Interface that T must implement if it is to be used by Pathfinding.</docs>
 	/// <typeparam name="T">The type to declare a node.</typeparam>
+	/// <decorations decor="public interface {T} where T : IComparable{T}"></decorations>
 	public interface INode<T> where T : IComparable<T>
 	{
 		/// <summary>This Node's F score.</summary>
+		/// <decorations decor="float"></decorations>
 		float F { get; set; }
 		/// <summary>This Node's G score.</summary>
+		/// <decorations decor="float"></decorations>
 		float G { get; set; }
 		/// <summary>This Node's H score.</summary>
+		/// <decorations decor="float"></decorations>
 		float H { get; set; }
 
 		T Parent { get; set; }
 
 		/// <summary>How many directions can this Node point to?</summary>
+		/// <decorations decor="uint"></decorations>
 		uint NumberOfDirections();
 
 		/// <summary>Is this block traversable?</summary>
+		/// <decorations decor="bool"></decorations>
 		bool IsTraversable();
 		/// <summary>Get the Neighbouring Node at Direction.</summary>
+		/// <decorations decor="INode{T}"></decorations>
 		/// <param name="Direction">The neighbour of this Node in this direction.</param>
 		INode<T> Neighbour(uint Direction);
 		/// <summary>The distance heuristic to calculate pathfinding scores.</summary>
+		/// <decorations decor="float"></decorations>
 		/// <param name="RelativeTo">Distance to from this T to Relative To.</param>
 		/// <returns>An indicative distance from this T, Relative To.</returns>
 		float DistanceHeuristic(T RelativeTo);

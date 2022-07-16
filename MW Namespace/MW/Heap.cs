@@ -6,6 +6,7 @@ namespace MW
 	/// <remarks><see cref="System.IComparable{T}"/> returns &lt; 0 for Max Heap and &gt; 0 for Min Heap.</remarks>
 	/// <docremarks>IComparable&lt;T&gt; returns &lt; 0 for Max Heap and &gt; 0 for Min Heap.</docremarks>
 	/// <typeparam name="T">The type to store in this heap.</typeparam>
+	/// <decorations decor="public class {T} where T : IHeapItem{T}"></decorations>
 	public class THeap<T> where T : IHeapItem<T>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
@@ -13,6 +14,7 @@ namespace MW
 		int Count;
 
 		/// <summary>The number of elements in the heap.</summary>
+		/// <decorations decor="public int"></decorations>
 		public int Num
 		{
 			get
@@ -29,6 +31,7 @@ namespace MW
 		}
 
 		/// <summary>Adds an item to this Heap.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Item">The item to add.</param>
 		public void Add(T Item)
 		{
@@ -40,6 +43,7 @@ namespace MW
 		}
 
 		/// <summary>Remove the element at the root of this Heap.</summary>
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The element that was removed.</returns>
 		public T RemoveFirst()
 		{
@@ -54,6 +58,7 @@ namespace MW
 		}
 
 		/// <summary>Updates Item's position in the Heap.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Item">The item to update.</param>
 		public void UpdateItem(T Item)
 		{
@@ -62,6 +67,7 @@ namespace MW
 		}
 
 		/// <summary>Sorts this Item upwards.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Item">The item to update.</param>
 		public void UpdateItemUp(T Item)
 		{
@@ -69,6 +75,7 @@ namespace MW
 		}
 
 		/// <summary>Sorts this Item downwards.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Item">The item to update.</param>
 		public void UpdateItemDown(T Item)
 		{
@@ -76,6 +83,7 @@ namespace MW
 		}
 
 		/// <summary>Whether or not this Heap contains Item.</summary>
+		/// <decorations decor="public bool"></decorations>
 		/// <param name="Item">The Item to check.</param>
 		/// <returns>True if Item exists in this Heap.</returns>
 		public bool Contains(T Item) => Equals(Items[Item.HeapItemIndex], Item);
@@ -148,6 +156,7 @@ namespace MW
 		}
 
 		/// <summary>The Heap as a T[].</summary>
+		/// <decorations decor="public T[]"></decorations>
 		/// <returns>T[] in the order of this THeap.</returns>
 		public T[] Array()
 		{
@@ -161,6 +170,7 @@ namespace MW
 
 	/// <summary>The Interface that T must implement if it is to be used as a Heap.</summary>
 	/// <typeparam name="T">The type to make compatible with THeap.</typeparam>
+	/// <decorations decor="public interface {T} : IComparable{T}"></decorations>
 	public interface IHeapItem<T> : System.IComparable<T>
 	{
 		/// <summary>The position in a THeap.</summary>

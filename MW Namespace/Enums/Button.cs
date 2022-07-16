@@ -1,6 +1,7 @@
 ﻿namespace MW
 {
 	/// <summary>The mouse buttons on a standard mouse.</summary>
+	/// <decorations decor="public enum"></decorations>
 	public enum EButton
 	{
 		/// <summary></summary>

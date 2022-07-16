@@ -8,6 +8,7 @@ namespace MW.Behaviour
 {
 	/// <summary>Generates a separate Tick function.</summary>
 	/// <typeparam name="T">The data to perform OnTick.</typeparam>
+	/// <decorations decor="public class {T} : MonoBehaviour"></decorations>
 	public class Tick<T> : MonoBehaviour
 	{
 		IEnumerator ThisTick;
@@ -51,6 +52,7 @@ namespace MW.Behaviour
 
 		/// <summary>Sets the data for the next execution of OnTick.</summary>
 		/// <remarks>All entries in Data will be executed linearly.</remarks>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Data">The data to set for the next OnTick.</param>
 		public void SetData(MArray<T> Data)
 		{
@@ -84,6 +86,7 @@ namespace MW.Behaviour
 
 		/// <summary>Pauses this Tick from executing until this <see cref="TogglePauseTick"/> is called again.</summary>
 		/// <docs>Pauses this Tick from executing until this (TogglePauseTick) is called again.</docs>
+		/// <decorations decor="public void"></decorations>
 		/// <remarks>This is a toggle.</remarks>
 		public void TogglePauseTick()
 		{
@@ -91,6 +94,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Stop executing this Tick.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Terminate()
 		{
 			StopCoroutine(GetTickFunction());
@@ -102,6 +106,7 @@ namespace MW.Behaviour
 		}
 
 		/// <docreturns>Information about the time and percentage complete on this Tick function.</docreturns>
+		/// <decorations decor="public TickInformation"></decorations>
 		/// <returns><see cref="TickInformation"/></returns>
 		public TickInformation GetTickInfo()
 		{

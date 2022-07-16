@@ -5,21 +5,27 @@ using UnityEngine.Events;
 namespace MW.Behaviour
 {
 	/// <summary>A class defining how MBehaviours do Sweeps.</summary>
+	/// <decorations decor="[Serializable] public class"></decorations>
 	[Serializable]
 	public class SweepInteraction
 	{
 		/// <summary>Constant null reference to mark No Interaction.</summary>
+		/// <decorations decor="public const SweepInteraction"></decorations>
 		public const SweepInteraction kNoInteraction = null;
 
 		static readonly SweepInteraction _default = new SweepInteraction();
 		/// <summary>Default Sweep Interaction parameters.</summary>
+		/// <decorations decor="public static readonly SweepInteraction"></decorations>
 		public static readonly SweepInteraction Default = _default;
 
 		/// <summary>The radius of this Sweep's check for interactions.</summary>
+		/// <decorations decor="public float"></decorations>
 		public float InteractingRadius;
 		/// <summary>The layers this Sweep will consider for interactions.</summary>
+		/// <decorations decor="public LayerMask"></decorations>
 		public LayerMask InteractingLayers;
 		/// <summary>What happens when the Sweep makes an interaction?</summary>
+		/// <decorations decor="public UnityEvent{GameObject}"></decorations>
 		public UnityEvent<GameObject> Broadcast;
 
 		/// <summary>Default Sweep Interaction parameters.</summary>

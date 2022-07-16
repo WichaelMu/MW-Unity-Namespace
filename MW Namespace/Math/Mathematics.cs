@@ -8,10 +8,12 @@ using static MW.Utils;
 namespace MW.Math
 {
 	/// <summary></summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Mathematics
 	{
 
 		/// <param name="Equation">The EEquation to use to accelerate.</param>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="CurrentSpeed">The current speed of the acceleration.</param>
 		/// <param name="RateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
 		/// <param name="Terminal">The maximum speed.</param>
@@ -26,6 +28,11 @@ namespace MW.Math
 			return Mathf.Clamp(Mathf.Lerp(CurrentSpeed / Time.deltaTime, Terminal, Interpolate.Ease(Equation, 0, 1, RateOfAcceleration)), 0, Terminal);
 		}
 
+		/// <summary>The rate of deceleration.</summary>
+		/// <decorations decor="public static float"></decorations>
+		/// <param name="CurrentSpeed"></param>
+		/// <param name="TargetVelocity"></param>
+		/// <returns></returns>
 		public static float Deceleration(float CurrentSpeed, float TargetVelocity = 0)
 		{
 			return -((TargetVelocity - CurrentSpeed) / Time.deltaTime);
@@ -33,6 +40,7 @@ namespace MW.Math
 
 		static float fAR = 0;
 
+		/// <decorations decor="[Obsolete] public static float"></decorations>
 		/// <param name="Self">The Rigidbody to calculate an acceleration rate.</param>
 		/// <param name="Speed">The current speed of the Rigidbody in EUnit.MetresPerSecond.</param>
 		/// <returns>The float rate of movement in EUnit.MetresPerSecond.</returns>
@@ -46,6 +54,7 @@ namespace MW.Math
 		}
 
 		/// <summary>The rate of acceleration in m/s^2.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="LastPosition"></param>
 		/// <param name="ThisPosition"></param>
 		/// <param name="DeltaTime">The difference in time between LastPosition and ThisPosition in seconds.</param>
@@ -59,6 +68,7 @@ namespace MW.Math
 
 		/// <summary>Converts a <see cref="Rigidbody"/>'s speed from metres per second to <see cref="EUnit"/>.</summary>
 		/// <docs>Converts a Rigidbody's speed from metres per second to UUnit.</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Self">The Rigidbody to read a speed from.</param>
 		/// <param name="Unit">The desired EUnit of measurement.</param>
 		/// <returns>A speed reading from self in EUnit of measurement.</returns>
@@ -93,6 +103,7 @@ namespace MW.Math
 
 		/// <summary>The direction to intercept Target relative to Projectile.</summary>
 		/// <remarks>Requires movement in BOTH Rigidbodies. This function was designed specifically for aircraft.</remarks>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Projectile">The Rigidbody predicting the movement of RBTarget.</param>
 		/// <param name="Target">The Rigidbody to predict.</param>
 		public static MVector PredictiveProjectile(Rigidbody Projectile, Rigidbody Target)
@@ -113,6 +124,7 @@ namespace MW.Math
 		}
 
 		/// <summary>Predicts the path of a target's movement for a projectile to be launched.</summary>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="LaunchPosition">World location of where a projectile will be launched.</param>
 		/// <param name="ConstantMoveSpeed">The movement speed of the projectile that will be launched.</param>
 		/// <param name="TargetVelocity">The direction of where the target is heading and the speed it is travelling at.</param>
@@ -133,11 +145,13 @@ namespace MW.Math
 		}
 
 		/// <summary>Whether Number is a power of two.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Number">The number to check.</param>
 		/// <returns>Number &amp; (Number - 1) == 0.</returns>
 		public static bool IsPowerOfTwo(int Number) => (Number & (Number - 1)) == 0;
 
 		/// <summary>The greatest common divisor of A and B.</summary>
+		/// <decorations decor="public static int"></decorations>
 		public static int GreatestCommonDivisor(int A, int B)
 		{
 			while (B != 0)
@@ -151,6 +165,7 @@ namespace MW.Math
 		}
 
 		/// <summary>The lowest common multiple of A and B.</summary>
+		/// <decorations decor="public static int"></decorations>
 		public static int LowestCommonMultiple(int A, int B)
 		{
 			int GCD = GreatestCommonDivisor(A, B);
@@ -158,6 +173,7 @@ namespace MW.Math
 		}
 
 		/// <summary>Wraps f between Min and Max.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="f">The float number to wrap.</param>
 		/// <param name="Min">The minimum value to wrap.</param>
 		/// <param name="Max">The maximum value to wrap.</param>
@@ -179,6 +195,7 @@ namespace MW.Math
 		}
 
 		/// <summary>Wraps n between Min and Max.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="n">The float number to wrap.</param>
 		/// <param name="Min">The minimum value to wrap.</param>
 		/// <param name="Max">The maximum value to wrap.</param>
@@ -200,6 +217,7 @@ namespace MW.Math
 		}
 
 		/// <summary>Whether M1 is parallel to M2 within ParallelThreshold.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="M1">Whether this vector is parallel to the other.</param>
 		/// <param name="M2">Whether this vector is parallel to the other.</param>
 		/// <param name="ParallelThreshold">The threshold to consider parallel vectors.</param>
@@ -211,6 +229,7 @@ namespace MW.Math
 		public static bool IsNormalised(MVector Vector) => Mathf.Abs(1f - Vector.SqrMagnitude) < .01f;
 
 		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Z-Axis. (For 3D space)</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Direction">The direction to calculate an angle towards.</param>
 		public static float AngleFromVector3D(Vector3 Direction)
 		{
@@ -218,6 +237,7 @@ namespace MW.Math
 		}
 
 		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Y-Axis. (For 2D space)</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Direction">The direction to calculate an angle towards.</param>
 		public static float AngleFromVector2D(Vector3 Direction)
 		{
@@ -225,6 +245,7 @@ namespace MW.Math
 		}
 
 		/// <summary>Returns a normalised MVector at Degrees, relative to ForwardDirection.</summary>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Degrees">The angle offset.</param>
 		/// <param name="ForwardDirection">The forward direction.</param>
 		public static MVector VectorFromAngle(float Degrees, EDirection ForwardDirection)
@@ -243,6 +264,7 @@ namespace MW.Math
 		}
 
 		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Sine">The Sine result over AngleInDegrees.</param>
 		/// <param name="Cosine">The Cosine result over AngleInDegrees.</param>
 		/// <param name="Angle">The angle in degrees.</param>
@@ -287,6 +309,7 @@ namespace MW.Math
 		}
 
 		/// <summary>Calculates the Square Distance between two Vector3s.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>The Square Distance between L and R.</returns>
@@ -301,6 +324,7 @@ namespace MW.Math
 
 		/// <summary>A fast version of <see cref="Vector3.Distance"/>.</summary>
 		/// <docs>A fast version of Vector3.Distance().</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>The distance between L and R.</returns>

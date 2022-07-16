@@ -3,9 +3,11 @@
 namespace MW.Audio
 {
 	/// <summary>A Sound Visualiser.</summary>
+	/// <decorations decor="public class"></decorations>
 	public class Visualiser
 	{
 		/// <summary>The number of samples in the audio clip.</summary>
+		/// <decorations decor="public int"></decorations>
 		public int Samples = 1024;
 		internal static float RMS0_N1_Db = 0.1f;
 		internal static float Threshold = 0.02f;
@@ -15,9 +17,11 @@ namespace MW.Audio
 		internal float Sample;
 
 		/// <summary>The source of the sound.</summary>
+		/// <decorations decor="public AudioSource"></decorations>
 		public AudioSource Source;
 		internal EComponentAxis Internal_PositiveVisualiserAxis;
 		/// <summary>How to visualise the sound in Visualiser.</summary>
+		/// <decorations decor="public EComponentAxis"></decorations>
 		public EComponentAxis PositiveVisualiserAxis
 		{
 			get => Internal_PositiveVisualiserAxis;
@@ -55,6 +59,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Visualises sound emitted by an AudioSource.</summary>
+		/// <decorations decor="public VisualInformation"></decorations>
 		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
 		public VisualInformation Analyse()
 		{
@@ -64,6 +69,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Visualises sound emitted by an AudioSource.</summary>
+		/// <decorations decor="public VisualInformation"></decorations>
 		/// <param name="Visualiser">The sound visualiser displayed as an array of MVectors. Where left indices are low frequencies and right indices are high.</param>
 		/// <returns>VisualInformation. Notably, decibels and pitch of the analysed sound.</returns>
 		public VisualInformation Analyse(out MVector[] Visualiser)
@@ -77,6 +83,7 @@ namespace MW.Audio
 
 		/// <summary>Visualises sound emitted by an AudioSource using a LineRenderer.</summary>
 		/// <remarks>Uses decibels to visualise.</remarks>
+		/// <decorations decor="public VisualInformation"></decorations>
 		/// <param name="LineRenderer">The LineRenderer to display the visualisation of the AudioSource.</param>
 		/// <param name="Modifier">The height multiplier for the LineRenderer. Negative points downwards.</param>
 		/// <param name="Smooth">The inverse interpolation strength for the LineRenderer as sounds change.</param>
@@ -186,13 +193,17 @@ namespace MW.Audio
 	}
 
 	/// <summary>Visualiser information for a analysed sound.</summary>
+	/// <decorations decor="public struct"></decorations>
 	public struct VisualInformation
 	{
 		/// <summary></summary>
+		/// <decorations decor="public float"></decorations>
 		public float RootMeanSquare;
 		/// <summary></summary>
+		/// <decorations decor="public float"></decorations>
 		public float Decibels;
 		/// <summary></summary>
+		/// <decorations decor="public float"></decorations>
 		public float Pitch;
 
 		internal VisualInformation(float RMS, float dB, float Pitch)

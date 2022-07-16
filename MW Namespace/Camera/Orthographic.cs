@@ -4,6 +4,7 @@ using UnityEngine;
 namespace MW.CameraUtils
 {
 	/// <summary>Utilities for an Orthographic camera.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Orthographic
 	{
 		const string kCameraIsNotOrthographicError = " is not orthographic";
@@ -23,6 +24,7 @@ namespace MW.CameraUtils
 		}
 
 		/// <summary>The Plane to pan a Camera for an Orthographic world.</summary>
+		/// <decorations decor="public static Plane"></decorations>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "PPlane is intended to be used and modified outside of MW.sln; inside a Unity project. A programmer might want to change the UnityEngine.Plane if the 2D, orthographic, game requires panning to be performed in a different manner than otherwise provided.")]
 		public static Plane Plane = new Plane(-Vector3.forward, Vector3.zero);
 		static Vector3 StartDrag;
@@ -30,6 +32,7 @@ namespace MW.CameraUtils
 		static Vector3 DragPos = Vector3.zero;
 
 		/// <summary>Pan ReferenceCamera using ButtonToActivate by linearly interpolating with InterpolateSpeed.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="ReferenceCamera">The camera to pan.</param>
 		/// <param name="ButtonToActivate">The mouse button to start activate panning.</param>
 		/// <param name="InterpolateSpeed">The speed to ease the camera's movement.</param>
@@ -65,11 +68,14 @@ namespace MW.CameraUtils
 	}
 
 	/// <summary>RaycastHit2D information about the Raycast.</summary>
+	/// <decorations decor="public struct"></decorations>
 	public struct OrthographicRaycast
 	{
 		/// <summary>The RaycastHit2D information about the ray itself.</summary>
+		/// <decorations decor="public RaycastHit2D"></decorations>
 		public RaycastHit2D Raycast;
 		/// <summary>If raycast hit something.</summary>
+		/// <decorations decor="public bool"></decorations>
 		public bool bHit;
 
 		public OrthographicRaycast(RaycastHit2D Raycast, bool bHit)

@@ -3,10 +3,12 @@
 namespace MW.Conversion
 {
 	/// <summary>Colour conversions.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Colour
 	{
 
 		/// <summary>The corresponding colour in RGA using Vector3.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="Colour">The RGB/XYZ channel values, respectively.</param>
 		public static Color Colour255(Vector3 Colour)
 		{
@@ -19,6 +21,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding colour from 0 - 255 in RGB.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="R">The red value.</param>
 		/// <param name="G">The green value.</param>
 		/// <param name="B">The blue value.</param>
@@ -32,6 +35,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding colour from 0 - 255 in RGB.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="R">The red value.</param>
 		/// <param name="G">The green value.</param>
 		/// <param name="B">The blue value.</param>
@@ -46,6 +50,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding colour in RGBA using Vector4.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="ColourWithAlpha">The RGBA/XYZW channel values, respectively.</param>
 		public static Color Colour255(Vector4 ColourWithAlpha)
 		{
@@ -58,6 +63,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="R">The red value.</param>
 		/// <param name="G">The green value.</param>
 		/// <param name="B">The blue value.</param>
@@ -74,6 +80,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding colour from 0 - 255 in RGBA.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="R">The red value.</param>
 		/// <param name="G">The green value.</param>
 		/// <param name="B">The blue value.</param>
@@ -90,6 +97,7 @@ namespace MW.Conversion
 		}
 
 		///<summary>Converts a hexadecimal to its corresponding colour.</summary>
+		///<decorations decor="public static Color"></decorations>
 		/// <param name="Hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
 		public static Color ColourHex(string Hex)
 		{
@@ -121,6 +129,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding hexadecimal and alpha colour.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="Hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
 		/// <param name="Alpha">The float alpha.</param>
 		public static Color ColourHex(string Hex, float Alpha)
@@ -155,6 +164,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>The corresponding hexadecimal colour and hexadecimal alpha.</summary>
+		/// <decorations decor="public static Color"></decorations>
 		/// <param name="Hex">The hexadecimal in the format: "#RRGGBB"; where '#' denotes a hexadecimal, 'RR' denotes the Red colour channel, 'GG' denotes the Green colour channel and 'BB' denotes the Blue colour channel.</param>
 		/// <param name="Alpha">The hexadecimal in the format: "#AA"; where '#' denotes a hexadecimal and 'AA' denotes the Alpha channel.</param>
 		public static Color ColourHex(string Hex, string Alpha)
@@ -196,6 +206,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>Converts a Colour to its RGB values as an MVector.</summary>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Colour">The colour to split.</param>
 		/// <returns>An MVector where X = R, Y = G, and Z = B in 255 RGB format.</returns>
 		public static MVector Get255RGB(Color Colour)
@@ -204,6 +215,7 @@ namespace MW.Conversion
 		}
 
 		/// <summary>Converts a Colour to its RGBA values as a Vector4.</summary>
+		/// <decorations decor="public static Vector4"></decorations>
 		/// <param name="Colour">The colour to split.</param>
 		/// <returns>A Vector4 where x = R, y = G, z = B, and w = A in 255 RGBA format.</returns>
 		public static Vector4 Get255RGBA(Color Colour)
@@ -213,6 +225,7 @@ namespace MW.Conversion
 
 		/// <summary>Converts RGB bytes to a Hex string.</summary>
 		/// <remarks>Alpha is always 255.</remarks>
+		/// <decorations decor="public static string"></decorations>
 		/// <param name="R">The Red channel.</param>
 		/// <param name="G">The Green channel.</param>
 		/// <param name="B">The Blue channel.</param>

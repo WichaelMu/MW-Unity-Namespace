@@ -5,6 +5,7 @@ namespace MW.Diagnostics
 {
 
 	/// <summary>Debug.LogEVerbosity().</summary>
+	/// <decorations decor="public enum"></decorations>
 	public enum EVerbosity
 	{
 		/// <summary></summary>
@@ -16,10 +17,12 @@ namespace MW.Diagnostics
 	};
 
 	/// <summary>Write to the console.</summary>
+	/// <decorations decor="public class"></decorations>
 	public class Log
 	{
 		/// <summary><see cref="Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.Log(object) every object with object.ToString().</docs>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void P(params object[] args)
 		{
@@ -32,6 +35,7 @@ namespace MW.Diagnostics
 
 		/// <summary><see cref="Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.LogError(object) every object with object.ToString().</docs>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void E(params object[] args)
 		{
@@ -44,6 +48,7 @@ namespace MW.Diagnostics
 
 		/// <summary><see cref="Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.LogWarning(object) every object with object.ToString().</docs>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="args">The list of objects to log separated by a space.</param>
 		public static void W(params object[] args)
 		{
@@ -55,6 +60,7 @@ namespace MW.Diagnostics
 		}
 
 		/// <summary>Prints Content to the Console with Verbosity.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Content">The string to print to the console.</param>
 		/// <param name="Verbosity">The verbosity to print Content with.</param>
 		public static void Auto(string Content, EVerbosity Verbosity)
@@ -77,6 +83,7 @@ namespace MW.Diagnostics
 		}
 
 		/// <summary>Prints Content to the Console with Colour and Verbosity.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Content">The string to colour and print to the console.</param>
 		/// <param name="Colour">The colour to display Content.</param>
 		/// <param name="Verbosity">The verbosity to print Content with.</param>

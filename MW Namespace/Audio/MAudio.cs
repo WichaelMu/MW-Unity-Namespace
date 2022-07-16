@@ -6,13 +6,16 @@ using UnityEngine;
 namespace MW.Audio
 {
 	/// <summary>The Audio controller for in-game sounds.</summary>
+	/// <decorations decor="public class : MonoBehaviour"></decorations>
 	public class MAudio : MonoBehaviour
 	{
 		/// <summary>A unique reference to the only Audio object in the scene.</summary>
+		/// <decorations decor="public static MAudio"></decorations>
 		public static MAudio AudioInstance { get => _AudioInstance; set => _AudioInstance = value; }
 		internal static MAudio _AudioInstance;
 
 		/// <summary>Every sound that this Audio object will control.</summary>
+		/// <decorations decor="public MSound[]"></decorations>
 		[Tooltip("Every sound that this Audio object will control.")]
 		public MSound[] Sounds;
 
@@ -25,6 +28,7 @@ namespace MW.Audio
 		/// <remarks>If a duplicate name is detected, a failure will occur. In this case,
 		/// check the names of the MSounds array.
 		/// </remarks>
+		/// <decorations decor="public virtual void"></decorations>
 		/// <param name="Sounds">The sounds to initialise into the game.</param>
 		public virtual void Initialise(MSound[] Sounds)
 		{
@@ -89,6 +93,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Plays the sound named Name.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Name">The name of the requested sound to play.</param>
 		public void Play(string Name)
 		{
@@ -99,6 +104,7 @@ namespace MW.Audio
 		/// <summary>Plays the sound named Name from Emitter.</summary>
 		/// <remarks>An AudioSource component will be added to Emitter.
 		/// The clip will inherit settings from the MSound named Name.</remarks>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Name">The name of the requested sound to play from Emitter.</param>
 		/// <param name="Emitter">The GameObject playing the sound.</param>
 		public void PlayWithOverlap(string Name, GameObject Emitter)
@@ -120,6 +126,7 @@ namespace MW.Audio
 		/// <summary>Plays the sound named Name from Emitter.</summary>
 		/// <remarks>An AudioSource component will be added to Emitter.
 		/// The clip will inherit settings from the MSound named Name.</remarks>
+		/// <decorations decor="public bool"></decorations>
 		/// <param name="Name">The name of the requested sound to play from Emitter.</param>
 		/// <param name="Emitter">The GameObject playing the sound.</param>
 		/// <param name="EmitterSource">The AudioSource that was added to Emitter.</param>
@@ -148,6 +155,7 @@ namespace MW.Audio
 
 		/// <summary>Plays the sound named Name from Emitter.</summary>
 		/// <remarks>An AudioSource component will be added to Emitter.</remarks>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Name">The name of the requested sound to play from Emitter.</param>
 		/// <param name="Emitter">The GameObject playing the sound.</param>
 		/// <param name="OverrideVolume">The volume to use, instead of the volume setting defined in AudioInstance.</param>
@@ -169,6 +177,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Pauses the sound named Name.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Name">The name of the requested sound to pause.</param>
 		public void Pause(string Name)
 		{
@@ -177,6 +186,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Pauses every sound that is playing in the game.</summary>
+		/// <decorations decor="public MArray{MSound}"></decorations>
 		/// <returns>An MArray of all sounds that were previously playing and affected by the pause.</returns>
 		public MArray<MSound> PauseAll()
 		{
@@ -193,6 +203,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Stops the sound named Name.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Name">The name of the requested sound to stop playing.</param>
 		public void Stop(string Name)
 		{
@@ -201,6 +212,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Stop every sound in the game.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void StopAll()
 		{
 			foreach (MSound S in Sounds)
@@ -208,6 +220,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Returns a sound in the Sounds array.</summary>
+		/// <decorations decor="public bool"></decorations>
 		/// <param name="Name">The name of the requested sound.</param>
 		/// <param name="MSound">The out MSound parameter for the sound named Name, if found, null otherwise.</param>
 		/// <returns>The MSound of the requested sound. Null if Name could not be found.</returns>
@@ -229,6 +242,7 @@ namespace MW.Audio
 		}
 
 		/// <summary>Whether or not sound of name n is playing.</summary>
+		/// <decorations decor="public bool"></decorations>
 		/// <param name="Name">The name of the sound to query.</param>
 		public bool IsPlaying(string Name)
 		{

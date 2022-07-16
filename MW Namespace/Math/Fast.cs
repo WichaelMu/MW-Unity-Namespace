@@ -3,11 +3,13 @@
 namespace MW.Math.Magic
 {
 	/// <summary>Fast implementations of common Mathematical functions using Bit Magic.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Fast
 	{
 		/// <summary>1 / sqrt(N).</summary>
 		/// <remarks>Modified from: <see href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"/></remarks>
 		/// <docremarks>Modified from: &lt;a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"&gt;The 'Quake III Fast Inv. Sqrt Algorithm'&lt;/a&gt;</docremarks>
+		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
 		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / sqrt(N).</returns>
@@ -25,6 +27,7 @@ namespace MW.Math.Magic
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Sqrt(float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Sqrt().</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
 		/// <returns>An approximation for the Square Root of F.</returns>
@@ -32,6 +35,7 @@ namespace MW.Math.Magic
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Asin(float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Asin().</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Angle">The angle to get the inverse Sine of.</param>
 		/// <returns>Inverse Sine of Angle.</returns>
 		public static float ArcSine(float Angle)
@@ -53,6 +57,7 @@ namespace MW.Math.Magic
 		}
 
 		/// <summary>Absolute Value of I.</summary>
+		/// <decorations decor="public static int"></decorations>
 		/// <param name="I">The int to get the Absolute Value of.</param>
 		/// <returns>The value of I regardless of its sign.</returns>
 		public static int Abs(int I)
@@ -63,10 +68,12 @@ namespace MW.Math.Magic
 		/// <summary>Modifies I to be its Absolute Value.</summary>
 		/// <remarks><see langword="ref"/> version of <see cref="Abs(int)"/>.</remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the int to modify.</param>
 		public static void Abs(ref int I) => I = Abs(I);
 
 		/// <summary>Absolute Value of F.</summary>
+		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="F">The float to get the Absolute Value of.</param>
 		/// <returns>The value of F regardless of its sign.</returns>
 		public static unsafe float Abs(float F)
@@ -78,6 +85,7 @@ namespace MW.Math.Magic
 		/// <summary>Modifies F to be its Absolute Value.</summary>
 		/// <remarks><see langword="ref"/> version of <see cref="Abs(float)"/></remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A ference to the float to modify.</param>
 		public static void Abs(ref float F) => F = Abs(F);
 	}

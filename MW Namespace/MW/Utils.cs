@@ -4,30 +4,42 @@ using UnityEngine;
 namespace MW
 {
 	/// <summary>Helper Variables and Functions.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Utils
 	{
 		/// <summary>Shorthand for writing / 3.</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kOneThird = .3333333333333333333333333333333333f;
 		/// <summary>Shorthand for writing / 1.5.</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kTwoThirds = .6666666666666666666666666666666666f;
 		/// <summary>The golden ratio.</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kPhi = 1.6180339887498948482045868343656381f;
 		/// <summary>Euler's number. (e)</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kE = 2.71828182845904523536f;
 		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(2).</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kSqrt2 = 1.4142135623730950488016887242097f;
 		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3).</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kSqrt3 = 1.7320508075688772935274463415059f;
 		/// <summary>Shorthand for writing 1 / Mathf.PI.</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kInversePI = .31830988618379067153776752674503f;
 		/// <summary>Shorthand for writing Mathf.PI * kHalf.</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float kHalfPI = 1.5707963267948966192313216916398f;
 		/// <summary>Shorthand for writing Mathf.PI * 2f</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float k2PI = 6.283185307179586476925286766559f;
 		/// <summary>The conversion from 0-1 to 0-255.</summary>
+		/// <decorations decor="public const float"></decorations>
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
 		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Face">The EDirection self is facing.</param>
 		/// <param name="Self">The Transform searching for target.</param>
 		/// <param name="Target">The Transform to look out for.</param>
@@ -56,6 +68,7 @@ namespace MW
 		}
 
 		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Face">The EDirection self is facing.</param>
 		/// <param name="Self">The Transform searching for target.</param>
 		/// <param name="Target">The Vector3 position to look out for.</param>
@@ -84,6 +97,7 @@ namespace MW
 		}
 
 		/// <summary>If Self has an unobstructed line of sight to To.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Self">The Vector3 position to look from.</param>
 		/// <param name="To">The Vector3 position to look to.</param>
 		/// <param name="Obstacles">The LayerMask obstacles to consider obtrusive.</param>
@@ -93,6 +107,7 @@ namespace MW
 		}
 
 		/// <summary>If Self has an unobstructed line of sight to To.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Self">The Vector3 position to look from.</param>
 		/// <param name="To">The Vector3 position to look to.</param>
 		public static bool LineOfSight(Vector3 Self, Vector3 To)
@@ -101,6 +116,7 @@ namespace MW
 		}
 
 		///<summary>The Value rounded to DecimalPlaces.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Value">The value to be rounded.</param>
 		/// <param name="DecimalPlaces">The decimal places to be included.</param>
 		public static float RoundToDP(float Value, int DecimalPlaces = 2)
@@ -115,6 +131,7 @@ namespace MW
 		}
 
 		/// <summary>Flip-Flops bBool.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="bBool"></param>
 		public static void FlipFlop(ref bool bBool)
 		{
@@ -122,6 +139,7 @@ namespace MW
 		}
 
 		/// <summary>Flip-Flops bBool.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="bBool"></param>
 		/// <param name="CallbackTrue">The method to call if the flip-flop is true.</param>
 		/// <param name="CallbackFalse">The method to call if the flip-flop is false.</param>
@@ -136,6 +154,7 @@ namespace MW
 		}
 
 		/// <summary>If Value is within the +- Limit of From.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Value">The value to check.</param>
 		/// <param name="From">The value to compare.</param>
 		/// <param name="Limit">The limits to consider.</param>
@@ -143,12 +162,12 @@ namespace MW
 		{
 			if (Limit == 0)
 			{
-				Debug.LogWarning("Use the '== 0' comparison operator instead.");
+				//Debug.LogWarning("Use the '== 0' comparison operator instead.");
 				return Value == From;
 			}
 			if (Limit < 0)
 			{
-				Debug.LogWarning("Please use a positive number");
+				//Debug.LogWarning("Please use a positive number");
 				Limit = Mathf.Abs(Limit);
 			}
 
@@ -157,6 +176,7 @@ namespace MW
 
 		/// <summary>The largest Vector3 between L and R, according to <see cref="Vector3.sqrMagnitude"/>.</summary>
 		/// <docs>The largest Vector3 between L and R, according to Vector3.sqrMagnitude.</docs>
+		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		public static Vector3 Max(Vector3 L, Vector3 R)
@@ -166,6 +186,7 @@ namespace MW
 
 		/// <summary>The largest Vector3 between L and R, according to <see cref="Vector3.sqrMagnitude"/>.</summary>
 		/// <docs>The largest Vector3 between L and R, according to Vector3.sqrMagnitude.</docs>
+		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		public static Vector3 Min(Vector3 L, Vector3 R)
@@ -176,6 +197,7 @@ namespace MW
 		static int[] fib_dp;
 
 		/// <summary>Returns the N'th Fibonacci number.</summary>
+		/// <decorations decor="public static int"></decorations>
 		/// <param name="N"></param>
 		public static int Fibonacci(int N)
 		{
@@ -192,6 +214,7 @@ namespace MW
 		}
 
 		/// <summary>Generates spherical points with an equal distribution.</summary>
+		/// <decorations decor="public static Vector3[]"></decorations>
 		/// <param name="Resolution">The number of points to generate.</param>
 		/// <param name="GoldenRatioModifier">Adjusts the golden ratio.</param>
 		/// <returns>The Vector3[] points for the sphere.</returns>
@@ -219,6 +242,7 @@ namespace MW
 		}
 
 		/// <summary>Generates the points to 'bridge' Origin and Target together at a Height as an arc.</summary>
+		/// <decorations decor="public static Vector3[]"></decorations>
 		/// <param name="Origin">The Vector3 starting point of the bridge.</param>
 		/// <param name="Target">The Vector3 ending point of the bridge.</param>
 		/// <param name="Resolution">The number of points for the bridge.</param>
@@ -263,6 +287,7 @@ namespace MW
 		public static string AsString(object Convert) => Convert.ToString();
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Number">The number to anchor a reflection.</param>
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
@@ -270,6 +295,7 @@ namespace MW
 		public static float MirrorNumber(float Number, float Minimum, float Maximum) => Minimum + Maximum - Number;
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with <see cref="MArray{T}.Reflect(int, int)"/>.</summary>
+		/// <decorations decor="public static int"></decorations>
 		/// <param name="Number">The number to anchor a reflection.</param>
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
@@ -277,6 +303,7 @@ namespace MW
 		public static int MirrorNumber(int Number, int Minimum, int Maximum) => Minimum + Maximum - Number;
 
 		/// <summary>Swaps L and R.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		public static void Swap<T>(ref T L, ref T R)
@@ -285,6 +312,7 @@ namespace MW
 		}
 
 		/// <summary>Clamps I to be between Min and Max.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the Integer to clamp.</param>
 		/// <param name="Min">The Minimum value of I.</param>
 		/// <param name="Max">The Maximum value of I.</param>
@@ -301,6 +329,7 @@ namespace MW
 		}
 
 		/// <summary>Clamps I to not fall below Min.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the Integer to clamp.</param>
 		/// <param name="Min">The Minimum value I can be.</param>
 		public static void ClampMin(ref int I, int Min)
@@ -310,6 +339,7 @@ namespace MW
 		}
 
 		/// <summary>Clamps I to not exceed Max.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the Integer to clamp.</param>
 		/// <param name="Max">The Maximum value I can be.</param>
 		public static void ClampMax(ref int I, int Max)
@@ -319,6 +349,7 @@ namespace MW
 		}
 
 		/// <summary>Clamps F to not fall below Min.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Min">The Minimum value F can be.</param>
 		public static void ClampMin(ref float F, float Min)
@@ -328,6 +359,7 @@ namespace MW
 		}
 
 		/// <summary>Clamps F to not exceed Max.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Max">The Maximum value F can be.</param>
 		public static void ClampMax(ref float F, float Max)
@@ -337,6 +369,7 @@ namespace MW
 		}
 
 		/// <summary>Clamps F to be between Min and Max.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Min">The Minimum value of F.</param>
 		/// <param name="Max">The Maximum value of F.</param>
@@ -353,6 +386,7 @@ namespace MW
 		}
 
 		/// <summary>The larger value between F1 and F2.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="F1"></param>
 		/// <param name="F2"></param>
 		/// <returns>The larger of the two given floats.</returns>
@@ -362,6 +396,7 @@ namespace MW
 		}
 
 		/// <summary>The smaller value between F1 and F2.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="F1"></param>
 		/// <param name="F2"></param>
 		/// <returns>The smaller of the two given floats.</returns>
@@ -372,6 +407,7 @@ namespace MW
 
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
 		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="bLockCursor">True to lock the Cursor.</param>
 		/// <param name="bHideCursorOnLock">True to hide the Cursor when it's locked.</param>
 		public static void LockCursor(bool bLockCursor, bool bHideCursorOnLock = true)

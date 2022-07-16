@@ -3,6 +3,7 @@
 namespace MW.Behaviour
 {
 	/// <summary>Inter-frame information recording utility.</summary>
+	/// <decorations decor="public struct"></decorations>
 	public struct IntervalInformation
 	{
 		internal LastIntervalInformation Last;
@@ -12,6 +13,7 @@ namespace MW.Behaviour
 
 		/// <summary>Records an Interval.</summary>
 		/// <remarks>Call before Mark.</remarks>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Player">The Player to record.</param>
 		public void Record(PlayerBase Player)
 		{
@@ -23,6 +25,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Marks the end of an Interval.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Player">The Player to get interval information.</param>
 		public void Mark(PlayerBase Player)
 		{
@@ -40,6 +43,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Marks the end of an interval.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Player">The Player to get interval information.</param>
 		/// <param name="LastInterval">Outs the last interval information.</param>
 		/// <param name="ThisInterval">Outs the current interval information.</param>
@@ -52,6 +56,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Get the information at the last recorded interval.</summary>
+		/// <decorations decor="public LastIntervalInformation"></decorations>
 		/// <returns>The Last Interval Information from the last recorded interval.</returns>
 		public LastIntervalInformation GetLast()
 		{
@@ -60,11 +65,14 @@ namespace MW.Behaviour
 	}
 
 	/// <summary>Information about this Player on the previous record.</summary>
+	/// <decorations decor="public struct"></decorations>
 	public struct LastIntervalInformation
 	{
 		/// <summary>The Position of this Player on the previous record.</summary>
+		/// <decorations decor="public MVector"></decorations>
 		public MVector Position;
 		/// <summary>The Rotation of this Player on the previous record.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		public MRotator Rotation;
 
 		public float Time;
@@ -79,11 +87,14 @@ namespace MW.Behaviour
 	}
 
 	/// <summary>Information about this Player on the current record.</summary>
+	/// <decorations decor="public struct"></decorations>
 	public struct ThisIntervalInformation
 	{
 		/// <summary>The Position of this Player on the current record.</summary>
+		/// <decorations decor="public MVector"></decorations>
 		public MVector Position;
 		/// <summary>The Position of this Player on the current record.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		public MRotator Rotation;
 
 		public float Time;
@@ -97,6 +108,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>The difference in positions of This and Last.</summary>
+		/// <decorations decor="public MVector"></decorations>
 		/// <param name="Last">The Last position.</param>
 		/// <returns>This.Position - Last.Position.</returns>
 		public MVector DeltaPosition(LastIntervalInformation Last)
@@ -105,6 +117,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>The difference in rotations of This and Last.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		/// <param name="Last">The Last rotation.</param>
 		/// <returns>This.Rotation - Last.Rotation.</returns>
 		public MRotator DeltaRotation(LastIntervalInformation Last)
@@ -113,6 +126,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>The time between the Last Interval and This Interval.</summary>
+		/// <decorations decor="public float"></decorations>
 		/// <param name="Last">The Last recorded time.</param>
 		/// <returns>This.Time - Last.Time.</returns>
 		public float TimeSinceLast(LastIntervalInformation Last)
@@ -121,6 +135,7 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Get Deltas in all respects.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Last">The Last recorded interval.</param>
 		/// <param name="DeltaPosition"></param>
 		/// <param name="DeltaRotation"></param>

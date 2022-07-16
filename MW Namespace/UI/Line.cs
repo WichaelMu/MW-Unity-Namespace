@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
-namespace MW.HUD
+namespace MW.HUD.Line
 {
 	/// <summary>Drawing LineRenderers in the game.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Line
 	{
 		/// <summary>Draws a line from to To in StartColor to EndColor at LineWidth thickness with an Offset in bUseWorldSpace.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="LineRenderer">The LineRenderer of the GameObject calling this.</param>
 		/// <param name="From">The coordinates where the line will originate.</param>
 		/// <param name="To">The coordinates where the line will end.</param>
@@ -30,6 +32,7 @@ namespace MW.HUD
 		}
 
 		/// <summary>Draws a line from to To in StartColor to EndColor at LineWidth thickness with an Offset in bUseWorldSpace.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Self">The GameObject calling this.</param>
 		/// <param name="From">The coordinates where the line will originate.</param>
 		/// <param name="To">The coordinates where the line will end.</param>
@@ -53,6 +56,7 @@ namespace MW.HUD
 		}
 
 		/// <summary>Draws a circle with a centre at Around at Radius with a LineColour at LineWidth thickness in bUseWorldSpace with NumberOfSegments.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="LineRenderer">The LineRenderer of the GameObject calling this.</param>
 		/// <param name="Around">The centre of the circle to be drawn.</param>
 		/// <param name="Radius">The radius of this circle.</param>
@@ -85,6 +89,7 @@ namespace MW.HUD
 		}
 
 		/// <summary>Draws a circle with a centre at Around at Radius with a LineColour at LineWidth thickness in bUseWorldSpace with NumberOfSegments.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Self">The GameObject calling this.</param>
 		/// <param name="Around">The centre of the circle to be drawn.</param>
 		/// <param name="Radius">The radius of this circle.</param>

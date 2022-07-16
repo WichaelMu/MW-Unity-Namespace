@@ -1,6 +1,7 @@
 ﻿namespace MW
 {
 	/// <summary>Interpolating equations.</summary>
+	/// <decorations decor="public enum"></decorations>
 	public enum EEquation
 	{
 		/// <summary></summary>

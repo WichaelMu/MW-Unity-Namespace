@@ -3,12 +3,15 @@
 namespace MW.Kinetic
 {
 	/// <summary></summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Kinematics
 	{
 		/// <summary>Convert inspector speed to m/s.</summary>
+		/// <decorations decor="public const int"></decorations>
 		public const int kVelocityRatio = 50;
 
 		/// <summary>If the distance between From and To is &lt;= Tolerance.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="From">The reference Vector3 to compare.</param>
 		/// <param name="To">The target Vector3 to compare.</param>
 		/// <param name="Tolerance">The range that is considered if From has 'reached' To.</param>
@@ -21,6 +24,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Rigidbody">The Rigidbody to move.</param>
 		/// <param name="Target">The Transform destination.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
@@ -31,6 +35,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Rigidbody">The Rigidbody to move.</param>
 		/// <param name="Target">The destination coordinates.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
@@ -43,6 +48,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Rigidbody">The Rigidbody2D to move.</param>
 		/// <param name="Target">The Transform destination.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
@@ -53,6 +59,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Moves Rigidbody towards target while moving at velocity with a maximum turn angle of MaxDegreesDeltaPerFrame.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Rigidbody">The Rigidbody2D to move.</param>
 		/// <param name="Target">The destination coordinates.</param>
 		/// <param name="Velocity">The rate at which self moves towards target.</param>
@@ -65,6 +72,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Calculates a launch velocity towards a target at a given speed.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="LaunchVelocity">The out velocity of the launch.</param>
 		/// <param name="Origin">Where the launch will begin.</param>
 		/// <param name="Target">The intended destination of the launched projectile.</param>
@@ -122,6 +130,7 @@ namespace MW.Kinetic
 
 		/// <summary>Computes a velocity to launch a Rigidbody from Origin to Target achieving a TargetHeight.</summary>
 		/// <remarks>Will not compute if TargetHeight cannot reach To.y and bLaunchRegardless is false.</remarks>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Origin">Where to launch from.</param>
 		/// <param name="Target">Where to launch to.</param>
 		/// <param name="TargetHeight">The apex.</param>
@@ -139,6 +148,7 @@ namespace MW.Kinetic
 
 		/// <summary>Computes a velocity to launch a Rigidbody from Origin to Target achieving a TargetHeight.</summary>
 		/// <remarks>Will not compute if TargetHeight cannot reach To.y and bLaunchRegardless is false.</remarks>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Origin">Where to launch from.</param>
 		/// <param name="Target">Where to launch to.</param>
 		/// <param name="TargetHeight">The apex.</param>
@@ -177,6 +187,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="LastPosition">The position before the current FixedUpdate call.</param>
 		/// <param name="ThisPosition">The current position at this FixedUpdate call.</param>
 		/// <param name="DeltaTime">The time between recording LastPosition and ThisPosition.</param>
@@ -193,6 +204,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="LastPosition">The position before the current FixedUpdate call.</param>
 		/// <param name="ThisPosition">The current position at this FixedUpdate call.</param>
 		/// <param name="DeltaTime">The time between recording LastPosition and ThisPosition.</param>
@@ -204,6 +216,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Compute the required velocity to jump at TargetHeight.</summary>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Up">Normalised direction of jumping.</param>
 		/// <param name="TargetHeight">The peak height achieved by this velocity.</param>
 		/// <param name="b3DGravity">True if using 3D Physics.</param>
@@ -214,6 +227,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>Compute the required velocity to jump at TargetHeight.</summary>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Up">Normalised direction of jumping.</param>
 		/// <param name="TargetHeight">The peak height achieved by this velocity.</param>
 		/// <param name="GravityMagnitude">The pull of gravity in opposite Up.</param>

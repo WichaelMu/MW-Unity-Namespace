@@ -3,10 +3,11 @@
 namespace MW.Kinetic
 {
 	/// <summary></summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Miscellanous
 	{
-
 		/// <summary>The direction in which to avoid colliding with obstacles.</summary>
+		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="Self">The transform wanting to avoid collisions.</param>
 		/// <param name="Angle">The angle to search for potential collisions.</param>
 		/// <param name="SearchDistance">The distance to search for collisions.</param>

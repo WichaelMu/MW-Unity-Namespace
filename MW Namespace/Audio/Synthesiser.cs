@@ -4,11 +4,17 @@ using UnityEngine;
 
 namespace MW.Audio
 {
+	/// <summary>An audio synthesiser.</summary>
+	/// <decorations decor="[RequireComponent{AudioSource}] public class : MonoBehaviour"></decorations>
 	[RequireComponent(typeof(AudioSource))]
 	public class Synthesiser : MonoBehaviour
 	{
+		/// <summary>The volume of this Synthesiser</summary>
+		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField, Range(0f, 1f), Tooltip("The volume of this Synthesiser.")] float Gain;
 
+		/// <summary>The Sample Frequency in System Sample Rate. (Default is 48,000)</summary>
+		/// <decorations decor="[SerializeField] ESampleRate"></decorations>
 		[SerializeField, Tooltip("The Sample Frequency in Edit -> Project Settings -> Audio -> System Sample Rate. (Default is 48,000)")] ESampleRate SampleRate = ESampleRate.SR_48K;
 		[SerializeField, Tooltip("The frequency of the notes, and their duration, to play.")] Key[] Notes;
 
@@ -87,12 +93,15 @@ namespace MW.Audio
 	}
 
 	/// <summary>The frequency and duration of a synthesised sound.</summary>
+	/// <decorations decor="[Serializable] public struct"></decorations>
 	[Serializable]
 	public struct Key
 	{
 		/// <summary>The frequency in Hertz of this key.</summary>
+		/// <decorations decor="public float"></decorations>
 		public float Frequency;
 		/// <summary>The time this key will play in seconds.</summary>
+		/// <decorations decor="public float"></decorations>
 		public float Duration;
 
 		/// <summary>Makes a Key out of a Note.</summary>
@@ -120,6 +129,7 @@ namespace MW.Audio
 	}
 
 	/// <summary></summary>
+	/// <decorations decor="public enum : int"></decorations>
 	public enum ESampleRate : int
 	{
 		/// <summary>24KHz Sample Rate.</summary>

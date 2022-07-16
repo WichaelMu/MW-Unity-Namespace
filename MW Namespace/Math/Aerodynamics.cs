@@ -4,9 +4,11 @@ using UnityEngine;
 namespace MW.Kinetic
 {
 	/// <summary>Computations for Aerodynamics.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Aerodynamics
 	{
 		/// <summary>The direction of natural air resistance.</summary>
+		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="Self">The Rigidbody to apply air resistance to.</param>
 		public static Vector3 AirResistance(Rigidbody Self)
 		{
@@ -15,6 +17,7 @@ namespace MW.Kinetic
 		}
 
 		/// <summary>The scale of lift applied to a wing with WingArea travelling at Velocity through a fluid at Density with LiftCoefficient.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="LiftCoefficient">The heuristic coefficient for lift.</param>
 		/// <param name="Density">The density of the fluid.</param>
 		/// <param name="Velocity">The speed at which the wing is travelling.</param>

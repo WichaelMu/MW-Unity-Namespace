@@ -1,6 +1,7 @@
 ﻿namespace MW
 {
 	/// <summary>Orientations for specific faces.</summary>
+	/// <decorations decor="public enum"></decorations>
 	public enum EDirection
 	{
 		/// <summary></summary>

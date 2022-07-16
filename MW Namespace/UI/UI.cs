@@ -3,13 +3,15 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-namespace MW.HUD
+namespace MW.HUD.UI
 {
 	/// <summary>World space <see cref="Canvas"/> scaling and <see cref="TextMeshProUGUI"/> utilities.</summary>
 	/// <docs>World space Canvas scaling and TextMeshProUGUI utilities.</docs>
+	/// <decorations decor="public static class"></decorations>
 	public static class UI
 	{
 		/// <summary>Scales the canvas element relative to Self.</summary>
+		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="Self">The position to scale from.</param>
 		/// <param name="ScaleWith">The position to scale with.</param>
 		/// <returns>The relative scale size in Vector2.</returns>
@@ -22,6 +24,7 @@ namespace MW.HUD
 
 		/// <summary>Animates TMPro to display Content like a typewriter.</summary>
 		/// <remarks>This is an extension function on TextMeshProUGUI.</remarks>
+		/// <decorations decor="|Extension| IEnumerator"></decorations>
 		/// <param name="TMPro">The extended TextMeshProUGUI GameObject.</param>
 		/// <param name="Game">The MonoBehaviour that will be responsible for invoking the Typewriter coroutine.</param>
 		/// <param name="Content">The content to typewrite.</param>
@@ -38,6 +41,7 @@ namespace MW.HUD
 
 		/// <summary>Animates TMPro to display Content like a typewriter.</summary>
 		/// <remarks>This is an extension function on TextMeshProUGUI.</remarks>
+		/// <decorations decor="|Extension| IEnumerator"></decorations>
 		/// <param name="TMPro">The extended TextMeshProUGUI GameObject.</param>
 		/// <param name="Game">The MonoBehaviour that will be responsible for invoking the Typewriter coroutine.</param>
 		/// <param name="Content">The content to typewrite.</param>
@@ -55,6 +59,7 @@ namespace MW.HUD
 		}
 
 		/// <summary>Animates TMPro to display Content like a typewriter.</summary>
+		/// <decorations decor="public static IEnumerator"></decorations>
 		/// <param name="TMPro">The text to animate.</param>
 		/// <param name="Content">The content to typewrite.</param>
 		/// <param name="Delay">The time gap between writing a new character.</param>
@@ -74,6 +79,7 @@ namespace MW.HUD
 		}
 
 		/// <summary>Animates TMPro to display Content like a typewriter.</summary>
+		/// <decorations decor="public static IEnumerator"></decorations>
 		/// <param name="TMPro">The text to animate.</param>
 		/// <param name="Caller">The GameObject requesting to play the sound. Only required when bOverlapSound is true.</param>
 		/// <param name="Content">The content to typewrite.</param>

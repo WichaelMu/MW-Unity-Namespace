@@ -6,6 +6,7 @@ namespace MW.CameraUtils
 	/// <docs>A Spring Arm Component that allows a Boom to track a Target.</docs>
 	/// <remarks>While commonly used as for Camera tracking, this can be used for any object that needs to track <see cref="Target"/>.</remarks>
 	/// <docremarks>While commonly used as for Camera tracking, this can be used for any object that needs to track a Target.</docremarks>
+	/// <decorations decor="public class : MonoBehaviour"></decorations>
 	public class SpringArm : MonoBehaviour
 	{
 		[Header("Debug Options.")]
@@ -13,33 +14,43 @@ namespace MW.CameraUtils
 
 		/// <summary>The <see cref="Transform"/> that will track <see cref="Boom"/>.</summary>
 		/// <docs>The Transform that will track Boom.</docs>
+		/// <decorations decor="public Transform"></decorations>
 		[Space(10), Header("Target Settings.")]
 		public Transform Boom;
 		/// <summary>The Target for <see cref="Boom"/> to track.</summary>
 		/// <docs>The Target for Boom to track.</docs>
+		/// <decorations decor="public Transform"></decorations>
 		public Transform Target;
 		/// <summary>The offset at which Boom will track Target.</summary>
+		/// <decorations decor="[SerializeField] Vector3"></decorations>
 		[SerializeField, Tooltip("The offset at which Boom will track Target.")] Vector3 TargetOffset;
 		Camera MainCamera;
 
 		/// <summary>The distance in which Boom will maintain from Target whilst tracking.</summary>
 		/// <remarks>Will not be used when the line between <see cref="Boom"/> and <see cref="Target"/> is interrupted by a <see cref="Collider"/> collision.</remarks>
 		/// <docremarks>Will not be used when the line between Boom and Target is interrupted by a collision.</docremarks>
+		/// <decorations decor="public float"></decorations>
 		[Header("Spring Arm Settings.")]
 		public float Distance;
 		/// <summary>The world-rotation of <see cref="Boom"/>, about <see cref="Target"/> + <see cref="TargetOffset"/>.</summary>
 		/// <docs>The world-rotation of Boom, about Target + TargetOffset.</docs>
+		/// <decorations decor="public Vector3"></decorations>
 		public Vector3 GimbalRotation;
 		/// <summary>The world-rotation of <see cref="Boom "/> as it looks and faces <see cref="Target"/>.</summary>
 		/// <docs>The world-rotation of Boom as it looks and faces Target.</docs>
+		/// <decorations decor="public Vector3"></decorations>
 		public Vector3 CameraRotation;
 		/// <summary><see langword="true"></see> to inherit <see cref="Target"/>'s rotation.</summary>
 		/// <docs>True to inherit Target's rotation.</docs>
+		/// <decorations decor="public bool"></decorations>
 		public bool bInheritRotation;
 		/// <summary><see langword="true"></see> to let the mouse wheel control <see cref="Distance"/>.</summary>
+		/// <docs>True to let the mouse wheel control Distance.</docs>
+		/// <decorations decor="public bool"></decorations>
 		[Space(5)] public bool bEnableScrollToDistance;
 		/// <summary>How much will <see cref="Distance"/> change when scrolling?</summary>
 		/// <docs>How much will Distance change when scrolling?</docs>
+		/// <decorations decor="public float"></decorations>
 		public float ScrollSensitivity;
 		[HideInInspector, SerializeField] Vector3 DefaultGimbalRotation;
 		[HideInInspector, SerializeField] Vector3 DefaultCameraRotation;
@@ -51,35 +62,47 @@ namespace MW.CameraUtils
 		Vector3 OriginalTargetOffset;
 
 		/// <summary><see langword="true"></see> to invert the Controls when Orbiting about the world X-Axis.</summary>
+		/// <docs>True to invert the Controls when Orbiting around the world X-Axis.</docs>
+		/// <decorations decor="public bool"></decorations>
 		[Header("Inverse Settings.")]
 		public bool bInvertX; // Inverse LR dragging Orbit Controls.
 		/// <summary><see langword="true"></see> to invert the Controls when Orbiting about the world Y-Axis.</summary>
+		/// <docs>True to invert the Controls when Orbiting around the world Y-Axis.</docs>
+		/// <decorations decor="public bool"></decorations>
 		public bool bInvertY; // Inverse UD dragging Orbit Controls.
 		/// <summary><see langword="true"></see> to invert the Zooming Distance direction.</summary>
+		/// <docs>True to invert the Zooming Distance direction.</docs>
+		/// <decorations decor="public bool"></decorations>
 		public bool bInvertZ; // Inverse Zoom Controls.
 
 		/// <summary>Interrupt Distance when a collision is made with this layer/s.</summary>
+		/// <decorations decor="[SerializeField] LayerMask"></decorations>
 		[Header("Collisions")]
 		[SerializeField, Tooltip("Interrupt the Spring Arm's Distance when a collision is made with this layer/s.")] LayerMask OnlyCollideWith;
 
 		/// <summary>The strength Boom will Lag behind tracking Target.</summary>
 		/// <remarks>0 is standstill (infinite Lag). 1 is instant (no Lag).</remarks>
+		/// <decorations decor="[SerializeField] float"></decorations>
 		[Header("Lag Settings")]
 		[SerializeField] float PositionalLagStrength = .2f;
 		/// <summary>The strength Boom will rotate to face Target.</summary>
 		/// <remarks>0 is standstill (infinite Lag). 1 is instant (no Lag).</remarks>
+		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField] float RotationalLagStrength = .2f;
 		Vector3 TargetPosition;
 		Quaternion TargetRotation;
 
 		/// <summary><see langword="true"/> to use a Camera Projection that cuts away close <see cref="Mesh"/>es.</summary>
 		/// <docs>True to use a Camera Projection that cuts away close Meshes.</docs>
+		/// <decorations decor="public bool"></decorations>
 		[Header("Projection Settings. Where Boom is a Camera")]
 		public bool bUseCustomProjection;
 		/// <summary>The distance when <see cref="Mesh"/>es are clipped.</summary>
 		/// <docs>The distance when Meshes are clipped.</docs>
+		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField, Tooltip("The distance when Meshes are clipped.")] float NearClipDistance;
 		/// <summary>How close should the Camera be to stop using this Custom Projection?</summary>
+		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField, Tooltip("How close should the Camera be to stop using this Custom Projection?")] float DistanceLimit;
 		Matrix4x4 DefaultProjection;
 

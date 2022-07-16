@@ -6,6 +6,7 @@ namespace MW
 {
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
+	/// <decorations decor="[Serializable] public class {T} : IEnumerable{T}"></decorations>
 	[Serializable]
 	public class MArray<T> : IEnumerable<T>
 	{
@@ -14,6 +15,7 @@ namespace MW
 		internal Dictionary<T, Stack<int>> HashMap;
 
 		/// <summary>The number of T in this MArray; the size.</summary>
+		/// <decorations decor="public int"></decorations>
 		public int Num { get => Items.Count; }
 
 		/// <summary>Initialises an MArray with the default settings.</summary>
@@ -32,6 +34,7 @@ namespace MW
 		}
 
 		/// <summary>Adds Item.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Item">The unique element to add.</param>
 		public void Push(T Item)
 		{
@@ -45,6 +48,7 @@ namespace MW
 		}
 
 		/// <summary>Adds a number of Items.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Items">The list of elements to add.</param>
 		public void Push(params T[] Items)
 		{
@@ -53,6 +57,7 @@ namespace MW
 		}
 
 		/// <summary>Removes Item.</summary>
+		/// <decorations decor="public int"></decorations>
 		/// <param name="Item">The element to remove.</param>
 		/// <returns>The new size of this MArray.</returns>
 		public int Pull(T Item)
@@ -70,6 +75,7 @@ namespace MW
 		}
 
 		/// <summary>Any element.</summary>
+		/// <decorations decor="public T"></decorations>
 		/// <returns>Any random element.</returns>
 		public T Random()
 		{
@@ -79,6 +85,7 @@ namespace MW
 			return Items[Random];
 		}
 
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the front of the queue.</returns>
 		public T First()
 		{
@@ -86,6 +93,7 @@ namespace MW
 		}
 
 		/// <summary>Pops the item at the front of the queue.</summary>
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The item that was at the front of the queue.</returns>
 		public T FirstPop()
 		{
@@ -96,6 +104,7 @@ namespace MW
 			return f;
 		}
 
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the top of the stack.</returns>
 		public T Top()
 		{
@@ -103,6 +112,7 @@ namespace MW
 		}
 
 		/// <summary>Pops the item at the top of the stack.</summary>
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the top of the stack.</returns>
 		public T TopPop()
 		{
@@ -114,6 +124,7 @@ namespace MW
 		}
 
 		/// <summary>Whether or not Index is within range.</summary>
+		/// <decorations decor="public bool"></decorations>
 		/// <param name="Index">The Index to check for range.</param>
 		/// <returns>If Index is greater than or equal to zero and less than the number of elements.</returns>
 		public bool InRange(int Index)
@@ -125,6 +136,7 @@ namespace MW
 			return bInRange;
 		}
 
+		/// <decorations decor="public bool"></decorations>
 		/// <param name="Item">Item to check for existence.</param>
 		/// <returns>Whether the HashCode of Item exists within the internal HashMap.</returns>
 		public bool Contains(T Item)
@@ -133,16 +145,19 @@ namespace MW
 		}
 
 		/// <summary>Clears this MArray.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Flush()
 		{
 			Items.Clear();
 			HashMap.Clear();
 		}
 
+		/// <decorations decor="public bool"></decorations>
 		/// <docreturns>If this MArray is considered empty; Num == 0.</docreturns>
 		/// <returns><see langword="True"/> <see langword="if"/> (<see cref="Num"/> == 0).</returns>
 		public bool IsEmpty() => Num == 0;
 
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The mirror position of index over minimum zero, maximum Num.</returns>
 		public T Mirror(int Index)
 		{
@@ -150,6 +165,7 @@ namespace MW
 			return Mirror(0, Index);
 		}
 
+		/// <decorations decor="public T"></decorations>
 		/// <returns>The mirror position of index over Minimum to maximum Num.</returns>
 		public T Mirror(int Minimum, int Index)
 		{
@@ -158,6 +174,7 @@ namespace MW
 		}
 
 		/// <summary>The incoming and reflected Item of this mirror from zero to maximum Num.</summary>
+		/// <decorations decor="public Reflected"></decorations>
 		/// <docreturns>Source and Reflected information.</docreturns>
 		/// <returns><see cref="Reflected"/> - Source and Reflected information.</returns>
 		public Reflected Reflect(int Index)
@@ -167,6 +184,7 @@ namespace MW
 		}
 
 		/// <summary>The incoming and reflected Item of this mirror from Minimum to maximum Num.</summary>
+		/// <decorations decor="public Reflected"></decorations>
 		/// <docreturns>Source and Reflected information.</docreturns>
 		/// <returns><see cref="Reflected"/> - Source and Reflected information.</returns>
 		public Reflected Reflect(int Minimum, int Index)
@@ -176,6 +194,7 @@ namespace MW
 		}
 
 		/// <summary>Reflects over Minimum, Maximum with Index.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <returns>Outs the incoming and reflected Item of this mirror of Minimum, maximum Num.</returns>
 		public void Reflect(int Minimum, int Index, out T Source, out T Reflected)
 		{
@@ -186,6 +205,7 @@ namespace MW
 		}
 
 		/// <summary>Sorts Items.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Sort()
 		{
 			Items.Sort();
@@ -194,6 +214,7 @@ namespace MW
 		}
 
 		/// <summary>Sorts Items from Index for Count using Comparer.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Index"></param>
 		/// <param name="Count"></param>
 		/// <param name="Comparer"></param>
@@ -205,6 +226,7 @@ namespace MW
 		}
 
 		/// <summary>Sorts Items with a Comparison&lt;T&gt;.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Comparison"></param>
 		public void Sort(Comparison<T> Comparison)
 		{
@@ -214,6 +236,7 @@ namespace MW
 		}
 
 		/// <summary>Sorts Items with an IComparer&lt;T&gt;.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Comparer"></param>
 		public void Sort(IComparer<T> Comparer)
 		{
@@ -223,6 +246,7 @@ namespace MW
 		}
 
 		/// <summary>Reverses Items.</summary>
+		/// <decorations decor="public void"></decorations>
 		public void Reverse()
 		{
 			Items.Reverse();
@@ -231,6 +255,7 @@ namespace MW
 		}
 
 		/// <summary>Reverses Items from Index for Count.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Index"></param>
 		/// <param name="Count"></param>
 		public void Reverse(int Index, int Count)
@@ -265,6 +290,7 @@ namespace MW
 		}
 
 		/// <summary>Converts this MArray into T[].</summary>
+		/// <decorations decor="public T[]"></decorations>
 		/// <returns>T[].</returns>
 		public T[] TArray()
 		{
@@ -272,10 +298,12 @@ namespace MW
 		}
 
 		/// <summary>Square bracket accessor.</summary>
+		/// <decorations decor="public T"></decorations>
 		/// <param name="i">The index to access T item.</param>
 		/// <returns>The Item at the specified index.</returns>
 		public T this[int i] => Items[i];
 
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Check">The MArray to check for initialisation.</param>
 		/// <returns>True if Check is null.</returns>
 		public static bool CheckNull(MArray<T> Check) => Check == null;
@@ -292,11 +320,13 @@ namespace MW
 
 		/// <summary>If this MArray is null.</summary>
 		/// <docs>If this MArray is null.</docs>
+		/// <decorations decor="public static bool operator!"></decorations>
 		/// <param name="CheckIfNull">The MArray to check whether it is uninitialised.</param>
 		/// <returns>True if CheckIfNullOrEmpty is null.</returns>
 		public static bool operator !(MArray<T> CheckIfNull) => CheckNull(CheckIfNull);
 
 		/// <summary>Adds Right to the end of Left.</summary>
+		/// <decorations decor="public static MArray{T} operator+"></decorations>
 		/// <param name="Left">The MArray to append to.</param>
 		/// <param name="Right">The MArray to append to Left.</param>
 		/// <returns>A contiguous MArray from Left to Right.</returns>
@@ -321,6 +351,7 @@ namespace MW
 		}
 
 		/// <summary>Left elements that exist in Right.</summary>
+		/// <decorations decor="public static MArray{T} operator&amp;"></decorations>
 		/// <param name="Left">The MArray to check AND.</param>
 		/// <param name="Right">The MArray to compare to.</param>
 		/// <returns>An MArray of Left elements that also exist in Right.</returns>
@@ -345,6 +376,7 @@ namespace MW
 		}
 
 		/// <summary>Left elements that do not exist in Right.</summary>
+		/// <decorations decor="public static MArray{T} operator^"></decorations>
 		/// <param name="Left">The MArray to check OR.</param>
 		/// <param name="Right">The MArray to compare to.</param>
 		/// <returns>An MArray of Left's elements that do not exist in Right.</returns>
@@ -375,32 +407,20 @@ namespace MW
 		public static implicit operator T[](MArray<T> Any) => Any.TArray();
 
 		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>
+		/// <decorations decor="public struct"></decorations>
 		public struct Reflected
 		{
 			/// <summary>In reflection.</summary>
+			/// <decorations decor="public T"></decorations>
 			public T Source;
 			/// <summary>Out reflection.</summary>
+			/// <decorations decor="public T"></decorations>
 			public T Reflection;
 
 			public Reflected(T Source, T Reflection)
 			{
 				this.Source = Source;
 				this.Reflection = Reflection;
-			}
-		}
-
-		/// <summary>Information which T failed to be pushed into an MArray&lt;T&gt;.</summary>
-		public struct PushRangeFailed
-		{
-			/// <summary>The T that couldn't be added into the MArray.</summary>
-			public T AttemptedItemToAdd;
-			/// <summary>The index of the T in range that couldn't be added.</summary>
-			public int IndexOfAttempt;
-
-			public PushRangeFailed(T AttemptedItemToAdd, int IndexOfAttempt)
-			{
-				this.AttemptedItemToAdd = AttemptedItemToAdd;
-				this.IndexOfAttempt = IndexOfAttempt;
 			}
 		}
 	}

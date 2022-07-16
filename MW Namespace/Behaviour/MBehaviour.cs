@@ -3,11 +3,14 @@
 namespace MW.Behaviour
 {
 	/// <summary></summary>
+	/// <decorations decor="public class : MonoBehaviour"></decorations>
 	public class MBehaviour : MonoBehaviour
 	{
 		/// <summary>The world position of this player.</summary>
+		/// <decorations decor="public MVector"></decorations>
 		public MVector Position { get => transform.position; set { transform.position = value; } }
 		/// <summary>The rotation of this player.</summary>
+		/// <decorations decor="public MRotator"></decorations>
 		public MRotator Rotation
 		{
 			get
@@ -37,6 +40,7 @@ namespace MW.Behaviour
 		/// Sets this transform's position to NewPosition or the first SweepInteraction
 		/// if bDoSweep and bTeleportToPosition are true.
 		/// </docs>
+		/// <decorations decor="public MArray{Collider}"></decorations>
 		/// <param name="NewPosition">The target destination to go to, or go towards in a straight-line.</param>
 		/// <param name="bTeleportToPosition">True to immediately teleport to the location, regardless of Sweep Interactions.</param>
 		/// <param name="bDoSweep">
@@ -92,6 +96,7 @@ namespace MW.Behaviour
 		/// Sets this transform's position to NewPosition or the first SweepInteraction
 		/// if bDoSweep and bTeleportToPosition are true.
 		/// </docs>
+		/// <decorations decor="public MArray{Collider2D}"></decorations>
 		/// <param name="NewPosition">The target destination to go to, or go towards in a straight-line.</param>
 		/// <param name="bTeleportToPosition">True to immediately teleport to the location, regardless of Sweep Interactions.</param>
 		/// <param name="bDoSweep">

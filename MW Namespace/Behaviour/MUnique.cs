@@ -5,7 +5,7 @@ namespace MW.Behaviour
 {
 	/// <summary>Base class for any unique MonoBehaviour in a game.</summary>
 	/// <typeparam name="T">The class to make unique.</typeparam>
-	/// <decorations decor="public class T where T : MonoBehaviour"></decorations>
+	/// <decorations decor="public class {T} where T : MonoBehaviour"></decorations>
 	public class MUnique<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		/// <summary>A unique reference to T.</summary>
@@ -13,10 +13,10 @@ namespace MW.Behaviour
 		public static T Instance;
 
 		/// <summary>Sets this gameObject to DontDestroyOnLoad.</summary>
-		/// <decorations decor="bool"></decorations>
+		/// <decorations decor="[SerializeField] bool"></decorations>
 		[SerializeField] bool bMakePersistent;
 		/// <summary>True to spawn a new unique instance when this is destroyed.</summary>
-		/// <decorations decor="bool"></decorations>
+		/// <decorations decor="[SerializeField] bool"></decorations>
 		[SerializeField] bool bSpawnNewOnDestroy;
 
 		/// <summary>Automatically sets the instance to this.</summary>
@@ -27,8 +27,8 @@ namespace MW.Behaviour
 		}
 
 		/// <summary>Sets the unique instance.</summary>
-		/// <param name="UniqueInstance">The component to mark as the unique instance.</param>
 		/// <decorations decor="protected virtual void"></decorations>
+		/// <param name="UniqueInstance">The component to mark as the unique instance.</param>
 		protected virtual void SetInstance(T UniqueInstance)
 		{
 			if (!Instance)

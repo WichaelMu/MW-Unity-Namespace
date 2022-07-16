@@ -4,8 +4,10 @@ namespace MW.IO
 {
 	/// <summary>Mouse Input and Keyboard Input, based on <see cref="Input"/>.</summary>
 	/// <docs>Mouse Input and Keyboard Input.</docs>
+	/// <decorations decor="public static class"></decorations>
 	public static class I
 	{
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="MouseButton">The EButton press to listen for.</param>
 		/// <param name="bHold">Whether or not to check if this button is held down.</param>
 		/// <param name="bUp">Whether or not to check if this button is released.</param>
@@ -40,6 +42,7 @@ namespace MW.IO
 			return false;
 		}
 
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="KeyStroke">The KeyCode that was pressed on the keyboard.</param>
 		/// <param name="bHold">Whether or not to check if this button is held down.</param>
 		/// <param name="bUp">Whether or not to check if this button is released.</param>
@@ -56,6 +59,7 @@ namespace MW.IO
 
 		/// <summary>Identical to <see cref="Input.anyKey"/>.</summary>
 		/// <docs>Identical to Input.anyKey.</docs>
+		/// <decorations decor="public static bool"></decorations>
 		/// <returns>True if a key or a mouse button was pressed.</returns>
 		public static bool Any()
 		{

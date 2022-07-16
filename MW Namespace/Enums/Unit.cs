@@ -1,6 +1,7 @@
 ﻿namespace MW
 {
 	/// <summary>Units of measurement of speed.</summary>
+	/// <decorations decor="public enum"></decorations>
 	public enum EUnit
 	{
 		/// <summary></summary>

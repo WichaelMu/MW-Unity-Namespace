@@ -3,6 +3,7 @@
 namespace MW.Audio
 {
 	/// <summary>Notes on a standard piano from Octaves 0 - 8.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class Notes
 	{
 		public static class Octave0
@@ -248,15 +249,20 @@ namespace MW.Audio
 	}
 
 	/// <summary>A Note on a standard piano.</summary>
+	/// <decorations decor="public struct"></decorations>
 	public struct Note
 	{
 		/// <summary>MIDI Number.</summary>
+		/// <decorations decor="public byte"></decorations>
 		public byte MIDI;
 		/// <summary>The name of this Note.</summary>
+		/// <decorations decor="public string"></decorations>
 		public string NoteName;
 		/// <summary>The frequency of this Note in Hertz.</summary>
+		/// <decorations decor="public float"></decorations>
 		public float FrequencyHz;
 		/// <summary>The period of this Note in milliseconds.</summary>
+		/// <decorations decor="public float"></decorations>
 		public float PeriodMS;
 
 		internal Note(byte MIDI, string NoteName, float FrequencyHz, float PeriodMS)
