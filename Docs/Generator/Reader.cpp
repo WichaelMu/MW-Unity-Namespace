@@ -124,7 +124,9 @@ std::vector<MW> Reader::OpenFile()
 			{
 				// <decorations name="value"...></decorations>
 
-				m.decorations.push_back(summary_params_etc->first_attribute()->value());
+				std::string ReplacedAngleBrackets = summary_params_etc->first_attribute()->value();
+				SwapChars::ReplaceAngleBrackets(ReplacedAngleBrackets, true);
+				m.decorations.push_back(ReplacedAngleBrackets);
 			}
 		}
 

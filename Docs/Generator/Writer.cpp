@@ -74,17 +74,19 @@ constexpr const char* CSS_PARAGRAPH = "\"simplePara\"";
 */
 constexpr const char* CSS_KEYWORD = "\"keyword\"";
 
-#define INTER_INJECT_TEXT(text) << text
-#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=\"C\" style=\"padding-right:25%;color:rgb(40,255,120);\">" INTER_INJECT_TEXT(decorations) << "</pre>"
-#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=\"padding-right:25%;color:rgb(78,201,176);font-weight:549\">" INTER_INJECT_TEXT(decorations) << "</pre>"
-
 #define WRITE_DEBUG_LINES 0
 
 #if WRITE_DEBUG_LINES
 #define DEBUG_WRITELINE << "<p style=\"color:white\">" INTER_INJECT_TEXT(__LINE__) << "</p>"
+#define GET_LINE << " " << __LINE__
 #else
 #define DEBUG_WRITELINE
+#define GET_LINE
 #endif
+
+#define INTER_INJECT_TEXT(text) << text GET_LINE
+#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=\"C\" style=\"padding-right:25%;color:rgb(40,255,120);\">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=\"padding-right:25%;color:rgb(78,201,176);font-weight:549\">" INTER_INJECT_TEXT(decorations) << "</pre>"
 
 #define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">" DEBUG_WRITELINE
 #define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=" << entry << ".html>" << entry << "</a></div><br>" DEBUG_WRITELINE

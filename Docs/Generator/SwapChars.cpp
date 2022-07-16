@@ -69,6 +69,8 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 					param = "operator^";
 				else if (param == "op_BitwiseOr")
 					param = "operator|";
+				else if (param == "op_BitwiseAnd")
+					param = "operator&";
 				else if (param == "op_GreaterThan")
 					param = "operator&gt;";
 				else if (param == "op_LessThan")
@@ -123,19 +125,7 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 					}
 				}
 
-				size_t pos = new_param.find('{');
-				if (pos != std::string::npos)
-					new_param.replace(pos, 1, "&lt;");
-
-				pos = new_param.find('}');
-				if (pos != std::string::npos)
-					new_param.replace(pos, 1, "&gt;");
-
-				// Remove the trailing curly bracket that exists, for some reason.
-				// Also, can't use the remove method, like above, for some reason.
-				pos = new_param.find('}');
-				if (pos != std::string::npos)
-					new_param.replace(pos, 1, "");
+				ReplaceAngleBrackets(new_param);
 
 				param = new_param;
 			}
@@ -148,4 +138,38 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 	}
 
 	param.erase(remove(param.begin(), param.end(), '`'), param.end());
+}
+
+void SwapChars::ReplaceAngleBrackets(std::string& param, const bool& continuous)
+{
+	if (continuous)
+	{
+		const size_t length = param.length();
+		for (size_t i = 0; i < length; ++i)
+		{
+			size_t pos = param.find('{');
+			if (pos != std::string::npos)
+				param.replace(pos, 1, "&lt;");
+
+			pos = param.find('}');
+			if (pos != std::string::npos)
+				param.replace(pos, 1, "&gt;");
+		}
+	}
+	else
+	{
+		size_t pos = param.find('{');
+		if (pos != std::string::npos)
+			param.replace(pos, 1, "&lt;");
+
+		pos = param.find('}');
+		if (pos != std::string::npos)
+			param.replace(pos, 1, "&gt;");
+
+		// Remove the trailing curly bracket that exists, for some reason.
+		// Also, can't use the remove method, like above, for some reason.
+		pos = param.find('}');
+		if (pos != std::string::npos)
+			param.replace(pos, 1, "");
+	}
 }
