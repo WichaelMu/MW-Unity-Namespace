@@ -225,6 +225,7 @@ namespace MW.Math
 		    => Mathf.Abs(M1 | M2) >= ParallelThreshold;
 
 		/// <summary>Whether Vector has been normalised.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Vector">The vector to check.</param>
 		public static bool IsNormalised(MVector Vector) => Mathf.Abs(1f - Vector.SqrMagnitude) < .01f;
 

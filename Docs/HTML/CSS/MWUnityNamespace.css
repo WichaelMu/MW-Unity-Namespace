@@ -17,6 +17,11 @@ pre {
 	font-size: 120%;
 }
 
+::selection {
+	background: rgb(64, 64, 64);
+	color: #fff;
+}
+
 /* MORE DEFAULT STYLES */
 
 .header {
@@ -180,6 +185,27 @@ nav {
 	padding-left: 5%;
 	color: #1FBEB9;
 	font-size: 30px;
+}
+
+.ParamName {
+	text-align: left;
+	position: relative;
+	padding-left: 5%;
+	padding-right: 5%;
+	font-weight: 600;
+	font-size: 100%;
+	list-style-type: none;
+	color: rgb(234, 230, 255);
+}
+
+.ParamDesc {
+	text-align: left;
+	position: relative;
+	padding-left: 5%;
+	padding-right: 5%;
+	font-size: 100%;
+	list-style-type: none;
+	color: white;
 }
 
 .simplePara {

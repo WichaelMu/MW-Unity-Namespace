@@ -70,9 +70,22 @@ constexpr const char* CSS_CLASS_SUMMARY_STYLE = "\"simplePara C\"";
 */
 constexpr const char* CSS_PARAGRAPH = "\"simplePara\"";
 /*
+* The CSS selector used to style names of function parameters.
+*/
+constexpr const char* CSS_PARAM_NAME = "\"ParamName\"";
+/*
+* The CSS selector used to style function parameters' descriptions.
+*/
+constexpr const char* CSS_PARAM_DESC = "\"ParamDesc\"";
+/*
 * The CSS selector used to style keywords for function summaries.
 */
 constexpr const char* CSS_KEYWORD = "\"keyword\"";
+
+/*
+* HTML shorthand for writing tab spaces.
+*/
+constexpr const char* HTML_TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 #define WRITE_DEBUG_LINES 0
 
@@ -86,7 +99,7 @@ constexpr const char* CSS_KEYWORD = "\"keyword\"";
 
 #define INTER_INJECT_TEXT(text) << text GET_LINE
 #define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=\"C\" style=\"padding-right:25%;color:rgb(40,255,120);\">" INTER_INJECT_TEXT(decorations) << "</pre>"
-#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=\"padding-right:25%;color:rgb(78,201,176);font-weight:549\">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=\"padding-right:25%;color:rgb(133, 245, 215);font-weight:549\">" INTER_INJECT_TEXT(decorations) << "</pre>"
 
 #define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">" DEBUG_WRITELINE
 #define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=" << entry << ".html>" << entry << "</a></div><br>" DEBUG_WRITELINE
@@ -96,6 +109,7 @@ constexpr const char* CSS_KEYWORD = "\"keyword\"";
 #define HTML_DECLARE_FUNCTION_PARAMS(title, params, decorations) INTER_INJECT_FUNCTION_DECORATIONS(decorations) << "<h1 class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << " (" INTER_INJECT_TEXT(params) << ")</h1>" DEBUG_WRITELINE
 #define HTML_DECLARE_OPERATOR_OVERLOAD(overload, params, decorations) INTER_INJECT_FUNCTION_DECORATIONS(decorations) << "<br><h1 class" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(overload) INTER_INJECT_TEXT(params) << "</h1>" DEBUG_WRITELINE
 #define HTML_SUMMARY_ENTRY(entry) "<p class=" << CSS_PARAGRAPH << ">" INTER_INJECT_TEXT(entry) << "</p>" DEBUG_WRITELINE
+#define HTML_PARAM_ENTRY(var, desc) "<p class=" << CSS_PARAM_NAME << ">" INTER_INJECT_TEXT(var) << "</p><p class=" << CSS_PARAM_DESC << ">" << HTML_TAB INTER_INJECT_TEXT(desc) << "</p>" DEBUG_WRITELINE
 #define HTML_KEYWORD(keyword) "<p class=" << CSS_KEYWORD << ">" INTER_INJECT_TEXT(keyword) << "</p>" DEBUG_WRITELINE
 
 void Writer::Write(const VT(MW)& all_mw)
@@ -272,12 +286,14 @@ void Writer::Write(const VT(MW)& all_mw)
 				// Write the summaries for the parameters (if any).
 				for (int i = 0; i < size_of_name; ++i)
 				{
-					if (mw.function_parameters_desc[i].length() != 0)
-					{
-						if (i == 0)
-							html << HTML_KEYWORD("Params:");
+					bool has_description = mw.function_parameters_desc[i].length() != 0;
 
-						html << HTML_SUMMARY_ENTRY(mw.function_parameters_name[i] + ": " + mw.function_parameters_desc[i]);
+					if (i == 0 && has_description)
+						html << HTML_KEYWORD("Params:");
+
+					if (has_description)
+					{
+						html << HTML_PARAM_ENTRY(mw.function_parameters_name[i] + ": ", mw.function_parameters_desc[i]);
 					}
 				}
 
