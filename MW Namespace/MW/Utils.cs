@@ -423,5 +423,7 @@ namespace MW
 				Cursor.visible = true;
 			}
 		}
+
+		public static int FPS() => (int)(1f / Time.unscaledDeltaTime);
 	}
 }

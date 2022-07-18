@@ -88,5 +88,20 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A ference to the float to modify.</param>
 		public static void Abs(ref float F) => F = Abs(F);
+
+		public static MVector Abs(MVector V)
+		{
+			return new MVector
+			{
+				X = Abs(V.X),
+				Y = Abs(V.Y),
+				Z = Abs(V.Z)
+			};
+		}
+
+		public static void Abs(ref MVector V)
+		{
+			V = Abs(V);
+		}
 	}
 }
