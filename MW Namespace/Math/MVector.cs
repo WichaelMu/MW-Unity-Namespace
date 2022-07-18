@@ -9,14 +9,25 @@ namespace MW
 {
 	/// <summary>Vector representation of coordinates and points with three-dimensions.</summary>
 	/// <decorations decors="[Serializable] public struct"></decorations>
-	[System.Serializable]
-	public struct MVector
+	[Serializable]
+	public partial struct MVector
 	{
 		/// <summary>Vector floating-point precision.</summary>
 		/// <decorations decors="public const float"></decorations>
 		public const float kEpsilon = 1E-05f;
 
 		public float X, Y, Z;
+
+		/// <summary>A pointer to the X-Axis.</summary>
+		/// <decorations decor="public unsafe float*"></decorations>
+		public unsafe float* pX;
+		/// <summary>A pointer to the Y-Axis.</summary>
+		/// <decorations decor="public unsafe float*"></decorations>
+		public unsafe float* pY;
+		/// <summary>A pointer to the Z-Axis.</summary>
+		/// <decorations decor="public unsafe float*"></decorations>
+		public unsafe float* pZ;
+
 		/// <summary>A new MVector ignoring the X component.</summary>
 		/// <decorations decor="public readonly MVector"></decorations>
 		public readonly MVector YZ { get => new MVector(0, Y, Z); }
@@ -29,42 +40,55 @@ namespace MW
 
 		/// <summary>Construct all components to U.</summary>
 		/// <param name="U">Uniform component.</param>
-		public MVector(float U)
+		public unsafe MVector(float U) : this()
 		{
 			X = U;
 			Y = U;
 			Z = U;
+
+			ForceNull();
 		}
 
 		/// <summary>Construct with X and Y components only.</summary>
 		/// <param name="X">X Component.</param>
 		/// <param name="Y">Y Component.</param>
-		public MVector(float X, float Y)
+		public MVector(float X, float Y) : this()
 		{
 			this.X = X;
 			this.Y = Y;
 			Z = 0;
+
+			ForceNull();
 		}
 
 		/// <summary>Construct an MVector with X, Y, and Z components.</summary>
 		/// <param name="X">X Component.</param>
 		/// <param name="Y">Y Component.</param>
 		/// <param name="Z">Z Component.</param>
-		public MVector(float X, float Y, float Z)
+		public MVector(float X, float Y, float Z) : this()
 		{
 			this.X = X;
 			this.Y = Y;
 			this.Z = Z;
+
+			ForceNull();
 		}
 
 		/// <summary>Construct an MVector with respect to a <see cref="Vector3"/>.</summary>
 		/// <docs>Construct an MVector with respect to a Vector3.</docs>
 		/// <param name="xyz">The Vector3's Components to set this MVector.</param>
-		public MVector(Vector3 xyz)
+		public MVector(Vector3 xyz) : this()
 		{
 			X = xyz.x;
 			Y = xyz.y;
 			Z = xyz.z;
+
+			ForceNull();
+		}
+
+		unsafe void ForceNull()
+		{
+			pX = pY = pZ = null;
 		}
 
 		public float this[int i] => i switch

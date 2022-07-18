@@ -281,18 +281,18 @@ namespace MW.Math
 				Quotient = (int)(Quotient - 0.5f);
 			}
 
-			float Y = Angle - (2.0f * Mathf.PI) * Quotient;
+			float A = Angle - (2.0f * Mathf.PI) * Quotient;
 
-			// Map Y to [-PI / 2, PI / 2] with Sin(Y) = Sin(Value).
+			// Map A to [-PI / 2, PI / 2] with Sin(A) = Sin(Value).
 			float Sign;
-			if (Y > kHalfPI)
+			if (A > kHalfPI)
 			{
-				Y = Mathf.PI - Y;
+				A = Mathf.PI - A;
 				Sign = -1.0f;
 			}
-			else if (Y < -kHalfPI)
+			else if (A < -kHalfPI)
 			{
-				Y = -Mathf.PI - Y;
+				A = -Mathf.PI - A;
 				Sign = -1.0f;
 			}
 			else
@@ -300,13 +300,13 @@ namespace MW.Math
 				Sign = +1.0f;
 			}
 
-			float Y2 = Y * Y;
+			float A2 = A * A;
 
 			// 11-degree minimax approximation
-			Sine = (((((-2.3889859e-08f * Y2 + 2.7525562e-06f) * Y2 - 0.00019840874f) * Y2 + 0.0083333310f) * Y2 - 0.16666667f) * Y2 + 1.0f) * Y;
+			Sine = (((((-2.3889859e-08f * A2 + 2.7525562e-06f) * A2 - 0.00019840874f) * A2 + 0.0083333310f) * A2 - 0.16666667f) * A2 + 1.0f) * A;
 
 			// 10-degree minimax approximation
-			Cosine = Sign * ((((-2.6051615e-07f * Y2 + 2.4760495e-05f) * Y2 - 0.0013888378f) * Y2 + 0.041666638f) * Y2 - 0.5f) * Y2 + 1.0f;
+			Cosine = Sign * ((((-2.6051615e-07f * A2 + 2.4760495e-05f) * A2 - 0.0013888378f) * A2 + 0.041666638f) * A2 - 0.5f) * A2 + 1.0f;
 		}
 
 		/// <summary>Calculates the Square Distance between two Vector3s.</summary>

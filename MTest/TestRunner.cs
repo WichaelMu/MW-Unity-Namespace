@@ -40,10 +40,10 @@ namespace MTest
 			O.Line(nameof(Execute.CoreTests.RoundToDPTest) + $" \t ({DPPassed}/{DPTotalTests}) Passed.\t Completed in: " + DPTime + "ms.");
 			O.Line(nameof(Execute.CoreTests.SwapTests) + $" \t\t ({SWPassed}/{SWTotalTests}) Passed. \t\t Completed in: " + SWTime + "ms.");
 			O.Line(nameof(Execute.CoreTests.SqrtTests) + $" \t\t ({SQPassed}/{SQTotalTests}) Passed. \t Completed in: " + SQTime + "ms.");
-			O.Line(nameof(Execute.MWTests.MVectorTest) + $" \t\t ({MVPassed}/{MVTotalTests}) Passed. \t Completed in: " + MVTime + "ms.");
-			O.Line(nameof(Execute.MWTests.MArrayTests) + $" \t\t ({MAPassed}/{MATotalTests}) Passed. \t Completed in: " + MATime + "ms.");
+			O.Line(nameof(Execute.MWTests.MVectorTest) + $" \t ({MVPassed}/{MVTotalTests}) Passed. \t Completed in: " + MVTime + "ms.");
+			O.Line(nameof(Execute.MWTests.MArrayTests) + $" \t ({MAPassed}/{MATotalTests}) Passed. \t Completed in: " + MATime + "ms.");
 			O.Line(nameof(Execute.MWTests.THeapTests) + $" \t\t ({THPassed}/{THTotalTests}) Passed. \t\t Completed in: " + THTime + "ms.");
-			O.Line(nameof(Execute.FastTests.ASin) + $" \t\t ({ASPassed}/{ASTotalTests}) Passed. \t\t Completed in: " + ASTime + "ms.");
+			O.Line(nameof(Execute.FastTests.ASin) + $" \t\t\t ({ASPassed}/{ASTotalTests}) Passed. \t Completed in: " + ASTime + "ms.");
 #endif
 		}
 

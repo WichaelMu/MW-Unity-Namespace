@@ -8,6 +8,7 @@
     <BaseOutputPath>Output\</BaseOutputPath>
     <BaseIntermediateOutputPath>Output\</BaseIntermediateOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
