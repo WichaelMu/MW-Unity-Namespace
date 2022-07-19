@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MW
 {
@@ -41,10 +42,14 @@ namespace MW
 			if (!HashMap.ContainsKey(Item))
 			{
 				HashMap.Add(Item, new());
-				Items.Add(Item);
+				HashMap[Item].Push(Num);
+			}
+			else
+			{
+				HashMap[Item].Push(HashMap[Item].Peek() + 1);
 			}
 
-			HashMap[Item].Push(Num - 1);
+			Items.Add(Item);
 		}
 
 		/// <summary>Adds a number of Items.</summary>
@@ -83,6 +88,28 @@ namespace MW
 			int Random = r.Next(0, Num - 1);
 
 			return Items[Random];
+		}
+
+		/// <summary>Accesses data specific to this Item in the MArray.</summary>
+		/// <decorations decor="public AccessedData"></decorations>
+		/// <param name="Item">The Item to access its data.</param>
+		/// <returns>Accessed Data Occurrences and Positions, or AccessedData.None if this MArray does not have Item.</returns>
+		public MArray.AccessedData Access(T Item)
+		{
+			if (!Contains(Item))
+				return MArray.AccessedData.None;
+
+			MArray.AccessedData Data = new()
+			{
+				Occurrences = HashMap[Item].Count,
+				Positions = new int[HashMap[Item].Count]
+			};
+
+			int i = 0;
+			foreach (int Position in HashMap[Item])
+				Data.Positions[i++] = Position;
+
+			return Data;
 		}
 
 		/// <decorations decor="public T"></decorations>
@@ -279,14 +306,19 @@ namespace MW
 			}
 		}
 
+		/// <summary>Every Item in this MArray represented as a <see cref="string"/> with <see cref="object.ToString"/>.</summary>
+		/// <docs>Every Item in this MArray represented as a string with object.ToString().</docs>
+		/// <remarks>Assumes that T has a readable ToString() defined.</remarks>
+		/// <decorations decor="public string"></decorations>
+		/// <returns>A string form of all T.</returns>
 		public string Print()
 		{
-			string S = "";
+			StringBuilder SB = new();
 
 			foreach (T T in Items)
-				S += T.ToString() + " ";
+				SB.Append(T.ToString());
 
-			return S;
+			return SB.ToString();
 		}
 
 		/// <summary>Converts this MArray into T[].</summary>
@@ -322,7 +354,7 @@ namespace MW
 		/// <docs>If this MArray is null.</docs>
 		/// <decorations decor="public static bool operator!"></decorations>
 		/// <param name="CheckIfNull">The MArray to check whether it is uninitialised.</param>
-		/// <returns>True if CheckIfNullOrEmpty is null.</returns>
+		/// <returns>True if CheckIfNull is null.</returns>
 		public static bool operator !(MArray<T> CheckIfNull) => CheckNull(CheckIfNull);
 
 		/// <summary>Adds Right to the end of Left.</summary>
@@ -344,8 +376,13 @@ namespace MW
 				return Left;
 
 			MArray<T> NewMArray = new(Left.Num + Right.Num);
-			NewMArray.Items.AddRange(Left.Items);
-			NewMArray.Items.AddRange(Right.Items);
+
+			foreach (T T in Left)
+				NewMArray.Push(T);
+			foreach (T T in Right)
+				NewMArray.Push(T);
+
+			NewMArray.Remap();
 
 			return NewMArray;
 		}
@@ -371,6 +408,8 @@ namespace MW
 				if (Right.Contains(ItemAnd))
 					AndMArray.Push(ItemAnd);
 			}
+
+			AndMArray.Remap();
 
 			return AndMArray;
 		}
@@ -399,6 +438,8 @@ namespace MW
 					OrMArray.Push(ItemOr);
 			}
 
+			OrMArray.Remap();
+
 			return OrMArray;
 		}
 
@@ -417,10 +458,38 @@ namespace MW
 			/// <decorations decor="public T"></decorations>
 			public T Reflection;
 
-			public Reflected(T Source, T Reflection)
+			internal Reflected(T Source, T Reflection)
 			{
 				this.Source = Source;
 				this.Reflection = Reflection;
+			}
+		}
+	}
+
+	public class MArray
+	{
+		
+
+		/// <summary>Data of an Item in an MArray.</summary>
+		/// <decorations decor="public struct"></decorations>
+		public struct AccessedData
+		{
+			static readonly AccessedData none = new AccessedData(-1, Array.Empty<int>());
+			/// <summary>No data available.</summary>
+			/// <decorations decor="public static readonly AccessedData"></decorations>
+			public static readonly AccessedData None = none;
+
+			/// <summary>The number of times an Item appears in an MArray.</summary>
+			/// <decorations decor="public int"></decorations>
+			public int Occurrences;
+			/// <summary>The index locations of this Item in an MArray.</summary>
+			/// <decorations decor="public int[]"></decorations>
+			public int[] Positions;
+
+			internal AccessedData(int Occurrences, int[] Positions)
+			{
+				this.Occurrences = Occurrences;
+				this.Positions = Positions;
 			}
 		}
 	}

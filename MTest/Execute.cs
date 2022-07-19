@@ -4,10 +4,12 @@ using MW.Extensions;
 using MW.Math;
 using UnityEngine;
 using static MW.Math.Magic.Fast;
+using static MTest.Tolerance;
+using static MTest.Assertion;
 
 namespace MTest
 {
-	internal class Execute : Assertion
+	internal class Execute
 	{
 		internal class CoreTests
 		{
@@ -211,29 +213,29 @@ namespace MTest
 				Vector3 UR = new Vector3(-5738, 2847, 19.24f);
 
 				Passed = 0;
-				Tolerance.VectorToleranceCheck(1, Vector3.Cross(UL, UR), ML ^ MR, "Cross", ref Passed);
-				Tolerance.FloatToleranceCheck(2, Vector3.Dot(UL, UR), ML | MR, "Dot", ref Passed);
-				Tolerance.VectorToleranceCheck(3, UL.normalized, ML.Normalised, "Normalise", ref Passed);
-				Tolerance.VectorToleranceCheck(4, UR.normalized, MR.Normalised, "Normalise", ref Passed);
-				Tolerance.FloatToleranceCheck(5, UL.sqrMagnitude, ML.SqrMagnitude, "Square Magnitude", ref Passed);
-				Tolerance.FloatToleranceCheck(6, UR.sqrMagnitude, MR.SqrMagnitude, "Square Magnitude", ref Passed);
-				Tolerance.FloatToleranceCheck(7, Vector3.Distance(UL, UR), MVector.Distance(ML, MR), "Distance", ref Passed);
-				Tolerance.FloatToleranceCheck(8, Vector3.Distance(UL, UR), Mathf.Sqrt(ML.SqrDistance(MR)), "MVector SqrDistance -> Vector3 Distance", ref Passed);
-				Tolerance.VectorToleranceCheck(9, UL - UR, ML - MR, "Subtraction", ref Passed);
-				Tolerance.VectorToleranceCheck(10, UR - UL, MR - ML, "Subtraction", ref Passed);
-				Tolerance.VectorToleranceCheck(11, -UL, -ML, "Negation", ref Passed);
-				Tolerance.VectorToleranceCheck(12, -UR, -MR, "Negation", ref Passed);
-				Tolerance.VectorToleranceCheck(13, UL + UR, ML + MR, "Addition", ref Passed);
-				Tolerance.VectorToleranceCheck(14, UR + ML, ML + UR, "Cross Addition", ref Passed);
+				VectorToleranceCheck(1, Vector3.Cross(UL, UR), ML ^ MR, "Cross", ref Passed);
+				FloatToleranceCheck(2, Vector3.Dot(UL, UR), ML | MR, "Dot", ref Passed);
+				VectorToleranceCheck(3, UL.normalized, ML.Normalised, "Normalise", ref Passed);
+				VectorToleranceCheck(4, UR.normalized, MR.Normalised, "Normalise", ref Passed);
+				FloatToleranceCheck(5, UL.sqrMagnitude, ML.SqrMagnitude, "Square Magnitude", ref Passed);
+				FloatToleranceCheck(6, UR.sqrMagnitude, MR.SqrMagnitude, "Square Magnitude", ref Passed);
+				FloatToleranceCheck(7, Vector3.Distance(UL, UR), MVector.Distance(ML, MR), "Distance", ref Passed);
+				FloatToleranceCheck(8, Vector3.Distance(UL, UR), Mathf.Sqrt(ML.SqrDistance(MR)), "MVector SqrDistance -> Vector3 Distance", ref Passed);
+				VectorToleranceCheck(9, UL - UR, ML - MR, "Subtraction", ref Passed);
+				VectorToleranceCheck(10, UR - UL, MR - ML, "Subtraction", ref Passed);
+				VectorToleranceCheck(11, -UL, -ML, "Negation", ref Passed);
+				VectorToleranceCheck(12, -UR, -MR, "Negation", ref Passed);
+				VectorToleranceCheck(13, UL + UR, ML + MR, "Addition", ref Passed);
+				VectorToleranceCheck(14, UR + ML, ML + UR, "Cross Addition", ref Passed);
 
 				for (float F = -10f; F <= 10f; F += .7f)
 				{
-					Tolerance.VectorToleranceCheck(15, F * UL, F * ML, "Multiplication by: " + F, ref Passed);
-					Tolerance.VectorToleranceCheck(16, UL / F, ML / F, "Division by: " + F, ref Passed);
+					VectorToleranceCheck(15, F * UL, F * ML, "Multiplication by: " + F, ref Passed);
+					VectorToleranceCheck(16, UL / F, ML / F, "Division by: " + F, ref Passed);
 				}
 
-				Tolerance.VectorToleranceCheck(17, (UR - UL).normalized, ML > MR, "Direction", ref Passed);
-				Tolerance.VectorToleranceCheck(18, (UL - UR).normalized, ML < MR, "Direction", ref Passed);
+				VectorToleranceCheck(17, (UR - UL).normalized, ML > MR, "Direction", ref Passed);
+				VectorToleranceCheck(18, (UL - UR).normalized, ML < MR, "Direction", ref Passed);
 
 				Assert(19, Mathematics.IsNormalised(ML.Normalised), ref Passed, nameof(Mathematics.IsNormalised));
 
@@ -338,6 +340,10 @@ namespace MTest
 				// M2  = (-2, 0, 2, 4, 6, 8, 10, 12, 14, 16)
 				// XOR = (-2, 0, 16)
 
+				// No longer used for testing from here.
+				And.Flush();
+				XOR.Flush();
+
 				MArray<float> L, R;
 				L = new MArray<float>();
 				R = new MArray<float>();
@@ -367,7 +373,7 @@ namespace MTest
 				LR.Pull(4f);
 				Assert(38, !LR.Contains(4f), ref Passed, "+ -> Pull -> Contains");
 
-				// LR = (1.5, 2.75, 5.25, 4, 2.75, 6.5)
+				// LR = (1.5, 2.75, 5.25, 2.75, 6.5)
 
 				M.Sort();
 				for (byte i = 0; i < M.Num - 1; ++i)
@@ -388,6 +394,71 @@ namespace MTest
 				// Total number of tests (41) + M's size after Sort() - 1 (12) + Forward.Num * 2 (14) - one for each loop (3).
 				TotalTests = 41 + 12 + 14 - 3;
 			}
+
+
+			public static void MArrayTests2(out int Passed, out int TotalTests)
+			{
+				Passed = 0;
+				MArray<TTestClass> M = new(17);
+
+				Assert(1, M.IsEmpty(), ref Passed, "Initial Size");
+				Assert(2, M.Num == 0, ref Passed, "Initial Size");
+
+				TTestClass T1 = new TTestClass(-1);
+				TTestClass T2 = new TTestClass(-2);
+				TTestClass T3 = new TTestClass(-3);
+				TTestClass T4 = new TTestClass(-4);
+				TTestClass T5 = new TTestClass(-5);
+				TTestClass T6 = new TTestClass(-6);
+				TTestClass T7 = new TTestClass(-7);
+				TTestClass T8 = new TTestClass(-8);
+
+				M.Push(T1, T2, T3, T4, T5, T6, T7, T8, T1);
+				M.Push(T1, T2, T3, T4, T5, T6, T7, T8, T1);
+
+				MArray.AccessedData AD = M.Access(T1);
+				Assert(3, AD.Occurrences == 4 && AD.Positions.Length == AD.Occurrences, ref Passed, "Occurrences && Positions.Length");
+
+				Assert(4, M.Num == 9 * 2, ref Passed, "Push Num");
+				M.Pull(T1);
+				Assert(5, M.Num == 9 * 2 - 1, ref Passed, "Push Num");
+
+				AD = M.Access(T1);
+				Assert(6, AD.Occurrences == 3 && AD.Positions.Length == AD.Occurrences, ref Passed, "Pull -> Occurrences && Positions.Length");
+
+				Assert(7, AD.Positions[0] == 9 && AD.Positions[1] == 8 && AD.Positions[2] == 0, ref Passed, "Positions");
+
+				Assert(8, M.Contains(T1), ref Passed, "Still Contains");
+				M.Pull(T1);
+				Assert(9, M.Contains(T1), ref Passed, "Still Contains");
+				M.Pull(T1);
+				Assert(10, M.Contains(T1), ref Passed, "Still Contains");
+
+				Assert(11, M.Access(T1).Occurrences == 1, ref Passed, "Only One Left");
+				M.Pull(T1);
+				Assert(12, M.Access(T1).Occurrences == -1, ref Passed, "Only One Left");
+				Assert(13, !M.Contains(T1), ref Passed, "Does not Contain");
+				M.Push(T1);
+				Assert(14, M.Top().Value == T1.Value, ref Passed, "Push");
+
+				Assert(15, M.Num == 9 * 2 - 3, ref Passed, "Num");
+
+				M += M;
+
+				Assert(16, M.Num == 2 * (9 * 2 - 3), ref Passed, "+=");
+
+				AD = M.Access(T1);
+				Assert(17, AD.Occurrences == 2 && AD.Positions.Length == AD.Occurrences, ref Passed, "+= -> Occurrences && Positions");
+
+				Assert(18, AD.Positions[0] == M.Num - 1, ref Passed, "+= -> Positions");
+				Assert(19, AD.Positions[1] == (M.Num - 1) / 2, ref Passed, "+= -> Positions");
+
+				M.Flush();
+				Assert(20, M.Num == 0, ref Passed, "Flush");
+
+				TotalTests = 20;
+			}
+
 
 			public static void THeapTests(out int Passed, out int TotalTests)
 			{
@@ -453,6 +524,13 @@ namespace MTest
 
 				return 0;
 			}
+
+			public override int GetHashCode()
+			{
+				return Value.GetHashCode();
+			}
+
+			public static implicit operator int(TTestClass TTC) => TTC.Value;
 		}
 	}
 }
