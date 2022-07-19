@@ -11,16 +11,16 @@ namespace MW.Math.Magic
 		/// <docremarks>Modified from: &lt;a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"&gt;The 'Quake III Fast Inv. Sqrt Algorithm'&lt;/a&gt;</docremarks>
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
-		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
+		/// <param name="AdditionalIterations">The number of additional Newton Iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / sqrt(N).</returns>
-		public static unsafe float InverseSqrt(float N, int Iterations = 1)
+		public static unsafe float InverseSqrt(float N, int AdditionalIterations = 1)
 		{
 			int F = *(int*)&N;
 			F = 0x5F3759DF - (F >> 1);
 			float X = *(float*)&F;
 
 			float ISqrt = X * (1.5f - .5f * N * X * X);
-			for (int i = 0; i < Iterations; ++i)
+			for (int i = 0; i < AdditionalIterations; ++i)
 				ISqrt *= (1.5f - .5f * N * ISqrt * ISqrt);
 			return ISqrt;
 		}
@@ -86,9 +86,13 @@ namespace MW.Math.Magic
 		/// <remarks><see langword="ref"/> version of <see cref="Abs(float)"/></remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
 		/// <decorations decor="public static void"></decorations>
-		/// <param name="F">A ference to the float to modify.</param>
+		/// <param name="F">A reference to the float to modify.</param>
 		public static void Abs(ref float F) => F = Abs(F);
 
+		/// <summary><see cref="Abs(float)"/> on all V's components.</summary>
+		/// <docs>Abs() on all V's components.</docs>
+		/// <param name="V">The Vector to Abs.</param>
+		/// <returns>An MVector with all positive components.</returns>
 		public static MVector Abs(MVector V)
 		{
 			return new MVector
@@ -99,9 +103,13 @@ namespace MW.Math.Magic
 			};
 		}
 
+		/// <summary>Modifies V to be positive on all components.</summary>
+		/// <param name="V">The Vector to modify.</param>
 		public static void Abs(ref MVector V)
 		{
-			V = Abs(V);
+			Abs(ref V.X);
+			Abs(ref V.Y);
+			Abs(ref V.Z);
 		}
 	}
 }
