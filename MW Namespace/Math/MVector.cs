@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MW
 {
 	/// <summary>Vector representation of coordinates and points with three-dimensions.</summary>
-	/// <decorations decors="[Serializable] public struct"></decorations>
+	/// <decorations decors="[Serializable] public partial struct"></decorations>
 	[Serializable]
 	public partial struct MVector
 	{
@@ -45,8 +45,6 @@ namespace MW
 			X = U;
 			Y = U;
 			Z = U;
-
-			ForceNull();
 		}
 
 		/// <summary>Construct with X and Y components only.</summary>
@@ -57,8 +55,6 @@ namespace MW
 			this.X = X;
 			this.Y = Y;
 			Z = 0;
-
-			ForceNull();
 		}
 
 		/// <summary>Construct an MVector with X, Y, and Z components.</summary>
@@ -70,8 +66,6 @@ namespace MW
 			this.X = X;
 			this.Y = Y;
 			this.Z = Z;
-
-			ForceNull();
 		}
 
 		/// <summary>Construct an MVector with respect to a <see cref="Vector3"/>.</summary>
@@ -82,13 +76,6 @@ namespace MW
 			X = xyz.x;
 			Y = xyz.y;
 			Z = xyz.z;
-
-			ForceNull();
-		}
-
-		unsafe void ForceNull()
-		{
-			pX = pY = pZ = null;
 		}
 
 		public float this[int i] => i switch
