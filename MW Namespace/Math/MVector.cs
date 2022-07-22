@@ -499,15 +499,15 @@ namespace MW
 		/// <decorations decors="public static bool operator=="></decorations>
 		/// <param name="Left">Left-side comparison.</param>
 		/// <param name="Right">Right-side comparison.</param>
-		/// <docreturns>True if the square distance between Left and Right is less than kEpsilon * kEpsilon.</docreturns>
+		/// <docreturns>True if the square distance between Left and Right is less than kEpsilon ^ 2.</docreturns>
 		/// <returns>True if the square distance between Left and Right is less than <see cref="kEpsilon"/>^2.</returns>
 		public static bool operator ==(MVector Left, MVector Right)
 		{
 			float x = Left.X - Right.X;
 			float y = Left.Y - Right.Y;
 			float z = Left.Z - Right.Z;
-			float sqr = x * x + y * y + z * z;
-			return sqr < kEpsilon * kEpsilon;
+			float Sqr = x * x + y * y + z * z;
+			return Sqr < kEpsilon * kEpsilon;
 		}
 
 		/// <summary>Compares two MVectors for inequality.</summary>

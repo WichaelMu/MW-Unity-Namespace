@@ -224,7 +224,7 @@ namespace MW
 		/// <summary>An <see cref="MW.MVector"/> where X = Pitch, Y = Yaw, Z = Roll.</summary>
 		/// <docs>An MVector where X = Pitch, Y = Yaw, Z = Roll.</docs>
 		/// <decorations decor="public MVector"></decorations>
-		public MVector MVector()
+		public MVector MV()
 		{
 			return new MVector(Pitch, Yaw, Roll);
 		}
@@ -262,7 +262,7 @@ namespace MW
 		/// <returns>(MRotator L, MRotator R) => L.Add(R)</returns>
 		public static MRotator operator +(MRotator L, MRotator R) => L.Add(R);
 
-		/// <summary>Subtracts L from R.</summary>
+		/// <summary>Subtracts R from L.</summary>
 		/// <decorations decor="public static MRotator operator-"></decorations>
 		/// <param name="L">Left-side MRotator.</param>
 		/// <param name="R">Right-side MRotator.</param>
@@ -290,11 +290,41 @@ namespace MW
 			return R;
 		}
 
+		/// <summary>Compares two MRotators for equality.</summary>
+		/// <decorations decor="public static bool operator=="></decorations>
+		/// <param name="Left">Left-side comparison.</param>
+		/// <param name="Right">Right-side comparison.</param>
+		/// <docreturns>True if the square difference between Left and Right is less than kEpsilon ^ 2.</docreturns>
+		/// <returns>True if the square difference between Left and Right is less than <see cref="MVector.kEpsilon"/>^2.</returns>
+		public static bool operator ==(MRotator Left, MRotator Right)
+		{
+			float P = Left.Pitch - Right.Pitch;
+			float Y = Left.Yaw - Right.Yaw;
+			float R = Left.Roll - Right.Roll;
+			float Sqr = P * P + Y * Y + R * R;
+			return Sqr < MVector.kEpsilon * MVector.kEpsilon;
+		}
+
+		/// <summary>Compares two MRotators for inequality.</summary>
+		/// <decorations decor="public static bool operator!="></decorations>
+		/// <param name="Left">Left-side comparison.</param>
+		/// <param name="Right">Right-side comparison.</param>
+		/// <returns>The opposite of operator ==.</returns>
+		public static bool operator !=(MRotator Left, MRotator Right) => !(Left == Right);
+
+		public override bool Equals(object O) => O is MVector V && Equals(V);
+		public bool Equals(MRotator R) => this == R || Mathf.Abs(R.Pitch - Pitch + R.Yaw - Yaw + R.Roll - Roll) < 4f * MVector.kEpsilon;
+
 		/// <summary>Converts Pitch, Yaw, Roll into its corresponding <see cref="UnityEngine.Quaternion"/>.</summary>
 		/// <docs>Converts Pitch, Yaw, Roll into its corresponding Quaternion.</docs>
 		/// <decorations decor="public static implicit operator Quaternion"></decorations>
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
+
+		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
+		/// <decorations decors="public override int"></decorations>
+		/// <returns>GetHashCode() => Pitch.GetHashCode() ^ (Yaw.GetHashCode() &lt;&lt; 2) ^ (Roll.GetHashCode() &gt;&gt; 2)</returns>
+		public override int GetHashCode() => Pitch.GetHashCode() ^ (Yaw.GetHashCode() << 2) ^ (Roll.GetHashCode() >> 2);
 
 		/// <summary>A human-readable MRotator.</summary>
 		/// <decorations decor="public override string"></decorations>
