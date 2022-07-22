@@ -7,9 +7,9 @@ namespace MW
 {
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
-	/// <decorations decor="[Serializable] public class {T} : IEnumerable{T}"></decorations>
+	/// <decorations decor="[Serializable] public class {T} : MArray, IEnumerable{T}"></decorations>
 	[Serializable]
-	public class MArray<T> : IEnumerable<T>
+	public class MArray<T> : MArray, IEnumerable<T>
 	{
 		[UnityEngine.SerializeField] List<T> Items;
 
@@ -42,12 +42,9 @@ namespace MW
 			if (!HashMap.ContainsKey(Item))
 			{
 				HashMap.Add(Item, new());
-				HashMap[Item].Push(Num);
 			}
-			else
-			{
-				HashMap[Item].Push(HashMap[Item].Peek() + 1);
-			}
+
+			HashMap[Item].Push(Num);
 
 			Items.Add(Item);
 		}
@@ -64,17 +61,37 @@ namespace MW
 		/// <summary>Removes Item.</summary>
 		/// <decorations decor="public int"></decorations>
 		/// <param name="Item">The element to remove.</param>
-		/// <returns>The new size of this MArray.</returns>
+		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
+		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist.</returns>
 		public int Pull(T Item)
 		{
-			Remap();
+			if (!Contains(Item))
+				return kInvalid;
 
 			Items.RemoveAt(HashMap[Item].Pop());
 
 			if (HashMap[Item].Count == 0)
+			{
 				HashMap.Remove(Item);
+				Remap();
+			}
 
-			Remap();
+			return Num;
+		}
+
+		/// <summary>Removes all occurrences of Item.</summary>
+		/// <param name="Item">The item to remove.</param>
+		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
+		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist.</returns>
+		public int PullAll(T Item)
+		{
+			if (!Contains(Item))
+				return kInvalid;
+
+			AccessedData Data = Access(Item);
+			int Occurences = Data.Occurrences;
+			for (int i = 0; i < Occurences; ++i)
+				Pull(Item);
 
 			return Num;
 		}
@@ -93,13 +110,14 @@ namespace MW
 		/// <summary>Accesses data specific to this Item in the MArray.</summary>
 		/// <decorations decor="public AccessedData"></decorations>
 		/// <param name="Item">The Item to access its data.</param>
-		/// <returns>Accessed Data Occurrences and Positions, or AccessedData.None if this MArray does not have Item.</returns>
-		public MArray.AccessedData Access(T Item)
+		/// <docreturns>Accessed Data Occurrences and Positions, or AccessedData.None if this MArray does not have Item.</docreturns>
+		/// <returns>Accessed Data Occurrences and Positions, or <see cref="MArray.AccessedData.None"/> if this MArray does not have Item.</returns>
+		public AccessedData Access(T Item)
 		{
 			if (!Contains(Item))
-				return MArray.AccessedData.None;
+				return AccessedData.None;
 
-			MArray.AccessedData Data = new()
+			AccessedData Data = new()
 			{
 				Occurrences = HashMap[Item].Count,
 				Positions = new int[HashMap[Item].Count]
@@ -124,11 +142,10 @@ namespace MW
 		/// <returns>The item that was at the front of the queue.</returns>
 		public T FirstPop()
 		{
-			T f = First();
-			Items.RemoveAt(0);
-			HashMap.Remove(f);
+			T T = First();
+			Pull(T);
 
-			return f;
+			return T;
 		}
 
 		/// <decorations decor="public T"></decorations>
@@ -316,7 +333,7 @@ namespace MW
 			StringBuilder SB = new();
 
 			foreach (T T in Items)
-				SB.Append(T.ToString());
+				SB.Append(T.ToString() + " ");
 
 			return SB.ToString();
 		}
@@ -466,15 +483,18 @@ namespace MW
 		}
 	}
 
+	/// <summary>The base class for an MArray.</summary>
+	/// <decorations decor="public class"></decorations>
 	public class MArray
 	{
-		
+		/// <summary>Definition of an invalid position or illegal number associated with an MArray.</summary>
+		public const int kInvalid = -1;
 
 		/// <summary>Data of an Item in an MArray.</summary>
 		/// <decorations decor="public struct"></decorations>
 		public struct AccessedData
 		{
-			static readonly AccessedData none = new AccessedData(-1, Array.Empty<int>());
+			static readonly AccessedData none = new AccessedData(kInvalid, Array.Empty<int>());
 			/// <summary>No data available.</summary>
 			/// <decorations decor="public static readonly AccessedData"></decorations>
 			public static readonly AccessedData None = none;

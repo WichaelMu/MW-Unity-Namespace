@@ -456,7 +456,26 @@ namespace MTest
 				M.Flush();
 				Assert(20, M.Num == 0, ref Passed, "Flush");
 
-				TotalTests = 20;
+				MArray<int> M2 = new();
+				M2.Push(8, 8, 8, 8, 8, 8);
+				Assert(21, M2.Access(8).Occurrences == M2.Num, ref Passed, "Duplicate Occurrences");
+				Assert(22, M2.Pull(8) == 5, ref Passed, "Pull -> Num");
+				Assert(23, M2.Contains(8), ref Passed, "Duplicate -> Contains");
+
+				int[] Positions = M2.Access(8).Positions;
+				bool bIsContinuous = true;
+				for (int i = 0; i < Positions.Length - 1 && bIsContinuous; ++i)
+					bIsContinuous = Positions[i] == Positions[i + 1] + 1;
+				Assert(24, bIsContinuous, ref Passed, "Access Positions");
+
+				M2.Pull(9); // No effect.
+				Assert(25, M2.Num == 5, ref Passed, "Pull Non-Existent");
+
+				M2.PullAll(8);
+
+				Assert(26, M2.Num == 0, ref Passed, "Force Remove");
+
+				TotalTests = 26;
 			}
 
 
