@@ -505,7 +505,7 @@ namespace MTest
 
 		internal class FastTests
 		{
-			public static void ASin(out int Passed, out int TotalTests)
+			public static void ASinTests(out int Passed, out int TotalTests)
 			{
 				Passed = 0;
 				for (float F = -50f; F <= 50f; F += .23f)

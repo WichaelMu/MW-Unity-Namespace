@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using MW.CameraUtils;
-using MW.Math.Magic;
+using static MW.Utils;
 
 namespace MW.Behaviour
 {
@@ -215,7 +215,7 @@ namespace MW.Behaviour
 		/// <decorations decor="protected bool"></decorations>
 		protected bool HasRotatedSinceLastFrame()
 		{
-			Vector3 DeltaRot = Fast.Abs(ThisFrameEulers - LastFrameEulers);
+			Vector3 DeltaRot = Abs(ThisFrameEulers - LastFrameEulers);
 
 			const float kThreshold = .1f;
 			bool bHasRotatedSinceLastFrame = DeltaRot.x >= kThreshold || DeltaRot.y >= kThreshold || DeltaRot.z >= kThreshold;
@@ -228,7 +228,7 @@ namespace MW.Behaviour
 		/// <decorations decor="protected bool"></decorations>
 		protected bool HasMovedSinceLastFrame()
 		{
-			Vector3 DeltaPosition = Fast.Abs(ThisFramePosition - LastFramePosition);
+			Vector3 DeltaPosition = Abs(ThisFramePosition - LastFramePosition);
 
 			bool bHasMovedSinceLastFrame = DeltaPosition.x >= Vector3.kEpsilon || DeltaPosition.y >= Vector3.kEpsilon || DeltaPosition.z >= Vector3.kEpsilon;
 			return bHasMovedSinceLastFrame;

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using MW.Math.Magic;
 
 namespace MW
 {
@@ -403,6 +404,45 @@ namespace MW
 		public static float Min(float F1, float F2)
 		{
 			return F1 < F2 ? F1 : F2;
+		}
+
+
+		/// <summary>Modifies I to be its Absolute Value.</summary>
+		/// <remarks><see langword="ref"/> version of <see cref="Fast.Abs(int)"/>.</remarks>
+		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
+		/// <decorations decor="public static void"></decorations>
+		/// <param name="I">A reference to the int to modify.</param>
+		public static void Abs(ref int I) => I = Fast.Abs(I);
+
+
+		/// <summary>Modifies F to be its Absolute Value.</summary>
+		/// <remarks><see langword="ref"/> version of <see cref="Fast.Abs(float)"/></remarks>
+		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
+		/// <decorations decor="public static void"></decorations>
+		/// <param name="F">A reference to the float to modify.</param>
+		public static void Abs(ref float F) => F = Fast.Abs(F);
+
+		/// <summary><see cref="Fast.Abs(float)"/> on all V's components.</summary>
+		/// <docs>Abs() on all V's components.</docs>
+		/// <param name="V">The Vector to Abs.</param>
+		/// <returns>An MVector with all positive components.</returns>
+		public static MVector Abs(MVector V)
+		{
+			return new MVector
+			{
+				X = Fast.Abs(V.X),
+				Y = Fast.Abs(V.Y),
+				Z = Fast.Abs(V.Z)
+			};
+		}
+
+		/// <summary>Modifies V to be positive on all components.</summary>
+		/// <param name="V">The Vector to modify.</param>
+		public static void Abs(ref MVector V)
+		{
+			Abs(ref V.X);
+			Abs(ref V.Y);
+			Abs(ref V.Z);
 		}
 
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>

@@ -36,7 +36,7 @@ namespace MTest
 			Execute.MWTests.THeapTests(out int THPassed, out int THTotalTests);
 			StopAndRestart(sw, out long THTime);
 
-			Execute.FastTests.ASin(out int ASPassed, out int ASTotalTests);
+			Execute.FastTests.ASinTests(out int ASPassed, out int ASTotalTests);
 			StopAndRestart(sw, out long ASTime);
 
 #if WITH_PASS_MESSAGES
@@ -47,7 +47,7 @@ namespace MTest
 			O.Line(nameof(Execute.MWTests.MArrayTests) + $" \t ({MAPassed}/{MATotalTests}) Passed. \t Completed in: " + MATime + "ms.");
 			O.Line(nameof(Execute.MWTests.MArrayTests2) + $" \t ({M2Passed}/{M2TotalTests}) Passed. \t Completed in: " + M2Time + "ms.");
 			O.Line(nameof(Execute.MWTests.THeapTests) + $" \t\t ({THPassed}/{THTotalTests}) Passed. \t\t Completed in: " + THTime + "ms.");
-			O.Line(nameof(Execute.FastTests.ASin) + $" \t\t\t ({ASPassed}/{ASTotalTests}) Passed. \t Completed in: " + ASTime + "ms.");
+			O.Line(nameof(Execute.FastTests.ASinTests) + $" \t\t ({ASPassed}/{ASTotalTests}) Passed. \t Completed in: " + ASTime + "ms.");
 #endif
 		}
 
