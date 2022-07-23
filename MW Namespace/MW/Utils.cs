@@ -223,7 +223,7 @@ namespace MW
 		{
 			Vector3[] vDirections = new Vector3[Resolution];
 
-			float fPhi = 1 + Mathf.Sqrt(GoldenRatioModifier) * .5f;
+			float fPhi = 1 + Fast.Sqrt(GoldenRatioModifier) * .5f;
 			float fInc = Mathf.PI * 2 * fPhi;
 
 			for (int i = 0; i < Resolution; i++)

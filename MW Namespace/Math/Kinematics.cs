@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using MW.Math.Magic;
 
 namespace MW.Kinetic
 {
@@ -97,7 +98,7 @@ namespace MW.Kinetic
 				return false;
 			}
 
-			float Sqrt = Mathf.Sqrt(Radicand);
+			float Sqrt = Fast.Sqrt(Radicand);
 
 			float GravityByDistance = 1 / (Gravity * DisplacementToTargetIgnoringAltitude);
 
@@ -121,8 +122,8 @@ namespace MW.Kinetic
 					: Mathf.Sign(Solution2)
 			;
 
-			float PreferenceMagnitude = Mathf.Sqrt(DisplacementArcPreference);
-			float LaunchHeight = Mathf.Sqrt(LaunchSpeedSquared - DisplacementArcPreference);
+			float PreferenceMagnitude = Fast.Sqrt(DisplacementArcPreference);
+			float LaunchHeight = Fast.Sqrt(LaunchSpeedSquared - DisplacementArcPreference);
 
 			LaunchVelocity = (PreferenceMagnitude * DirectionToTargetIgnoringAltitude) + (LaunchHeight * Sign * MVector.Up);
 			return true;
@@ -179,7 +180,7 @@ namespace MW.Kinetic
 			float Gravity = GravityMagnitude;
 
 			MVector VY = ComputeJumpVelocity(MVector.Up, TargetHeight);
-			MVector VXZ = DeltaXZ / (Mathf.Sqrt(-2f * TargetHeight / Gravity) + Mathf.Sqrt(2 * (DeltaY - TargetHeight) / Gravity));
+			MVector VXZ = DeltaXZ / (Fast.Sqrt(-2f * TargetHeight / Gravity) + Fast.Sqrt(2 * (DeltaY - TargetHeight) / Gravity));
 
 			MVector LaunchVelocity = -Mathf.Sign(Gravity) * VY + VXZ;
 
@@ -236,7 +237,7 @@ namespace MW.Kinetic
 		{
 			float U = -2f * GravityMagnitude * TargetHeight;
 
-			return Mathf.Sqrt(U) * Up;
+			return Fast.Sqrt(U) * Up;
 		}
 	}
 }
