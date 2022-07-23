@@ -135,6 +135,7 @@ namespace MW.Kinetic
 		/// <param name="Origin">Where to launch from.</param>
 		/// <param name="Target">Where to launch to.</param>
 		/// <param name="TargetHeight">The apex.</param>
+		/// <param name="Time">Point on launch trajectory at a time. Flight time.</param>
 		/// <param name="b3DGravity">True if using 3D Physics.</param>
 		/// <param name="bLaunchRegardless">
 		/// True to ignore the height limitation and compute a velocity anyway.
@@ -142,9 +143,9 @@ namespace MW.Kinetic
 		/// </param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
-		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, bool b3DGravity = true, bool bLaunchRegardless = false)
+		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, out float Time, bool b3DGravity = true, bool bLaunchRegardless = false)
 		{
-			return LaunchTowards(Origin, Target, TargetHeight, b3DGravity ? Physics.gravity.y : Physics2D.gravity.y, bLaunchRegardless);
+			return LaunchTowards(Origin, Target, TargetHeight, GetGravity(b3DGravity), out Time, bLaunchRegardless, b3DGravity);
 		}
 
 		/// <summary>Computes a velocity to launch a Rigidbody from Origin to Target achieving a TargetHeight.</summary>
@@ -154,13 +155,15 @@ namespace MW.Kinetic
 		/// <param name="Target">Where to launch to.</param>
 		/// <param name="TargetHeight">The apex.</param>
 		/// <param name="GravityMagnitude">True if using 3D Physics.</param>
+		/// <param name="Time">Point on launch trajectory at a time. Flight time.</param>
 		/// <param name="bLaunchRegardless">
 		/// True to ignore the height limitation and compute a velocity anyway.
 		/// May be inaccurate.
 		/// </param>
+		/// <param name="b3DGravity">True if using 3D Physics.</param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
-		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, bool bLaunchRegardless)
+		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, out float Time, bool bLaunchRegardless, bool b3DGravity = true)
 		{
 			float DeltaY = Target.Y - Origin.Y;
 
@@ -172,20 +175,24 @@ namespace MW.Kinetic
 				}
 				else
 				{
-					return new MVector(float.NaN);
+					Time = -1f;
+					return MVector.NaN;
 				}
 			}
 
 			MVector DeltaXZ = new MVector(Target.X - Origin.X, 0f, Target.Z - Origin.Z);
-			float Gravity = GravityMagnitude;
+			float InverseGravity = 1f / GravityMagnitude;
 
-			MVector VY = ComputeJumpVelocity(MVector.Up, TargetHeight);
-			MVector VXZ = DeltaXZ / (Fast.Sqrt(-2f * TargetHeight / Gravity) + Fast.Sqrt(2 * (DeltaY - TargetHeight) / Gravity));
+			MVector VY = ComputeJumpVelocity(MVector.Up, TargetHeight, b3DGravity);
+			Time = (Fast.Sqrt(-2f * TargetHeight * InverseGravity) + Fast.Sqrt(2 * (DeltaY - TargetHeight) * InverseGravity));
+			MVector VXZ = DeltaXZ / Time;
 
-			MVector LaunchVelocity = -Mathf.Sign(Gravity) * VY + VXZ;
+			MVector LaunchVelocity = -Mathf.Sign(GravityMagnitude) * VY + VXZ;
 
 			return LaunchVelocity;
 		}
+
+		static float GetGravity(bool bIs3D) => bIs3D ? Physics.gravity.y : Physics2D.gravity.y;
 
 		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
 		/// <decorations decor="public static MVector"></decorations>
@@ -224,7 +231,7 @@ namespace MW.Kinetic
 		/// <returns>The velocity required to jump Up at TargetHeight high.</returns>
 		public static MVector ComputeJumpVelocity(MVector Up, float TargetHeight, bool b3DGravity = true)
 		{
-			return ComputeJumpVelocity(Up, TargetHeight, b3DGravity ? Physics.gravity.y : Physics2D.gravity.y);
+			return ComputeJumpVelocity(Up, TargetHeight, GetGravity(b3DGravity));
 		}
 
 		/// <summary>Compute the required velocity to jump at TargetHeight.</summary>
