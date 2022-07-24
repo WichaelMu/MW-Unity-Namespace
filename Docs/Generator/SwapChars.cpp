@@ -83,6 +83,12 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 					param = "operator=";
 				else if (param == "op_Inequality")
 					param = "operator!=";
+				else if (param == "op_OnesComplement")
+					param = "operator~";
+				else if (param == "op_True")
+					param = "operator true";
+				else if (param == "op_False")
+					param = "operator false";
 			}
 			else
 			{
