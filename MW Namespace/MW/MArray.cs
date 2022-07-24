@@ -198,7 +198,7 @@ namespace MW
 
 		/// <decorations decor="public bool"></decorations>
 		/// <docreturns>If this MArray is considered empty; Num == 0.</docreturns>
-		/// <returns><see langword="True"/> <see langword="if"/> (<see cref="Num"/> == 0).</returns>
+		/// <returns><see langword="true"/> <see langword="if"/> (<see cref="Num"/> == 0).</returns>
 		public bool IsEmpty() => Num == 0;
 
 		/// <decorations decor="public T"></decorations>
@@ -352,11 +352,6 @@ namespace MW
 		/// <returns>The Item at the specified index.</returns>
 		public T this[int i] => Items[i];
 
-		/// <decorations decor="public static bool"></decorations>
-		/// <param name="Check">The MArray to check for initialisation.</param>
-		/// <returns>True if Check is null.</returns>
-		public static bool CheckNull(MArray<T> Check) => Check == null;
-
 		public IEnumerator<T> GetEnumerator()
 		{
 			return ((IEnumerable<T>)Items).GetEnumerator();
@@ -489,6 +484,11 @@ namespace MW
 	{
 		/// <summary>Definition of an invalid position or illegal number associated with an MArray.</summary>
 		public const int kInvalid = -1;
+
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="Check">The MArray to check for initialisation.</param>
+		/// <returns>True if Check is null.</returns>
+		public static bool CheckNull(MArray Check) => Check == null;
 
 		/// <summary>Data of an Item in an MArray.</summary>
 		/// <decorations decor="public struct"></decorations>

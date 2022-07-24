@@ -8,25 +8,15 @@ using UnityEngine;
 namespace MW
 {
 	/// <summary>Vector representation of coordinates and points with three-dimensions.</summary>
-	/// <decorations decors="[Serializable] public partial struct"></decorations>
+	/// <decorations decors="[Serializable] public struct"></decorations>
 	[Serializable]
-	public partial struct MVector
+	public struct MVector
 	{
 		/// <summary>Vector floating-point precision.</summary>
 		/// <decorations decors="public const float"></decorations>
 		public const float kEpsilon = 1E-05f;
 
 		public float X, Y, Z;
-
-		/// <summary>A pointer to the X-Axis.</summary>
-		/// <decorations decor="public unsafe float*"></decorations>
-		public unsafe float* pX;
-		/// <summary>A pointer to the Y-Axis.</summary>
-		/// <decorations decor="public unsafe float*"></decorations>
-		public unsafe float* pY;
-		/// <summary>A pointer to the Z-Axis.</summary>
-		/// <decorations decor="public unsafe float*"></decorations>
-		public unsafe float* pZ;
 
 		/// <summary>A new MVector ignoring the X component.</summary>
 		/// <decorations decor="public readonly MVector"></decorations>

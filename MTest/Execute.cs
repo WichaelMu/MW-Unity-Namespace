@@ -258,12 +258,13 @@ namespace MTest
 				AssertEquals(31, Mathematics.Distance(UL, UR), Vector3.Distance(UL, UR), ref Passed, "V3 Extension Dist");
 
 				Vector3 V = new Vector3(2, 4, 6);
-				MVector Clone = MVector.Clone(ref V);
-				AssertEquals(32, Clone.Dereference(), V, ref Passed, "Clone Equality");
+				UVector Clone = UVector.Clone(ref V);
+				AssertEquals(32, Clone.Construct(), V, ref Passed, "Clone Equality");
 				V.x = 8;
 				V.y = 10;
 				V.z = 12;
-				AssertEquals(33, Clone.Dereference(), V, ref Passed, "Clone Equality");
+				AssertEquals(33, Clone.Construct(), V, ref Passed, "Clone Equality");
+				Clone.Dispose();
 
 				// Total number of tests (31) + the difference between -10 and 10 divided by .7 (28) * 2 for both Multiplication and Division.
 				TotalTests = 33 + 28 * 2;
