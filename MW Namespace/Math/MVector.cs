@@ -353,6 +353,13 @@ namespace MW
 		/// <returns>The square distance between this MVector and V.</returns>
 		public float SqrDistance(MVector V) => SqrDistance(this, V);
 
+		/// <summary>Get the <see cref="SqrMagnitude"/> of <paramref name="M"/>.</summary>
+		/// <docs>Get the SqrMagnitude of M.</docs>
+		/// <param name="M">The MVector.</param>
+		/// <docreturns>The SquMagnitude of M.</docreturns>
+		/// <returns><see cref="SqrMagnitude"/>.</returns>
+		public static float operator ~(MVector M) => M.SqrMagnitude;
+
 		/// <summary>Adds two MVectors together.</summary>
 		/// <decorations decors="public static MVector operator+"></decorations>
 		/// <param name="Left">Left-side MVector.</param>
@@ -509,6 +516,18 @@ namespace MW
 
 		public override bool Equals(object O) => O is MVector V && Equals(V);
 		public bool Equals(MVector V) => this == V || Mathf.Abs(V.X - X + V.Y - Y + V.Z - Z) < 4f * kEpsilon;
+
+		/// <summary><see langword="true"/>if the MVector is non-zero.</summary>
+		/// <param name="M">The Vector to check.</param>
+		/// <docreturns>M != MVector(NaN) &amp;&amp; M != MVector.Zero &amp;&amp; M.SqrMagnitude &gt; MVector.kEpsilon.</docreturns>
+		/// <returns><paramref name="M"/> != <see cref="NaN"/> &amp;&amp; M != <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &gt; <see cref="kEpsilon"/>.</returns>
+		public static bool operator true(MVector M) => M != NaN && M != Zero && M.SqrMagnitude > kEpsilon;
+
+		/// <summary><see langword="true"/>if the MVector is zero or considered zero.</summary>
+		/// <param name="M">The Vector to check.</param>
+		/// <docreturns>M == MVector(NaN) &amp;&amp; M == MVector.Zero &amp;&amp; M.SqrMagnitude &lt; MVector.kEpsilon.</docreturns>
+		/// <returns><paramref name="M"/> == <see cref="NaN"/> &amp;&amp; M == <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &lt; <see cref="kEpsilon"/>.</returns>
+		public static bool operator false(MVector M) => M == NaN || M == Zero || M.SqrMagnitude < kEpsilon;
 
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		/// <decorations decors="public static implicit operator Vector3"></decorations>
