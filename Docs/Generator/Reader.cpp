@@ -43,6 +43,8 @@ std::vector<MW> Reader::OpenFile()
 	xml_document<>* doc = new xml_document<>();
 	doc->parse<0>(file.data());
 
+	SwapChars::BuildTranslator();
+
 	xml_node<char>* members = doc->first_node()->first_node()->next_sibling();
 
 	for (xml_node<>* member = members->first_node(); member; member = member->next_sibling())

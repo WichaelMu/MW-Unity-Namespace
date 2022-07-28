@@ -7,88 +7,18 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 	param.erase(remove(param.begin(), param.end(), '1'), param.end());
 
 	// Hard-coded replacements.
-	if (param == "Single")
+	if (translator.count(param))
 	{
-		param = "float";
-	}
-	else if (param == "Boolean")
-	{
-		param = "bool";
-	}
-	else if (param == "Int32")
-	{
-		param = "int";
-	}
-	else if (param == "Int64")
-	{
-		param = "long";
-	}
-	else if (param == "UInt32")
-	{
-		param = "uint";
-	}
-	// Reference/Out Types.
-	else if (param == "Single@")
-	{
-		param = "float&";
-	}
-	else if (param == "Boolean@")
-	{
-		param = "bool&";
-	}
-	else if (param == "Int32@")
-	{
-		param = "int&";
-	}
-	else if (param == "Int64@")
-	{
-		param = "long&";
-	}
-	else if (param == "UInt32@")
-	{
-		param = "uint&";
+		param = translator[param];
 	}
 	else
 	{
 		if (!is_file_name)
 		{
 			// This is an overloaded operator.
-			if (param.length() > 3 && param[2] == '_')
+			if (param.length() > 3 && param[2] == '_' && translator.count(param))
 			{
-				if (param == "op_Addition")
-					param = "operator+";
-				else if (param == "op_Subtraction")
-					param = "operator-";
-				else if (param == "op_UnaryNegation")
-					param = "operator-";
-				else if (param == "op_Multiply")
-					param = "operator*";
-				else if (param == "op_Division")
-					param = "operator/";
-				else if (param == "op_ExclusiveOr")
-					param = "operator^";
-				else if (param == "op_BitwiseOr")
-					param = "operator|";
-				else if (param == "op_BitwiseAnd")
-					param = "operator&";
-				else if (param == "op_GreaterThan")
-					param = "operator&gt;";
-				else if (param == "op_LessThan")
-					param = "operator&lt;";
-				else if (param == "op_RightShift")
-					param = "operator&gt;&gt;";
-				else if (param == "op_LeftShift")
-					param = "operator&lt;&lt";
-				else if (param == "op_Equality")
-					param = "operator=";
-				else if (param == "op_Inequality")
-					param = "operator!=";
-				else if (param == "op_OnesComplement")
-					param = "operator~";
-				else if (param == "op_True")
-					param = "operator true";
-				else if (param == "op_False")
-					param = "operator false";
+				param = translator[param];
 			}
 			else
 			{
@@ -178,4 +108,40 @@ void SwapChars::ReplaceAngleBrackets(std::string& param, const bool& continuous)
 		if (pos != std::string::npos)
 			param.replace(pos, 1, "");
 	}
+}
+
+
+std::map<std::string, std::string> SwapChars::translator;
+
+void SwapChars::BuildTranslator()
+{
+	translator["Single"] = "float";
+	translator["Boolean"] = "bool";
+	translator["Int32"] = "int";
+	translator["Int64"] = "long";
+	translator["UInt64"] = "uint";
+
+	// Reference/Out Types.
+	translator["Single@"] = "float&";
+	translator["Boolean@"] = "bool&";
+	translator["Int32@"] = "int&";
+	translator["Int64@"] = "long&";
+	translator["UInt32@"] = "uint&";
+
+	translator["op_Addition"] = "operator+";
+	translator["op_Subtraction"] = "operator-";
+	translator["op_UnaryNegation"] = "operator-";
+	translator["op_Multiply"] = "operator*";
+	translator["op_Division"] = "operator/";
+	translator["op_ExclusiveOr"] = "operator^";
+	translator["op_BitwiseOr"] = "operator|";
+	translator["op_BitwiseAnd"] = "operator&";
+	translator["op_GreaterThan"] = "operator&gt;";
+	translator["op_LessThan"] = "operator&lt;";
+	translator["op_RightShift"] = "operator&gt;&gt;";
+	translator["op_LeftShift"] = "operator&lt;&lt;";
+	translator["op_Equality"] = "operator=";
+	translator["op_Inequality"] = "operator!=";
+	translator["op_OnesComplement"] = "operator~";
+	translator["op_True"] = "operator true";
 }
