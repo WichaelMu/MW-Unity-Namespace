@@ -15,13 +15,13 @@ namespace MW
 	public struct MRotator
 	{
 		/// <summary>The rotation in degrees around the X axis. 0 = Forward, +Up, -Down.</summary>
-		/// <decorations decor="public static float"></decorations>
+		/// <decorations decor="public float"></decorations>
 		public float Pitch;
 		/// <summary>The rotation in degrees around the Y axis. 0 = Straight, +Right, -Left.</summary>
-		/// <decorations decor="public static float"></decorations>
+		/// <decorations decor="public float"></decorations>
 		public float Yaw;
 		/// <summary>The rotation in degrees around the Z axis. 0 = Up is 12 o'clock, +Clockwise, -Counter-clockwise.</summary>
-		/// <decorations decor="public static float"></decorations>
+		/// <decorations decor="public float"></decorations>
 		public float Roll;
 
 		static readonly MRotator zero = new MRotator(0, 0, 0);
