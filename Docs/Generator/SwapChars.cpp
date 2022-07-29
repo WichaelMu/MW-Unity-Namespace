@@ -142,6 +142,8 @@ void SwapChars::BuildTranslator()
 	translator["op_LeftShift"] = "operator&lt;&lt;";
 	translator["op_Equality"] = "operator=";
 	translator["op_Inequality"] = "operator!=";
+	translator["op_LogicalNot"] = "operator!";
 	translator["op_OnesComplement"] = "operator~";
 	translator["op_True"] = "operator true";
+	translator["op_False"] = "operator false";
 }
