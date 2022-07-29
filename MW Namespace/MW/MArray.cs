@@ -160,11 +160,10 @@ namespace MW
 		/// <returns>The item at the top of the stack.</returns>
 		public T TopPop()
 		{
-			T t = Top();
-			Items.RemoveAt(Num - 1);
-			HashMap.Remove(t);
+			T T = Top();
+			Pull(T);
 
-			return t;
+			return T;
 		}
 
 		/// <summary>Whether or not Index is within range.</summary>
