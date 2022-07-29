@@ -216,6 +216,12 @@ MW Reader::ProcessNode(const std::string& chars)
 
 							// Add the type of the parameter after replacing illegals.
 							mw.function_parameters_type.push_back(param);
+
+							// Some parameters don't have the 'System.' prefix. (System.Int32, System.String, System.Single).
+							// Some parameters are generic '``0' and are represented only with ('``0') (no System.).
+							// This system relies on checking for '.' periods for function parameters.
+							// Without this assignment, it will fail.
+							param = "";
 						}
 					}
 
