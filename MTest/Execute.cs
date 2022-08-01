@@ -476,7 +476,94 @@ namespace MTest
 
 				Assert(26, M2.Num == 0, ref Passed, "Force Remove");
 
-				TotalTests = 26;
+				MArray<float> M3 = new();
+				MArray.AccessedData Access;
+
+				M3.Push(2.4f, 2.4f, 4.667f, 1.6f, 1.6f, -.5f);
+				Access = M3.Access(2.4f);
+				Assert(27, Access.Occurrences == 2, ref Passed, "Access Occurrences");
+				Assert(28, Access.Positions[0] == 1 && Access.Positions[1] == 0, ref Passed, "Access Positions");
+
+				Assert(29, M3.FirstPop() == 2.4f, ref Passed, "FirstPop");
+				Access = M3.Access(2.4f);
+				Assert(30, M3.Contains(2.4f), ref Passed, "FirstPop -> Contains");
+				Assert(31, M3.Num == 5, ref Passed, "FirstPop -> Num");
+				Assert(32, Access.Occurrences == 1, ref Passed, "FirstPop -> Access Occurrences");
+				Assert(33, Access.Positions[0] == 0, ref Passed, "FirstPop -> Access Positions");
+
+				Assert(34, M3.FirstPop() == 2.4f, ref Passed, "FirstPop");
+				Access = M3.Access(2.4f);
+				Assert(35, !M3.Contains(2.4f), ref Passed, "FirstPop -> !Contains");
+				Assert(36, M3.Num == 4, ref Passed, "FirstPop -> Num");
+				Assert(37, Access.Occurrences == -1, ref Passed, "FirstPop -> Access Occurrences");
+				Assert(38, Access.Positions.Length == 0, ref Passed, "FirstPop -> Access Positions");
+				Assert(39, M3.First() == 4.667f, ref Passed, "FirstPop -> First");
+
+				Access = M3.Access(1.6f);
+				Assert(40, Access.Occurrences == 2, ref Passed, "Access Occurrences");
+				Assert(41, Access.Positions[0] == 2 && Access.Positions[1] == 1, ref Passed, "Access Positions");
+				Assert(42, M3.TopPop() == -.5f, ref Passed, "TopPop");
+				Assert(43, M3.TopPop() == 1.6f, ref Passed, "TopPop");
+				Assert(44, M3.Contains(1.6f), ref Passed, "TopPop -> Contains");
+				Access = M3.Access(1.6f);
+				Assert(45, Access.Occurrences == 1, ref Passed, "TopPop -> Access Occurrences");
+				Assert(46, Access.Positions[0] == 1, ref Passed, "TopPop -> Access Positions");
+				Assert(47, M3.Num == 2, ref Passed, "TopPop -> Num");
+				Assert(48, M3.Contains(1.6f), ref Passed, "TopPop -> Contains");
+				Assert(49, M3.TopPop() == 1.6f, ref Passed, "TopPop");
+				Access = M3.Access(1.6f);
+				Assert(50, Access.Occurrences == -1 && Access.Positions.Length == 0, ref Passed, "TopPop -> Access Occurrences & Positions");
+				Assert(51, !M3.Contains(1.6f), ref Passed, "TopPop -> !Contains");
+				Assert(52, M3.Num == 1, ref Passed, "TopPop -> Num");
+				Assert(53, M3[0] == 4.667f, ref Passed, "TopPop -> []");
+				Assert(54, M3.First() == M3.Top(), ref Passed, "First == Top");
+
+				M3.Flush();
+
+
+				M3.Push(1.4f, 1.4f, 1.4f, 6f, 1.4f);
+
+				Access = M3.Access(1.4f);
+				int OccurrencesOf1p4 = Access.Occurrences;
+
+				for (int i = 0; i < OccurrencesOf1p4; ++i)
+				{
+					Access = M3.Access(6f);
+					int PositionOf6 = Access.Positions[0];
+
+					Assert(55, PositionOf6 == 3 - i, ref Passed, "FirstPop Loop");
+					M3.FirstPop();
+				}
+
+				Assert(56, M3.Top() == M3.First(), ref Passed, "Top == First");
+
+				M3.Flush();
+
+				M3.Push(1.4f, 1.4f, 1.4f, 6f, 1.4f, 1.5f, 1.5f, 1.5f);
+				Access = M3.Access(1.5f);
+				int OccurrencesOf1p5 = Access.Occurrences;
+
+				for (int i = 0; i < OccurrencesOf1p5; ++i)
+				{
+					Access = M3.Access(1.5f);
+					Assert(57, Access.Occurrences == OccurrencesOf1p5 - i, ref Passed, "TopPop Loop");
+
+					M3.TopPop();
+				}
+
+				Assert(58, !M3.Contains(1.5f), ref Passed, "TopPop -> !Contains");
+				M3.FirstPop();
+				Access = M3.Access(6f);
+				Assert(59, Access.Positions[0] == 2, ref Passed, "TopPop -> FirstPop -> Access Positions");
+
+				M3.Flush();
+
+				M3.Push(1.4f, 1.4f, 6f, 6f, 1.4f, 1.4f);
+				M3.Pull(6f);
+				Access = M3.Access(1.4f);
+				Assert(60, Access.Positions[0] == 4, ref Passed, "Multi-Mid Pull -> Access Positions");
+
+				TotalTests = 63;
 			}
 
 

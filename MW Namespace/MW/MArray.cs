@@ -58,7 +58,20 @@ namespace MW
 				Push(T);
 		}
 
-		/// <summary>Removes Item.</summary>
+		public void PushUnique(T Item)
+		{
+			if (!Contains(Item))
+				Push(Item);
+		}
+
+		public void PushUnique(params T[] Items)
+		{
+			foreach (T T in Items)
+				if (!Contains(T))
+					Push(T);
+		}
+
+		/// <summary>Removes the most recent push of Item.</summary>
 		/// <decorations decor="public int"></decorations>
 		/// <param name="Item">The element to remove.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
@@ -73,8 +86,9 @@ namespace MW
 			if (HashMap[Item].Count == 0)
 			{
 				HashMap.Remove(Item);
-				Remap();
 			}
+
+			Remap();
 
 			return Num;
 		}
@@ -143,7 +157,17 @@ namespace MW
 		public T FirstPop()
 		{
 			T T = First();
-			Pull(T);
+
+			int[] Positions = Access(T).Positions;
+
+			Items.RemoveAt(Positions[Positions.Length - 1]);
+
+			if (HashMap[T].Count == 0)
+			{
+				HashMap.Remove(T);
+			}
+
+			Remap();
 
 			return T;
 		}
@@ -326,13 +350,30 @@ namespace MW
 		/// <docs>Every Item in this MArray represented as a string with object.ToString().</docs>
 		/// <remarks>Assumes that T has a readable ToString() defined.</remarks>
 		/// <decorations decor="public string"></decorations>
+		/// <param name="bWithIndex">Should the resulting string include the index of every item?</param>
 		/// <returns>A string form of all T.</returns>
-		public string Print()
+		public string Print(bool bWithIndex = false)
 		{
 			StringBuilder SB = new();
 
-			foreach (T T in Items)
-				SB.Append(T.ToString() + " ");
+			if (bWithIndex)
+			{
+				for (int i = 0; i < Num; ++i)
+				{
+					SB.Append(i + ": " + Items[i].ToString());
+					if (i != Num - 1)
+						SB.Append(", ");
+				}
+			}
+			else
+			{
+				for (int i = 0; i < Num; ++i)
+				{
+					SB.Append(Items[i].ToString());
+					if (i != Num - 1)
+						SB.Append(", ");
+				}
+			}
 
 			return SB.ToString();
 		}
@@ -510,6 +551,11 @@ namespace MW
 				this.Occurrences = Occurrences;
 				this.Positions = Positions;
 			}
+
+			/// <summary>Data containing whether or not an accessed item has data associated with it.</summary>
+			/// <docreturns>Whether or not an accessed item exists within an MArray{T}.</docreturns>
+			/// <returns><see langword="true"/> if the accessed item does not exist in this <see cref="MArray{T}"/>.</returns>
+			public bool IsNone() => Occurrences == kInvalid && Positions.Length == 0;
 		}
 	}
 }
