@@ -42,6 +42,10 @@ namespace MW.SubSystems.GameData
 		/// Creates or overwrites a file to<paramref name="FullDestinationPath"/>
 		/// and writes all byte data from <paramref name="ObjectToSave"/>.
 		/// </summary>
+		/// <remarks>
+		/// <b>Assumes <typeparamref name="T"/> is marked with a <see cref="SerializableAttribute"/>.</b>
+		/// </remarks>
+		/// <docremarks>&lt;b&gt;Assumes T is marked with a Serializable Attribute.&lt;/b&gt;</docremarks>
 		/// <param name="FullDestinationPath">The name and directory of the file to write to.</param>
 		/// <param name="ObjectToSave">The bytes of the Object to write to the file.</param>
 		/// <exception cref="ArgumentException">

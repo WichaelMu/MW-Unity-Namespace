@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization.Formatters.Binary;
+﻿using System;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 namespace MW.SubSystems.GameData
@@ -8,6 +9,10 @@ namespace MW.SubSystems.GameData
 	{
 		/// <summary>Converts T <paramref name="Object"/> to byte data.</summary>
 		/// <docs>Converts T Object to byte data.</docs>
+		/// <remarks>
+		/// <b>Assumes <typeparamref name="T"/> is marked with a <see cref="SerializableAttribute"/>.</b>
+		/// </remarks>
+		/// <docremarks>&lt;b&gt;Assumes T is marked with a Serializable Attribute.&lt;/b&gt;</docremarks>
 		/// <typeparam name="T">The type of Object.</typeparam>
 		/// <param name="Object">The Object to get byte data.</param>
 		/// <returns>The bytes representing Object.</returns>
@@ -29,6 +34,9 @@ namespace MW.SubSystems.GameData
 		/// <returns>The bytes as a T Object.</returns>
 		public static T ToObject<T>(byte[] Bytes)
 		{
+			if (Bytes == null || Bytes.Length == 0)
+				throw new ArgumentNullException(nameof(Bytes), "Bytes is null or empty!");
+
 			MemoryStream Memory = new();
 			BinaryFormatter Binary = new();
 			Memory.Write(Bytes, 0, Bytes.Length);
