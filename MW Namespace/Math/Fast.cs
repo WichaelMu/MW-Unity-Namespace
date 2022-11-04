@@ -75,6 +75,11 @@ namespace MW.Math.Magic
 			return *(float*)&T;
 		}
 
+		/// <summary>1 / N.</summary>
+		/// <decorations decor="public static unsafe float"></decorations>
+		/// <param name="N">The Number to take the reciprocal of.</param>
+		/// <param name="AdditionalIterations">The number of additional polynomial evaluation iterations of Horner's method to perform.</param>
+		/// <returns>An approximation for 1 / N.</returns>
 		public static unsafe float FInverse(float N, int AdditionalIterations = 1)
 		{
 			int Sign = N < 0f ? -1 : 1;
@@ -100,6 +105,8 @@ namespace MW.Math.Magic
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
+		/// <docs>Faster version of Vector3.Angle().</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="L">The Vector in which the angular difference is measured.</param>
 		/// <param name="R">The Vector in which the angular difference is measured.</param>
 		/// <returns>The Angle between L and R in degrees.</returns>

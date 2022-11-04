@@ -7,9 +7,17 @@ using UnityEngine;
 
 namespace MW.ConsoleDebugger
 {
+	/// <summary>A Console Debugger for debugging games during runtime.</summary>
+	/// <decorations decor="public abstract class : MonoBehaviour"></decorations>
 	public abstract class Console : MonoBehaviour
 	{
+		/// <summary>The <see cref="Type"/>to get the <see cref="Assembly"/> of the Unity Game where <see cref="ExecAttribute"/>s are defined.</summary>
+		/// <docs>The Type to get the Assembly of the Unity Game where ExecAttributes are defined.</docs>
+		/// <decorations decor="public abstract Type"></decorations>
 		public abstract Type TypeAssembly { get; set; }
+		/// <summary>The <see cref="KeyCode"/> to show <see cref="OnGUI"/>.</summary>
+		/// <docs>The KeyCode to show the Console GUI.</docs>
+		/// <decorations decor="public virtual KeyCode"></decorations>
 		public virtual KeyCode ShowConsoleKey { get; set; } = KeyCode.BackQuote;
 
 		Dictionary<string, MethodExec<MethodInfo, ExecAttribute>> Funcs;
@@ -18,6 +26,8 @@ namespace MW.ConsoleDebugger
 		string Input;
 		string PreviousInput;
 
+		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
+		/// <decorations decor="public virtual void"></decorations>
 		public virtual void Awake()
 		{
 			Funcs = new Dictionary<string, MethodExec<MethodInfo, ExecAttribute>>();
@@ -46,6 +56,8 @@ namespace MW.ConsoleDebugger
 			}
 		}
 
+		/// <summary>Shows the Console on the in-game viewport.</summary>
+		/// <decorations decor="public virtual void"></decorations>
 		public virtual void ShowConsole()
 		{
 			bShowConsole = !bShowConsole;
@@ -71,6 +83,11 @@ namespace MW.ConsoleDebugger
 			Input = "";
 		}
 
+		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="Params"/>.</summary>
+		/// <docs>Executes MethodName with Params.</docs>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="MethodName">The name of the method to execute. (This is case-sensitive)</param>
+		/// <param name="Params">The parameters to pass to the method.</param>
 		public void Exec(string MethodName, params object[] Params)
 		{
 			if (Funcs.ContainsKey(MethodName))
@@ -116,6 +133,8 @@ namespace MW.ConsoleDebugger
 
 		Vector2 Scroll;
 
+		/// <summary>Draws the Console to the in-game viewport.</summary>
+		/// <decorations decor="public virtual void"></decorations>
 		public virtual void OnGUI()
 		{
 			if (!bShowConsole)
