@@ -1,11 +1,10 @@
 ﻿#define WITH_PASS_MESSAGES
 
+using System.Diagnostics;
+
 #if WITH_PASS_MESSAGES
 using MTest.Output;
 #endif
-
-using System.Diagnostics;
-
 
 namespace MTest
 {

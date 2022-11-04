@@ -4,12 +4,18 @@ using System.IO;
 namespace MW.SubSystems.GameData
 {
 	/// <summary>A generic game saving sub-system.</summary>
+	/// <decorations decor="public static class"></decorations>
 	public static class MSaveSystem
 	{
 		/// <summary>
-		/// Creates or overwrites a file to<paramref name="FullDestinationPath"/>
+		/// Creates or overwrites a file to <paramref name="FullDestinationPath"/>
 		/// and writes all <paramref name="Bytes"/>.
 		/// </summary>
+		/// <docs>
+		/// Creates or overwrites a file to FullDestinationPath and writes
+		/// all Bytes.
+		/// </docs>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="FullDestinationPath">The name and directory of the file to write to.</param>
 		/// <param name="Bytes">The bytes to write to the file.</param>
 		/// <exception cref="ArgumentException">
@@ -39,13 +45,18 @@ namespace MW.SubSystems.GameData
 		}
 
 		/// <summary>
-		/// Creates or overwrites a file to<paramref name="FullDestinationPath"/>
+		/// Creates or overwrites a file to <paramref name="FullDestinationPath"/>
 		/// and writes all byte data from <paramref name="ObjectToSave"/>.
 		/// </summary>
+		/// <docs>
+		/// Creates or overwrites a file to FullDestinationPath and writes
+		/// all byte data from ObjectToSave.
+		/// </docs>
 		/// <remarks>
 		/// <b>Assumes <typeparamref name="T"/> is marked with a <see cref="SerializableAttribute"/>.</b>
 		/// </remarks>
-		/// <docremarks>&lt;b&gt;Assumes T is marked with a Serializable Attribute.&lt;/b&gt;</docremarks>
+		/// <docremarks>&lt;b&gt;Assumes T is marked with [System.Serializable].&lt;/b&gt;</docremarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="FullDestinationPath">The name and directory of the file to write to.</param>
 		/// <param name="ObjectToSave">The bytes of the Object to write to the file.</param>
 		/// <exception cref="ArgumentException">
@@ -77,6 +88,7 @@ namespace MW.SubSystems.GameData
 
 		/// <summary>Loads data from an existing file as T.</summary>
 		/// <typeparam name="T"></typeparam>
+		/// <decorations decor="public static T"></decorations>
 		/// <param name="FullOriginPath"></param>
 		/// <exception cref="ArgumentException">
 		/// <paramref name="FullOriginPath"/> is empty, is only white space, or contains illegal characters.
@@ -115,6 +127,7 @@ namespace MW.SubSystems.GameData
 		/// <summary>Deletes a save file.</summary>
 		/// <remarks><b>WARNING: THIS WILL REMOVE ANY SPECIFIED FILE AND IS NOT LIMITED TO GAME SAVE FILES.</b></remarks>
 		/// <docremarks>&lt;b&gt;&lt;span style="color:red"&gt;WARNING: THIS WILL REMOVE ANY SPECIFIED FILE AND IS NOT LIMITED TO GAME SAVE FILES.&lt;/span&gt;&lt;/b&gt;</docremarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="FullPath">The name and directory of the file to delete.</param>
 		/// <exception cref="IOException">
 		/// <paramref name="FullPath"/> is read-only, is the current working directory, contains a read-only file, or is being used by another process.

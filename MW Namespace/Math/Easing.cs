@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using MW.Math.Magic;
+﻿using MW.Math.Magic;
+using UnityEngine;
 
 namespace MW.Easing
 {
@@ -279,7 +279,7 @@ namespace MW.Easing
 		public static float EaseInCirc(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return -End * (Fast.Sqrt(1 - Duration * Duration) - 1) + Start;
+			return -End * (Fast.FSqrt(1 - Duration * Duration) - 1) + Start;
 		}
 
 		/// <summary></summary>
@@ -292,7 +292,7 @@ namespace MW.Easing
 		{
 			Duration--;
 			End -= Start;
-			return End * Fast.Sqrt(1 - Duration * Duration) + Start;
+			return End * Fast.FSqrt(1 - Duration * Duration) + Start;
 		}
 
 		/// <summary></summary>
@@ -305,9 +305,9 @@ namespace MW.Easing
 		{
 			Duration /= .5f;
 			End -= Start;
-			if (Duration < 1) return -End * 0.5f * (Fast.Sqrt(1 - Duration * Duration) - 1) + Start;
+			if (Duration < 1) return -End * 0.5f * (Fast.FSqrt(1 - Duration * Duration) - 1) + Start;
 			Duration -= 2;
-			return End * 0.5f * (Fast.Sqrt(1 - Duration * Duration) + 1) + Start;
+			return End * 0.5f * (Fast.FSqrt(1 - Duration * Duration) + 1) + Start;
 		}
 
 		/// <summary></summary>
@@ -791,7 +791,7 @@ namespace MW.Easing
 		/// <returns></returns>
 		public static float EaseInCircD(float Start, float End, float Duration)
 		{
-			return (End - Start) * Duration / Fast.Sqrt(1f - Duration * Duration);
+			return (End - Start) * Duration / Fast.FSqrt(1f - Duration * Duration);
 		}
 
 		/// <summary></summary>
@@ -804,7 +804,7 @@ namespace MW.Easing
 		{
 			Duration--;
 			End -= Start;
-			return -End * Duration / Fast.Sqrt(1f - Duration * Duration);
+			return -End * Duration / Fast.FSqrt(1f - Duration * Duration);
 		}
 
 		/// <summary></summary>
@@ -820,12 +820,12 @@ namespace MW.Easing
 
 			if (Duration < 1)
 			{
-				return End * Duration / (2f * Fast.Sqrt(1f - Duration * Duration));
+				return End * Duration / (2f * Fast.FSqrt(1f - Duration * Duration));
 			}
 
 			Duration -= 2;
 
-			return -End * Duration / (2f * Fast.Sqrt(1f - Duration * Duration));
+			return -End * Duration / (2f * Fast.FSqrt(1f - Duration * Duration));
 		}
 
 		/// <summary></summary>

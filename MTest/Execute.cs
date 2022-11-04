@@ -3,9 +3,9 @@ using MW;
 using MW.Extensions;
 using MW.Math;
 using UnityEngine;
-using static MW.Math.Magic.Fast;
-using static MTest.Tolerance;
 using static MTest.Assertion;
+using static MTest.Tolerance;
+using static MW.Math.Magic.Fast;
 
 namespace MTest
 {
@@ -180,7 +180,7 @@ namespace MTest
 				TotalTests = 50;
 				for (float f = 0; f < TotalTests; f += .23f)
 				{
-					Tolerance.FloatToleranceCheck(1, Mathf.Sqrt(f), MW.Math.Magic.Fast.Sqrt(f), "Fast Sqrt", ref Passed);
+					Tolerance.FloatToleranceCheck(1, Mathf.Sqrt(f), MW.Math.Magic.Fast.FSqrt(f), "Fast Sqrt", ref Passed);
 				}
 
 				TotalTests = (int)(TotalTests / .23f) + 1;
@@ -563,7 +563,7 @@ namespace MTest
 				Access = M3.Access(1.4f);
 				Assert(60, Access.Positions[0] == 4, ref Passed, "Multi-Mid Pull -> Access Positions");
 
-				TotalTests = 63;
+				TotalTests = 65;
 			}
 
 
@@ -598,7 +598,7 @@ namespace MTest
 				Passed = 0;
 				for (float F = -50f; F <= 50f; F += .23f)
 				{
-					Tolerance.FloatToleranceCheck(1, Mathf.Asin(F), ArcSine(F), "Fast ASin", ref Passed);
+					Tolerance.FloatToleranceCheck(1, Mathf.Asin(F), FArcSine(F), "Fast ASin", ref Passed);
 				}
 
 				// 100 / .23;

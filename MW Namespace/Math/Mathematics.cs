@@ -4,6 +4,7 @@ using MW.Kinetic;
 using MW.Math.Magic;
 using UnityEngine;
 using static MW.Utils;
+using static MW.Math.Magic.Fast;
 
 namespace MW.Math
 {
@@ -264,6 +265,43 @@ namespace MW.Math
 			};
 		}
 
+		/// <summary>Converts a normalised vector direction to a Quaternion rotation</summary>
+		/// <remarks>Roll (Z) cannot be calculated from a direction vector.</remarks>
+		/// <param name="From">Origin</param>
+		/// <param name="To">Target</param>
+		/// <returns>Quaternion rotation from to.</returns>
+		public static Quaternion DirectionToQuat(Vector3 From, Vector3 To)
+		{
+			Vector3 Direction = (To - From).normalized;
+
+			return V2Q(Direction);
+		}
+
+		/// <summary>Converts a normalised vector to a Quaternion rotation.</summary>
+		/// <remarks>Roll (Z) cannot be calculated from a direction vector.</remarks>
+		/// <param name="V">Normalised direction vector.</param>
+		/// <returns>Quaternion rotation without roll.</returns>
+		public static Quaternion V2Q(Vector3 V)
+		{
+			return Quaternion.Euler(V2PYR(V));
+		}
+
+		/// <summary>Converts V to Pitch Yaw Roll.</summary>
+		/// <remarks>Roll (Z) cannot be calculated from a direction vector.</remarks>
+		/// <param name="V">Normalised direction vector.</param>
+		/// <returns>X = Pitch, Y = Yaw, Z = Roll = 0.</returns>
+		public static Vector3 V2PYR(Vector3 V)
+		{
+			Vector3 EulerRadians = new Vector3
+			{
+				x = FArcSine(V.y),
+				y = Mathf.Atan2(V.x, V.z),
+				z = 0
+			};
+
+			return EulerRadians * Mathf.Rad2Deg;
+		}
+
 		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Sine">The Sine result over AngleInDegrees.</param>
@@ -331,7 +369,7 @@ namespace MW.Math
 		/// <returns>The distance between L and R.</returns>
 		public static float Distance(Vector3 L, Vector3 R)
 		{
-			return Fast.Sqrt(SqrDistance(L, R));
+			return Fast.FSqrt(SqrDistance(L, R));
 		}
 	}
 }

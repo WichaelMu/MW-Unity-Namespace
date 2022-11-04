@@ -1,7 +1,7 @@
-﻿using MW.Diagnostics;
-using MW.Easing;
-using System;
+﻿using System;
 using System.Collections;
+using MW.Diagnostics;
+using MW.Easing;
 using UnityEngine;
 
 namespace MW.Behaviour

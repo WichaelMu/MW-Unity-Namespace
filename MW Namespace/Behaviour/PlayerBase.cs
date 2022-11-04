@@ -1,7 +1,7 @@
-﻿using MW.Kinetic;
-using MW.Math;
-using System;
+﻿using System;
 using System.Collections;
+using MW.Kinetic;
+using MW.Math;
 using UnityEngine;
 
 namespace MW.Behaviour

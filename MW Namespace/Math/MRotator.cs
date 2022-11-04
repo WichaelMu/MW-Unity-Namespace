@@ -1,8 +1,8 @@
-﻿using MW.Diagnostics;
+﻿using System;
+using MW.Diagnostics;
 using MW.Extensions;
 using MW.Math;
 using MW.Math.Magic;
-using System;
 using UnityEngine;
 using static MW.Utils;
 
@@ -109,7 +109,7 @@ namespace MW
 			}
 
 			R.Yaw = Mathf.Atan2(2f * Q.x * Q.w + 2f * Q.y * Q.z, 1 - 2f * (Q.z * Q.z + Q.w * Q.w));
-			R.Pitch = Fast.ArcSine(2f * (Q.x * Q.z - Q.w * Q.y));
+			R.Pitch = Fast.FArcSine(2f * (Q.x * Q.z - Q.w * Q.y));
 			R.Roll = Mathf.Atan2(2f * Q.x * Q.y + 2f * Q.z * Q.w, 1 - 2f * (Q.y * Q.y + Q.z * Q.z));
 			return R.NormaliseAngles();
 		}

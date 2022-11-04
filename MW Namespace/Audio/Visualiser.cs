@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using MW.Math.Magic;
+﻿using MW.Math.Magic;
+using UnityEngine;
 
 namespace MW.Audio
 {
@@ -115,7 +115,7 @@ namespace MW.Audio
 				sum += Internal_Samples[i] * Internal_Samples[i];
 			}
 
-			RMS = Fast.Sqrt(sum / Samples);
+			RMS = Fast.FSqrt(sum / Samples);
 			Decibels = 20 * Mathf.Log10(RMS / RMS0_N1_Db);
 
 			if (Decibels < -160)

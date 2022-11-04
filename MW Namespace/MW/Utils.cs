@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using MW.Math.Magic;
+using UnityEngine;
 
 namespace MW
 {
@@ -223,7 +223,7 @@ namespace MW
 		{
 			Vector3[] vDirections = new Vector3[Resolution];
 
-			float fPhi = 1 + Fast.Sqrt(GoldenRatioModifier) * .5f;
+			float fPhi = 1 + Fast.FSqrt(GoldenRatioModifier) * .5f;
 			float fInc = Mathf.PI * 2 * fPhi;
 
 			for (int i = 0; i < Resolution; i++)
@@ -408,21 +408,21 @@ namespace MW
 
 
 		/// <summary>Modifies I to be its Absolute Value.</summary>
-		/// <remarks><see langword="ref"/> version of <see cref="Fast.Abs(int)"/>.</remarks>
+		/// <remarks><see langword="ref"/> version of <see cref="Fast.FAbs(int)"/>.</remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the int to modify.</param>
-		public static void Abs(ref int I) => I = Fast.Abs(I);
+		public static void Abs(ref int I) => I = Fast.FAbs(I);
 
 
 		/// <summary>Modifies F to be its Absolute Value.</summary>
-		/// <remarks><see langword="ref"/> version of <see cref="Fast.Abs(float)"/></remarks>
+		/// <remarks><see langword="ref"/> version of <see cref="Fast.FAbs(float)"/></remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the float to modify.</param>
-		public static void Abs(ref float F) => F = Fast.Abs(F);
+		public static void Abs(ref float F) => F = Fast.FAbs(F);
 
-		/// <summary><see cref="Fast.Abs(float)"/> on all V's components.</summary>
+		/// <summary><see cref="Fast.FAbs(float)"/> on all V's components.</summary>
 		/// <docs>Abs() on all V's components.</docs>
 		/// <param name="V">The Vector to Abs.</param>
 		/// <returns>An MVector with all positive components.</returns>
@@ -430,9 +430,9 @@ namespace MW
 		{
 			return new MVector
 			{
-				X = Fast.Abs(V.X),
-				Y = Fast.Abs(V.Y),
-				Z = Fast.Abs(V.Z)
+				X = Fast.FAbs(V.X),
+				Y = Fast.FAbs(V.Y),
+				Z = Fast.FAbs(V.Z)
 			};
 		}
 

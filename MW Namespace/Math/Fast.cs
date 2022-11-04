@@ -13,7 +13,7 @@ namespace MW.Math.Magic
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
 		/// <param name="AdditionalIterations">The number of additional Newton Iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / sqrt(N).</returns>
-		public static unsafe float InverseSqrt(float N, int AdditionalIterations = 1)
+		public static unsafe float FInverseSqrt(float N, int AdditionalIterations = 1)
 		{
 			int F = *(int*)&N;
 			F = 0x5F3759DF - (F >> 1);
@@ -31,22 +31,22 @@ namespace MW.Math.Magic
 		/// <param name="F"></param>
 		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
 		/// <returns>An approximation for the Square Root of F.</returns>
-		public static float Sqrt(float F, int Iterations = 2) => InverseSqrt(Max(F, MVector.kEpsilon), Iterations) * F;
+		public static float FSqrt(float F, int Iterations = 2) => FInverseSqrt(Max(F, MVector.kEpsilon), Iterations) * F;
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Asin(float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Asin().</docs>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="Angle">The angle to get the inverse Sine of.</param>
 		/// <returns>Inverse Sine of Angle.</returns>
-		public static float ArcSine(float Angle)
+		public static float FArcSine(float Angle)
 		{
 			bool bIsPositive = Angle >= 0f;
-			float FAbs = Abs(Angle);
+			float FAbs = Fast.FAbs(Angle);
 
 			float OneMinusFAbs = 1f - FAbs;
 			ClampMin(ref OneMinusFAbs, 0f);
 
-			float Root = Sqrt(OneMinusFAbs);
+			float Root = FSqrt(OneMinusFAbs);
 
 			const float kASinHalfPI = 1.5707963050f;
 
@@ -60,7 +60,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="I">The int to get the Absolute Value of.</param>
 		/// <returns>The value of I regardless of its sign.</returns>
-		public static int Abs(int I)
+		public static int FAbs(int I)
 		{
 			return 0x7FFFFFFF & I;
 		}
@@ -69,10 +69,49 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="F">The float to get the Absolute Value of.</param>
 		/// <returns>The value of F regardless of its sign.</returns>
-		public static unsafe float Abs(float F)
+		public static unsafe float FAbs(float F)
 		{
-			int T = Abs(*(int*)&F);
+			int T = FAbs(*(int*)&F);
 			return *(float*)&T;
+		}
+
+		public static unsafe float FInverse(float N, int AdditionalIterations = 1)
+		{
+			int Sign = N < 0f ? -1 : 1;
+			int U = (int)(0x7EF127EA - *(uint*)&N);
+			float F = *(float*)&U;
+			float H = N * F; // Initial Approximation.
+
+			ClampMin(ref AdditionalIterations, 1);
+			ClampMax(ref AdditionalIterations, 3);
+
+			float R = F * (2f - H);
+			if (AdditionalIterations <= 2)
+			{
+				R *= 4 + H * (-6f + H * (4f - H));
+			}
+
+			if (AdditionalIterations <= 3)
+			{
+				R *= 8 + H * (-28f + H * (56f + H * (-70f + H * (56f + H * (-28f + H * (8f - H))))));
+			}
+
+			return R;
+		}
+
+		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
+		/// <param name="L">The Vector in which the angular difference is measured.</param>
+		/// <param name="R">The Vector in which the angular difference is measured.</param>
+		/// <returns>The Angle between L and R in degrees.</returns>
+		public static float FAngle(MVector L, MVector R)
+		{
+			float ZeroOrEpsilon = FSqrt(L.SqrMagnitude * R.SqrMagnitude);
+			if (ZeroOrEpsilon < MVector.kEpsilon)
+				return 0f;
+
+			float Radians = MVector.Dot(L, R);
+			Clamp(ref Radians, -1f, 1f);
+			return 90f - FArcSine(Radians) * UnityEngine.Mathf.Rad2Deg;
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace MW.Extensions
 		/// <returns>Normalised Vector3.</returns>
 		public static Vector3 Normalise(this Vector3 V)
 		{
-			return V * InverseSqrt(V.sqrMagnitude);
+			return V * FInverseSqrt(V.sqrMagnitude);
 		}
 
 		/// <summary>Converts a <see cref="Quaternion"/> to an MRotator.</summary>

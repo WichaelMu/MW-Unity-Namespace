@@ -1,6 +1,6 @@
-﻿using MW.Diagnostics;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MW.Diagnostics;
 using UnityEngine;
 
 namespace MW.Audio

@@ -1,8 +1,8 @@
-﻿using MW.Conversion;
-using MW.Math;
-using MW.Math.Magic;
-using System;
+﻿using System;
 using System.Globalization;
+using MW.Conversion;
+using MW.Math;
+using static MW.Math.Magic.Fast;
 using UnityEngine;
 
 namespace MW
@@ -145,7 +145,7 @@ namespace MW
 		/// <decorations decors="public static float"></decorations>
 		/// <param name="Left">Source of the distance.</param>
 		/// <param name="Right">Distance from source.</param>
-		public static float Distance(MVector Left, MVector Right) => Fast.Sqrt(SqrDistance(Left, Right));
+		public static float Distance(MVector Left, MVector Right) => FSqrt(SqrDistance(Left, Right));
 
 		/// <summary>Square Euclidean distance between Left and Right.</summary>
 		/// <decorations decors="public static float"></decorations>
@@ -174,7 +174,7 @@ namespace MW
 		/// <decorations decors="public MVector"></decorations>
 		public MVector Normalised
 		{
-			get => Fast.InverseSqrt(SqrMagnitude) * this;
+			get => FInverseSqrt(SqrMagnitude) * this;
 		}
 
 		/// <summary>Normalises this MVector.</summary>
@@ -238,7 +238,7 @@ namespace MW
 		{
 			MRotator R = new MRotator();
 
-			R.Pitch = Mathf.Asin(Y);
+			R.Pitch = FArcSine(Y);
 			R.Yaw = Mathf.Atan2(X, Z);
 			R.Roll = 0;
 
@@ -408,8 +408,7 @@ namespace MW
 				throw new DivideByZeroException("Attempted division by zero.");
 			}
 
-			float S = 1 / D;
-
+			float S = 1f / D;
 			return S * V;
 		}
 
