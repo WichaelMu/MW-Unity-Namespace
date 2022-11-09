@@ -165,7 +165,7 @@ namespace MW
 		public float SqrMagnitude { get => X * X + Y * Y + Z * Z; }
 		/// <summary>The magnitude of this MVector.</summary>
 		/// <decorations decors="public float"></decorations>
-		public float Magnitude { get => Mathf.Sqrt(SqrMagnitude); }
+		public float Magnitude { get => FSqrt(SqrMagnitude); }
 		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
 		/// <docs>The Mathf.Abs(float) of this MVector's components.</docs>
 		/// <decorations decors="public MVector"></decorations>
