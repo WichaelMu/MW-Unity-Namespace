@@ -1,4 +1,7 @@
-﻿#define WITH_PASS_MESSAGES
+﻿#define MICROSOFT_TESTING
+
+#if !MICROSOFT_TESTING
+#define WITH_PASS_MESSAGES
 
 using System.Diagnostics;
 
@@ -58,3 +61,4 @@ namespace MTest
 		}
 	}
 }
+#endif

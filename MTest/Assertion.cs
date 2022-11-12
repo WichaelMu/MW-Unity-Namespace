@@ -1,4 +1,5 @@
-﻿using MTest.Output;
+﻿#if !MICROSOFT_TESTING
+using MTest.Output;
 using MW;
 
 namespace MTest
@@ -44,3 +45,4 @@ namespace MTest
 		}
 	}
 }
+#endif

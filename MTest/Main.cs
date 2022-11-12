@@ -1,10 +1,18 @@
-﻿namespace MTest
+﻿#if false
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
+
+namespace MTest
 {
-	class Entry
+#if false
+	[TestClass]
+	public class Entry
 	{
-		public static void Main()
+		[TestMethod]
+		public void FullSuite()
 		{
-			TestRunner.FullSuite();
+
 		}
 	}
+#endif
 }
