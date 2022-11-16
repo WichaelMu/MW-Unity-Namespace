@@ -1115,9 +1115,9 @@ namespace MTest
 #if !MICROSOFT_TESTING
 			Passed = 0;
 #endif
-			for (float F = -50f; F <= 50f; F += .23f)
+			for (float F = -1f; F <= 1f; F += .023f)
 			{
-				FloatToleranceCheck(1, Mathf.Asin(F), FArcSine(F), "Fast ASin"
+				FloatToleranceCheck(1, Mathf.Asin(F), FArcSine(F), $"Fast ASin {F}"
 #if !MICROSOFT_TESTING
 					, ref Passed
 #endif
@@ -1127,6 +1127,21 @@ namespace MTest
 			// 100 / .23;
 			TotalTests = (int)(434.78260869565217391304347826087f) + 1;
 #endif
+		}
+	}
+
+	[TestClass]
+	public class ApproximationTests
+	{
+		[TestMethod]
+		public void SinCosTests()
+		{
+			for (float F = -365f; F <= 365f; F += .23f)
+			{
+				Mathematics.SinCos(out float S, out float C, F);
+				FloatToleranceCheck(1, Mathf.Sin(F), S, "Sine");
+				FloatToleranceCheck(2, Mathf.Cos(F), C, "Cosine");
+			}
 		}
 	}
 

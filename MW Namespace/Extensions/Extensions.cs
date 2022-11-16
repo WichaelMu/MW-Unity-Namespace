@@ -21,7 +21,7 @@ namespace MW.Extensions
 		/// <decorations decor="|Extension| MRotator"></decorations>
 		/// <param name="Q">The Quaternion to extract Pitch, Yaw and Roll.</param>
 		/// <docreturns>An MRotator rotated according to a Quaternion.</docreturns>
-		/// <returns>An MRotator rotated according to a <see cref="UnityEngine.Quaternion"/>.</returns>
+		/// <returns>An MRotator rotated according to a <see cref="Quaternion"/>.</returns>
 		public static MRotator MakeRotator(this Quaternion Q)
 		{
 			return MRotator.Rotator(Q);

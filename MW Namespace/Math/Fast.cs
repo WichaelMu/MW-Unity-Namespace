@@ -75,6 +75,19 @@ namespace MW.Math.Magic
 			return *(float*)&T;
 		}
 
+		/// <summary>Absolute Value of F.</summary>
+		/// <decorations decor="public static unsafe float"></decorations>
+		/// <param name="F">The float to set the Absolute Value of.</param>
+		/// <returns>The value of F regardless of its sign.</returns>
+		public static unsafe float FAbs(ref float F)
+		{
+			fixed (float* pF = &F)
+			{
+				int T = FAbs(*(int*)pF);
+				return *(float*)&T;
+			}
+		}
+
 		/// <summary>1 / N.</summary>
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">The Number to take the reciprocal of.</param>
@@ -82,6 +95,9 @@ namespace MW.Math.Magic
 		/// <returns>An approximation for 1 / N.</returns>
 		public static unsafe float FInverse(float N, int AdditionalIterations = 1)
 		{
+			if (N == 0F)
+				return float.PositiveInfinity;
+
 			int Sign = N < 0f ? -1 : 1;
 			int U = (int)(0x7EF127EA - *(uint*)&N);
 			float F = *(float*)&U;

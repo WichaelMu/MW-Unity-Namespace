@@ -309,33 +309,26 @@ namespace MW.Math
 		/// <param name="Angle">The angle in degrees.</param>
 		public static void SinCos(out float Sine, out float Cosine, float Angle)
 		{
-			float Quotient = (kInversePI * 0.5f) * Angle;
-			if (Angle >= 0.0f)
-			{
-				Quotient = (int)(Quotient + 0.5f);
-			}
-			else
-			{
-				Quotient = (int)(Quotient - 0.5f);
-			}
+			float Quotient = (kInversePI * .5f) * Angle;
+			Quotient = (int)(Quotient + (Angle >= 0f ? .5f : -.5f));
 
-			float A = Angle - (2.0f * Mathf.PI) * Quotient;
+			float A = Angle - k2PI * Quotient;
 
 			// Map A to [-PI / 2, PI / 2] with Sin(A) = Sin(Value).
 			float Sign;
 			if (A > kHalfPI)
 			{
 				A = Mathf.PI - A;
-				Sign = -1.0f;
+				Sign = -1f;
 			}
 			else if (A < -kHalfPI)
 			{
 				A = -Mathf.PI - A;
-				Sign = -1.0f;
+				Sign = -1f;
 			}
 			else
 			{
-				Sign = +1.0f;
+				Sign = +1f;
 			}
 
 			float A2 = A * A;
@@ -345,6 +338,12 @@ namespace MW.Math
 
 			// 10-degree minimax approximation
 			Cosine = Sign * ((((-2.6051615e-07f * A2 + 2.4760495e-05f) * A2 - 0.0013888378f) * A2 + 0.041666638f) * A2 - 0.5f) * A2 + 1.0f;
+
+			// -1.f ≤ Sine ≤ 1.f -and- -1.f ≤ Cosine ≤ 1.f.
+			if (Sine >= 1f)
+				Sine -= 2f;
+			if (Cosine >= 1f)
+				Cosine -= 2f;
 		}
 
 		/// <summary>Calculates the Square Distance between two Vector3s.</summary>

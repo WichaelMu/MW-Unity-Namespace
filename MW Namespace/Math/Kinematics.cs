@@ -1,4 +1,6 @@
-﻿using MW.Math.Magic;
+﻿using MW;
+using static MW.Debugger.Arrow;
+using MW.Math.Magic;
 using UnityEngine;
 
 namespace MW.Kinetic
@@ -79,8 +81,9 @@ namespace MW.Kinetic
 		/// <param name="Target">The intended destination of the launched projectile.</param>
 		/// <param name="LaunchSpeed">The speed of the launched projectile.</param>
 		/// <param name="bFavourHighArc">Should the launched projectile attain the maximum height?</param>
+		/// <param name="bIs3D">True if using 3D physics.</param>
 		/// <returns>True if a solution to hit Target from Origin at LaunchSpeed exists.</returns>
-		public static bool LaunchTowards(out MVector LaunchVelocity, Vector3 Origin, Vector3 Target, float LaunchSpeed, bool bFavourHighArc)
+		public static bool LaunchTowards(out MVector LaunchVelocity, Vector3 Origin, Vector3 Target, float LaunchSpeed, bool bFavourHighArc, bool bIs3D = true)
 		{
 			MVector RelativeTargetPosition = Target - Origin;
 			MVector DirectionToTargetIgnoringAltitude = RelativeTargetPosition.XZ.Normalised;
@@ -90,7 +93,7 @@ namespace MW.Kinetic
 
 			float LaunchSpeedSquared = LaunchSpeed * LaunchSpeed;
 
-			float Gravity = -Physics.gravity.y;
+			float Gravity = -F_GetGravity(bIs3D);
 			float Radicand = (LaunchSpeedSquared * LaunchSpeedSquared) - Gravity * ((Gravity * (DisplacementToTargetIgnoringAltitude * DisplacementToTargetIgnoringAltitude)) + (2f * YDisplacement * LaunchSpeedSquared));
 			if (Radicand < 0f)
 			{
@@ -137,15 +140,12 @@ namespace MW.Kinetic
 		/// <param name="TargetHeight">The apex.</param>
 		/// <param name="Time">Point on launch trajectory at a time. Flight time.</param>
 		/// <param name="b3DGravity">True if using 3D Physics.</param>
-		/// <param name="bLaunchRegardless">
-		/// True to ignore the height limitation and compute a velocity anyway.
-		/// May be inaccurate.
-		/// </param>
+		/// <param name="bLaunchRegardless">True to ignore the height limitation and compute a velocity anyway.</param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
 		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, out float Time, bool b3DGravity = true, bool bLaunchRegardless = false)
 		{
-			return LaunchTowards(Origin, Target, TargetHeight, GetGravity(b3DGravity), out Time, bLaunchRegardless, b3DGravity);
+			return LaunchTowards(Origin, Target, TargetHeight, F_GetGravity(b3DGravity), out Time, bLaunchRegardless, b3DGravity);
 		}
 
 		/// <summary>Computes a velocity to launch a Rigidbody from Origin to Target achieving a TargetHeight.</summary>
@@ -156,10 +156,7 @@ namespace MW.Kinetic
 		/// <param name="TargetHeight">The apex.</param>
 		/// <param name="GravityMagnitude">True if using 3D Physics.</param>
 		/// <param name="Time">Point on launch trajectory at a time. Flight time.</param>
-		/// <param name="bLaunchRegardless">
-		/// True to ignore the height limitation and compute a velocity anyway.
-		/// May be inaccurate.
-		/// </param>
+		/// <param name="bLaunchRegardless">True to ignore the height limitation and compute a velocity anyway.</param>
 		/// <param name="b3DGravity">True if using 3D Physics.</param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
@@ -192,7 +189,250 @@ namespace MW.Kinetic
 			return LaunchVelocity;
 		}
 
-		static float GetGravity(bool bIs3D) => bIs3D ? Physics.gravity.y : Physics2D.gravity.y;
+		/// <summary>Computes a velocity to launch a Rigidbody from Origin to Target achieving a TargetHeight.</summary>
+		/// <remarks>Will not compute if TargetHeight cannot reach To.y and bLaunchRegardless is false.</remarks>
+		/// <decorations decor="public static MVector"></decorations>
+		/// <param name="Origin">Where to launch from.</param>
+		/// <param name="Target">Where to launch to.</param>
+		/// <param name="TargetHeight">The apex.</param>
+		/// <param name="GravityMagnitude">True if using 3D Physics.</param>
+		/// <param name="Time">Point on launch trajectory at a time. Flight time.</param>
+		/// <param name="Arc">Out the points in a line where the projectile will follow from Origin to Target.</param>
+		/// <param name="ArcResolution">The number of points for the Arc.</param>
+		/// <param name="bLaunchRegardless">True to ignore the height limitation and compute a velocity anyway.</param>
+		/// <param name="b3DGravity">True if using 3D Physics.</param>
+		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
+		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
+		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, out float Time, out MVector[] Arc, int ArcResolution = 30, bool bLaunchRegardless = false, bool b3DGravity = true)
+		{
+			MVector LaunchVelocity = LaunchTowards(Origin, Target, TargetHeight, GravityMagnitude, out Time, b3DGravity, bLaunchRegardless);
+			Arc = GetArc(LaunchVelocity, Time, ArcResolution, b3DGravity);
+
+			return LaunchVelocity;
+		}
+
+		/// <summary>Gets the Arc of a launched projectile, given the time.</summary>
+		/// <decorations decor="public static MVector[]"></decorations>
+		/// <param name="LaunchVelocity">The speed and direction of the launched projectile.</param>
+		/// <param name="Time">Flight time.</param>
+		/// <param name="ArcResolution">The number of points for the Arc.</param>
+		/// <param name="bIs3D">True if using 3D Physics.</param>
+		/// <returns>The trajectory of a projectile travelling at LaunchVelocity will travel through.</returns>
+		public static MVector[] GetArc(MVector LaunchVelocity, float Time, int ArcResolution = 30, bool bIs3D = true)
+		{
+			if (ArcResolution <= 0)
+				throw new System.ArgumentException($"{nameof(ArcResolution)} must be greater than zero!");
+
+			if (Time <= MVector.kEpsilon)
+				return System.Array.Empty<MVector>();
+
+			MVector[] RetVal = new MVector[ArcResolution];
+
+			float InverseResolutionTime = Fast.FInverse(ArcResolution * Time);
+
+			for (int i = 0; i <= ArcResolution; ++i)
+			{
+				float Simulation = i * InverseResolutionTime;
+
+				MVector Arc = Simulation * LaunchVelocity + V_GetGravity(bIs3D) * Simulation * Simulation * .5f;
+
+				RetVal[i] = Arc;
+			}
+
+			return RetVal;
+		}
+
+		/// <summary>The Arc of a Projectile travelling through the world.</summary>
+		/// <decorations decor="public static MArray&lt;ProjectileArcTracer&gt;"></decorations>
+		/// <param name="Physics">The Rigidbody associated with a Projectile.</param>
+		/// <param name="StartPosition">The initial position of the Projectile.</param>
+		/// <param name="Gravity">The pull of Gravity affecting this Projectile.</param>
+		/// <param name="Resolution">The number of points to sample the trajectory.</param>
+		/// <param name="bDrawDebug">True to draw debug lines of the Projectile's trajectory.</param>
+		/// <param name="MaxSimulationTime">The maximum time-step for the trajectory simulation.</param>
+		/// <returns>An array of this Projectile's Position and velocity at the given Time.</returns>
+		public static MArray<ProjectileArcTracer> GetProjectileArc(Rigidbody Physics, Vector3 StartPosition, float Gravity, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
+		{
+			float SubstepDeltaTime = 1f / Resolution;
+			MVector Velocity = Physics.velocity;
+			MVector End = StartPosition;
+			float Time = 0f;
+
+			MArray<ProjectileArcTracer> RetVal = new MArray<ProjectileArcTracer>(Resolution);
+			while (Time < MaxSimulationTime)
+			{
+				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				Time += ActualStepDeltaTime;
+
+				StartPosition = End;
+				MVector OldVelocity = Velocity;
+				Velocity = OldVelocity + new MVector(0f, Gravity * ActualStepDeltaTime, 0f);
+				End = StartPosition + .5f * ActualStepDeltaTime * (OldVelocity + Velocity);
+
+				RetVal.Push(new ProjectileArcTracer(End, Velocity, Time));
+			}
+
+			if (bDrawDebug)
+			{
+				for (int i = 0; i < RetVal.Num - 1; ++i)
+					Debug.DrawLine(RetVal[i].Position, RetVal[i + 1].Position, Color.Lerp(Color.green, Color.red, 0.06667f * RetVal[i].Velocity.Magnitude), 5f);
+			}
+
+			return RetVal;
+		}
+
+		/// <summary>The Arc of a Projectile travelling through the world.</summary>
+		/// <decorations decor="public static MArray&lt;ProjectileArcTracer&gt;"></decorations>
+		/// <param name="Velocity">The speed and direction of this Projectile.</param>
+		/// <param name="StartPosition">The initial position of the Projectile.</param>
+		/// <param name="Gravity">The pull of Gravity affecting this Projectile.</param>
+		/// <param name="Resolution">The number of points to sample the trajectory.</param>
+		/// <param name="bDrawDebug">True to draw debug lines of the Projectile's trajectory.</param>
+		/// <param name="MaxSimulationTime">The maximum time-step for the trajectory simulation.</param>
+		/// <returns>An array of this Projectile's Position and velocity at the given Time.</returns>
+		public static MArray<ProjectileArcTracer> GetProjectileArc(MVector Velocity, Vector3 StartPosition, float Gravity, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
+		{
+			float SubstepDeltaTime = 1f / Resolution;
+			MVector End = StartPosition;
+			float Time = 0f;
+
+			MArray<ProjectileArcTracer> RetVal = new MArray<ProjectileArcTracer>(Resolution);
+			while (Time < MaxSimulationTime)
+			{
+				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				Time += ActualStepDeltaTime;
+
+				StartPosition = End;
+				MVector OldVelocity = Velocity;
+				Velocity = OldVelocity + new MVector(0f, Gravity * ActualStepDeltaTime, 0f);
+				End = StartPosition + .5f * ActualStepDeltaTime * (OldVelocity + Velocity);
+
+				RetVal.Push(new ProjectileArcTracer(End, Velocity, Time));
+			}
+
+			if (bDrawDebug)
+			{
+				for (int i = 0; i < RetVal.Num - 1; ++i)
+					Debug.DrawLine(RetVal[i].Position, RetVal[i + 1].Position, Color.Lerp(Color.green, Color.red, 0.06667f * RetVal[i].Velocity.Magnitude), 5f);
+			}
+
+			return RetVal;
+		}
+
+		/// <summary>The Arc of a Projectile travelling through the world.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="Physics">The Rigidbody associated with a Projectile.</param>
+		/// <param name="StartPosition">The initial position of the Projectile.</param>
+		/// <param name="Gravity">The pull of Gravity affecting this Projectile.</param>
+		/// <param name="Trajectory">Outs an array of this Projectile's Position and velocity at the given Time.</param>
+		/// <param name="ProjectileRadius">The radius of this Projectile to consider for Collisions.</param>
+		/// <param name="CollisionLayer">The Layer to identify Collisions.</param>
+		/// <param name="Collisions">Outs an array of the Collisions this Projectile will encounter along the trajectory.</param>
+		/// <param name="bStopOnCollision">True to stop simulating and calculating the trajectory upon Collision.</param>
+		/// <param name="Resolution">The number of points to sample the trajectory.</param>
+		/// <param name="bDrawDebug">True to draw debug lines of the Projectile's trajectory and Collisions.</param>
+		/// <param name="MaxSimulationTime">The maximum time-step for the trajectory simulation.</param>
+		/// <returns>True if this Projectile will Collide with something in CollisionLayer.</returns>
+		public static bool GetProjectileArc(Rigidbody Physics, Vector3 StartPosition, float Gravity, out MArray<ProjectileArcTracer> Trajectory, float ProjectileRadius, LayerMask CollisionLayer, out MArray<ProjectileArcCollision> Collisions, bool bStopOnCollision = true, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
+		{
+			float SubstepDeltaTime = 1f / Resolution;
+			MVector Velocity = Physics.velocity;
+			MVector End = StartPosition;
+			float Time = 0f;
+
+			Trajectory = new MArray<ProjectileArcTracer>(Resolution);
+			Collisions = new MArray<ProjectileArcCollision>();
+			while (Time < MaxSimulationTime)
+			{
+				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				Time += ActualStepDeltaTime;
+
+				StartPosition = End;
+				MVector OldVelocity = Velocity;
+				Velocity = OldVelocity + new MVector(0f, Gravity * ActualStepDeltaTime, 0f);
+				End = StartPosition + .5f * ActualStepDeltaTime * (OldVelocity + Velocity);
+
+				Collider[] Collision = UnityEngine.Physics.OverlapSphere(End, ProjectileRadius, CollisionLayer);
+				for (int i = 0; i < Collision.Length; ++i)
+					if (Collision[i].gameObject != Physics.gameObject)
+						Collisions.PushUnique(new ProjectileArcCollision(End, Velocity, Collision[i]));
+
+				if (bStopOnCollision && Collision.Length > 0)
+					break;
+
+				Trajectory.Push(new ProjectileArcTracer(End, Velocity, Time));
+			}
+
+			if (bDrawDebug)
+			{
+				for (int i = 0; i < Trajectory.Num - 1; ++i)
+					Debug.DrawLine(Trajectory[i].Position, Trajectory[i + 1].Position, Color.Lerp(Color.green, Color.red, 0.06667f * Trajectory[i].Velocity.Magnitude), 5f);
+
+				for (int i = 0; i < Collisions.Num; ++i)
+					DebugArrow(Collisions[i].Point + MVector.One, -MVector.Up, Color.blue);
+			}
+
+			return Collisions.Num != 0;
+		}
+
+		/// <summary>The Arc of a Projectile travelling through the world.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="Projectile">This Projectile; ignored when checking for Collisions.</param>
+		/// <param name="Velocity">The speed and direction of this Projectile.</param>
+		/// <param name="StartPosition">The initial position of the Projectile.</param>
+		/// <param name="Gravity">The pull of Gravity affecting this Projectile.</param>
+		/// <param name="Trajectory">Outs an array of this Projectile's Position and velocity at the given Time.</param>
+		/// <param name="ProjectileRadius">The radius of this Projectile to consider for Collisions.</param>
+		/// <param name="CollisionLayer">The Layer to identify Collisions.</param>
+		/// <param name="Collisions">Outs an array of the Collisions this Projectile will encounter along the trajectory.</param>
+		/// <param name="bStopOnCollision">True to stop simulating and calculating the trajectory upon Collision.</param>
+		/// <param name="Resolution">The number of points to sample the trajectory.</param>
+		/// <param name="bDrawDebug">True to draw debug lines of the Projectile's trajectory and Collisions.</param>
+		/// <param name="MaxSimulationTime">The maximum time-step for the trajectory simulation.</param>
+		/// <returns>True if this Projectile will Collide with something in CollisionLayer.</returns>
+		public static bool GetProjectileArc(GameObject Projectile, MVector Velocity, Vector3 StartPosition, float Gravity, out MArray<ProjectileArcTracer> Trajectory, float ProjectileRadius, LayerMask CollisionLayer, out MArray<ProjectileArcCollision> Collisions, bool bStopOnCollision = true, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
+		{
+			float SubstepDeltaTime = 1f / Resolution;
+			MVector End = StartPosition;
+			float Time = 0f;
+
+			Trajectory = new MArray<ProjectileArcTracer>(Resolution);
+			Collisions = new MArray<ProjectileArcCollision>();
+			while (Time < MaxSimulationTime)
+			{
+				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				Time += ActualStepDeltaTime;
+
+				StartPosition = End;
+				MVector OldVelocity = Velocity;
+				Velocity = OldVelocity + new MVector(0f, Gravity * ActualStepDeltaTime, 0f);
+				End = StartPosition + .5f * ActualStepDeltaTime * (OldVelocity + Velocity);
+
+				Collider[] Collision = Physics.OverlapSphere(End, ProjectileRadius, CollisionLayer);
+				for (int i = 0; i < Collision.Length; ++i)
+					if (Collision[i].gameObject != Projectile)
+						Collisions.PushUnique(new ProjectileArcCollision(End, Velocity, Collision[i]));
+
+				if (bStopOnCollision && Collision.Length > 0)
+					break;
+
+				Trajectory.Push(new ProjectileArcTracer(End, Velocity, Time));
+			}
+
+			if (bDrawDebug)
+			{
+				for (int i = 0; i < Trajectory.Num - 1; ++i)
+					Debug.DrawLine(Trajectory[i].Position, Trajectory[i + 1].Position, Color.Lerp(Color.green, Color.red, 0.06667f * Trajectory[i].Velocity.Magnitude), 5f);
+
+				for (int i = 0; i < Collisions.Num; ++i)
+					DebugArrow(Collisions[i].Point + MVector.One, -MVector.Up, Color.blue);
+			}
+
+			return Collisions.Num != 0;
+		}
+
+		static float F_GetGravity(bool bIs3D) => bIs3D ? Physics.gravity.y : Physics2D.gravity.y;
+		static Vector3 V_GetGravity(bool bIs3D) => bIs3D ? Physics.gravity : Physics2D.gravity;
 
 		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
 		/// <decorations decor="public static MVector"></decorations>
@@ -231,7 +471,7 @@ namespace MW.Kinetic
 		/// <returns>The velocity required to jump Up at TargetHeight high.</returns>
 		public static MVector ComputeJumpVelocity(MVector Up, float TargetHeight, bool b3DGravity = true)
 		{
-			return ComputeJumpVelocity(Up, TargetHeight, GetGravity(b3DGravity));
+			return ComputeJumpVelocity(Up, TargetHeight, F_GetGravity(b3DGravity));
 		}
 
 		/// <summary>Compute the required velocity to jump at TargetHeight.</summary>
@@ -246,5 +486,54 @@ namespace MW.Kinetic
 
 			return Fast.FSqrt(U) * Up;
 		}
+	}
+
+	/// <summary>Projectile trajectory information.</summary>
+	/// <decorations decor="public struct"></decorations>
+	public struct ProjectileArcTracer
+	{
+		/// <summary>The world-position of this trace at <see cref="Time"/>.</summary>
+		/// <docs>Te world-position of this trace at Time.</docs>
+		/// <decorations decor="public MVector"></decorations>
+		public MVector Position;
+		/// <summary>The speed and direction of this trace at <see cref="Time"/>.</summary>
+		/// <docs>The speed and direction of this trace at Time.</docs>
+		/// <decorations decor="public MVector"></decorations>
+		public MVector Velocity;
+		/// <summary>The <see cref="Position"/> and <see cref="Velocity"/> of the trajectory at this Time.</summary>
+		/// <docs>The Position and Velocity of the trajectory at this Time.</docs>
+		/// <decorations decor="public float"></decorations>
+		public float Time;
+
+		internal ProjectileArcTracer(MVector Position, MVector Velocity, float Time)
+		{
+			this.Position = Position;
+			this.Velocity = Velocity;
+			this.Time = Time;
+		}
+	}
+
+	/// <summary>Projectile trajectory impacts information.</summary>
+	/// <decorations decor="public struct"></decorations>
+	public struct ProjectileArcCollision
+	{
+		/// <summary>The world-position of the Collision.</summary>
+		/// <decorations decor="public MVector"></decorations>
+		public MVector Point;
+		/// <summary>The speed and direction of the Collision.</summary>
+		/// <decorations decor="public MVector"></decorations>
+		public MVector Velocity;
+		/// <summary>The impacting Collider.</summary>
+		/// <decorations decor="public Collider"></decorations>
+		public Collider Collider;
+
+		internal ProjectileArcCollision(MVector Point, MVector Velocity, Collider Collider)
+		{
+			this.Point = Point;
+			this.Velocity = Velocity;
+			this.Collider = Collider;
+		}
+
+		public override int GetHashCode() => Collider.GetHashCode();
 	}
 }

@@ -4,8 +4,9 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
+using MW.Diagnostics;
 
-namespace MW.ConsoleDebugger
+namespace MW.Debugger
 {
 	/// <summary>A Console Debugger for debugging games during runtime.</summary>
 	/// <decorations decor="public abstract class : MonoBehaviour"></decorations>
@@ -122,7 +123,7 @@ namespace MW.ConsoleDebugger
 							ErrorBuilder.Append(", ");
 					}
 
-					Debug.LogError($"Failed to execute {MethodName} ({ErrorBuilder})");
+					Log.E($"Failed to execute {MethodName} ({ErrorBuilder})");
 				}
 			}
 			else

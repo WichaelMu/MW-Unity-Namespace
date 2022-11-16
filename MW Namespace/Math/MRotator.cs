@@ -24,10 +24,10 @@ namespace MW
 		/// <decorations decor="public float"></decorations>
 		public float Roll;
 
-		static readonly MRotator zero = new MRotator(0, 0, 0);
+		static readonly MRotator Zero = new MRotator(0, 0, 0);
 		/// <summary>An MRotator with no rotation.</summary>
 		/// <decorations decor="public static readonly MVector"></decorations>
-		public static readonly MRotator Zero = zero;
+		public static readonly MRotator Neutral = Zero;
 
 		/// <summary>Makes a rotation with Pitch, Yaw and Roll.</summary>
 		/// <param name="P">Pitch.</param>

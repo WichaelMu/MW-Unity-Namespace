@@ -21,7 +21,7 @@ namespace MTest
 			)
 		{
 #if MICROSOFT_TESTING
-			Assert.IsFalse(Mathf.Abs(L - R) > kFloatingPointTolerancePercentage, Operation);
+			Assert.AreEqual(L, R, kFloatingPointTolerancePercentage, Operation);
 #else
 			if (Mathf.Abs(L - R) > kFloatingPointTolerancePercentage)
 				O.Failed(TestNumber, L, R, Operation);
