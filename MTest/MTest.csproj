@@ -5,8 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
 	  <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <BaseOutputPath>Output\</BaseOutputPath>
-    <BaseIntermediateOutputPath>Output\</BaseIntermediateOutputPath>
+    <BaseOutputPath>Output\Binaries</BaseOutputPath>
+    <BaseIntermediateOutputPath>Output\Intermediate</BaseIntermediateOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsTestProject>True</IsTestProject>
@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="BuildAndRunMTest.bat" />
     <None Remove="BuildMTest.bat" />
     <None Remove="RunMTest.bat" />
   </ItemGroup>
@@ -39,7 +40,7 @@
 
   <ItemGroup>
     <Reference Include="MW">
-      <HintPath>..\Output\Release\netstandard2.0\MW.dll</HintPath>
+      <HintPath>..\Output\Binaries\Release\netstandard2.0\MW.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Extensions\UnityEngine.dll</HintPath>

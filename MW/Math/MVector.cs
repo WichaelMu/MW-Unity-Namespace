@@ -2,8 +2,8 @@
 using System.Globalization;
 using MW.Conversion;
 using MW.Math;
-using static MW.Math.Magic.Fast;
 using UnityEngine;
+using static MW.Math.Magic.Fast;
 
 namespace MW
 {

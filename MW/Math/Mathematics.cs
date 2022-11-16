@@ -3,8 +3,8 @@ using MW.Easing;
 using MW.Kinetic;
 using MW.Math.Magic;
 using UnityEngine;
-using static MW.Utils;
 using static MW.Math.Magic.Fast;
+using static MW.Utils;
 
 namespace MW.Math
 {

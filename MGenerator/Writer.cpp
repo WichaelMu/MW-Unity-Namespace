@@ -116,11 +116,11 @@ void Writer::Write(const VT(MW)& all_mw)
 {
 	std::map<std::string, std::string> namespace_to_html;
 
-#if _DEBUG && WITH_VS
-	const std::string HTML_PATH = "../HTML/";
-#else
-	const std::string HTML_PATH = "../../HTML/";
-#endif
+//#if _DEBUG && WITH_VS
+	const std::string HTML_PATH = "../../Docs/HTML/";
+//#else
+	//const std::string HTML_PATH = "../../Docs/HTML/";
+//#endif
 
 	// Write/Create basic HTML file.
 	for (auto& n : all_mw)

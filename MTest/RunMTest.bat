@@ -3,4 +3,4 @@
 @echo -- Running MTest Suite --
 @echo.
 
-dotnet test MTest.csproj
+dotnet test MTest.csproj /p:Configuration=Release

@@ -1,7 +1,6 @@
-﻿using MW;
-using static MW.Debugger.Arrow;
-using MW.Math.Magic;
+﻿using MW.Math.Magic;
 using UnityEngine;
+using static MW.Debugger.Arrow;
 
 namespace MW.Kinetic
 {
