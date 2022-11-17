@@ -10,8 +10,6 @@ namespace MW.Behaviour
 	/// <summary>Forward and Backward Reaching Inverse Kinematics.</summary>
 	/// <remarks>
 	/// This class is marked <see langword="partial"/> and can have its functionality extended.
-	/// <br></br><br></br>
-	/// Alternatively, this class can have its functionality extended.
 	/// </remarks>
 	/// <docs>
 	/// Forward and Backward Reaching Inverse Kinematics.

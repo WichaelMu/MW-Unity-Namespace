@@ -204,7 +204,7 @@ namespace MW
 		/// <decorations decors="public MVector"></decorations>
 		/// <param name="AngleDegrees">The degrees at which to rotate this MVector.</param>
 		/// <param name="Axis">The axis to rotate this MVector around.</param>
-		public MVector RotateAngleAxis(float AngleDegrees, MVector Axis)
+		public MVector RotateVector(float AngleDegrees, MVector Axis)
 		{
 			Mathematics.SinCos(out float S, out float C, AngleDegrees * Mathf.Deg2Rad);
 

@@ -10,16 +10,17 @@ A library containing helpful classes, methods, functions, and data structures to
 The MW Unity Namespace was built for ` Unity Engine 2021.1.3f1 ` and previously ` Unity Engine 2020.2.4f1 `.
 * Either:
   * See [Building and Compiling MW](#building-and-compiling-mw).
-  * Download the latest release of MW.
+  * [Download](https://github.com/WichaelMu/MW-Unity-Namespace/releases) the latest release of MW.
 * Drag MW.dll, and MW.xml if you want documentation, somewhere in your Assets/ folder in your Unity Project.
 * Unity will recompile with MW.dll.
 * In any C# script in your Project, add:
-   <br>
-   ` using MW; `,
-   <br>
+   ```cs
+   using MW;
+   ```
    or any other sub-namespace, such as 
-   <br>
-   ` using MW.Math; `.
+   ```cs
+   using MW.Math;
+   ```
 * You should now have access to the MW Namespace.
 
 You can view the documentation explaining each namespace and its classes in [The Documentation](#the-documentation).
@@ -38,18 +39,18 @@ MW was developed and built using Visual Studio 2022.
         * Ensure that the Solution Platform is set to ` Any CPU `.
         * Build the solution.
         * <b>NOTE: These are the settings that were used to build Generator.</b>
-    1. Ensure that Generator.exe is in ` Docs/Generator/Output/ `. Otherwise, place it there.
+    1. Ensure that Generator.exe is in ` MGenerator/Output/ `. Otherwise, place it there.
     1. You may also need to build MTest - this automatically tests aspects of the MW Namespace and reports any issues.
         * Open the MTest solution.
         * Ensure that the Solution Configuration is set to ` Release `.
         * Ensure that the Solution Platform is set to ` Any CPU `.
         * Build the solution.
         * <b>NOTE: These are the settings that were used to build MTest.</b>
-    1. Ensure that MTest.exe is in ` MTest/Output/Release/net6.0/ `. Otherwise, place it there.
+    1. Ensure that MTest.exe is in ` MTest/Binaries/Output/Release/net6.0/ `. Otherwise, place it there.
 1. Open and Build the MW solution.
 <br>
 
-You should have MW.dll and MW.xml in ` Output/Release/netstandard2.0/ `. Otherwise, re-attempt the steps above.
+You should have MW.dll and MW.xml in ` Output/Binaries/Release/netstandard2.0/ `. Otherwise, re-attempt the steps above.
     
 
 ## Namespaces

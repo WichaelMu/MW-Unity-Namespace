@@ -30,18 +30,21 @@
 	<ItemGroup>
 		<Compile Remove="Docs\**" />
 		<Compile Remove="Extensions\**" />
+		<Compile Remove="MGenerator\**" />
 		<Compile Remove="MTest\**" />
 		<Compile Remove="obj\**" />
 		<Compile Remove="Other\**" />
 		<Compile Remove="x64\**" />
 		<EmbeddedResource Remove="Docs\**" />
 		<EmbeddedResource Remove="Extensions\**" />
+		<EmbeddedResource Remove="MGenerator\**" />
 		<EmbeddedResource Remove="MTest\**" />
 		<EmbeddedResource Remove="obj\**" />
 		<EmbeddedResource Remove="Other\**" />
 		<EmbeddedResource Remove="x64\**" />
 		<None Remove="Docs\**" />
 		<None Remove="Extensions\**" />
+		<None Remove="MGenerator\**" />
 		<None Remove="MTest\**" />
 		<None Remove="obj\**" />
 		<None Remove="Other\**" />

@@ -42,7 +42,7 @@ namespace MW.Pathfinding
 					break;
 				}
 
-				for (uint i = 0; i < Current.NumberOfDirections(); ++i)
+				for (int i = 0; i < Current.NumberOfDirections(); ++i)
 				{
 					T Neighbour = (T)Current.Neighbour(i);
 					if (!Neighbour.IsTraversable() || Closed.Contains(Neighbour)) { continue; }
@@ -310,7 +310,7 @@ namespace MW.Pathfinding
 
 		/// <summary>How many directions can this Node point to?</summary>
 		/// <decorations decor="uint"></decorations>
-		uint NumberOfDirections();
+		int NumberOfDirections();
 
 		/// <summary>Is this block traversable?</summary>
 		/// <decorations decor="bool"></decorations>
@@ -318,7 +318,7 @@ namespace MW.Pathfinding
 		/// <summary>Get the Neighbouring Node at Direction.</summary>
 		/// <decorations decor="INode{T}"></decorations>
 		/// <param name="Direction">The neighbour of this Node in this direction.</param>
-		INode<T> Neighbour(uint Direction);
+		INode<T> Neighbour(int Direction);
 		/// <summary>The distance heuristic to calculate pathfinding scores.</summary>
 		/// <decorations decor="float"></decorations>
 		/// <param name="RelativeTo">Distance to from this T to Relative To.</param>

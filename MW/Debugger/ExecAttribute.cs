@@ -33,7 +33,7 @@ namespace MW.Debugger
 		public ExecAttribute(bool bIsTestExec) : this(string.Empty, true) { bHideInConsole = bIsTestExec; }
 	}
 
-	internal struct MethodExec<T1, T2>
+	public struct MethodExec<T1, T2>
 	{
 		public T1 Method;
 		public T2 Exec;

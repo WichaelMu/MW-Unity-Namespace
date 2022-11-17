@@ -91,9 +91,8 @@ namespace MW.Math.Magic
 		/// <summary>1 / N.</summary>
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">The Number to take the reciprocal of.</param>
-		/// <param name="AdditionalIterations">The number of additional polynomial evaluation iterations of Horner's method to perform.</param>
 		/// <returns>An approximation for 1 / N.</returns>
-		public static unsafe float FInverse(float N, int AdditionalIterations = 1)
+		public static unsafe float FInverse(float N)
 		{
 			if (N == 0F)
 				return float.PositiveInfinity;
@@ -101,21 +100,11 @@ namespace MW.Math.Magic
 			int Sign = N < 0f ? -1 : 1;
 			int U = (int)(0x7EF127EA - *(uint*)&N);
 			float F = *(float*)&U;
-			float H = N * F; // Initial Approximation.
+			float W = N * F; // Initial Approximation.
 
-			ClampMin(ref AdditionalIterations, 1);
-			ClampMax(ref AdditionalIterations, 3);
-
-			float R = F * (2f - H);
-			if (AdditionalIterations <= 2)
-			{
-				R *= 4 + H * (-6f + H * (4f - H));
-			}
-
-			if (AdditionalIterations <= 3)
-			{
-				R *= 8 + H * (-28f + H * (56f + H * (-70f + H * (56f + H * (-28f + H * (8f - H))))));
-			}
+			float R = F * (2f - W);
+			R *= 4 + W * (-6f + W * (4f - W));
+			R *= 8 + W * (-28f + W * (56f + W * (-70f + W * (56f + W * (-28f + W * (8f - W))))));
 
 			return R;
 		}

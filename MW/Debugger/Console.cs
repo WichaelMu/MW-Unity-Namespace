@@ -21,11 +21,11 @@ namespace MW.Debugger
 		/// <decorations decor="public virtual KeyCode"></decorations>
 		public virtual KeyCode ShowConsoleKey { get; set; } = KeyCode.BackQuote;
 
-		Dictionary<string, MethodExec<MethodInfo, ExecAttribute>> Funcs;
+		protected Dictionary<string, MethodExec<MethodInfo, ExecAttribute>> Funcs;
 
-		bool bShowConsole = false;
-		string Input;
-		string PreviousInput;
+		protected bool bShowConsole = false;
+		protected string Input;
+		protected string PreviousInput;
 
 		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
 		/// <decorations decor="public virtual void"></decorations>
