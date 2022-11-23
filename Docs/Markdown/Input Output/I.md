@@ -25,6 +25,6 @@ bool bAny = I.Key(KS, false, true);        // True if KS was pressed at all.
 
 ## Any
 Check if anything was pressed.
-```
+```cs
 bool bAnythingWasPressed = I.Any();        // True if anything was pressed.
 ```
