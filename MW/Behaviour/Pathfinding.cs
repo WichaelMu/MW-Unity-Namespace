@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using MW.Diagnostics;
+using UnityEngine;
 
 namespace MW.Pathfinding
 {
 	/// <summary>Provides the A* Pathfinding implementation for T.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	/// <decorations decor="public static class {T} where T : INode{T}, IHeapItem{T}"></decorations>
-	public static class Pathfinding<T> where T : INode<T>, IHeapItem<T>
+	public static class Pathfinding<T> where T : MNode, IHeapItem<T>
 	{
 		/// <summary>A* pathfinds from Origin to Destination looking uDepth times within a uMapSize.</summary>
 		/// <decorations decor="public static bool"></decorations>
@@ -16,11 +17,9 @@ namespace MW.Pathfinding
 		/// <param name="Path">Reference T List of that make up the path from Origin to Destination.</param>
 		/// <param name="Depth">The depth to search to.</param>
 		/// <param name="MapSize">The total size of the map to be traversed. (The number of INodes).</param>
-		/// <param name="OnPathFound">What to do when a path is found? Passes the reference successful Path as a parameter.</param>
-		/// <param name="OnPathFailed">What to do when a path cannot be found? Passes the current state of the Path as a parameter.</param>
 		/// <param name="bUseDiagnostics">Time the duration of Pathfinding?</param>
 		/// <returns>Whether or not a path was found from Origin to Destination within uDepth in uMapSize.</returns>
-		public static bool AStar(T Origin, T Destination, out List<T> Path, uint Depth = int.MaxValue, uint MapSize = 10000, Action<List<T>> OnPathFound = null, Action<List<T>> OnPathFailed = null, bool bUseDiagnostics = false)
+		public static bool AStar(T Origin, T Destination, out MArray<T> Path, uint Depth = int.MaxValue, uint MapSize = 10000, bool bUseDiagnostics = false)
 		{
 			Stopwatch sw = new(bUseDiagnostics);
 
@@ -36,7 +35,7 @@ namespace MW.Pathfinding
 				T Current = Open.RemoveFirst();
 				Closed.Add(Current);
 
-				if (Current.CompareTo(Destination) == 0)
+				if (Current == Destination)
 				{
 					bFoundPath = true;
 					break;
@@ -44,7 +43,7 @@ namespace MW.Pathfinding
 
 				for (int i = 0; i < Current.NumberOfDirections(); ++i)
 				{
-					T Neighbour = (T)Current.Neighbour(i);
+					T Neighbour = Current.Neighbour(i) as T;
 					if (!Neighbour.IsTraversable() || Closed.Contains(Neighbour)) { continue; }
 
 					float fUpdatedCost = Current.G + Current.DistanceHeuristic(Neighbour);
@@ -72,10 +71,10 @@ namespace MW.Pathfinding
 				long Time = sw.Time();
 
 				T Traverse = Destination;
-				while (Traverse.CompareTo(Origin) == 0)
+				while (Traverse != Origin)
 				{
-					Path.Add(Traverse);
-					Traverse = Traverse.Parent;
+					Path.Push(Traverse);
+					Traverse = Traverse.Parent as T;
 				}
 
 				Path.Reverse();
@@ -84,12 +83,6 @@ namespace MW.Pathfinding
 				{
 					Log.P("Path found in:", Time, "ms. Path reversed in:", sw.Stop());
 				}
-
-				OnPathFound?.Invoke(Path);
-			}
-			else
-			{
-				OnPathFailed?.Invoke(Path);
 			}
 
 			return bFoundPath;
@@ -99,7 +92,7 @@ namespace MW.Pathfinding
 	/// <summary>Computes a number of paths over a number of frames.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	/// <decorations decor="public static class {T} where T : INode{T}, IHeapItem{T}"></decorations>
-	public static class PathRegister<T> where T : INode<T>, IHeapItem<T>
+	public static class PathRegister<T> where T : MNode, IHeapItem<T>
 	{
 		static Queue<PathRequest> PathsToCompute = new();
 		static bool bIsCurrentlyComputingPath;
@@ -129,7 +122,7 @@ namespace MW.Pathfinding
 				bIsCurrentlyComputingPath = true;
 
 				PathRequest CurrentComputation = PathsToCompute.Dequeue();
-				bool bPathFound = Pathfinding<T>.AStar(CurrentComputation.Origin, CurrentComputation.Destination, out List<T> Path);
+				bool bPathFound = Pathfinding<T>.AStar(CurrentComputation.Origin, CurrentComputation.Destination, out MArray<T> Path);
 
 				if (bPathFound)
 				{
@@ -190,22 +183,20 @@ namespace MW.Pathfinding
 	/// <summary>The MonoBehavior script that manages pathfinding over frames.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	/// <decorations decor="public class {T} : MonoBehaviour where T : INode{T}, IHeapItem{T}"></decorations>
-	public class MPathManager<T> : UnityEngine.MonoBehaviour where T : INode<T>, IHeapItem<T>
+	public class MPathManager<T> : MonoBehaviour where T : MNode, IHeapItem<T>
 	{
 		/// <summary>The number of paths to compute per frame.</summary>
 		/// <decorations decor="[SerializeField] [Min(1)] uint"></decorations>
-		[UnityEngine.SerializeField]
-		[UnityEngine.Min(1)]
-		[UnityEngine.Tooltip("The number of paths to compute per frame.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
+		[SerializeField]
+		[Min(1)]
+		[Tooltip("The number of paths to compute per frame.")]
 		uint ComputationsPerFrame = 1;
 
 		/// <summary>The number of frames between computing path/s.</summary>
 		/// <decorations decor="[SerializeField] [Min(1)] uint"></decorations>
-		[UnityEngine.SerializeField]
-		[UnityEngine.Min(1)]
-		[UnityEngine.Tooltip("The number of frames before path/s are computed.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "This is marked UnityEngine.SerializeField and will be changed in the Unity Editor.")]
+		[SerializeField]
+		[Min(1)]
+		[Tooltip("The number of frames before path/s are computed.")]
 		uint FramesBetweenComputations = 1;
 
 		bool bIsPaused = false;
@@ -324,5 +315,60 @@ namespace MW.Pathfinding
 		/// <param name="RelativeTo">Distance to from this T to Relative To.</param>
 		/// <returns>An indicative distance from this T, Relative To.</returns>
 		float DistanceHeuristic(T RelativeTo);
+	}
+
+	public abstract class MNode : INode<MNode>, IHeapItem<MNode>
+	{
+		public bool bIsTraversable;
+		public MArray<MNode> Neighbours;
+
+		#region Pathfinding Interface
+
+		public float F { get => f; set => f = value; }
+		public float G { get => g; set => g = value; }
+		public float H { get => h; set => h = value; }
+		public MNode Parent { get => parent; set => parent = value; }
+		public int HeapItemIndex { get => HeapIndex; set => HeapIndex = value; }
+
+		float f, g, h;
+		MNode parent;
+		int HeapIndex;
+
+		#endregion;
+
+		public MNode()
+		{
+			f = g = h = 0f;
+			HeapIndex = 0;
+			parent = null;
+
+			Neighbours = new MArray<MNode>(6);
+			bIsTraversable = true;
+		}
+
+		public virtual int CompareTo(MNode Other)
+		{
+			int Compare = F.CompareTo(Other.F);
+
+			if (Compare == 0)
+				Compare = H.CompareTo(Other.H);
+
+			return -Compare;
+		}
+
+		public abstract float DistanceHeuristic(MNode RelativeTo);
+
+		public abstract bool IsTraversable();
+
+		public virtual INode<MNode> Neighbour(int Direction)
+		{
+			if (Direction < Neighbours.Num)
+				return Neighbours[Direction];
+			return null;
+		}
+
+		public virtual int NumberOfDirections() => Neighbours.Num;
+
+		public static implicit operator bool(MNode M) => M != null;
 	}
 }

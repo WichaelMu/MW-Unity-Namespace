@@ -519,8 +519,7 @@ namespace MW
 	}
 
 	/// <summary>The base class for an MArray.</summary>
-	/// <decorations decor="[Serializable] public class"></decorations>
-	[Serializable]
+	/// <decorations decor="public class"></decorations>
 	public class MArray
 	{
 		/// <summary>Definition of an invalid position or illegal number associated with an MArray.</summary>

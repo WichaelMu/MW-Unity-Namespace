@@ -33,4 +33,4 @@ Vector3 V = N.V3();
 // Vector3 to MVector
 MVector M = U.MV();
 ```
-Vector3 to MVector conversions can also be done with `UVector.Clone(Vector3)`.
+Vector3 to MVector conversions can also be done with `FVector.Clone(Vector3)`.

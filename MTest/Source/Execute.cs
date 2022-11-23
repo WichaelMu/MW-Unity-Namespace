@@ -206,19 +206,19 @@ namespace MTest
 			Assert.AreEqual(M << 4, M << 1);
 
 			Assert.AreEqual(Mathematics.SqrDistance(UL, Vector3.zero), ML.SqrMagnitude);
-			VectorToleranceCheck(30, UL.Normalise(), UL.normalized, "V3 Extension Normalise");
+			VectorToleranceCheck(30, UL.FNormalise(), UL.normalized, "V3 Extension Normalise");
 			Assert.AreEqual(Mathematics.Distance(UL, UR), Vector3.Distance(UL, UR));
 
 			Vector3 V = new Vector3(2f, 4f, 6f);
-			UVector Clone = UVector.Clone(ref V);
+			FVector Clone = FVector.Clone(ref V);
 
-			Assert.AreEqual(Clone.Construct(), V.MV());
+			Assert.AreEqual(Clone.MV(), V.MV());
 
 			V.x = 8;
 			V.y = 10;
 			V.z = 12;
 
-			Assert.AreEqual(V.MV(), Clone.Construct());
+			Assert.AreEqual(V.MV(), Clone.MV());
 			Assert.AreEqual(V.x, *Clone.pX);
 			Assert.AreEqual(V.y, *Clone.pY);
 			Assert.AreEqual(V.z, *Clone.pZ);
@@ -233,9 +233,9 @@ namespace MTest
 
 			MVector MVectorRotate = new MVector(4f, 2f, 0f);
 			MVector Rotated = MVectorRotate.RotateVector(78.24f, MVector.Up);
-			Assert.AreEqual(Rotated, Clone.RotateVector(78.24f, Vector3.up).Construct());
+			Assert.AreEqual(Rotated, Clone.RotateVector(78.24f, Vector3.up).MV());
 
-			Assert.AreEqual(V.normalized.MV(), Clone.Normalise().Construct());
+			Assert.AreEqual(V.normalized.MV(), Clone.FNormalise().MV());
 
 			Clone.Dispose();
 		}

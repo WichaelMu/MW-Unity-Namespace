@@ -201,6 +201,14 @@ namespace MW
 		public MVector Mirror(MVector Normal) => 2f * (this | Normal) * this - Normal;
 
 		/// <summary>Rotates this MVector at an angle of AngleDegrees around Axis.</summary>
+		/// <remarks>
+		/// <b>While looking towards -Axis:</b><br></br>
+		/// + Angle is CW. - Angle is CCW.
+		/// </remarks>
+		/// <docremarks>
+		/// While looking towards -Axis:&lt;br&gt;
+		/// + Angle is CW. - Angle is CCW.
+		/// </docremarks>
 		/// <decorations decors="public MVector"></decorations>
 		/// <param name="AngleDegrees">The degrees at which to rotate this MVector.</param>
 		/// <param name="Axis">The axis to rotate this MVector around.</param>

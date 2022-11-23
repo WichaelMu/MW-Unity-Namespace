@@ -23,40 +23,40 @@ namespace MW.Diagnostics
 		/// <summary><see cref="Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.Log(object) every object with object.ToString().</docs>
 		/// <decorations decor="public static void"></decorations>
-		/// <param name="args">The list of objects to log separated by a space.</param>
-		public static void P(params object[] args)
+		/// <param name="Args">The list of objects to log separated by a space.</param>
+		public static void P(params object[] Args)
 		{
-			string print = "";
-			foreach (object arg in args)
-				print += arg.ToString() + ' ';
+			StringBuilder SB = new StringBuilder();
+			foreach (object arg in Args)
+				SB.Append(arg.ToString()).Append(' ');
 
-			Debug.Log(print);
+			Debug.Log(SB.ToString());
 		}
 
 		/// <summary><see cref="Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.LogError(object) every object with object.ToString().</docs>
 		/// <decorations decor="public static void"></decorations>
-		/// <param name="args">The list of objects to log separated by a space.</param>
-		public static void E(params object[] args)
+		/// <param name="Args">The list of objects to log separated by a space.</param>
+		public static void E(params object[] Args)
 		{
-			string print = "";
-			foreach (object arg in args)
-				print += arg.ToString() + ' ';
+			StringBuilder SB = new StringBuilder();
+			foreach (object Arg in Args)
+				SB.Append(Arg.ToString()).Append(' ');
 
-			Debug.LogError(print);
+			Debug.LogError(SB.ToString());
 		}
 
 		/// <summary><see cref="Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.LogWarning(object) every object with object.ToString().</docs>
 		/// <decorations decor="public static void"></decorations>
-		/// <param name="args">The list of objects to log separated by a space.</param>
-		public static void W(params object[] args)
+		/// <param name="Args">The list of objects to log separated by a space.</param>
+		public static void W(params object[] Args)
 		{
-			string print = "";
-			foreach (object arg in args)
-				print += arg.ToString() + ' ';
+			StringBuilder SB = new StringBuilder();
+			foreach (object Arg in Args)
+				SB.Append(Arg.ToString()).Append(' ');
 
-			Debug.LogWarning(print);
+			Debug.LogWarning(SB.ToString());
 		}
 
 		/// <summary>Prints Content to the Console with Verbosity.</summary>
@@ -85,7 +85,7 @@ namespace MW.Diagnostics
 		/// <summary>Prints Content to the Console with Colour and Verbosity.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Content">The string to colour and print to the console.</param>
-		/// <param name="Colour">The colour to display Content.</param>
+		/// <param name="Colour">The colour to display Content in RGB.</param>
 		/// <param name="Verbosity">The verbosity to print Content with.</param>
 		public static void Colourise(string Content, MVector Colour, EVerbosity Verbosity = EVerbosity.Log)
 		{

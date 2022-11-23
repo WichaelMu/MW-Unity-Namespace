@@ -24,6 +24,7 @@
     <ProjectGuid>{68cd8cd0-b832-42d5-b893-bdf226d7052c}</ProjectGuid>
     <RootNamespace>Generator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MGenerator</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

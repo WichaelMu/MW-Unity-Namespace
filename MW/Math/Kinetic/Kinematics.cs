@@ -81,12 +81,13 @@ namespace MW.Kinetic
 		/// <param name="LaunchSpeed">The speed of the launched projectile.</param>
 		/// <param name="bFavourHighArc">Should the launched projectile attain the maximum height?</param>
 		/// <param name="bIs3D">True if using 3D physics.</param>
+		/// <param name="bDrawDebug">True to draw debug lines of the arc.</param>
 		/// <returns>True if a solution to hit Target from Origin at LaunchSpeed exists.</returns>
-		public static bool LaunchTowards(out MVector LaunchVelocity, Vector3 Origin, Vector3 Target, float LaunchSpeed, bool bFavourHighArc, bool bIs3D = true)
+		public static bool LaunchTowards(out MVector LaunchVelocity, Vector3 Origin, Vector3 Target, float LaunchSpeed, bool bFavourHighArc, bool bIs3D = true, bool bDrawDebug = false)
 		{
 			MVector RelativeTargetPosition = Target - Origin;
 			MVector DirectionToTargetIgnoringAltitude = RelativeTargetPosition.XZ.Normalised;
-			float DisplacementToTargetIgnoringAltitude = new MVector(RelativeTargetPosition.X, RelativeTargetPosition.Z).Magnitude;
+			float DisplacementToTargetIgnoringAltitude = RelativeTargetPosition.XZ.Magnitude;
 
 			float YDisplacement = RelativeTargetPosition.Y;
 
@@ -96,7 +97,7 @@ namespace MW.Kinetic
 			float Radicand = (LaunchSpeedSquared * LaunchSpeedSquared) - Gravity * ((Gravity * (DisplacementToTargetIgnoringAltitude * DisplacementToTargetIgnoringAltitude)) + (2f * YDisplacement * LaunchSpeedSquared));
 			if (Radicand < 0f)
 			{
-				LaunchVelocity = MVector.Zero;
+				LaunchVelocity = MVector.NaN;
 				return false;
 			}
 
@@ -128,6 +129,22 @@ namespace MW.Kinetic
 			float LaunchHeight = Fast.FSqrt(LaunchSpeedSquared - DisplacementArcPreference);
 
 			LaunchVelocity = (PreferenceMagnitude * DirectionToTargetIgnoringAltitude) + (LaunchHeight * Sign * MVector.Up);
+
+			if (bDrawDebug)
+			{
+				const float kResolution = .033333f;
+				MVector DebugOrigin = Origin;
+				for (float TimeStep = 0f; TimeStep < 1f; TimeStep += kResolution)
+				{
+					float TimeInFlight = (TimeStep + kResolution) * DisplacementToTargetIgnoringAltitude / PreferenceMagnitude;
+
+					MVector DebugDestination = Origin + TimeInFlight * LaunchVelocity + new MVector(0f, .5f * -Gravity * TimeInFlight * TimeInFlight);
+
+					Debug.DrawLine(DebugOrigin, DebugDestination, Color.green);
+					DebugOrigin = DebugDestination;
+				}
+			}
+
 			return true;
 		}
 
