@@ -4,5 +4,5 @@
 @echo.
 
 @cd Output
-@Generator.exe
+@MGenerator.exe
 @cd ..

@@ -15,6 +15,7 @@ public:
 private:
 
 	static MW ProcessNode(const std::string& chars);
+	static void ProcessPredefinedGenericType(std::string& param);
 
 };
 

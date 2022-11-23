@@ -201,21 +201,38 @@ MW Reader::ProcessNode(const std::string& chars)
 				else
 				{
 					std::string param = "";
+					bool is_predefined_generic_type = false; // E.g., MW.MArray<MW.Kinetic.ProjectileArcCollision> Collisions.
 					for (size_t k = i + 1; k < chars.length(); ++k)
 					{
 						if (chars[k] != ')')
 							param += chars[k];
 
-						if (chars[k] == '.')
+						if (chars[k] == '{' && chars[k + 1] != '`')
+							is_predefined_generic_type = true;
+
+						if (chars[k] == '.' && !is_predefined_generic_type)
 							param = "";
 
 						// Checks if a parameter has been terminated. (1, 2). Adds only 1 and 2.
 						if (chars[k] == ',' || chars[k] == ')')
 						{
-							SwapChars::Replace(param);
+							// If we're not a custom generic type, continue as normal...
+							if (!is_predefined_generic_type)
+							{
+								SwapChars::Replace(param);
 
-							// Add the type of the parameter after replacing illegals.
-							mw.function_parameters_type.push_back(param);
+								// Add the type of the parameter after replacing illegals.
+								mw.function_parameters_type.push_back(param);
+							}
+							// Otherwise, process the generic type *first*, then replace and continue as normal...
+							else
+							{
+								ProcessPredefinedGenericType(param);
+								SwapChars::Replace(param);
+
+								mw.function_parameters_type.push_back(param);
+								is_predefined_generic_type = false;
+							}
 
 							// Some parameters don't have the 'System.' prefix. (System.Int32, System.String, System.Single).
 							// Some parameters are generic '``0' and are represented only with ('``0') (no System.).
@@ -307,7 +324,7 @@ MW Reader::ProcessNode(const std::string& chars)
 					*
 					* If we have reached the first period (the period in Math.Magic), do not increment
 					* out iteration and instead add a period in the Namespace for Docs.
-					* 
+					*
 					* This *should* support namespaces branching through multiple levels.
 					*/
 					else
@@ -357,4 +374,21 @@ MW Reader::ProcessNode(const std::string& chars)
 		mw.mw_class = mw.mw_namespace;
 
 	return mw;
+}
+
+void Reader::ProcessPredefinedGenericType(std::string& param)
+{
+	size_t index_of_angle_bracket = std::string::npos;
+	size_t index_of_dot = std::string::npos;
+
+	for (size_t i = 0; i < param.length(); ++i)
+	{
+		if (param[i] == '{')
+			index_of_angle_bracket = i;
+		else if (param[i] == '.')
+			index_of_dot = i;
+	}
+
+	if (index_of_angle_bracket != std::string::npos && index_of_dot != std::string::npos)
+		param.erase(param.begin() + index_of_angle_bracket + 1, param.begin() + index_of_dot + 1);
 }
