@@ -30,22 +30,28 @@
 	<ItemGroup>
 		<Compile Remove="Docs\**" />
 		<Compile Remove="Extensions\**" />
+		<Compile Remove="MEditor\**" />
 		<Compile Remove="MGenerator\**" />
 		<Compile Remove="MTest\**" />
+		<Compile Remove="MWEditor\**" />
 		<Compile Remove="obj\**" />
 		<Compile Remove="Other\**" />
 		<Compile Remove="x64\**" />
 		<EmbeddedResource Remove="Docs\**" />
 		<EmbeddedResource Remove="Extensions\**" />
+		<EmbeddedResource Remove="MEditor\**" />
 		<EmbeddedResource Remove="MGenerator\**" />
 		<EmbeddedResource Remove="MTest\**" />
+		<EmbeddedResource Remove="MWEditor\**" />
 		<EmbeddedResource Remove="obj\**" />
 		<EmbeddedResource Remove="Other\**" />
 		<EmbeddedResource Remove="x64\**" />
 		<None Remove="Docs\**" />
 		<None Remove="Extensions\**" />
+		<None Remove="MEditor\**" />
 		<None Remove="MGenerator\**" />
 		<None Remove="MTest\**" />
+		<None Remove="MWEditor\**" />
 		<None Remove="obj\**" />
 		<None Remove="Other\**" />
 		<None Remove="x64\**" />
@@ -54,6 +60,9 @@
 	<ItemGroup>
 		<Reference Include="Unity.TextMeshPro">
 		  <HintPath>Extensions\Unity.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEditor">
+		  <HintPath>..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.3f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine">
 		  <HintPath>Extensions\UnityEngine.dll</HintPath>
