@@ -14,7 +14,8 @@ namespace MW.Pathfinding
 		public bool bDrawGizmos;
 		/// <summary>Draw the positions of the individual nodes.</summary>
 		/// <decorations decor="public bool"></decorations>
-		public bool bDrawGizmoCubes;
+		public EDynamicPathfindingGizmosOptions GizmoOptions;
+		public bool bShowBounds;
 
 		/// <summary>The local centre of the bounding box.</summary>
 		/// <decorations decor="[SerializeField] Vector3"></decorations>
@@ -90,11 +91,17 @@ namespace MW.Pathfinding
 			int i = 0;
 			Limits = -Vector2Int.one;
 
-			for (float x = -Bounds.x; x <= Bounds.x; x += PPU)
+			// Handle 3 offset.
+			int IsThree = PointsPerUnit == 3 ? 1 : 0;
+			float XLimit = Bounds.x + PPU * IsThree;
+			float YLimit = Bounds.y + PPU * IsThree;
+			float ZLimit = Bounds.z + PPU * IsThree;
+
+			for (float x = -Bounds.x; x <= XLimit; x += PPU)
 			{
-				for (float y = -Bounds.y; y <= Bounds.y; y += PPU)
+				for (float y = -Bounds.y; y <= YLimit; y += PPU)
 				{
-					for (float z = -Bounds.z; z <= Bounds.z; z += PPU)
+					for (float z = -Bounds.z; z <= ZLimit; z += PPU)
 					{
 						Vector3 Point = Centre + new Vector3(x, y, z);
 						Node N = new Node();
@@ -146,6 +153,32 @@ namespace MW.Pathfinding
 			}
 
 			return false;
+		}
+
+		public int WorldToIndex(Vector3 InWorld)
+		{
+			Vector3 LocalWorld = (InWorld * PointsPerUnit) - Centre;
+
+			if (Mathf.Abs(LocalWorld.x) > Bounds.x || Mathf.Abs(LocalWorld.y) > Bounds.y || Mathf.Abs(LocalWorld.z) > Bounds.z)
+				return -1;
+
+			int MidPoint = Nodes.Num / 2;
+
+			float X = Limits.x * Mathf.Round(LocalWorld.x);
+			float Y = Limits.y * Mathf.Round(LocalWorld.y);
+			float Z = Mathf.Round(LocalWorld.z);
+
+			return MidPoint + (int)(X + Y + Z);
+		}
+
+		public Node WorldToNode(Vector3 InWorld)
+		{
+			return Nodes[WorldToIndex(InWorld)];
+		}
+
+		public int NodeToIndex(Node Node)
+		{
+			return WorldToIndex(Node.Position);
 		}
 
 		IEnumerator AsyncDynamicNodeReconnect()
@@ -215,34 +248,44 @@ namespace MW.Pathfinding
 			return false;
 		}
 
-		void OnDrawGizmosSelected()
+		void OnDrawGizmos()
 		{
-			FAbs(ref Bounds);
-
 			if (!bDrawGizmos)
 				return;
 
-			Gizmos.DrawWireCube(transform.position + LocalCentre, Bounds * 2);
+			if (bShowBounds)
+				Gizmos.DrawWireCube(transform.position + LocalCentre, Bounds * 2);
 
-			if (bDrawGizmoCubes)
+			if (GizmoOptions == 0)
+				return;
+
+
+			for (int i = 0; i < Nodes.Num; ++i)
 			{
-				Gizmos.color = Color.red;
-				for (int i = 0; i < Nodes.Num; ++i)
+				Node N = Nodes[i];
+				if ((GizmoOptions & EDynamicPathfindingGizmosOptions.CollisionOnly) == EDynamicPathfindingGizmosOptions.CollisionOnly && !N.bIsTraversable)
 				{
-					Node N = Nodes[i];
-					if (!N.bIsTraversable)
-					{
-						Gizmos.DrawCube(N.Position, Size);
-					}
+					Gizmos.color = Color.red;
+					Gizmos.DrawCube(N.Position, Size);
+				}
+				else if ((GizmoOptions & EDynamicPathfindingGizmosOptions.NoCollision) == EDynamicPathfindingGizmosOptions.NoCollision && N.bIsTraversable)
+				{
+					Gizmos.color = Color.cyan;
+					Gizmos.DrawCube(N.Position, Size);
 				}
 			}
 		}
+	}
 
-		static void FAbs(ref Vector3Int V)
-		{
-			V.x = Mathf.Abs(V.x);
-			V.y = Mathf.Abs(V.y);
-			V.z = Mathf.Abs(V.z);
-		}
+	public enum EDynamicPathfindingGizmosOptions : byte
+	{
+		[InspectorName("Show None")]
+		None = 0,
+		[InspectorName("Show Collisions Only")]
+		CollisionOnly = 1,
+		[InspectorName("Show Traversable Only")]
+		NoCollision = 2,
+		[InspectorName("Show All")]
+		AllNodes = CollisionOnly | NoCollision
 	}
 }
