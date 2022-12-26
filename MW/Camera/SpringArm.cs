@@ -89,10 +89,8 @@ namespace MW.CameraUtils
 		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField] float MaxPanDistance = 5f;
 
-		Vector2 PreviousMouseDragPosition;
 		Vector3 GimbalRotationInherited;
 		Vector3 CameraRotationInherited;
-		Vector2 PreviousMousePanPosition;
 		Vector3 OriginalTargetOffset;
 		float PitchDegrees;
 
@@ -188,11 +186,6 @@ namespace MW.CameraUtils
 
 		void Update()
 		{
-			UpdateRotationOnMouse();
-			PanCameraOnMouse();
-
-			ScrollDistance();
-
 			if (bNoClip)
 			{
 				const float kNoClipSpeed = 25f;
@@ -303,7 +296,7 @@ namespace MW.CameraUtils
 				return;
 
 			// Make the Position and Rotation for Lag.
-			FinalPosition = TargetPos() - (Distance * ArmDirection);
+			FinalPosition = GetTargetPosition() - (Distance * ArmDirection);
 
 			SetPositionAndRotation(FinalPosition, FinalRotation);
 		}
@@ -319,7 +312,7 @@ namespace MW.CameraUtils
 				return false;
 #endif
 
-			Vector3 TP = TargetPos();
+			Vector3 TP = GetTargetPosition();
 			Ray FOV = new Ray(TP, -Direction);
 			bool bViewToTargetBlocked = Physics.Raycast(FOV, out RaycastHit Hit, Distance, OnlyCollideWith);
 
@@ -465,7 +458,7 @@ namespace MW.CameraUtils
 		/// <summary>The Target's position including any offsets and rotations.</summary>
 		/// <decorations decor="protected virtual Vector3"></decorations>
 		/// <returns>The Target's Position + TargetOffset + Target.up.y.</returns>
-		protected virtual Vector3 TargetPos() => Target.position + TargetOffset * Target.up.y;
+		protected virtual Vector3 GetTargetPosition() => Target.position + TargetOffset * Target.up.y;
 
 		/// <summary>Gets the Inherited Rotation of the Target.</summary>
 		/// <decorations decor="protected virtual Quaternion"></decorations>
@@ -483,24 +476,30 @@ namespace MW.CameraUtils
 			return TargetAxis;
 		}
 
-		void ScrollDistance()
+		/// <summary>Changes the <see cref="Distance"/> of the Spring Arm.</summary>
+		/// <docs>Sets the Distance of the Spring Arm.</docs>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="DistanceDelta">The amount to increase or decrease.</param>
+		public void SetDeltaDistance(float DistanceDelta)
 		{
 			if (bEnableScrollToDistance)
 			{
-				Distance += Input.mouseScrollDelta.y * (bInvertZ ? -1f : 1f) * -ScrollSensitivity;
+				Distance += DistanceDelta * (bInvertZ ? -1f : 1f) * -ScrollSensitivity;
 
-				Distance = Mathf.Clamp(Distance, 1, 30);
+				Distance = Mathf.Clamp(Distance, MinMaxDistance.x, MinMaxDistance.y);
 			}
 		}
 
-		void UpdateRotationOnMouse()
+		/// <summary>Rotates the Spring Arm around <see cref="Target"/>.</summary>
+		/// <docs>Rotates the Spring Arm around Target.</docs>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="RotationDelta">The delta rotation in degrees where X = Yaw, Y = Pitch.</param>
+		public void SetDeltaRotation(Vector2 RotationDelta)
 		{
-			Vector3 MousePosition = Input.mousePosition;
-
-			if (Input.GetMouseButton(1))
+			if (RotationDelta.sqrMagnitude > Vector2.kEpsilon)
 			{
-				float DeltaX = (MousePosition.x - PreviousMouseDragPosition.x) * OrbitSensitivity;
-				float DeltaY = (MousePosition.y - PreviousMouseDragPosition.y) * OrbitSensitivity;
+				float DeltaX = RotationDelta.x * OrbitSensitivity;
+				float DeltaY = RotationDelta.y * OrbitSensitivity;
 
 				DetermineInverse(ref DeltaX, ref DeltaY);
 
@@ -532,8 +531,6 @@ namespace MW.CameraUtils
 				GimbalRotationInherited = DefaultGimbalRotation;
 				CameraRotationInherited = DefaultCameraRotation;
 			}
-
-			PreviousMouseDragPosition = MousePosition;
 		}
 
 		void DetermineInverse(ref float DeltaX, ref float DeltaY)
@@ -546,14 +543,16 @@ namespace MW.CameraUtils
 			static void Inverse(ref float F) => F *= -1f;
 		}
 
-		void PanCameraOnMouse()
+		/// <summary>Pans the Spring Arm about <see cref="GetTargetPosition"/>.</summary>
+		/// <docs>Pans the Spring Arm about GetTargetPosition().</docs>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="PanDelta">The amount to pan where X = Horizontal, Y = Vertical.</param>
+		public void SetDeltaCameraPan(Vector2 PanDelta)
 		{
-			Vector3 MousePosition = Input.mousePosition;
-
 			if (Input.GetMouseButton(2))
 			{
-				float DeltaX = (MousePosition.x - PreviousMousePanPosition.x) * OrbitSensitivity * OrbitSensitivity * Time.deltaTime;
-				float DeltaY = (MousePosition.y - PreviousMousePanPosition.y) * OrbitSensitivity * OrbitSensitivity * Time.deltaTime;
+				float DeltaX = PanDelta.x * OrbitSensitivity * Time.deltaTime;
+				float DeltaY = PanDelta.y * OrbitSensitivity * Time.deltaTime;
 
 				// Ensure 'Right' and 'Up' is relative to the Camera.
 				TargetOffset -= DeltaX * Time.deltaTime * Boom.right + DeltaY * Time.deltaTime * Boom.up;
@@ -564,8 +563,6 @@ namespace MW.CameraUtils
 				if (!bPermanentlyChangePanTargetOffset)
 					TargetOffset = Vector3.Lerp(TargetOffset, OriginalTargetOffset, .2f);
 			}
-
-			PreviousMousePanPosition = MousePosition;
 		}
 
 		/// <summary>Gets the Forward and Right vectors of this Spring Arm.</summary>
@@ -674,7 +671,7 @@ namespace MW.CameraUtils
 		protected virtual void OnDrawGizmosSelected()
 		{
 			if (Boom && Target)
-				Debug.DrawLine(TargetPos(), Boom.position, Color.red);
+				Debug.DrawLine(GetTargetPosition(), Boom.position, Color.red);
 		}
 	}
 }
