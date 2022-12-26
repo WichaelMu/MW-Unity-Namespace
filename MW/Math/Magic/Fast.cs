@@ -97,7 +97,6 @@ namespace MW.Math.Magic
 			if (N == 0F)
 				return float.PositiveInfinity;
 
-			int Sign = N < 0f ? -1 : 1;
 			int U = (int)(0x7EF127EA - *(uint*)&N);
 			float F = *(float*)&U;
 			float W = N * F; // Initial Approximation.
