@@ -14,8 +14,8 @@ namespace MW.Debugger
 	{
 		/// <summary>The <see cref="Type"/>to get the <see cref="Assembly"/> of the Unity Game where <see cref="ExecAttribute"/>s are defined.</summary>
 		/// <docs>The Type to get the Assembly of the Unity Game where ExecAttributes are defined.</docs>
-		/// <decorations decor="public abstract Type"></decorations>
-		public abstract Type TypeAssembly { get; set; }
+		/// <decorations decor="public abstract Type[]"></decorations>
+		public abstract Type[] ExecTypes { get; set; }
 		/// <summary>The <see cref="KeyCode"/> to show <see cref="OnGUI"/>.</summary>
 		/// <docs>The KeyCode to show the Console GUI.</docs>
 		/// <decorations decor="public virtual KeyCode"></decorations>
@@ -33,26 +33,29 @@ namespace MW.Debugger
 		{
 			Funcs = new Dictionary<string, MethodExec<MethodInfo, ExecAttribute>>();
 
-			IEnumerable<MethodInfo> Methods = TypeAssembly.Assembly.GetTypes()
-				.SelectMany(Type => Type.GetMethods());
-
-			foreach (MethodInfo Method in Methods)
+			foreach (Type T in ExecTypes)
 			{
-				ExecAttribute Command = (ExecAttribute)Attribute.GetCustomAttribute(Method, typeof(ExecAttribute));
+				IEnumerable<MethodInfo> Methods = T.Assembly.GetTypes()
+					.SelectMany(Type => Type.GetMethods());
 
-				if (Command == null)
-					continue;
-
-				Funcs.Add(Method.Name, new MethodExec<MethodInfo, ExecAttribute>(Method, Command));
-
-				if (Command.bExecOnStart)
+				foreach (MethodInfo Method in Methods)
 				{
-					Exec(Method.Name, Command.ExecParams);
-				}
+					ExecAttribute Command = (ExecAttribute)Attribute.GetCustomAttribute(Method, typeof(ExecAttribute));
 
-				if (Command.bHideInConsole)
-				{
-					Funcs.Remove(Method.Name);
+					if (Command == null)
+						continue;
+
+					Funcs.Add(Method.Name, new MethodExec<MethodInfo, ExecAttribute>(Method, Command));
+
+					if (Command.bExecOnAwake)
+					{
+						Exec(Command.GameObjectTargetsByName, Method.Name, Command.ExecParams);
+					}
+
+					if (Command.bHideInConsole)
+					{
+						Funcs.Remove(Method.Name);
+					}
 				}
 			}
 		}
@@ -69,13 +72,25 @@ namespace MW.Debugger
 			if (!string.IsNullOrEmpty(Input))
 			{
 				string[] Split = Input.Split(' ');
-				object[] Args = new object[Split.Length - 1];
+				object[] ArgV = new object[Split.Length - 1];
+				string[] TargetsArgV = new string[Split.Length - 1];
+				int TargetsArgC = 0;
 				string Func = Split[0];
 
 				for (int o = 0, s = 1; s < Split.Length; ++s, ++o)
-					Args[o] = Split[s];
+				{
+					if (Split[s][0] == '@')
+					{
+						TargetsArgV[TargetsArgC] = Split[s].Substring(1);
+						++TargetsArgC;
+					}
+					else
+					{
+						ArgV[o - TargetsArgC] = Split[s];
+					}
+				}
 
-				Exec(Func, Args);
+				Exec(TargetsArgV, Func, ArgV);
 
 				PreviousInput = Input;
 
@@ -87,9 +102,10 @@ namespace MW.Debugger
 		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="Params"/>.</summary>
 		/// <docs>Executes MethodName with Params.</docs>
 		/// <decorations decor="public void"></decorations>
+		/// <param name="Targets">The names of GameObjects to execute MethodName on. If null or empty, Object.FindObjectOfType will be used instead.</param>
 		/// <param name="MethodName">The name of the method to execute. (This is case-sensitive)</param>
 		/// <param name="Params">The parameters to pass to the method.</param>
-		public void Exec(string MethodName, params object[] Params)
+		public void Exec(string[] Targets, string MethodName, params object[] Params)
 		{
 			if (Funcs.ContainsKey(MethodName))
 			{
@@ -109,7 +125,20 @@ namespace MW.Debugger
 					}
 					else
 					{
-						Func.Method.Invoke(Convert.ChangeType(FindObjectOfType(Func.Method.DeclaringType), Func.Method.DeclaringType), Parameters);
+						if (Targets != null && Targets.Length != 0)
+						{
+							foreach (string Target in Targets)
+							{
+								if (string.IsNullOrEmpty(Target))
+									break;
+
+								Func.Method.Invoke(GetTargetFromString(Target).GetComponent(Func.Method.DeclaringType), Parameters);
+							}
+						}
+						else
+						{
+							Func.Method.Invoke(Convert.ChangeType(FindObjectOfType(Func.Method.DeclaringType), Func.Method.DeclaringType), Parameters);
+						}
 					}
 				}
 				catch (Exception)
@@ -130,6 +159,16 @@ namespace MW.Debugger
 			{
 				Debug.LogError($"Unknown Command: {MethodName}");
 			}
+		}
+
+		GameObject GetTargetFromString(string Target)
+		{
+			if (string.IsNullOrEmpty(Target))
+			{
+				return null;
+			}
+
+			return GameObject.Find(Target);
 		}
 
 		Vector2 Scroll;
