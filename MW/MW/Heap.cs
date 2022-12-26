@@ -88,6 +88,17 @@ namespace MW
 		/// <returns>True if Item exists in this Heap.</returns>
 		public bool Contains(T Item) => Equals(Items[Item.HeapItemIndex], Item);
 
+		/// <summary>Clears this Heap.</summary>
+		/// <decorations decor="public void"></decorations>
+		public void Flush()
+		{
+			if (Num > 0)
+			{
+				System.Array.Clear(Items, 0, Num);
+				Count = 0;
+			}
+		}
+
 		void SortDown(T Item)
 		{
 			while (true)
