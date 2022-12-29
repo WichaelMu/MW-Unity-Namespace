@@ -26,6 +26,9 @@ namespace MW
 		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3).</summary>
 		/// <decorations decor="public const float"></decorations>
 		public const float kSqrt3 = 1.7320508075688772935274463415059f;
+		/// <summary>PI</summary>
+		/// <decorations decor="public const float"></decorations>
+		public const float kPI = 3.1415926535897932384626433832795f;
 		/// <summary>Shorthand for writing 1 / Mathf.PI.</summary>
 		/// <decorations decor="public const float"></decorations>
 		public const float kInversePI = .31830988618379067153776752674503f;

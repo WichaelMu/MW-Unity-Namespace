@@ -6,6 +6,11 @@ namespace MW.Math.Magic
 	/// <decorations decor="public static class"></decorations>
 	public static class Fast
 	{
+
+		////////////////////////////////////////////////////////////////////////////////
+		// NUMERICAL FUNCTIONS
+		////////////////////////////////////////////////////////////////////////////////
+
 		/// <summary>1 / sqrt(N).</summary>
 		/// <remarks>Modified from: <see href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"/></remarks>
 		/// <docremarks>Modified from: &lt;a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"&gt;The 'Quake III Fast Inv. Sqrt Algorithm'&lt;/a&gt;</docremarks>
@@ -17,21 +22,40 @@ namespace MW.Math.Magic
 		{
 			int F = *(int*)&N;
 			F = 0x5F3759DF - (F >> 1);
-			float X = *(float*)&F;
+			float R = *(float*)&F;
 
-			float ISqrt = X * (1.5f - .5f * N * X * X);
+			R *= (1.5f - .5f * N * R * R);
 			for (int i = 0; i < AdditionalIterations; ++i)
-				ISqrt *= (1.5f - .5f * N * ISqrt * ISqrt);
-			return ISqrt;
+				R *= (1.5f - .5f * N * R * R);
+			return R;
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Sqrt(float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Sqrt().</docs>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
-		/// <param name="Iterations">The number of Newton Iterations to perform.</param>
+		/// <param name="AdditionalIterations">The number of Newton Iterations to perform.</param>
 		/// <returns>An approximation for the Square Root of F.</returns>
-		public static float FSqrt(float F, int Iterations = 2) => FInverseSqrt(Max(F, MVector.kEpsilon), Iterations) * F;
+		public static float FSqrt(float F, int AdditionalIterations = 2) => FInverseSqrt(Max(F, MVector.kEpsilon), AdditionalIterations) * F;
+
+		/// <summary>Fast reciprocal/inverse function for any float N. 1f / N.</summary>
+		/// <param name="N">The number to take the inverse of.</param>
+		/// <param name="AdditionalIterations">The number of additional Newton Raphson iterations to perform.</param>
+		/// <returns>An approximation for calculating: 1 / N.</returns>
+		public static unsafe float FInverse(float N, int AdditionalIterations = 2)
+		{
+			int F = *(int*)&N;
+			F = 0x7ED311C3 - F;
+			float R = *(float*)&F;
+			R *= -R * N + 2f;
+			for (int i = 0; i < AdditionalIterations; ++i)
+				R *= -R * N + 2f;
+			return R;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////
+		// TRIGONOMETRY FUNCTIONS
+		////////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Asin(float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Asin().</docs>
@@ -55,6 +79,41 @@ namespace MW.Math.Magic
 
 			return bIsPositive ? kASinHalfPI - Approximation : Approximation - kASinHalfPI;
 		}
+
+		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Acos(float)"/>.</summary>
+		/// <docs>Faster version of Mathf.Acos().</docs>
+		/// <decorations decor="public static float"></decorations>
+		/// <param name="Angle">The angle to get the inverse Cosine of.</param>
+		/// <returns>Inverse Cosine of Angle.</returns>
+		public static float FArcCosine(float Angle)
+		{
+			float A = FAbs(Angle);
+			float ACos = ((-.0206452f * A + .0764532f) * A + -.21271f) * A + kHalfPI;
+			ACos *= FSqrt(1f - A);
+
+			return Angle > 0f ? ACos : kPI - ACos;
+		}
+
+		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
+		/// <docs>Faster version of Vector3.Angle().</docs>
+		/// <decorations decor="public static float"></decorations>
+		/// <param name="L">The Vector in which the angular difference is measured.</param>
+		/// <param name="R">The Vector in which the angular difference is measured.</param>
+		/// <returns>The Angle between L and R in degrees.</returns>
+		public static float FAngle(MVector L, MVector R)
+		{
+			float ZeroOrEpsilon = FSqrt(L.SqrMagnitude * R.SqrMagnitude);
+			if (ZeroOrEpsilon < MVector.kEpsilon)
+				return 0f;
+
+			float Radians = MVector.Dot(L, R) * FInverse(ZeroOrEpsilon);
+			Clamp(ref Radians, -1f, 1f);
+			return FArcCosine(Radians) * UnityEngine.Mathf.Rad2Deg;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////
+		// ABSOLUTE VALUES
+		////////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>Absolute Value of I.</summary>
 		/// <decorations decor="public static int"></decorations>
@@ -86,43 +145,6 @@ namespace MW.Math.Magic
 				int T = FAbs(*(int*)pF);
 				return *(float*)&T;
 			}
-		}
-
-		/// <summary>1 / N.</summary>
-		/// <decorations decor="public static unsafe float"></decorations>
-		/// <param name="N">The Number to take the reciprocal of.</param>
-		/// <returns>An approximation for 1 / N.</returns>
-		public static unsafe float FInverse(float N)
-		{
-			if (N == 0F)
-				return float.PositiveInfinity;
-
-			int U = (int)(0x7EF127EA - *(uint*)&N);
-			float F = *(float*)&U;
-			float W = N * F; // Initial Approximation.
-
-			float R = F * (2f - W);
-			R *= 4 + W * (-6f + W * (4f - W));
-			R *= 8 + W * (-28f + W * (56f + W * (-70f + W * (56f + W * (-28f + W * (8f - W))))));
-
-			return R;
-		}
-
-		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
-		/// <docs>Faster version of Vector3.Angle().</docs>
-		/// <decorations decor="public static float"></decorations>
-		/// <param name="L">The Vector in which the angular difference is measured.</param>
-		/// <param name="R">The Vector in which the angular difference is measured.</param>
-		/// <returns>The Angle between L and R in degrees.</returns>
-		public static float FAngle(MVector L, MVector R)
-		{
-			float ZeroOrEpsilon = FSqrt(L.SqrMagnitude * R.SqrMagnitude);
-			if (ZeroOrEpsilon < MVector.kEpsilon)
-				return 0f;
-
-			float Radians = MVector.Dot(L, R);
-			Clamp(ref Radians, -1f, 1f);
-			return 90f - FArcSine(Radians) * UnityEngine.Mathf.Rad2Deg;
 		}
 	}
 }

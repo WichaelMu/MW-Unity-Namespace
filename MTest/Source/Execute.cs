@@ -137,15 +137,6 @@ namespace MTest
 			Assert.AreEqual(One, MVector.Zero);
 			Assert.AreEqual(Zero, new MVector(-1));
 		}
-
-		[TestMethod]
-		public void SqrtTests()
-		{
-			for (float f = 0; f < 50; f += .23f)
-			{
-				FloatToleranceCheck(1, Mathf.Sqrt(f), FSqrt(f), "Fast Sqrt");
-			}
-		}
 	}
 
 	[TestClass]
@@ -165,29 +156,29 @@ namespace MTest
 			Vector3 UL = new Vector3(234, 5.94f, -148);
 			Vector3 UR = new Vector3(-5738, 2847, 19.24f);
 
-			VectorToleranceCheck(1, Vector3.Cross(UL, UR), ML ^ MR, "Cross");
-			FloatToleranceCheck(2, Vector3.Dot(UL, UR), ML | MR, "Dot");
-			VectorToleranceCheck(3, UL.normalized, ML.Normalised, "Normalise");
-			VectorToleranceCheck(4, UR.normalized, MR.Normalised, "Normalise");
-			FloatToleranceCheck(5, UL.sqrMagnitude, ML.SqrMagnitude, "Square Magnitude");
-			FloatToleranceCheck(6, UR.sqrMagnitude, MR.SqrMagnitude, "Square Magnitude");
-			FloatToleranceCheck(7, Vector3.Distance(UL, UR), MVector.Distance(ML, MR), "Distance");
-			FloatToleranceCheck(8, Vector3.Distance(UL, UR), Mathf.Sqrt(ML.SqrDistance(MR)), "MVector SqrDistance -> Vector3 Distance");
-			VectorToleranceCheck(9, UL - UR, ML - MR, "Subtraction");
-			VectorToleranceCheck(10, UR - UL, MR - ML, "Subtraction");
-			VectorToleranceCheck(11, -UL, -ML, "Negation");
-			VectorToleranceCheck(12, -UR, -MR, "Negation");
-			VectorToleranceCheck(13, UL + UR, ML + MR, "Addition");
-			VectorToleranceCheck(14, UR + ML, ML + UR, "Cross Addition");
+			VectorToleranceCheck(Vector3.Cross(UL, UR), ML ^ MR, "Cross");
+			FloatToleranceCheck(Vector3.Dot(UL, UR), ML | MR, "Dot");
+			VectorToleranceCheck(UL.normalized, ML.Normalised, "Normalise");
+			VectorToleranceCheck(UR.normalized, MR.Normalised, "Normalise");
+			FloatToleranceCheck(UL.sqrMagnitude, ML.SqrMagnitude, "Square Magnitude");
+			FloatToleranceCheck(UR.sqrMagnitude, MR.SqrMagnitude, "Square Magnitude");
+			FloatToleranceCheck(Vector3.Distance(UL, UR), MVector.Distance(ML, MR), "Distance");
+			FloatToleranceCheck(Vector3.Distance(UL, UR), Mathf.Sqrt(ML.SqrDistance(MR)), "MVector SqrDistance -> Vector3 Distance");
+			VectorToleranceCheck(UL - UR, ML - MR, "Subtraction");
+			VectorToleranceCheck(UR - UL, MR - ML, "Subtraction");
+			VectorToleranceCheck(-UL, -ML, "Negation");
+			VectorToleranceCheck(-UR, -MR, "Negation");
+			VectorToleranceCheck(UL + UR, ML + MR, "Addition");
+			VectorToleranceCheck(UR + ML, ML + UR, "Cross Addition");
 
 			for (float F = -10f; F <= 10f; F += .7f)
 			{
-				VectorToleranceCheck(15, F * UL, F * ML, "Multiplication by: " + F);
-				VectorToleranceCheck(16, UL / F, ML / F, "Division by: " + F);
+				VectorToleranceCheck(F * UL, F * ML, "Multiplication by: " + F);
+				VectorToleranceCheck(UL / F, ML / F, "Division by: " + F);
 			}
 
-			VectorToleranceCheck(17, (UR - UL).normalized, ML > MR, "Direction");
-			VectorToleranceCheck(18, (UL - UR).normalized, ML < MR, "Direction");
+			VectorToleranceCheck((UR - UL).normalized, ML > MR, "Direction");
+			VectorToleranceCheck((UL - UR).normalized, ML < MR, "Direction");
 
 			Assert.IsTrue(Mathematics.IsNormalised(ML.Normalised));
 
@@ -206,7 +197,7 @@ namespace MTest
 			Assert.AreEqual(M << 4, M << 1);
 
 			Assert.AreEqual(Mathematics.SqrDistance(UL, Vector3.zero), ML.SqrMagnitude);
-			VectorToleranceCheck(30, UL.FNormalise(), UL.normalized, "V3 Extension Normalise");
+			VectorToleranceCheck(UL.FNormalise(), UL.normalized, "V3 Extension Normalise");
 			Assert.AreEqual(Mathematics.Distance(UL, UR), Vector3.Distance(UL, UR));
 
 			Vector3 V = new Vector3(2f, 4f, 6f);
@@ -236,6 +227,19 @@ namespace MTest
 			Assert.AreEqual(Rotated, Clone.RotateVector(78.24f, Vector3.up).MV());
 
 			Assert.AreEqual(V.normalized.MV(), Clone.FNormalise().MV());
+
+			for (
+				float X = -370f,    Y =  180f,     Z =  370f;
+				      X <  370f  && Y <  370f  &&  Z > -370f;
+				      X += .23f,    Y += .23f,     Z -= .23f
+				)
+			{
+				Vector3 FAV1 = new Vector3(X, Y, Z);
+				Vector3 FAV2 = new Vector3(Y, Z, X);
+				MVector FAM1 = new MVector(X, Y, Z);
+				MVector FAM2 = FAM1 << 1;
+				FloatToleranceCheck(Vector3.Angle(FAV1, FAV2), FAngle(FAM1, FAM2), "Fast Angle", .5f);
+			}
 
 			Clone.Dispose();
 		}
@@ -579,11 +583,40 @@ namespace MTest
 	public class FastTests
 	{
 		[TestMethod]
+		public void SqrtTests()
+		{
+			// This also checks FInverseSqrt()...
+
+			for (float F = 0; F < 50; F += .23f)
+			{
+				FloatToleranceCheck(Mathf.Sqrt(F), FSqrt(F), "Fast Sqrt");
+			}
+		}
+
+		[TestMethod]
+		public void InverseTests()
+		{
+			for (float F = -1500.442f; F <= 1500.422f; F += .23f)
+			{
+				FloatToleranceCheck(1f / F, FInverse(F, 3), "Fast Inverse");
+			}
+		}
+
+		[TestMethod]
 		public void ASinTests()
 		{
 			for (float F = -1f; F <= 1f; F += .023f)
 			{
-				FloatToleranceCheck(1, Mathf.Asin(F), FArcSine(F), $"Fast ASin {F}");
+				FloatToleranceCheck(Mathf.Asin(F), FArcSine(F), $"Fast ASin {F}");
+			}
+		}
+
+		[TestMethod]
+		public void ACosTests()
+		{
+			for (float F = -1f; F <= 1f; F += .023f)
+			{
+				FloatToleranceCheck(Mathf.Acos(F), FArcCosine(F), $"Fast ACosine {F}");
 			}
 		}
 	}
@@ -597,8 +630,8 @@ namespace MTest
 			for (float F = -365f; F <= 365f; F += .23f)
 			{
 				Mathematics.SinCos(out float S, out float C, F);
-				FloatToleranceCheck(1, Mathf.Sin(F), S, "Sine");
-				FloatToleranceCheck(2, Mathf.Cos(F), C, "Cosine");
+				FloatToleranceCheck(Mathf.Sin(F), S, "Sine");
+				FloatToleranceCheck(Mathf.Cos(F), C, "Cosine");
 			}
 		}
 	}
