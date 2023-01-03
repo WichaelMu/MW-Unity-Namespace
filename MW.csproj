@@ -7,11 +7,11 @@
 		<OutputType>Library</OutputType>
 		<StartupObject></StartupObject>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<BaseOutputPath>Output\Binaries</BaseOutputPath>
+		<BaseOutputPath>MW\Output\Binaries</BaseOutputPath>
 		<DocumentationFile></DocumentationFile>
 		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<BaseIntermediateOutputPath>Output\Intermediate</BaseIntermediateOutputPath>
+		<BaseIntermediateOutputPath>MW\Output\Intermediate</BaseIntermediateOutputPath>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
 	</PropertyGroup>
 
