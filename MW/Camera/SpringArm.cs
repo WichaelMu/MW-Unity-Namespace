@@ -6,6 +6,7 @@ using MW.Extensions;
 using static MW.Math.Mathematics;
 using static MW.Utils;
 using static MW.Debugger.Arrow;
+using static MW.Math.Magic.Fast;
 
 namespace MW.CameraUtils
 {
@@ -482,7 +483,7 @@ namespace MW.CameraUtils
 		/// <param name="DistanceDelta">The amount to increase or decrease.</param>
 		public void SetDeltaDistance(float DistanceDelta)
 		{
-			if (bEnableScrollToDistance)
+			if (bEnableScrollToDistance && FAbs(DistanceDelta) > MVector.kEpsilon)
 			{
 				Distance += DistanceDelta * (bInvertZ ? -1f : 1f) * -ScrollSensitivity;
 
@@ -549,7 +550,7 @@ namespace MW.CameraUtils
 		/// <param name="PanDelta">The amount to pan where X = Horizontal, Y = Vertical.</param>
 		public void SetDeltaCameraPan(Vector2 PanDelta)
 		{
-			if (Input.GetMouseButton(2))
+			if (PanDelta.sqrMagnitude > Vector2.kEpsilon)
 			{
 				float DeltaX = PanDelta.x * OrbitSensitivity * Time.deltaTime;
 				float DeltaY = PanDelta.y * OrbitSensitivity * Time.deltaTime;
