@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using MW.Conversion;
 using MW.Math;
 using UnityEngine;
@@ -179,6 +180,7 @@ namespace MW
 
 		/// <summary>Normalises this MVector.</summary>
 		/// <decorations decors="public MVector"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public MVector Normalise() => this = Normalised;
 
 		/// <summary>Sets this MVector's components.</summary>

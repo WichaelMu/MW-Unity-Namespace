@@ -1,4 +1,5 @@
-﻿using static MW.Utils;
+﻿using System.Runtime.CompilerServices;
+using static MW.Utils;
 
 namespace MW.Math.Magic
 {
@@ -18,6 +19,7 @@ namespace MW.Math.Magic
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
 		/// <param name="AdditionalIterations">The number of additional Newton Iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / sqrt(N).</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe float FInverseSqrt(float N, int AdditionalIterations = 1)
 		{
 			int F = *(int*)&N;
@@ -36,12 +38,14 @@ namespace MW.Math.Magic
 		/// <param name="F"></param>
 		/// <param name="AdditionalIterations">The number of Newton Iterations to perform.</param>
 		/// <returns>An approximation for the Square Root of F.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float FSqrt(float F, int AdditionalIterations = 2) => FInverseSqrt(Max(F, MVector.kEpsilon), AdditionalIterations) * F;
 
 		/// <summary>Fast reciprocal/inverse function for any float N. 1f / N.</summary>
 		/// <param name="N">The number to take the inverse of.</param>
 		/// <param name="AdditionalIterations">The number of additional Newton Raphson iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / N.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe float FInverse(float N, int AdditionalIterations = 2)
 		{
 			int F = *(int*)&N;
@@ -119,6 +123,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="I">The int to get the Absolute Value of.</param>
 		/// <returns>The value of I regardless of its sign.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int FAbs(int I)
 		{
 			return 0x7FFFFFFF & I;
@@ -128,6 +133,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="F">The float to get the Absolute Value of.</param>
 		/// <returns>The value of F regardless of its sign.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe float FAbs(float F)
 		{
 			int T = FAbs(*(int*)&F);
@@ -138,6 +144,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="F">The float to set the Absolute Value of.</param>
 		/// <returns>The value of F regardless of its sign.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe float FAbs(ref float F)
 		{
 			fixed (float* pF = &F)

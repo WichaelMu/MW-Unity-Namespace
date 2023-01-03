@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using MW;
+using MW.Math.Magic;
 using UnityEngine;
 
 namespace MTest
@@ -24,9 +25,9 @@ namespace MTest
 			float Y = M.Y - U.y;
 			float Z = M.Z - U.z;
 
-			X = Mathf.Abs(X);
-			Y = Mathf.Abs(Y);
-			Z = Mathf.Abs(Z);
+			Fast.FAbs(ref X);
+			Fast.FAbs(ref Y);
+			Fast.FAbs(ref Z);
 
 			Assert.IsFalse(X > ToleranceOverride, Operation);
 			Assert.IsFalse(Y > ToleranceOverride, Operation);

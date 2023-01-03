@@ -1,5 +1,6 @@
 ﻿using System;
-using MW.Math.Magic;
+using System.Runtime.CompilerServices;
+using static MW.Math.Magic.Fast;
 using UnityEngine;
 
 namespace MW
@@ -183,6 +184,7 @@ namespace MW
 		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector3 Max(Vector3 L, Vector3 R)
 		{
 			return L.sqrMagnitude < R.sqrMagnitude ? R : L;
@@ -193,6 +195,7 @@ namespace MW
 		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector3 Min(Vector3 L, Vector3 R)
 		{
 			return L.sqrMagnitude > R.sqrMagnitude ? R : L;
@@ -226,7 +229,7 @@ namespace MW
 		{
 			Vector3[] vDirections = new Vector3[Resolution];
 
-			float fPhi = 1 + Fast.FSqrt(GoldenRatioModifier) * .5f;
+			float fPhi = 1 + FSqrt(GoldenRatioModifier) * .5f;
 			float fInc = Mathf.PI * 2 * fPhi;
 
 			for (int i = 0; i < Resolution; i++)
@@ -296,6 +299,7 @@ namespace MW
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
 		/// <returns>The reflected number.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float MirrorNumber(float Number, float Minimum, float Maximum) => Minimum + Maximum - Number;
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with <see cref="MArray{T}.Reflect(int, int)"/>.</summary>
@@ -304,12 +308,14 @@ namespace MW
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
 		/// <param name="Maximum">The maximum number that can be reflected.</param>
 		/// <returns>The reflected number.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int MirrorNumber(int Number, int Minimum, int Maximum) => Minimum + Maximum - Number;
 
 		/// <summary>Swaps L and R.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Swap<T>(ref T L, ref T R)
 		{
 			(R, L) = (L, R);
@@ -320,6 +326,7 @@ namespace MW
 		/// <param name="I">A reference to the Integer to clamp.</param>
 		/// <param name="Min">The Minimum value of I.</param>
 		/// <param name="Max">The Maximum value of I.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Clamp(ref int I, int Min, int Max)
 		{
 			if (I < Min)
@@ -336,6 +343,7 @@ namespace MW
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the Integer to clamp.</param>
 		/// <param name="Min">The Minimum value I can be.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ClampMin(ref int I, int Min)
 		{
 			if (I < Min)
@@ -346,6 +354,7 @@ namespace MW
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the Integer to clamp.</param>
 		/// <param name="Max">The Maximum value I can be.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ClampMax(ref int I, int Max)
 		{
 			if (I > Max)
@@ -356,6 +365,7 @@ namespace MW
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Min">The Minimum value F can be.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ClampMin(ref float F, float Min)
 		{
 			if (F < Min)
@@ -366,6 +376,7 @@ namespace MW
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Max">The Maximum value F can be.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ClampMax(ref float F, float Max)
 		{
 			if (F > Max)
@@ -377,6 +388,7 @@ namespace MW
 		/// <param name="F">A reference to the Float to clamp.</param>
 		/// <param name="Min">The Minimum value of F.</param>
 		/// <param name="Max">The Maximum value of F.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Clamp(ref float F, float Min, float Max)
 		{
 			if (F < Min)
@@ -394,6 +406,7 @@ namespace MW
 		/// <param name="F1"></param>
 		/// <param name="F2"></param>
 		/// <returns>The larger of the two given floats.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Max(float F1, float F2)
 		{
 			return F1 < F2 ? F2 : F1;
@@ -404,6 +417,7 @@ namespace MW
 		/// <param name="F1"></param>
 		/// <param name="F2"></param>
 		/// <returns>The smaller of the two given floats.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Min(float F1, float F2)
 		{
 			return F1 < F2 ? F1 : F2;
@@ -411,41 +425,50 @@ namespace MW
 
 
 		/// <summary>Modifies I to be its Absolute Value.</summary>
-		/// <remarks><see langword="ref"/> version of <see cref="Fast.FAbs(int)"/>.</remarks>
+		/// <remarks><see langword="ref"/> version of <see cref="FAbs(int)"/>.</remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="I">A reference to the int to modify.</param>
-		public static void Abs(ref int I) => I = Fast.FAbs(I);
-
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void Abs(ref int I) => I = FAbs(I);
 
 		/// <summary>Modifies F to be its Absolute Value.</summary>
-		/// <remarks><see langword="ref"/> version of <see cref="Fast.FAbs(float)"/></remarks>
+		/// <remarks><see langword="ref"/> version of <see cref="FAbs(float)"/></remarks>
 		/// <docremarks>Ref&amp; version of FastAbs().</docremarks>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="F">A reference to the float to modify.</param>
-		public static void Abs(ref float F) => F = Fast.FAbs(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void Abs(ref float F) => F = FAbs(F);
 
-		/// <summary><see cref="Fast.FAbs(float)"/> on all V's components.</summary>
+		/// <summary><see cref="FAbs(float)"/> on all V's components.</summary>
 		/// <docs>Abs() on all V's components.</docs>
 		/// <param name="V">The Vector to Abs.</param>
 		/// <returns>An MVector with all positive components.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector Abs(MVector V)
 		{
 			return new MVector
 			{
-				X = Fast.FAbs(V.X),
-				Y = Fast.FAbs(V.Y),
-				Z = Fast.FAbs(V.Z)
+				X = FAbs(V.X),
+				Y = FAbs(V.Y),
+				Z = FAbs(V.Z)
 			};
 		}
 
 		/// <summary>Modifies V to be positive on all components.</summary>
 		/// <param name="V">The Vector to modify.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Abs(ref MVector V)
 		{
 			Abs(ref V.X);
 			Abs(ref V.Y);
 			Abs(ref V.Z);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsZero(float F, float Tolerance = MVector.kEpsilon)
+		{
+			return FAbs(F) < Tolerance;
 		}
 
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
@@ -467,6 +490,7 @@ namespace MW
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int FPS() => (int)(1f / Time.unscaledDeltaTime);
 	}
 }
