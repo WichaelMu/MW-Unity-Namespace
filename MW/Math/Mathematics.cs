@@ -175,13 +175,13 @@ namespace MW.Math
 
 		/// <summary>Wraps f between Min and Max.</summary>
 		/// <decorations decor="public static float"></decorations>
-		/// <param name="f">The float number to wrap.</param>
+		/// <param name="F">The float number to wrap.</param>
 		/// <param name="Min">The minimum value to wrap.</param>
 		/// <param name="Max">The maximum value to wrap.</param>
-		public static float Wrap(float f, float Min, float Max)
+		public static float Wrap(float F, float Min, float Max)
 		{
 			float s = Max - Min;
-			float e = f;
+			float e = F;
 			while (e < Min)
 			{
 				e += s;

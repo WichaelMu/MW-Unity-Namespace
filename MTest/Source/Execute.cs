@@ -217,7 +217,7 @@ namespace MTest
 			*Clone.pX = 4f;
 			*Clone.pY = 2f;
 			*Clone.pZ = 0f;
-			
+
 			Assert.AreEqual(V.x, *Clone.pX);
 			Assert.AreEqual(V.y, *Clone.pY);
 			Assert.AreEqual(V.z, *Clone.pZ);
@@ -228,20 +228,150 @@ namespace MTest
 
 			Assert.AreEqual(V.normalized.MV(), Clone.FNormalise().MV());
 
-			for (
-				float X = -370f,    Y =  180f,     Z =  370f;
-				      X <  370f  && Y <  370f  &&  Z > -370f;
-				      X += .23f,    Y += .23f,     Z -= .23f
-				)
-			{
-				Vector3 FAV1 = new Vector3(X, Y, Z);
-				Vector3 FAV2 = new Vector3(Y, Z, X);
-				MVector FAM1 = new MVector(X, Y, Z);
-				MVector FAM2 = FAM1 << 1;
-				FloatToleranceCheck(Vector3.Angle(FAV1, FAV2), FAngle(FAM1, FAM2), "Fast Angle", .5f);
-			}
-
 			Clone.Dispose();
+
+			FloatToleranceCheck(Vector3.Angle(Vector3.up, Vector3.right), MVector.Angle(MVector.Up, MVector.Right), "Fast Angle", .01f);
+
+			FloatToleranceCheck(Vector3.Angle(Vector3.up, Vector3.down), MVector.Angle(MVector.Up, -MVector.Up), "Fast Angle", .01f);
+
+			FloatToleranceCheck(Vector3.Angle(Vector3.up, new Vector3(-.1f, -.9f)), MVector.Angle(MVector.Up, new MVector(-.1f, -.9f)), "Fast Angle", .01f);
+
+			MVector L, R;
+			L = RandomVector(new System.Random());
+			R = RandomVector(new System.Random());
+			FloatToleranceCheck(Vector3.Angle(L, R), MVector.Angle(L, R), "Fast Angle", .01f);
+		}
+
+		[TestMethod]
+		public void VectorRotationTest()
+		{
+			MVector ToRotate = MVector.Up;
+			MVector Result;
+
+			// Clockwise.
+			Result = ToRotate.RotateVector(45f, MVector.Forward);
+			Assert.AreEqual(MVector.One.XY.Normalised, Result, "45 Clockwise");
+
+			Result = ToRotate.RotateVector(90f, MVector.Forward);
+			Assert.AreEqual(MVector.Right, Result, "90 Clockwise");
+
+			Result = ToRotate.RotateVector(135f, MVector.Forward);
+			Assert.AreEqual(new MVector(1f, -1f).Normalised, Result, "135 Clockwise");
+
+			Result = ToRotate.RotateVector(180f, MVector.Forward);
+			Assert.AreEqual(-MVector.Up, Result, "180 Clockwise");
+
+			Result = ToRotate.RotateVector(225f, MVector.Forward);
+			Assert.AreEqual(-MVector.One.XY.Normalised, Result, "225 Clockwise");
+
+			Result = ToRotate.RotateVector(270f, MVector.Forward);
+			Assert.AreEqual(-MVector.Right, Result, "270 Clockwise");
+
+			Result = ToRotate.RotateVector(315f, MVector.Forward);
+			Assert.AreEqual(new MVector(-1f, 1f).Normalised, Result, "315 Clockwise");
+
+			Result = ToRotate.RotateVector(360f, MVector.Forward);
+			Assert.AreEqual(ToRotate, Result, "360 Clockwise");
+
+			// Clockwise Wrapped.
+			Result = ToRotate.RotateVector(360f + 45f, MVector.Forward);
+			Assert.AreEqual(MVector.One.XY.Normalised, Result, "45 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 90f, MVector.Forward);
+			Assert.AreEqual(MVector.Right, Result, "90 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 135f, MVector.Forward);
+			Assert.AreEqual(new MVector(1f, -1f).Normalised, Result, "135 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 180f, MVector.Forward);
+			Assert.AreEqual(-MVector.Up, Result, "180 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 225f, MVector.Forward);
+			Assert.AreEqual(-MVector.One.XY.Normalised, Result, "225 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 270f, MVector.Forward);
+			Assert.AreEqual(-MVector.Right, Result, "270 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 315f, MVector.Forward);
+			Assert.AreEqual(new MVector(-1f, 1f).Normalised, Result, "315 Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(360f + 360f, MVector.Forward);
+			Assert.AreEqual(ToRotate, Result, "360 Clockwise Wrapped");
+
+			// Anti-Clockwise.
+			Result = ToRotate.RotateVector(-45f, MVector.Forward);
+			Assert.AreEqual(new MVector(-1f, 1f).Normalised, Result, "45 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-90f, MVector.Forward);
+			Assert.AreEqual(-MVector.Right, Result, "90 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-135f, MVector.Forward);
+			Assert.AreEqual(-MVector.One.XY.Normalised, Result, "135 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-180f, MVector.Forward);
+			Assert.AreEqual(-MVector.Up, Result, "180 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-225f, MVector.Forward);
+			Assert.AreEqual(new MVector(1f, -1f).Normalised, Result, "225 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-270f, MVector.Forward);
+			Assert.AreEqual(MVector.Right, Result, "270 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-315f, MVector.Forward);
+			Assert.AreEqual(MVector.One.XY.Normalised, Result, "315 Anti-Clockwise");
+
+			Result = ToRotate.RotateVector(-360f, MVector.Forward);
+			Assert.AreEqual(ToRotate, Result, "360 Anti-Clockwise");
+
+			// Anti-Clockwise Wrapped.
+			Result = ToRotate.RotateVector(-360f - 45f, MVector.Forward);
+			Assert.AreEqual(new MVector(-1f, 1f).Normalised, Result, "45 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 90f, MVector.Forward);
+			Assert.AreEqual(-MVector.Right, Result, "90 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 135f, MVector.Forward);
+			Assert.AreEqual(-MVector.One.XY.Normalised, Result, "135 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 180f, MVector.Forward);
+			Assert.AreEqual(-MVector.Up, Result, "180 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 225f, MVector.Forward);
+			Assert.AreEqual(new MVector(1f, -1f).Normalised, Result, "225 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 270f, MVector.Forward);
+			Assert.AreEqual(MVector.Right, Result, "270 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 315f, MVector.Forward);
+			Assert.AreEqual(MVector.One.XY.Normalised, Result, "315 Anti-Clockwise Wrapped");
+
+			Result = ToRotate.RotateVector(-360f - 360f, MVector.Forward);
+			Assert.AreEqual(ToRotate, Result, "360 Anti-Clockwise Wrapped");
+
+			// Arbitrary Angle-Axis Rotations.
+			System.Random R = new System.Random();
+			const float kRotateBoundary = 1440f;
+
+			for (int ArbitraryAngleIteration = 0; ArbitraryAngleIteration < 1000; ++ArbitraryAngleIteration)
+			{
+				float RandomAngle = R.NextSingle();
+				RandomAngle = (RandomAngle * 2f - 1f) * kRotateBoundary;
+				MVector RandAxis = RandomVector(R);
+				ToRotate = MVector.Cross(RandomVector(R), RandAxis).Normalised;
+
+				MVector Rotated = ToRotate.RotateVector(RandomAngle, RandAxis);
+				FloatToleranceCheck(Vector3.Angle(ToRotate, Rotated), MVector.Angle(ToRotate, Rotated), $"Arbitrary Rotation {RandomAngle} Degrees\nAngle Iteration: {ArbitraryAngleIteration}\nToRotate: {ToRotate}\nRotated: {Rotated}", .1f);
+			}
+		}
+
+		public static MVector RandomVector(System.Random R)
+		{
+			float RandX = (R.NextSingle() * 2f) - 1f;
+			float RandY = (R.NextSingle() * 2f) - 1f;
+			float RandZ = (R.NextSingle() * 2f) - 1f;
+			MVector RandAxis = new MVector(RandX, RandY, RandZ);
+
+			return RandAxis.Normalised;
 		}
 
 		[TestMethod]
@@ -580,25 +710,45 @@ namespace MTest
 	}
 
 	[TestClass]
-	public class FastTests
+	public class ApproximationTests
 	{
+		[TestMethod]
+		public void SinCosTests()
+		{
+			for (float F = -365f; F <= 365f; F += .23f)
+			{
+				Mathematics.SinCos(out float S, out float C, F);
+				FloatToleranceCheck(Mathf.Sin(F), S, "Sine");
+				FloatToleranceCheck(Mathf.Cos(F), C, "Cosine");
+			}
+		}
+
 		[TestMethod]
 		public void SqrtTests()
 		{
 			// This also checks FInverseSqrt()...
 
-			for (float F = 0; F < 50; F += .23f)
+			for (float F = 0f; F <= 1500.442; F += .023f)
 			{
 				FloatToleranceCheck(Mathf.Sqrt(F), FSqrt(F), "Fast Sqrt");
+			}
+
+			System.Random R = new System.Random();
+			for (float F = 0f; F <= 1f; F += .00001f)
+			{
+				MVector V1 = MWTests.RandomVector(R);
+				MVector V2 = MWTests.RandomVector(R);
+				float SquareMagnitude = V1.SqrMagnitude * V2.SqrMagnitude;
+				FloatToleranceCheck(Mathf.Sqrt(SquareMagnitude), FSqrt(SquareMagnitude), "Lim -> 0 Fast Sqrt", .00001f);
 			}
 		}
 
 		[TestMethod]
 		public void InverseTests()
 		{
-			for (float F = -1500.442f; F <= 1500.422f; F += .23f)
+			for (float F = -1500.442f; F <= 1500.422f; F += .023f)
 			{
-				FloatToleranceCheck(1f / F, FInverse(F, 3), "Fast Inverse");
+				FloatToleranceCheck(1f / F, FInverse(F), "Fast Inverse");
 			}
 		}
 
@@ -614,26 +764,12 @@ namespace MTest
 		[TestMethod]
 		public void ACosTests()
 		{
-			for (float F = -1f; F <= 1f; F += .023f)
+			for (float F = -1f; F <= 1f; F += .001f)
 			{
 				FloatToleranceCheck(Mathf.Acos(F), FArcCosine(F), $"Fast ACosine {F}");
 			}
 		}
-	}
 
-	[TestClass]
-	public class ApproximationTests
-	{
-		[TestMethod]
-		public void SinCosTests()
-		{
-			for (float F = -365f; F <= 365f; F += .23f)
-			{
-				Mathematics.SinCos(out float S, out float C, F);
-				FloatToleranceCheck(Mathf.Sin(F), S, "Sine");
-				FloatToleranceCheck(Mathf.Cos(F), C, "Cosine");
-			}
-		}
 	}
 
 	class TTestClass : IHeapItem<TTestClass>

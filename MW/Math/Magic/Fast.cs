@@ -52,6 +52,8 @@ namespace MW.Math.Magic
 			F = 0x7ED311C3 - F;
 			float R = *(float*)&F;
 			R *= -R * N + 2f;
+			R *= -R * N + 2f;
+			R *= -R * N + 2f;
 			for (int i = 0; i < AdditionalIterations; ++i)
 				R *= -R * N + 2f;
 			return R;
@@ -103,14 +105,14 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="L">The Vector in which the angular difference is measured.</param>
 		/// <param name="R">The Vector in which the angular difference is measured.</param>
-		/// <returns>The Angle between L and R in degrees.</returns>
+		/// <returns>The Angle between L and R in degrees, accurate to +-.1 degrees..</returns>
 		public static float FAngle(MVector L, MVector R)
 		{
 			float ZeroOrEpsilon = FSqrt(L.SqrMagnitude * R.SqrMagnitude);
-			if (ZeroOrEpsilon < MVector.kEpsilon)
+			if (ZeroOrEpsilon < 1E-15f)
 				return 0f;
 
-			float Radians = MVector.Dot(L, R) * FInverse(ZeroOrEpsilon);
+			float Radians = (L | R) * FInverse(ZeroOrEpsilon);
 			Clamp(ref Radians, -1f, 1f);
 			return FArcCosine(Radians) * UnityEngine.Mathf.Rad2Deg;
 		}

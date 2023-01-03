@@ -355,7 +355,7 @@ namespace MW.CameraUtils
 				// Otherwise, if we're not using Force, the Advanced Behaviour must use Inherit Rotation.
 				else if (bForceAdvancedBehaviour || bInheritRotation)
 				{
-					RunAdvancedCollision(TargetPosition, Hit, Rotation, -Direction);
+					RunAdvancedCollision(TargetPosition, Hit, Rotation);
 				}
 				// Otherwise, skip the frame.
 			}
@@ -366,7 +366,7 @@ namespace MW.CameraUtils
 				bHasSetAdvancedVectors = false;
 		}
 
-		void RunAdvancedCollision(MVector TP, RaycastHit Hit, Quaternion Rotation, Vector3 FallbackDirection)
+		void RunAdvancedCollision(MVector TP, RaycastHit Hit, Quaternion Rotation)
 		{
 			if (!bHasSetAdvancedVectors)
 			{
@@ -390,8 +390,8 @@ namespace MW.CameraUtils
 
 			// Make and Rotate L and R Vectors Rotated by the above Angle.
 			MVector TargetDirectionToCamera = (Hit.point.MV() - TP).Normalised;
-			Vector3 Right = TargetDirectionToCamera.RotateVector(DeltaAngle, Vector3.up);
-			Vector3 Left = TargetDirectionToCamera.RotateVector(-DeltaAngle, Vector3.up);
+			Vector3 Right = TargetDirectionToCamera.RotateVector(-DeltaAngle, MVector.Up);
+			Vector3 Left = TargetDirectionToCamera.RotateVector(DeltaAngle, MVector.Up);
 
 			Ray RR = new Ray(TP, Right);
 			Ray RL = new Ray(TP, Left);

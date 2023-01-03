@@ -1,5 +1,6 @@
 ﻿using MW.Math;
 using static MW.Math.Magic.Fast;
+using MW.Extensions;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 
@@ -129,11 +130,11 @@ namespace MW
 
 		/// <summary>Rotates this FVector at an angle of AngleDegrees around Axis.</summary>
 		/// <remarks>
-		/// <b>While looking towards -Axis:</b><br></br>
+		/// <b>While looking towards Axis:</b><br></br>
 		/// + Angle is CW. - Angle is CCW.
 		/// </remarks>
 		/// <docremarks>
-		/// While looking towards -Axis:&lt;br&gt;
+		/// While looking towards Axis:&lt;br&gt;
 		/// + Angle is CW.
 		/// </docremarks>
 		/// <decorations decors="public unsafe FVector"></decorations>
@@ -141,29 +142,11 @@ namespace MW
 		/// <param name="Axis">The axis to rotate this FVector around.</param>
 		public unsafe FVector RotateVector(float AngleDegrees, Vector3 Axis)
 		{
-			Mathematics.SinCos(out float S, out float C, AngleDegrees * Mathf.Deg2Rad);
+			MVector This = MV().RotateVector(AngleDegrees, Axis.MV());
 
-			float XX = Axis.x * Axis.x;
-			float YY = Axis.y * Axis.y;
-			float ZZ = Axis.z * Axis.z;
-
-			float XY = Axis.x * Axis.y;
-			float YZ = Axis.y * Axis.z;
-			float ZX = Axis.z * Axis.x;
-
-			float XS = Axis.x * S;
-			float YS = Axis.y * S;
-			float ZS = Axis.z * S;
-
-			float OMC = 1f - C;
-
-			float X = *pX;
-			float Y = *pY;
-			float Z = *pZ;
-
-			*pX = (OMC * XX + C) * X + (OMC * XY - ZS) * Y + (OMC * ZX + YS) * Z;
-			*pY = (OMC * XY + ZS) * X + (OMC * YY + C) * Y + (OMC * YZ - XS) * Z;
-			*pZ = (OMC * ZX - YS) * X + (OMC * YZ + XS) * Y + (OMC * ZZ + C) * Z;
+			*pX = This.X;
+			*pY = This.Y;
+			*pZ = This.Z;
 
 			return this;
 		}

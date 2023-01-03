@@ -13,9 +13,9 @@ namespace MTest
 		const float kVectorTolerancePercentage = .001f; // .001 = .1% error.
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void FloatToleranceCheck(float L, float R, string Operation, float ToleranceOverride = kFloatingPointTolerancePercentage)
+		public static void FloatToleranceCheck(float Expected, float Actual, string Operation, float ToleranceOverride = kFloatingPointTolerancePercentage)
 		{
-			Assert.AreEqual(L, R, ToleranceOverride, Operation);
+			Assert.AreEqual(Expected, Actual, ToleranceOverride, $"{Operation}\nDifference: {Expected - Actual:F6}");
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

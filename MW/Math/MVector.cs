@@ -142,6 +142,11 @@ namespace MW
 		/// <param name="Degrees">The angle offset.</param>
 		/// <param name="Forward">The forward direction.</param>
 		public static MVector MVectorFromAngle(float Degrees, EDirection Forward) => Mathematics.VectorFromAngle(Degrees, Forward);
+		/// <summary>The angle between two vectors in degrees.</summary>
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		/// <returns>An approximation of the angle between L and R in degrees, accurate to +-.1 degrees.</returns>
+		public static float Angle(MVector L, MVector R) => FAngle(L, R);
 		/// <summary>The distance between Left and Right.</summary>
 		/// <decorations decors="public static float"></decorations>
 		/// <param name="Left">Source of the distance.</param>
@@ -204,11 +209,11 @@ namespace MW
 
 		/// <summary>Rotates this MVector at an angle of AngleDegrees around Axis.</summary>
 		/// <remarks>
-		/// <b>While looking towards -Axis:</b><br></br>
+		/// <b>While looking towards Axis:</b><br></br>
 		/// + Angle is CW. - Angle is CCW.
 		/// </remarks>
 		/// <docremarks>
-		/// While looking towards -Axis:&lt;br&gt;
+		/// While looking towards Axis:&lt;br&gt;
 		/// + Angle is CW. - Angle is CCW.
 		/// </docremarks>
 		/// <decorations decors="public MVector"></decorations>
@@ -216,6 +221,14 @@ namespace MW
 		/// <param name="Axis">The axis to rotate this MVector around.</param>
 		public MVector RotateVector(float AngleDegrees, MVector Axis)
 		{
+			if (AngleDegrees < 0f || AngleDegrees > 360f)
+				AngleDegrees = Mathematics.Wrap(AngleDegrees, 0f, 360f);
+
+			if (AngleDegrees == 0f || AngleDegrees == 360f)
+				return this;
+
+			Axis = -Axis;
+
 			Mathematics.SinCos(out float S, out float C, AngleDegrees * Mathf.Deg2Rad);
 
 			float XX = Axis.X * Axis.X;
