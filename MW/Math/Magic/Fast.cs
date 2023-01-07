@@ -20,15 +20,17 @@ namespace MW.Math.Magic
 		/// <param name="AdditionalIterations">The number of additional Newton Iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / sqrt(N), within +-.001 of the real inverse square root.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe float FInverseSqrt(float N, int AdditionalIterations = 1)
+		public static unsafe float FInverseSqrt(float N, int AdditionalIterations = 0)
 		{
 			int F = *(int*)&N;
 			F = 0x5F3759DF - (F >> 1);
 			float R = *(float*)&F;
 
-			R *= (1.5f - .5f * N * R * R);
+			R *= 1.5f - .5f * N * R * R;
+			R *= 1.5f - .5f * N * R * R;
+			R *= 1.5f - .5f * N * R * R;
 			for (int i = 0; i < AdditionalIterations; ++i)
-				R *= (1.5f - .5f * N * R * R);
+				R *= 1.5f - .5f * N * R * R;
 			return R;
 		}
 
@@ -39,18 +41,20 @@ namespace MW.Math.Magic
 		/// <param name="AdditionalIterations">The number of Newton Iterations to perform.</param>
 		/// <returns>An approximation for the Square Root of F, within +-.001 of the real square root.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float FSqrt(float F, int AdditionalIterations = 2) => FInverseSqrt(Max(F, MVector.kEpsilon), AdditionalIterations) * F;
+		public static float FSqrt(float F, int AdditionalIterations = 0) => FInverseSqrt(Max(F, MVector.kEpsilon), AdditionalIterations) * F;
 
 		/// <summary>Fast reciprocal/inverse function for any float N. 1f / N.</summary>
 		/// <param name="N">The number to take the inverse of.</param>
 		/// <param name="AdditionalIterations">The number of additional Newton Raphson iterations to perform.</param>
 		/// <returns>An approximation for calculating: 1 / N, within +-.001 of the real reciprocal.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe float FInverse(float N, int AdditionalIterations = 2)
+		public static unsafe float FInverse(float N, int AdditionalIterations = 0)
 		{
 			int F = *(int*)&N;
 			F = 0x7ED311C3 - F;
 			float R = *(float*)&F;
+			R *= -R * N + 2f;
+			R *= -R * N + 2f;
 			R *= -R * N + 2f;
 			R *= -R * N + 2f;
 			R *= -R * N + 2f;
