@@ -2,7 +2,7 @@
 
 namespace MW.Debugger
 {
-	/// <summary>The attribute to mark a method executable by <see cref="Console.Exec(string[], string, object[])"/>.</summary>
+	/// <summary>The attribute to mark a method executable by <see cref="MConsole.Exec(string[], string, object[])"/>.</summary>
 	/// <docs>The attribute to mark a method executable by Console.Exec().</docs>
 	/// <decorations decor="public class : Attriubte"></decorations>
 	[AttributeUsage(AttributeTargets.Method)]
@@ -14,11 +14,11 @@ namespace MW.Debugger
 		/// <summary>The description of this method.</summary>
 		/// <decorations decor="public string"></decorations>
 		public string Description;
-		/// <summary><see langword="true"/> if this method should <see cref="Console.Exec(string[], string, object[])"/> on Start.</summary>
+		/// <summary><see langword="true"/> if this method should <see cref="MConsole.Exec(string[], string, object[])"/> on Start.</summary>
 		/// <docs>True if this method should Exec() on Start.</docs>
 		/// <decorations decor="public bool"></decorations>
 		public bool bExecOnAwake;
-		/// <summary><see langword="true"/> if this method should not appear in <see cref="Console.OnGUI"/>.</summary>
+		/// <summary><see langword="true"/> if this method should not appear in <see cref="MConsole.OnGUI"/>.</summary>
 		/// <docs>True if this method should not appear in the Console GUI.</docs>
 		/// <decorations decor="public bool"></decorations>
 		public bool bHideInConsole;
@@ -55,6 +55,7 @@ namespace MW.Debugger
 	{
 		public T1 Method;
 		public T2 Exec;
+
 		public MethodExec(T1 M, T2 E)
 		{
 			Method = M;

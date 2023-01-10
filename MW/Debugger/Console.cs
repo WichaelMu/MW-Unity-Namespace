@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using MW.Diagnostics;
 using UnityEngine;
@@ -10,12 +11,12 @@ namespace MW.Debugger
 {
 	/// <summary>A Console Debugger for debugging games during runtime.</summary>
 	/// <decorations decor="public abstract class : MonoBehaviour"></decorations>
-	public abstract class Console : MonoBehaviour
+	public abstract class MConsole : MonoBehaviour
 	{
 		/// <summary>The <see cref="Type"/>to get the <see cref="Assembly"/> of the Unity Game where <see cref="ExecAttribute"/>s are defined.</summary>
 		/// <docs>The Type to get the Assembly of the Unity Game where ExecAttributes are defined.</docs>
 		/// <decorations decor="public abstract Type[]"></decorations>
-		public abstract Type[] ExecTypes { get; set; }
+		public abstract Type[] ExecTypes { get; }
 		/// <summary>The <see cref="KeyCode"/> to show <see cref="OnGUI"/>.</summary>
 		/// <docs>The KeyCode to show the Console GUI.</docs>
 		/// <decorations decor="public virtual KeyCode"></decorations>
@@ -24,8 +25,11 @@ namespace MW.Debugger
 		protected Dictionary<string, MethodExec<MethodInfo, ExecAttribute>> Funcs;
 
 		protected bool bShowConsole = false;
-		protected string Input;
+		protected string RawInput;
 		protected string PreviousInput;
+
+		const char kTargetGameObjectIdentifier = '@';
+		const char kGameObjectByNameIdentifier = '#';
 
 		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
 		/// <decorations decor="public virtual void"></decorations>
@@ -69,43 +73,44 @@ namespace MW.Debugger
 
 		void BuildExec()
 		{
-			if (!string.IsNullOrEmpty(Input))
+			if (!string.IsNullOrEmpty(RawInput))
 			{
-				string[] Split = Input.Split(' ');
-				object[] ArgV = new object[Split.Length - 1];
-				string[] TargetsArgV = new string[Split.Length - 1];
-				int TargetsArgC = 0;
+				string[] Split = RawInput.Split(' ');
+				MArray<object> ArgV = new MArray<object>();
+				MArray<string> TargetsArgV = new MArray<string>();
 				string Func = Split[0];
 
 				for (int o = 0, s = 1; s < Split.Length; ++s, ++o)
 				{
-					if (Split[s][0] == '@')
+					if (string.IsNullOrEmpty(Split[s]))
+						continue;
+
+					if (Split[s][0] == kTargetGameObjectIdentifier)
 					{
-						TargetsArgV[TargetsArgC] = Split[s].Substring(1);
-						++TargetsArgC;
+						TargetsArgV.Push(Split[s].Substring(1));
 					}
 					else
 					{
-						ArgV[o - TargetsArgC] = Split[s];
+						ArgV.Push(Split[s]);
 					}
 				}
 
 				Exec(TargetsArgV, Func, ArgV);
 
-				PreviousInput = Input;
+				PreviousInput = RawInput;
 
 			}
 
-			Input = "";
+			RawInput = "";
 		}
 
-		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="Params"/>.</summary>
+		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="RawParams"/>.</summary>
 		/// <docs>Executes MethodName with Params.</docs>
 		/// <decorations decor="public void"></decorations>
 		/// <param name="Targets">The names of GameObjects to execute MethodName on. If null or empty, Object.FindObjectOfType will be used instead.</param>
 		/// <param name="MethodName">The name of the method to execute. (This is case-sensitive)</param>
-		/// <param name="Params">The parameters to pass to the method.</param>
-		public void Exec(string[] Targets, string MethodName, params object[] Params)
+		/// <param name="RawParams">The parameters to pass to the method.</param>
+		public void Exec(string[] Targets, string MethodName, params object[] RawParams)
 		{
 			if (Funcs.ContainsKey(MethodName))
 			{
@@ -113,15 +118,16 @@ namespace MW.Debugger
 				{
 					MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
 
-					object[] Parameters = new object[Params.Length];
 					ParameterInfo[] MethodParams = Func.Method.GetParameters();
+					object[] ExecParameters = new object[MethodParams.Length];
 
-					for (int i = 0; i < Params.Length; ++i)
-						Parameters[i] = Convert.ChangeType(Params[i], MethodParams[i].ParameterType);
+					// Convert to correct Parameter types declared by the Exec function.
+					for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParams.Length; ++ExecParamIndex)
+						GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType);
 
 					if (Func.Method.IsStatic)
 					{
-						Func.Method.Invoke(null, Parameters);
+						Func.Method.Invoke(null, ExecParameters);
 					}
 					else
 					{
@@ -132,27 +138,30 @@ namespace MW.Debugger
 								if (string.IsNullOrEmpty(Target))
 									break;
 
-								Func.Method.Invoke(GetTargetFromString(Target).GetComponent(Func.Method.DeclaringType), Parameters);
+								Func.Method.Invoke(GetTargetFromString(Target).GetComponent(Func.Method.DeclaringType), ExecParameters);
 							}
 						}
 						else
 						{
-							Func.Method.Invoke(Convert.ChangeType(FindObjectOfType(Func.Method.DeclaringType), Func.Method.DeclaringType), Parameters);
+							Func.Method.Invoke(Convert.ChangeType(FindObjectOfType(Func.Method.DeclaringType), Func.Method.DeclaringType), ExecParameters);
 						}
 					}
 				}
-				catch (Exception)
+				catch (Exception E)
 				{
 					StringBuilder ErrorBuilder = new StringBuilder();
 
-					for (int i = 0; i < Params.Length; ++i)
+					for (int i = 0; i < RawParams.Length; ++i)
 					{
-						ErrorBuilder.Append(Params[i].ToString());
-						if (i != Params.Length - 1)
+						if (RawParams[i] == null)
+							continue;
+
+						ErrorBuilder.Append(RawParams[i].ToString().TrimStart(kGameObjectByNameIdentifier, kTargetGameObjectIdentifier));
+						if (i != RawParams.Length - 1)
 							ErrorBuilder.Append(", ");
 					}
 
-					Log.E($"Failed to execute {MethodName} ({ErrorBuilder})");
+					Log.E($"Failed to execute {MethodName} ({ErrorBuilder}) - {E.Message}\n{E}");
 				}
 			}
 			else
@@ -164,12 +173,92 @@ namespace MW.Debugger
 		GameObject GetTargetFromString(string Target)
 		{
 			if (string.IsNullOrEmpty(Target))
-			{
 				return null;
-			}
 
 			return GameObject.Find(Target);
 		}
+
+		void GetCustomParameterType(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
+		{
+			if (ParamIndex < 0 || ParamIndex >= RawParams.Length)
+				throw new ArgumentOutOfRangeException($"Parameter Index is out of range! Expected 0 <= {nameof(ParamIndex)} ({ParamIndex}) < {nameof(RawParams)}.Length ({RawParams.Length}!");
+
+			// Test against known types.
+			if (ExecParameterType == typeof(MVector)) // MVector.
+			{
+				if (ParamIndex + 2 < RawParams.Length)
+				{
+					MVector RetVal;
+					RetVal.X = ConvertType<float>(RawParams[ParamIndex++]);
+					RetVal.Y = ConvertType<float>(RawParams[ParamIndex++]);
+					RetVal.Z = ConvertType<float>(RawParams[ParamIndex]);
+
+					TargetObject = RetVal;
+				}
+			}
+			else if (ExecParameterType == typeof(Vector3)) // Vector3.
+			{
+				if (ParamIndex + 2 < RawParams.Length)
+				{
+					Vector3 RetVal;
+					RetVal.x = ConvertType<float>(RawParams[ParamIndex++]);
+					RetVal.y = ConvertType<float>(RawParams[ParamIndex++]);
+					RetVal.z = ConvertType<float>(RawParams[ParamIndex]);
+
+					TargetObject = RetVal;
+				}
+			}
+			else if (ExecParameterType == typeof(GameObject) || ExecParameterType == typeof(Transform)) // GameObject or Transform.
+			{
+				string StringValue = ConvertType<string>(RawParams[ParamIndex]);
+
+				if (StringValue[0] != kGameObjectByNameIdentifier)
+					throw new ArgumentException($"GameObject and Transform [Exec] Function Parameters must be prefixed with {kGameObjectByNameIdentifier}!");
+
+				string GameObjectName = StringValue.TrimStart(kGameObjectByNameIdentifier);
+
+				GameObject FindResult = GameObject.Find(GameObjectName);
+
+				if (!FindResult)
+					throw new NullReferenceException($"Could not find GameObject with name: {GameObjectName}");
+
+				if (ExecParameterType == typeof(Transform))
+					TargetObject = FindResult.transform;
+				else
+					TargetObject = FindResult;
+			}
+			else if (typeof(MonoBehaviour).IsAssignableFrom(ExecParameterType)) // Components.
+			{
+				string StringValue = ConvertType<string>(RawParams[ParamIndex]);
+
+				if (StringValue.Length <= 2 || StringValue[0] != kGameObjectByNameIdentifier)
+					throw new ArgumentException($"[Exec] Function Parameters referencing a {nameof(MonoBehaviour)} must be prefixed with '{kGameObjectByNameIdentifier}'!");
+
+				string ComponentTarget = StringValue.TrimStart(kGameObjectByNameIdentifier);
+
+				if (string.IsNullOrEmpty(ComponentTarget))
+					throw new NullReferenceException("The Target GameObject name is contains no identifier after a valid prefix!");
+
+				GameObject ComponentResult = GameObject.Find(ComponentTarget);
+
+				if (!ComponentResult)
+					throw new NullReferenceException($"Could not find GameObject with name: {ComponentTarget}!");
+
+				TargetObject = ComponentResult.GetComponent(ExecParameterType);
+
+				if (TargetObject == null)
+					throw new NullReferenceException($"GameObject: {ComponentResult.name} doesn't have an attached {ExecParameterType}");
+			}
+			else
+			{
+				TargetObject = Convert.ChangeType(RawParams[ParamIndex], ExecParameterType);
+			}
+
+			++ParamIndex;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		T ConvertType<T>(object ToConvert) => (T)Convert.ChangeType(ToConvert, typeof(T));
 
 		Vector2 Scroll;
 
@@ -196,7 +285,7 @@ namespace MW.Debugger
 
 			if (Event.current.Equals(Event.KeyboardEvent("Up")))
 			{
-				Input = PreviousInput;
+				RawInput = PreviousInput;
 			}
 
 			float Y = 0f;
@@ -239,7 +328,7 @@ namespace MW.Debugger
 			GUI.backgroundColor = Color.white;
 
 			GUI.SetNextControlName("Exec Text Field");
-			Input = GUI.TextField(new Rect(10f, Y + 5f, Screen.width - 20f, 20f), Input);
+			RawInput = GUI.TextField(new Rect(10f, Y + 5f, Screen.width - 20f, 20f), RawInput);
 			GUI.FocusControl("Exec Text Field");
 		}
 	}
