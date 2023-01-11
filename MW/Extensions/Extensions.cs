@@ -18,9 +18,18 @@ namespace MW.Extensions
 			return V * FInverseSqrt(V.sqrMagnitude);
 		}
 
+		/// <summary>Fast magnitude of a Vector3.</summary>
+		/// <decorations decor="|Extension| float"></decorations>
+		/// <param name="V">The Vector3 to get the magnitude of.</param>
+		/// <returns>The magnitude of V.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float FMagnitude(this Vector3 V) => FSqrt(V.sqrMagnitude);
 
+		/// <summary>Fast distance between two Vector3s.</summary>
+		/// <decorations decor="|Extension| float"></decorations>
+		/// <param name="V">The Vector3 to measure the distance from.</param>
+		/// <param name="R">The Vector3 to measure the distance to.</param>
+		/// <returns>The distance between V and R.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float FDistance(this Vector3 V, Vector3 R) => (V - R).FMagnitude();
 
@@ -48,6 +57,11 @@ namespace MW.Extensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector MV(this Vector3 V) => new MVector(V.x, V.y, V.z);
 
+		/// <summary>Gets or Adds T Component to a GameObject.</summary>
+		/// <typeparam name="T">The type to Get or Add to G.</typeparam>
+		/// <decorations decor="|Extension| T"></decorations>
+		/// <param name="G">The GameObject to Get or Add T.</param>
+		/// <returns>The T Component attached to G.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T GetOrAddComponent<T>(this GameObject G) where T : Component
 		{
@@ -56,22 +70,42 @@ namespace MW.Extensions
 			return G.AddComponent<T>();
 		}
 
+		/// <summary>Gets or Adds T Component to a Transform.</summary>
+		/// <typeparam name="T">The type to Get or Add to R.</typeparam>
+		/// <decorations decor="|Extension| T"></decorations>
+		/// <param name="R">The Transform to Get or Add T.</param>
+		/// <returns>The T Component attached to R.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T GetOrAddComponent<T>(this Transform R) where T : Component
 		{
 			return R.gameObject.GetOrAddComponent<T>();
 		}
 
+		/// <summary>Gets the floating-point bits of a float as an int.</summary>
+		/// <param name="F">The float to get the bits of.</param>
+		/// <returns>The 1:1 bit conversion of F to an int.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe int GetBits(this float F) =>
-			*(int*)&F;
+		public static unsafe int GetBits(this float F) => *(int*)&F;
 
+		/// <summary>Set the bits of a float to the bits of an int.</summary>
+		/// <param name="F">The float to set the bits of.</param>
+		/// <param name="I">The bits to pass into F.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe void SetBits(this float F, int I) =>
-			F = *(float*)&I;
+		public static unsafe void SetBits(this float F, int I) => F = *(float*)&I;
 
+		/// <summary>Is a MonoBehaviour derived from T?</summary>
+		/// <typeparam name="T">The type to check against B's parent.</typeparam>
+		/// <param name="B">The MonoBehaviour to check if it derives from T.</param>
+		/// <docreturns>True if B inherits T.</docreturns>
+		/// <returns><see langword="True"/> if B inherits T.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Is<T>(this MonoBehaviour B) where T : MonoBehaviour => B is T;
+		/// <summary>Is a MonoBehaviour derived from T? If so, cast it to T.</summary>
+		/// <typeparam name="T">The type to check against B's parent.</typeparam>
+		/// <param name="B">The MonoBehaviour to check if it derives from T.</param>
+		/// <param name="Behaviour">Out B as T, if B derives from T.</param>
+		/// <docreturns>True if B inherits T.</docreturns>
+		/// <returns><see langword="True"/> if B inherits T.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Is<T>(this MonoBehaviour B, out T Behaviour) where T : MonoBehaviour
 		{
