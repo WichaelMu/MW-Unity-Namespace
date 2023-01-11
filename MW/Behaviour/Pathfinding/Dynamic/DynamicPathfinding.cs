@@ -30,6 +30,16 @@ namespace MW.Pathfinding
 		/// <summary>The number of Nodes per Unity-world unit.</summary>
 		/// <decorations decor="[SerializeField] [Min(1)] float"></decorations>
 		[SerializeField, Min(1f)] float PointsPerUnit = 1;
+		/// <summary>Make the Traversable Layer <i>not</i> traversable.</summary>
+		/// <docs>Make the Traversable Layer &lt;not&gt; traversable.</docs>
+		/// <decorations decor="[SerializeField] bool"></decorations>
+		[SerializeField] bool bAirIsTraversable = false;
+		/// <summary>Whether or not to check if Nodes inside a contact is traversable.</summary>
+		/// <decorations decor="[SerializeField] bool"></decorations>
+		[SerializeField] bool bCheckInsideContacts = false;
+		/// <summary>The method to use to determine if a point is inside a Collider.</summary>
+		/// <decorations decor="[SerializeField] EInsideContactQueryMethod"></decorations>
+		[SerializeField] EInsideContactQueryMethod InsideContactMethod = EInsideContactQueryMethod.Raycast;
 
 		/// <summary>True if this should adapt to the world environment.</summary>
 		/// <decorations decor="[SerializeField] bool"></decorations>
@@ -197,12 +207,65 @@ namespace MW.Pathfinding
 			AsyncOperation = null;
 		}
 
+		static Collider[] CachedContacts = new Collider[10];
+
 		void UpdateNode(int NodeIndex)
 		{
 			Node N = Nodes[NodeIndex];
 
 			float PPU = 1f / PointsPerUnit;
-			N.bIsTraversable = !(Physics.OverlapBox(N.Position, Vector3.one * PPU * .5f, Quaternion.identity, ~TraversableLayer).Length > 0);
+
+			// Physics Parameters...
+			Vector3 Centre = N.Position;
+			Vector3 HalfExtents = Vector3.one * PPU * .5f;
+			Quaternion Orientation = Quaternion.identity;
+			int LayerMask = TraversableLayer;
+
+			if (!bCheckInsideContacts)
+			{
+				// N is Traversable if Physics made contact with a Traversable Layer.
+				N.bIsTraversable = Physics.OverlapBox(Centre, HalfExtents, Orientation, LayerMask).Length > 0;
+			}
+			else
+			{
+				int Contacts = Physics.OverlapBoxNonAlloc(Centre, HalfExtents, CachedContacts, Orientation, LayerMask);
+
+				if (Contacts == 0)
+				{
+					N.bIsTraversable = false;
+				}
+				else
+				{
+					N.bIsTraversable = true;
+
+					for (int i = 0; i < Contacts; ++i)
+					{
+						bool bIsPointInsideContact = false;
+						if ((InsideContactMethod & EInsideContactQueryMethod.Raycast) == EInsideContactQueryMethod.Raycast)
+						{
+							Vector3 ContactPosition = CachedContacts[i].transform.position;
+							Ray R = new Ray(Centre, (ContactPosition - Centre).FNormalise());
+
+							bIsPointInsideContact = Physics.Raycast(R, Centre.FDistance(ContactPosition) + .1f, TraversableLayer);
+						}
+
+						if ((InsideContactMethod & EInsideContactQueryMethod.Bounds) == EInsideContactQueryMethod.Bounds)
+						{
+							bIsPointInsideContact |= CachedContacts[i].bounds.Contains(Centre);
+						}
+
+						if (bIsPointInsideContact)
+						{
+							N.bIsTraversable = false;
+							break;
+						}
+					}
+				}
+			}
+
+
+			// Flip if Air is treated as traversable.
+			N.bIsTraversable ^= bAirIsTraversable;
 
 			// In (+Z).
 			if (IsAllowed(NodeIndex, 1))
@@ -287,5 +350,20 @@ namespace MW.Pathfinding
 		NoCollision = 2,
 		[InspectorName("Show All")]
 		AllNodes = CollisionOnly | NoCollision
+	}
+
+	/// <summary>The method for checking if a point is inside a Collider.</summary>
+	/// <decorations decor="public enum EInsideContactQueryMethod : byte"></decorations>
+	public enum EInsideContactQueryMethod : byte
+	{
+		/// <summary>Raycast from Contact Point to Collider Centre.</summary>
+		[InspectorName("Raycast from Contact Point to Collider Centre.")]
+		Raycast = 1,
+		/// <summary>Use Collider Bounds to Contact Point Check.</summary>
+		[InspectorName("Use Collider Bounds to Contact Point check.")]
+		Bounds = 2,
+		/// <summary>Use both Raycast and Bounds checks.</summary>
+		[InspectorName("Use both Raycast and Bounds checks.")]
+		RaycastAndBounds = Raycast | Bounds
 	}
 }
