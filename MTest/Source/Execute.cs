@@ -770,6 +770,36 @@ namespace MTest
 			}
 		}
 
+		[TestMethod]
+		public void ATanTests()
+		{
+			for (float F = -1500.422f; F < 1500.422f; F += .023f)
+			{
+				FloatToleranceCheck(Mathf.Atan(F), FArcTangent(F), $"Fast ATan {F}", .01f);
+			}
+		}
+
+		[TestMethod]
+		public void ATan2Tests()
+		{
+			for (float Y = -50.442f; Y <= 50.422f; Y += .23f)
+			{
+				for (float X = 25.422f; X >= -25.422f; X -= .23f)
+				{
+					FloatToleranceCheck(Mathf.Atan2(Y, X), FArcTangent2(Y, X), $"Fast ATan2 {Y}, {X}", .01f);
+				}
+			}
+		}
+	}
+
+	[TestClass]
+	public class CastTests
+	{
+		[TestMethod]
+		public void ObjectCastTests()
+		{
+			Assert.AreEqual((object)4f, ((object)4f).Cast<float>());
+		}
 	}
 
 	class TTestClass : IHeapItem<TTestClass>

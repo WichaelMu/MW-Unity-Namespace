@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using MW.Extensions;
 using static MW.Utils;
 
 namespace MW.Math.Magic
@@ -17,20 +18,20 @@ namespace MW.Math.Magic
 		/// <docremarks>Modified from: &lt;a href="https://github.com/id-Software/Quake-III-Arena/blob/dbe4ddb10315479fc00086f08e25d968b4b43c49/code/game/q_math.c#L552"&gt;The 'Quake III Fast Inv. Sqrt Algorithm'&lt;/a&gt;</docremarks>
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
-		/// <param name="AdditionalIterations">The number of additional Newton Iterations to perform.</param>
-		/// <returns>An approximation for calculating: 1 / sqrt(N), within +-.001 of the real inverse square root.</returns>
+		/// <param name="NewtonIterations">The number of Newton Iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
+		/// <returns>An approximation for calculating: 1 / sqrt(N), within +-.001 of the real inverse square root with 3 Newton Iterations.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe float FInverseSqrt(float N, int AdditionalIterations = 0)
+		public static unsafe float FInverseSqrt(float N, int NewtonIterations = 3)
 		{
 			int F = *(int*)&N;
 			F = 0x5F3759DF - (F >> 1);
 			float R = *(float*)&F;
 
-			R *= 1.5f - .5f * N * R * R;
-			R *= 1.5f - .5f * N * R * R;
-			R *= 1.5f - .5f * N * R * R;
-			for (int i = 0; i < AdditionalIterations; ++i)
+			ClampMin(ref NewtonIterations, 1);
+
+			for (int i = 0; i < NewtonIterations; ++i)
 				R *= 1.5f - .5f * N * R * R;
+
 			return R;
 		}
 
@@ -38,28 +39,27 @@ namespace MW.Math.Magic
 		/// <docs>Faster version of Mathf.Sqrt().</docs>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
-		/// <param name="AdditionalIterations">The number of Newton Iterations to perform.</param>
-		/// <returns>An approximation for the Square Root of F, within +-.001 of the real square root.</returns>
+		/// <param name="NewtonIterations">The number of Newton Iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
+		/// <returns>An approximation for the Square Root of F, within +-.001 of the real square root with 3 Newton Iterations.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float FSqrt(float F, int AdditionalIterations = 0) => FInverseSqrt(Max(F, MVector.kEpsilon), AdditionalIterations) * F;
+		public static float FSqrt(float F, int NewtonIterations = 3) => FInverseSqrt(Max(F, MVector.kEpsilon), NewtonIterations) * F;
 
 		/// <summary>Fast reciprocal/inverse function for any float N. 1f / N.</summary>
 		/// <param name="N">The number to take the inverse of.</param>
-		/// <param name="AdditionalIterations">The number of additional Newton Raphson iterations to perform.</param>
-		/// <returns>An approximation for calculating: 1 / N, within +-.001 of the real reciprocal.</returns>
+		/// <param name="NewtonRaphsonIterations">The number of Newton Raphson iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
+		/// <returns>An approximation for calculating: 1 / N, within +-.001 of the real reciprocal with 5 Newton Raphson iterations.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe float FInverse(float N, int AdditionalIterations = 0)
+		public static unsafe float FInverse(float N, int NewtonRaphsonIterations = 5)
 		{
 			int F = *(int*)&N;
 			F = 0x7ED311C3 - F;
 			float R = *(float*)&F;
-			R *= -R * N + 2f;
-			R *= -R * N + 2f;
-			R *= -R * N + 2f;
-			R *= -R * N + 2f;
-			R *= -R * N + 2f;
-			for (int i = 0; i < AdditionalIterations; ++i)
+
+			ClampMin(ref NewtonRaphsonIterations, 1);
+
+			for (int i = 0; i < NewtonRaphsonIterations; ++i)
 				R *= -R * N + 2f;
+
 			return R;
 		}
 
@@ -102,6 +102,99 @@ namespace MW.Math.Magic
 			ACos *= FSqrt(1f - A);
 
 			return Angle > 0f ? ACos : kPI - ACos;
+		}
+
+		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan(float)"/>.</summary>
+		/// <docs>Faster version of Mathf.Atan().</docs>
+		/// <param name="N">The ratio O/A.</param>
+		/// <returns>Inverse Tangent of N in radians, accurate to +-.01 radians.</returns>
+		public static float FArcTangent(float N)
+		{
+			float F = FAbs(N);
+			float T = (F < 1f) ? F : FInverse(F);
+			float TT = T * T;
+			float P = .0872929f;
+			P = -.301895f + P * TT;
+			P = 1f + P * TT;
+			P *= T;
+
+			float R = F < 1f ? P : kHalfPI - P;
+			return N < 0f ? -R : R;
+		}
+
+		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan2(float, float))"/>.</summary>
+		/// <docs>Faster version of Mathf.Atan2().</docs>
+		/// <param name="Y">The Y component of a point.</param>
+		/// <param name="X">The X component of a point.</param>
+		/// <returns>Approximation of Atan2, accurate to +-.01 in radians.</returns>
+		public static float FArcTangent2(float Y, float X)
+		{
+			if (Y == 0f && X == 0f)
+				return 0f;
+			if (Y == 0f && X > 0f)
+				return 0f;
+			if (Y == 0f && X < 0f)
+				return kPI;
+			if (Y > 0f && X == 0f)
+				return kHalfPI;
+			if (Y < 0f && X == 0f)
+				return -kHalfPI;
+			if (X.IsIllegalFloat() || Y.IsIllegalFloat())
+				return float.NaN;
+
+			float YX = Y * FInverse(X);
+			float XY = X * FInverse(Y);
+
+			if (X >= 0f)
+			{
+				if (Y >= 0f)
+				{
+					if (Y < X)
+					{
+						return FArcTangent(YX);
+					}
+					else
+					{
+						return kHalfPI - FArcTangent(XY);
+					}
+				}
+				else
+				{
+					if (-Y < X)
+					{
+						return FArcTangent(YX);
+					}
+					else
+					{
+						return -kHalfPI - FArcTangent(XY);
+					}
+				}
+			}
+			else
+			{
+				if (Y >= 0f)
+				{
+					if (Y < -X)
+					{
+						return FArcTangent(YX) + kPI;
+					}
+					else
+					{
+						return kHalfPI - FArcTangent(XY);
+					}
+				}
+				else
+				{
+					if (-Y < -X)
+					{
+						return FArcTangent(YX) - kPI;
+					}
+					else
+					{
+						return -kHalfPI - FArcTangent(XY);
+					}
+				}
+			}
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
