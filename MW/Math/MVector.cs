@@ -52,29 +52,29 @@ namespace MW
 		/// <param name="X">X Component.</param>
 		/// <param name="Y">Y Component.</param>
 		/// <param name="Z">Z Component.</param>
-		public MVector(float X, float Y, float Z) : this()
+		public MVector(float X, float Y, float Z) : this(X, Y)
 		{
-			this.X = X;
-			this.Y = Y;
 			this.Z = Z;
 		}
 
 		/// <summary>Construct an MVector with respect to a <see cref="Vector3"/>.</summary>
 		/// <docs>Construct an MVector with respect to a Vector3.</docs>
 		/// <param name="xyz">The Vector3's Components to set this MVector.</param>
-		public MVector(Vector3 xyz) : this()
-		{
-			X = xyz.x;
-			Y = xyz.y;
-			Z = xyz.z;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public MVector(Vector3 xyz) : this(xyz.x, xyz.y, xyz.z) { }
+
+		/// <summary>Construct an MVector with respect to a <see cref="Vector2"/>.</summary>
+		/// <summary>Construct an MVector with respect to a Vector2.</summary>
+		/// <param name="xy">The Vector2's Components to set this MVector.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public MVector(Vector2 xy) : this(xy.x, xy.y) { }
 
 		public float this[int i] => i switch
 		{
 			0 => X,
 			1 => Y,
 			2 => Z,
-			_ => throw new System.IndexOutOfRangeException("Vector index " + i + " is out of range! Expected i >= 0 && i <= 2.\nInput i: " + i)
+			_ => throw new IndexOutOfRangeException("Vector index " + i + " is out of range! Expected i >= 0 && i <= 2.\nInput i: " + i)
 		};
 
 		static readonly MVector zero = new MVector(0);
@@ -115,48 +115,58 @@ namespace MW
 		/// <summary>Converts an MVector to a Vector3.</summary>
 		/// <decorations decors="public static Vector3"></decorations>
 		/// <param name="M">The MVector to convert.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector3 V3(MVector M) => new Vector3(M.X, M.Y, M.Z);
 		/// <summary>Converts a Vector3 to an MVector.</summary>
 		/// <decorations decors="public static MVector"></decorations>
 		/// <param name="V">The Vector3 to convert.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector MV(Vector3 V) => new MVector(V.x, V.y, V.z);
 
 		/// <summary>Normalises V.</summary>
 		/// <decorations decors="public static MVector"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector Normalise(MVector V) => V.Normalise();
 		/// <summary>The vector cross ^ product of Left and Right.</summary>
 		/// <decorations decors="public static MVector"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector Cross(MVector Left, MVector Right) => Left ^ Right;
 		/// <summary>The vector dot | product of Left and Right.</summary>
 		/// <remarks>Does not assume Left and Right are normalised.</remarks>
 		/// <decorations decors="public static float"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Dot(MVector Left, MVector Right) => Left | Right;
 		/// <summary>Whether Left and Right are <see cref="Mathematics.Parallel(MVector, MVector, float)"/> to each other.</summary>
 		/// <docs>Whether left and right are Mathematics.Parallel(MVector, MVector, float) to each other.</docs>
 		/// <decorations decors="public static bool"></decorations>
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Parallel(MVector Left, MVector Right) => Mathematics.Parallel(Left, Right);
 		/// <summary>A normalised MVector at Degrees, relative to Forward.</summary>
 		/// <decorations decors="public static MVector"></decorations>
 		/// <param name="Degrees">The angle offset.</param>
 		/// <param name="Forward">The forward direction.</param>
+		[Obsolete($"Use {nameof(RotateVector)} instead!")]
 		public static MVector MVectorFromAngle(float Degrees, EDirection Forward) => Mathematics.VectorFromAngle(Degrees, Forward);
 		/// <summary>The angle between two vectors in degrees.</summary>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>An approximation of the angle between L and R in degrees, accurate to +-.1 degrees.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Angle(MVector L, MVector R) => FAngle(L, R);
 		/// <summary>The distance between Left and Right.</summary>
 		/// <decorations decors="public static float"></decorations>
 		/// <param name="Left">Source of the distance.</param>
 		/// <param name="Right">Distance from source.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Distance(MVector Left, MVector Right) => FSqrt(SqrDistance(Left, Right));
 
 		/// <summary>Square Euclidean distance between Left and Right.</summary>
 		/// <decorations decors="public static float"></decorations>
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float SqrDistance(MVector Left, MVector Right)
 		{
 			float x = Left.X - Right.X;
@@ -175,13 +185,10 @@ namespace MW
 		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
 		/// <docs>The Mathf.Abs(float) of this MVector's components.</docs>
 		/// <decorations decors="public MVector"></decorations>
-		public MVector Abs { get => new MVector(Mathf.Abs(X), Mathf.Abs(Y), Mathf.Abs(Z)); }
+		public MVector Abs { get => new MVector(FAbs(X), FAbs(Y), FAbs(Z)); }
 		/// <summary>The normalised version of this MVector.</summary>
 		/// <decorations decors="public MVector"></decorations>
-		public MVector Normalised
-		{
-			get => FInverseSqrt(SqrMagnitude) * this;
-		}
+		public MVector Normalised { get => FInverseSqrt(SqrMagnitude) * this; }
 
 		/// <summary>Normalises this MVector.</summary>
 		/// <decorations decors="public MVector"></decorations>
@@ -205,6 +212,7 @@ namespace MW
 		/// <summary>This MVector's reflection among Normal.</summary>
 		/// <decorations decors="public MVector"></decorations>
 		/// <param name="Normal">The normal vector to mirror.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public MVector Mirror(MVector Normal) => 2f * (this | Normal) * this - Normal;
 
 		/// <summary>Rotates this MVector at an angle of AngleDegrees around Axis.</summary>
@@ -369,11 +377,13 @@ namespace MW
 		/// <param name="V">The MVector to find distance.</param>
 		/// <decorations decors="public float"></decorations>
 		/// <returns>The Euclidean distance between this MVector and V.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Distance(MVector V) => Distance(this, V);
 		/// <summary>The Euclidean distance, but without the square root calculation.</summary>
 		/// <param name="V">The MVector to find square distance.</param>
 		/// <decorations decors="public float"></decorations>
 		/// <returns>The square distance between this MVector and V.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float SqrDistance(MVector V) => SqrDistance(this, V);
 
 		/// <summary>Get the <see cref="SqrMagnitude"/> of <paramref name="M"/>.</summary>
@@ -381,6 +391,7 @@ namespace MW
 		/// <param name="M">The MVector.</param>
 		/// <docreturns>The SquMagnitude of M.</docreturns>
 		/// <returns><see cref="SqrMagnitude"/>.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float operator ~(MVector M) => M.SqrMagnitude;
 
 		/// <summary>Adds two MVectors together.</summary>
@@ -388,35 +399,41 @@ namespace MW
 		/// <param name="Left">Left-side MVector.</param>
 		/// <param name="Right">Right-side MVector.</param>
 		/// <returns>(MVector Left, MVector Right) => new MVector(Left.X + Right.X, Left.Y + Right.Y, Left.Z + Right.Z)</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator +(MVector Left, MVector Right) => new MVector(Left.X + Right.X, Left.Y + Right.Y, Left.Z + Right.Z);
 		/// <summary>Adds a Vector3 to an MVector.</summary>
 		/// <decorations decors="public static MVector operator+"></decorations>
 		/// <param name="Left">The MVector.</param>
 		/// <param name="Right">The Vector3.</param>
 		/// <returns>(MVector Left, Vector3 Right) => Left + (MVector)Right</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator +(MVector Left, Vector3 Right) => Left + (MVector)Right;
 		/// <summary>Adds an MVector to a Vector3.</summary>
 		/// <decorations decors="public static MVector operator+"></decorations>
 		/// <param name="Left">The Vector3.</param>
 		/// <param name="Right">The MVector.</param>
 		/// <returns>(Vector3 Left, MVector Right) => (MVector)Left + Right</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator +(Vector3 Left, MVector Right) => (MVector)Left + Right;
 		/// <summary>Subtracts two MVectors.</summary>
 		/// <decorations decors="public static MVector operator-"></decorations>
 		/// <param name="Left">Left-side MVector.</param>
 		/// <param name="Right">Right-side MVector.</param>
 		/// <returns>(MVector Left, MVector Right) => new MVector(Left.X - Right.X, Left.Y - Right.Y, Left.Z - Right.Z)</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator -(MVector Left, MVector Right) => new MVector(Left.X - Right.X, Left.Y - Right.Y, Left.Z - Right.Z);
 		/// <summary>Negates an MVector.</summary>
 		/// <decorations decors="public static MVector operator-"></decorations>
 		/// <param name="V">The MVector to negate all components.</param>
 		/// <returns>(MVector V) => V *= -1f</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator -(MVector V) => -1f * V;
 		/// <summary>Multiplies an MVector by a scalar on all components.</summary>
 		/// <decorations decors="public static MVector operator*"></decorations>
 		/// <param name="S">The Scalar to multiply.</param>
 		/// <param name="V">The MVector.</param>
 		/// <returns>(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S)</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator *(float S, MVector V) => new MVector(V.X * S, V.Y * S, V.Z * S);
 		/// <summary>Divides an MVector by a scalar on all components.</summary>
 		/// <remarks>If d == 0, this will throw a DivideByZeroException.</remarks>
@@ -424,6 +441,7 @@ namespace MW
 		/// <param name="V">The MVector.</param>
 		/// <param name="D">The denominator under all components.</param>
 		/// <returns>(MVector V, float D) => float S = 1 / D; return S * V</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator /(MVector V, float D)
 		{
 			if (D == 0)
@@ -431,8 +449,7 @@ namespace MW
 				throw new DivideByZeroException("Attempted division by zero.");
 			}
 
-			float S = 1f / D;
-			return S * V;
+			return FInverse(D) * V;
 		}
 
 		/// <summary>The vector cross ^ product.</summary>
@@ -440,6 +457,7 @@ namespace MW
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		/// <returns>(MVector Left, MVector Right) => new MVector(Left.Y * Right.Z - Left.Z * Right.Y, Left.Z * Right.X - Left.X * Right.Z, Left.X * Right.Y - Left.Y * Right.X)</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator ^(MVector Left, MVector Right) => new MVector(Left.Y * Right.Z - Left.Z * Right.Y, Left.Z * Right.X - Left.X * Right.Z, Left.X * Right.Y - Left.Y * Right.X);
 		/// <summary>The vector dot | product.</summary>
 		/// <remarks>Does not assume Left and Right are normalised.</remarks>
@@ -447,6 +465,7 @@ namespace MW
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		/// <returns>(MVector Left, MVector Right) => Left.X * Right.X + Left.Y * Right.Y + Left.Z * Right.Z</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float operator |(MVector Left, MVector Right) => Left.X * Right.X + Left.Y * Right.Y + Left.Z * Right.Z;
 
 		/// <summary>Normalised direction from to.</summary>
@@ -454,12 +473,14 @@ namespace MW
 		/// <param name="From"></param>
 		/// <param name="To"></param>
 		/// <returns>(MVector From, MVector To) => (To - From).Normalised</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator >(MVector From, MVector To) => (To - From).Normalised;
 		/// <summary>Normalised direction from to.</summary>
 		/// <decorations decors="public static MVector operator&lt;"></decorations>
 		/// <param name="From"></param>
 		/// <param name="To"></param>
 		/// <returns>(MVector To, MVector From) => From > To</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator <(MVector To, MVector From) => From > To;
 
 		/// <summary>Shifts all components to the right.</summary>
@@ -467,6 +488,7 @@ namespace MW
 		/// <param name="V">The MVector to shift.</param>
 		/// <param name="I">The number of times to shift right.</param>
 		/// <returns>X = Y, Y = Z, Z = X.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator >>(MVector V, int I)
 		{
 			if (I == 0)
@@ -493,6 +515,7 @@ namespace MW
 		/// <param name="V">The MVector to shift.</param>
 		/// <param name="I">The number of times to shift left.</param>
 		/// <returns>X = Z, Y = X, Z = Y.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator <<(MVector V, int I)
 		{
 			if (I == 0)
@@ -520,6 +543,7 @@ namespace MW
 		/// <param name="Right">Right-side comparison.</param>
 		/// <docreturns>True if the square distance between Left and Right is less than kEpsilon ^ 2.</docreturns>
 		/// <returns>True if the square distance between Left and Right is less than <see cref="kEpsilon"/>^2.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(MVector Left, MVector Right)
 		{
 			float x = Left.X - Right.X;
@@ -534,16 +558,20 @@ namespace MW
 		/// <param name="Left">Left-side comparison.</param>
 		/// <param name="Right">Right-side comparison.</param>
 		/// <returns>The opposite of operator ==.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator !=(MVector Left, MVector Right) => !(Left == Right);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override bool Equals(object O) => O is MVector V && Equals(V);
-		public bool Equals(MVector V) => this == V || Mathf.Abs(V.X - X + V.Y - Y + V.Z - Z) < 4f * kEpsilon;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool Equals(MVector V) => this == V || FAbs(V.X - X + V.Y - Y + V.Z - Z) < 4f * kEpsilon;
 
 		/// <summary><see langword="true"/>if the MVector is non-zero.</summary>
 		/// <decorations decor="public static bool operator true"></decorations>
 		/// <param name="M">The Vector to check.</param>
 		/// <docreturns>M != MVector(NaN) &amp;&amp; M != MVector.Zero &amp;&amp; M.SqrMagnitude &gt; MVector.kEpsilon.</docreturns>
 		/// <returns><paramref name="M"/> != <see cref="NaN"/> &amp;&amp; M != <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &gt; <see cref="kEpsilon"/>.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator true(MVector M) => M != NaN && M != Zero && M.SqrMagnitude > kEpsilon;
 
 		/// <summary><see langword="true"/>if the MVector is zero or considered zero.</summary>
@@ -551,23 +579,28 @@ namespace MW
 		/// <param name="M">The Vector to check.</param>
 		/// <docreturns>M == MVector(NaN) &amp;&amp; M == MVector.Zero &amp;&amp; M.SqrMagnitude &lt; MVector.kEpsilon.</docreturns>
 		/// <returns><paramref name="M"/> == <see cref="NaN"/> &amp;&amp; M == <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &lt; <see cref="kEpsilon"/>.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator false(MVector M) => M == NaN || M == Zero || M.SqrMagnitude < kEpsilon;
 
 		/// <summary>Automatic conversion from an MVector to a bool. <see cref="operator true(MVector)"/> and <see cref="operator false(MVector)"/>.</summary>
 		/// <docs>Automatic conversion from an MVector to a bool. See operator true and operator false.</docs>
 		/// <decorations decor="public static implicit operator bool"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator bool(MVector M) => M;
 
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		/// <decorations decors="public static implicit operator Vector3"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Vector3(MVector MVector) => new Vector3(MVector.X, MVector.Y, MVector.Z);
 		/// <summary>Automatic conversion from an MVector to a Vector2.</summary>
 		/// <remarks>Only the X and Y components are considered. The Z component is ignored.</remarks>
 		/// <decorations decors="public static implicit operator Vector2"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Vector2(MVector MVector) => new Vector2(MVector.X, MVector.Y);
 
 		/// <summary>Automatic conversion from a Vector3 to an MVector.</summary>
 		/// <decorations decors="public static implicit operator MVector"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator MVector(Vector3 Vector) => new MVector(Vector);
 		/// <summary>Automatic conversion from a Vector2 to an MVector.</summary>
 		/// <remarks>The resulting MVector will have a Z equal to zero.</remarks>
@@ -576,16 +609,19 @@ namespace MW
 
 		/// <summary>The Colour representation of this MVector, in 0-255 XYZ/RGB.</summary>
 		/// <decorations decors="public static implicit operator Color"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Color(MVector V) => Colour.Colour255(V.X, V.Y, V.Z);
 
 		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
 		/// <decorations decors="public override int"></decorations>
 		/// <returns>GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() &lt;&lt; 2) ^ (Z.GetHashCode() &gt;&gt; 2)</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override int GetHashCode() => X.GetHashCode() ^ (Y.GetHashCode() << 2) ^ (Z.GetHashCode() >> 2);
 
 		/// <summary>A human-readable MVector.</summary>
 		/// <decorations decors="public override string"></decorations>
 		/// <returns>ToString() => "X: " + X + " Y: " + Y + " Z: " + Z</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override string ToString() => "X: " + X + " Y: " + Y + " Z: " + Z;
 
 		/// <summary>A human-readable MVector with formatting.</summary>
