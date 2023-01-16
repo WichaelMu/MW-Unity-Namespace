@@ -1,4 +1,5 @@
-﻿using MW.Diagnostics;
+﻿using System.Runtime.CompilerServices;
+using MW.Diagnostics;
 using MW.Easing;
 using MW.Kinetic;
 using MW.Math.Magic;
@@ -222,12 +223,14 @@ namespace MW.Math
 		/// <param name="M1">Whether this vector is parallel to the other.</param>
 		/// <param name="M2">Whether this vector is parallel to the other.</param>
 		/// <param name="ParallelThreshold">The threshold to consider parallel vectors.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Parallel(MVector M1, MVector M2, float ParallelThreshold = 0.999845f)
 		    => Mathf.Abs(M1 | M2) >= ParallelThreshold;
 
 		/// <summary>Whether Vector has been normalised.</summary>
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Vector">The vector to check.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNormalised(MVector Vector) => Mathf.Abs(1f - Vector.SqrMagnitude) < .01f;
 
 		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Z-Axis. (For 3D space)</summary>
@@ -351,13 +354,14 @@ namespace MW.Math
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>The Square Distance between L and R.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float SqrDistance(Vector3 L, Vector3 R)
 		{
-			float x = L.x - R.x;
-			float y = L.y - R.y;
-			float z = L.z - R.z;
+			float X = L.x - R.x;
+			float Y = L.y - R.y;
+			float Z = L.z - R.z;
 
-			return x * x + y * y + z * z;
+			return X * X + Y * Y + Z * Z;
 		}
 
 		/// <summary>A fast version of <see cref="Vector3.Distance"/>.</summary>
@@ -366,9 +370,10 @@ namespace MW.Math
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>The distance between L and R.</returns>
-		public static float Distance(Vector3 L, Vector3 R)
-		{
-			return Fast.FSqrt(SqrDistance(L, R));
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float Distance(Vector3 L, Vector3 R) => FSqrt(SqrDistance(L, R));
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float ArcDistance(MVector A, MVector B, float Radius) => Radius * FArcCosine((A | B) * FInverse(Radius * Radius));
 	}
 }
