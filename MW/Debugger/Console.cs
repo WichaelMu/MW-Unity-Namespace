@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using MW.Diagnostics;
+using MW.Extensions;
 using UnityEngine;
 
 namespace MW.Debugger
@@ -189,9 +190,9 @@ namespace MW.Debugger
 				if (ParamIndex + 2 < RawParams.Length)
 				{
 					MVector RetVal;
-					RetVal.X = ConvertType<float>(RawParams[ParamIndex++]);
-					RetVal.Y = ConvertType<float>(RawParams[ParamIndex++]);
-					RetVal.Z = ConvertType<float>(RawParams[ParamIndex]);
+					RetVal.X = RawParams[ParamIndex++].Cast<float>();
+					RetVal.Y = RawParams[ParamIndex++].Cast<float>();
+					RetVal.Z = RawParams[ParamIndex].Cast<float>();
 
 					TargetObject = RetVal;
 				}
@@ -201,16 +202,28 @@ namespace MW.Debugger
 				if (ParamIndex + 2 < RawParams.Length)
 				{
 					Vector3 RetVal;
-					RetVal.x = ConvertType<float>(RawParams[ParamIndex++]);
-					RetVal.y = ConvertType<float>(RawParams[ParamIndex++]);
-					RetVal.z = ConvertType<float>(RawParams[ParamIndex]);
+					RetVal.x = RawParams[ParamIndex++].Cast<float>();
+					RetVal.y = RawParams[ParamIndex++].Cast<float>();
+					RetVal.z = RawParams[ParamIndex].Cast<float>();
+
+					TargetObject = RetVal;
+				}
+			}
+			else if (ExecParameterType == typeof(MRotator))
+			{
+				if (ParamIndex + 2 < RawParams.Length)
+				{
+					MRotator RetVal;
+					RetVal.Pitch =RawParams[ParamIndex++].Cast<float>();
+					RetVal.Yaw =  RawParams[ParamIndex++].Cast<float>();
+					RetVal.Roll = RawParams[ParamIndex].Cast<float>();
 
 					TargetObject = RetVal;
 				}
 			}
 			else if (ExecParameterType == typeof(GameObject) || ExecParameterType == typeof(Transform)) // GameObject or Transform.
 			{
-				string StringValue = ConvertType<string>(RawParams[ParamIndex]);
+				string StringValue = RawParams[ParamIndex].Cast<string>();
 
 				if (StringValue[0] != kGameObjectByNameIdentifier)
 					throw new ArgumentException($"GameObject and Transform [Exec] Function Parameters must be prefixed with {kGameObjectByNameIdentifier}!");
@@ -229,7 +242,7 @@ namespace MW.Debugger
 			}
 			else if (typeof(MonoBehaviour).IsAssignableFrom(ExecParameterType)) // Components.
 			{
-				string StringValue = ConvertType<string>(RawParams[ParamIndex]);
+				string StringValue = RawParams[ParamIndex].Cast<string>();
 
 				if (StringValue.Length <= 2 || StringValue[0] != kGameObjectByNameIdentifier)
 					throw new ArgumentException($"[Exec] Function Parameters referencing a {nameof(MonoBehaviour)} must be prefixed with '{kGameObjectByNameIdentifier}'!");
@@ -256,9 +269,6 @@ namespace MW.Debugger
 
 			++ParamIndex;
 		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		T ConvertType<T>(object ToConvert) => (T)Convert.ChangeType(ToConvert, typeof(T));
 
 		Vector2 Scroll;
 
