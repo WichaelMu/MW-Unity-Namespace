@@ -4,9 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using MW.IO;
 using MW.Diagnostics;
 using MW.Extensions;
 using UnityEngine;
+using UObject = UnityEngine.Object;
 
 namespace MW.Debugger
 {
@@ -67,6 +69,7 @@ namespace MW.Debugger
 
 		/// <summary>Shows the Console on the in-game viewport.</summary>
 		/// <decorations decor="public virtual void"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public virtual void ShowConsole()
 		{
 			bShowConsole = !bShowConsole;
@@ -106,7 +109,7 @@ namespace MW.Debugger
 		}
 
 		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="RawParams"/>.</summary>
-		/// <docs>Executes MethodName with Params.</docs>
+		/// <docs>Executes MethodName with RawParams on Targets (if any).</docs>
 		/// <decorations decor="public void"></decorations>
 		/// <param name="Targets">The names of GameObjects to execute MethodName on. If null or empty, Object.FindObjectOfType will be used instead.</param>
 		/// <param name="MethodName">The name of the method to execute. (This is case-sensitive)</param>
@@ -144,7 +147,12 @@ namespace MW.Debugger
 						}
 						else
 						{
-							Func.Method.Invoke(Convert.ChangeType(FindObjectOfType(Func.Method.DeclaringType), Func.Method.DeclaringType), ExecParameters);
+							UObject ObjectTarget = FindObjectOfType(Func.Method.DeclaringType);
+							if (ObjectTarget)
+							{
+								Func.Method.Invoke(Convert.ChangeType(ObjectTarget, Func.Method.DeclaringType), ExecParameters);
+								O.Out($"Exec: {Func.Method.Name} on {ObjectTarget.name}");
+							}
 						}
 					}
 				}
@@ -171,6 +179,7 @@ namespace MW.Debugger
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		GameObject GetTargetFromString(string Target)
 		{
 			if (string.IsNullOrEmpty(Target))
@@ -209,7 +218,7 @@ namespace MW.Debugger
 					TargetObject = RetVal;
 				}
 			}
-			else if (ExecParameterType == typeof(MRotator))
+			else if (ExecParameterType == typeof(MRotator)) // MRotator.
 			{
 				if (ParamIndex + 2 < RawParams.Length)
 				{
