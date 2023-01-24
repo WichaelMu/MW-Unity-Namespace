@@ -161,6 +161,9 @@ namespace MW.Extensions
 			return Behaviour != null;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool Is<T>(this object O) => O is T || O.GetType() == typeof(T);
+
 		/// <summary>Cast an object to a Type.</summary>
 		/// <typeparam name="T">The class to convert O to.</typeparam>
 		/// <param name="O">The object to cast.</param>
