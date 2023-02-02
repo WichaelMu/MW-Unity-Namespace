@@ -127,13 +127,13 @@ namespace MW.Extensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe void SetBits(this float F, int I) => F = *(float*)&I;
 
-		public static unsafe bool IsIllegalFloat(this float F)
+		public static unsafe bool IsIllegalFloat(this float F, EIllegalFlags Flags = EIllegalFlags.NaN | EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity)
 		{
 			int T = F.GetBits();
 			return
-				(T & 0x7FFFFFFF) > 0x7F800000 || // NaN.
-				(T == 0x7F800000) || // Infinity.
-				(T == unchecked((int)0xFF800000)); // -Infinity.
+				((EIllegalFlags.NaN & Flags)			==	EIllegalFlags.NaN			&&	(T & 0x7FFFFFFF) > 0x7F800000)		|| // NaN.
+				((EIllegalFlags.PositiveInfinity & Flags)	==	EIllegalFlags.PositiveInfinity		&&	(T == 0x7F800000))			|| // Infinity.
+				((EIllegalFlags.NegativeInfinity & Flags)	==	EIllegalFlags.NegativeInfinity		&&	(T == unchecked((int)0xFF800000)));	   // -Infinity.
 		}
 
 		/// <summary>Is a MonoBehaviour derived from T?</summary>
@@ -170,5 +170,12 @@ namespace MW.Extensions
 		/// <returns>T class type of O if O is T, otherwise null.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T Cast<T>(this object O) => O is T R ? R : default;
+	}
+
+	public enum EIllegalFlags : byte
+	{
+		NaN = 1,
+		PositiveInfinity = 2,
+		NegativeInfinity = 4
 	}
 }
