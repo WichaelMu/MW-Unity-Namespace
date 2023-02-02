@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MW.Debugger
+namespace MW.Console
 {
 	/// <summary>The attribute to mark a method executable by <see cref="MConsole.Exec(string[], string, object[])"/>.</summary>
 	/// <docs>The attribute to mark a method executable by Console.Exec().</docs>

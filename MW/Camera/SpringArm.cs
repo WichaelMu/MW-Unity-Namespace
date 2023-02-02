@@ -1,7 +1,7 @@
 ﻿//#define ENABLE_CUSTOM_PROJECTION
 
 using UnityEngine;
-using MW.Debugger;
+using MW.Console;
 using MW.Extensions;
 using static MW.Math.Mathematics;
 using static MW.Utils;

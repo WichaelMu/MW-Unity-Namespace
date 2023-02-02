@@ -10,7 +10,7 @@ using MW.Extensions;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
-namespace MW.Debugger
+namespace MW.Console
 {
 	/// <summary>A Console Debugger for debugging games during runtime.</summary>
 	/// <decorations decor="public abstract class : MonoBehaviour"></decorations>
