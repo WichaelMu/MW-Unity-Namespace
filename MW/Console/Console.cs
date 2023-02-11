@@ -39,11 +39,12 @@ namespace MW.Console
 		public virtual void Awake()
 		{
 			Funcs = new Dictionary<string, MethodExec<MethodInfo, ExecAttribute>>();
+			BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Static;
 
 			foreach (Type T in ExecTypes)
 			{
 				IEnumerable<MethodInfo> Methods = T.Assembly.GetTypes()
-					.SelectMany(Type => Type.GetMethods());
+					.SelectMany(Type => Type.GetMethods(MethodFlags));
 
 				foreach (MethodInfo Method in Methods)
 				{
@@ -80,22 +81,23 @@ namespace MW.Console
 			if (!string.IsNullOrEmpty(RawInput))
 			{
 				string[] Split = RawInput.Split(' ');
+				int ArgC = Split.Length;
 				MArray<object> ArgV = new MArray<object>();
 				MArray<string> TargetsArgV = new MArray<string>();
 				string Func = Split[0];
 
-				for (int o = 0, s = 1; s < Split.Length; ++s, ++o)
+				for (int Arg = 1; Arg < ArgC; ++Arg)
 				{
-					if (string.IsNullOrEmpty(Split[s]))
+					if (string.IsNullOrEmpty(Split[Arg]))
 						continue;
 
-					if (Split[s][0] == kTargetGameObjectIdentifier)
+					if (Split[Arg][0] == kTargetGameObjectIdentifier)
 					{
-						TargetsArgV.Push(Split[s].Substring(1));
+						TargetsArgV.Push(Split[Arg].Substring(1));
 					}
 					else
 					{
-						ArgV.Push(Split[s]);
+						ArgV.Push(Split[Arg]);
 					}
 				}
 
@@ -191,7 +193,7 @@ namespace MW.Console
 		void GetCustomParameterType(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			if (ParamIndex < 0 || ParamIndex >= RawParams.Length)
-				throw new ArgumentOutOfRangeException($"Parameter Index is out of range! Expected 0 <= {nameof(ParamIndex)} ({ParamIndex}) < {nameof(RawParams)}.Length ({RawParams.Length}!");
+				throw new ArgumentOutOfRangeException($"Parameter Index is out of range! Expected 0 <= {nameof(ParamIndex)} ({ParamIndex}) < {nameof(RawParams)}.Length ({RawParams.Length})!");
 
 			// Test against known types.
 			if (ExecParameterType == typeof(MVector)) // MVector.
@@ -223,8 +225,8 @@ namespace MW.Console
 				if (ParamIndex + 2 < RawParams.Length)
 				{
 					MRotator RetVal;
-					RetVal.Pitch =RawParams[ParamIndex++].Cast<float>();
-					RetVal.Yaw =  RawParams[ParamIndex++].Cast<float>();
+					RetVal.Pitch = RawParams[ParamIndex++].Cast<float>();
+					RetVal.Yaw = RawParams[ParamIndex++].Cast<float>();
 					RetVal.Roll = RawParams[ParamIndex].Cast<float>();
 
 					TargetObject = RetVal;
@@ -273,11 +275,15 @@ namespace MW.Console
 			}
 			else
 			{
-				TargetObject = Convert.ChangeType(RawParams[ParamIndex], ExecParameterType);
+				HandlePrimitiveParameter(ref TargetObject, RawParams[ParamIndex], ExecParameterType);
 			}
 
 			++ParamIndex;
 		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void HandlePrimitiveParameter(ref object TargetObject, object RawParameter, Type ParameterType)
+			=> TargetObject = Convert.ChangeType(RawParameter, ParameterType);
 
 		Vector2 Scroll;
 
