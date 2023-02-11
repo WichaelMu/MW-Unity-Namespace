@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -13,6 +13,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<BaseIntermediateOutputPath>MW\Output\Intermediate</BaseIntermediateOutputPath>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -62,7 +63,7 @@
 		  <HintPath>Extensions\Unity.TextMeshPro.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEditor">
-		  <HintPath>..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.1.3f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+		  <HintPath>Extensions\UnityEditor.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine">
 		  <HintPath>Extensions\UnityEngine.dll</HintPath>
