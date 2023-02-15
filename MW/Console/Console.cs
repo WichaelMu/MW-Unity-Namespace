@@ -25,10 +25,18 @@ namespace MW.Console
 		/// <decorations decor="public virtual KeyCode"></decorations>
 		public virtual KeyCode ShowConsoleKey { get; set; } = KeyCode.BackQuote;
 
+		/// <summary>Exec attributes and their reflected functions.</summary>
+		/// <decorations decor="protected Dictionary&lt; string, MethodExec&lt; MethodInfo, ExecAttribute &gt;&gt;"></decorations>
 		protected Dictionary<string, MethodExec<MethodInfo, ExecAttribute>> Funcs;
 
+		/// <summary>True to show the MConsole GUI.</summary>
+		/// <decorations decor="protected bool"></decorations>
 		protected bool bShowConsole = false;
+		/// <summary>The raw string input given by the developer using MConsole's GUI.</summary>
+		/// <decorations decor="protected string"></decorations>
 		protected string RawInput;
+		/// <summary>The previous Exec'd function called by MConsole.</summary>
+		/// <decorations decor="protected string"></decorations>
 		protected string PreviousInput;
 
 		const char kTargetGameObjectIdentifier = '@';
@@ -273,9 +281,13 @@ namespace MW.Console
 				if (TargetObject == null)
 					throw new NullReferenceException($"GameObject: {ComponentResult.name} doesn't have an attached {ExecParameterType}");
 			}
-			else
+			else if (ExecParameterType.IsPrimitive)
 			{
 				HandlePrimitiveParameter(ref TargetObject, RawParams[ParamIndex], ExecParameterType);
+			}
+			else
+			{
+				HandleCustomParameter(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 			}
 
 			++ParamIndex;
@@ -284,6 +296,36 @@ namespace MW.Console
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void HandlePrimitiveParameter(ref object TargetObject, object RawParameter, Type ParameterType)
 			=> TargetObject = Convert.ChangeType(RawParameter, ParameterType);
+
+		/// <summary>Handles custom parameter types for MConsole to parse and execute methods and functions.</summary>
+		/// <decorations decor="public virtual void"></decorations>
+		/// <remarks>
+		/// Natively supported types are:<br></br>
+		/// <list type="bullet">
+		/// <item><see cref="MVector"/> and <see cref="Vector3"/>.</item>
+		/// <item><see cref="MRotator"/>.</item>
+		/// <item><see cref="GameObject"/> and <see cref="Transform"/>, given a GameObject Target by hierarchy-name reference.</item>
+		/// <item>Any <see cref="MonoBehaviour"/> component, given a GameObject Target by hierarchy-name reference.</item>
+		/// <item>All primitive types.</item>
+		/// </list>
+		/// </remarks>
+		/// <docremarks>
+		/// Natively supported types are:&lt;br&gt;
+		/// MVector and Vector3&lt;br&gt;
+		/// MRotator&lt;br&gt;
+		/// GameObject and Transform, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
+		/// Any MonoBehaviour component, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
+		/// All primitive types.&lt;br&gt;
+		/// </docremarks>
+		/// <param name="RawParameters">The Parameters entered into as RawInput to the MConsole GUI.</param>
+		/// <param name="ParamIndex">The current index of the Parameters array that requires custom parsing.</param>
+		/// <param name="TargetObject">The fully parsed custom type parameter as an object.</param>
+		/// <param name="ExecParameterType">The [Exec] function's required parameter type.</param>
+		/// <exception cref="NotImplementedException">Occurs when MConsole does not natively support ExecParameterType.</exception>
+		public virtual void HandleCustomParameter(object[] RawParameters, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
+		{
+			throw new NotImplementedException($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)} to support it.");
+		}
 
 		Vector2 Scroll;
 
