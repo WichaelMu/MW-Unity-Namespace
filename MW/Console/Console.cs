@@ -311,8 +311,8 @@ namespace MW.Console
 		/// </remarks>
 		/// <docremarks>
 		/// Natively supported types are:&lt;br&gt;
-		/// MVector and Vector3&lt;br&gt;
-		/// MRotator&lt;br&gt;
+		/// MVector and Vector3.&lt;br&gt;
+		/// MRotator.&lt;br&gt;
 		/// GameObject and Transform, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
 		/// Any MonoBehaviour component, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
 		/// All primitive types.&lt;br&gt;
