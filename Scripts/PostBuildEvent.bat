@@ -11,5 +11,4 @@
 
 @cd..
 @cd MTest
-@call BuildMTest
 @call RunMTest
