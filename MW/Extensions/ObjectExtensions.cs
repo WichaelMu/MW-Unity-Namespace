@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace MW.Extensions
@@ -29,7 +30,12 @@ namespace MW.Extensions
 		/// <param name="O">The object to cast.</param>
 		/// <returns>T class type of O if O is T, otherwise null.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static T Cast<T>(this object O) => O is T R ? R : default;
+		public static T Cast<T>(this object O)
+		{
+			return O is T R
+				? R
+				: (T)Convert.ChangeType(O, typeof(T));
+		}
 
 		/// <summary>Cast an object to T if it is attached, implemented, or derived.</summary>
 		/// <typeparam name="T">The Unity Component, Interface, or Type.</typeparam>
