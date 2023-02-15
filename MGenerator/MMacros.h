@@ -14,3 +14,5 @@
 #define PROPERTY "PROPERTY"
 #define FIELD "FIELD"
 #define MEMBER "MEMBER"
+
+#define EXEC_FROM_VS 0
