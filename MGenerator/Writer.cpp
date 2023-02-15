@@ -9,15 +9,17 @@
 #include "Timer.h"
 #endif
 
-#define HTML_HEADER(title) "<!DOCTYPE html><html lang="\
-			"en"\
-			"><head>"\
-			"<title>" << title << " | MW Unity Namespace</title><link rel=""stylesheet"" href="\
-			"CSS/MWUnityNamespace.css"\
-			"><meta charset="\
-			"UTF-8"\
-			"></head><body><div class=""header"" id=""top"">"\
-			"MW UNITY NAMESPACE</div>"\
+#define Q(s) "\""#s"\""
+
+#define HTML_HEADER(title) "<!DOCTYPE html><html lang=" \
+			Q(en) \
+			"><head>" \
+			"<title>" << title << " | MW Unity Namespace</title><link rel=" Q(stylesheet) " href=" \
+			Q(CSS/MWUnityNamespace.css) \
+			"><meta charset=" \
+			"UTF-8" \
+			"></head><body><div class=" Q(header) " id=" Q(top) ">" \
+			"MW UNITY NAMESPACE</div>" \
 
 #define HTML_END "</div></div></div></body></html>"
 
@@ -33,64 +35,65 @@
   constructors and summaries of the respective namespace
   function.
 */
-constexpr const char* CSS_HOLDING_DIV = "\"width: 100%; display: table;\"";
+constexpr const char* CSS_HOLDING_DIV = Q(width: 100%; display: table;);
 /*
 * The div marking the first and only row in the file.
 */
-constexpr const char* CSS_INNER_DIV = "\"display: table-row\"";
+constexpr const char* CSS_INNER_DIV = Q(display: table-row);
 /*
 * The div defining the styles of the left column.
 */
-constexpr const char* CSS_LEFT_COL_DIV = "\"width: 200px; display: table-cell;\"";
+constexpr const char* CSS_LEFT_COL_DIV = Q(width: 200px; display: table-cell;);
 /*
 * The div defining the styles of the right column.
 */
-constexpr const char* CSS_RIGHT_COL_DIV = "\"display: table-cell;\"";
+constexpr const char* CSS_RIGHT_COL_DIV = Q(display: table-cell;);
 /*
 * The CSS selector used for every link in the navbar.
 */
-constexpr const char* CSS_NAV_LINKS = "\"navLinks\"";
+constexpr const char* CSS_NAV_LINKS = Q(navLinks);
 /*
 * The CSS selector used to define the style for namespace classes or
   functions, depending on whether the namespace class is a part of
   the root MW namespace.
 */
-constexpr const char* CSS_HEADER_STYLE = "\"basicHead\"";
+constexpr const char* CSS_HEADER_STYLE = Q(basicHead);
 /*
 * The CSS selector/s used to define the style for namespace classes.
 */
-constexpr const char* CSS_CLASS_STYLE = "\"classHead C\"";
+constexpr const char* CSS_CLASS_STYLE = Q(classHead C);
 /*
 * The CSS selector/s used to style the namespace class summary.
 */
-constexpr const char* CSS_CLASS_SUMMARY_STYLE = "\"simplePara C\"";
+constexpr const char* CSS_CLASS_SUMMARY_STYLE = Q(simplePara C);
 /*
 * The CSS selector used to style function summaries and parameter
   definitions.
 */
-constexpr const char* CSS_PARAGRAPH = "\"simplePara\"";
+constexpr const char* CSS_PARAGRAPH = Q(simplePara);
 /*
 * The CSS selector used to style names of function parameters.
 */
-constexpr const char* CSS_PARAM_NAME = "\"ParamName\"";
+constexpr const char* CSS_PARAM_NAME = Q(ParamName);
 /*
 * The CSS selector used to style function parameters' descriptions.
 */
-constexpr const char* CSS_PARAM_DESC = "\"ParamDesc\"";
+constexpr const char* CSS_PARAM_DESC = Q(ParamDesc);
 /*
 * The CSS selector used to style keywords for function summaries.
 */
-constexpr const char* CSS_KEYWORD = "\"keyword\"";
+constexpr const char* CSS_KEYWORD = Q(keyword);
 
 /*
 * HTML shorthand for writing tab spaces.
 */
 constexpr const char* HTML_TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
+#define WRITE_CREATION_MESSAGES 1
 #define WRITE_DEBUG_LINES 0
 
 #if WRITE_DEBUG_LINES
-#define DEBUG_WRITELINE << "<p style=\"color:white\">" INTER_INJECT_TEXT(__LINE__) << "</p>"
+#define DEBUG_WRITELINE << "<p style=" Q(color:white) ">" INTER_INJECT_TEXT(__LINE__) << "</p>"
 #define GET_LINE << " " << __LINE__
 #else
 #define DEBUG_WRITELINE
@@ -98,11 +101,11 @@ constexpr const char* HTML_TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs
 #endif
 
 #define INTER_INJECT_TEXT(text) << text GET_LINE
-#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=\"C\" style=\"padding-right:25%;color:rgb(40,255,120);\">" INTER_INJECT_TEXT(decorations) << "</pre>"
-#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=\"padding-right:25%;color:rgb(133, 245, 215);font-weight:549\">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=" Q(C) " style=" Q(padding-right:25%;color:rgb(40,255,120);) ">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=" Q(padding-right:25%;color:rgb(133, 245, 215);font-weight:549) ">" INTER_INJECT_TEXT(decorations) << "</pre>"
 
 #define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">" DEBUG_WRITELINE
-#define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=" << entry << ".html>" << entry << "</a></div><br>" DEBUG_WRITELINE
+#define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=\"" << entry << ".html\">" << entry << "</a></div><br>" DEBUG_WRITELINE
 #define HTML_SUMMARY_START "</div><br><br><div style=" << CSS_RIGHT_COL_DIV << ">" DEBUG_WRITELINE
 #define HTML_CLASS_START(entry, summary, decorations) INTER_INJECT_CLASS_DECORATIONS(decorations) << "</pre><h1 class=" << CSS_CLASS_STYLE << ">" INTER_INJECT_TEXT(entry) << "</h1><br><p class=" << CSS_CLASS_SUMMARY_STYLE << ">" INTER_INJECT_TEXT(summary) << "</p>" DEBUG_WRITELINE
 #define HTML_SUMMARY_TITLE(title, decorations) INTER_INJECT_FUNCTION_DECORATIONS(decorations) << "<p class=" << CSS_HEADER_STYLE << ">" INTER_INJECT_TEXT(title) << "</p>" DEBUG_WRITELINE
@@ -116,11 +119,11 @@ void Writer::Write(const VT(MW)& all_mw)
 {
 	std::map<std::string, std::string> namespace_to_html;
 
-//#if _DEBUG && WITH_VS
+#if EXEC_FROM_VS
+	const std::string HTML_PATH = "../Docs/HTML/";
+#else
 	const std::string HTML_PATH = "../../Docs/HTML/";
-//#else
-	//const std::string HTML_PATH = "../../Docs/HTML/";
-//#endif
+#endif
 
 	// Write/Create basic HTML file.
 	for (auto& n : all_mw)
@@ -138,14 +141,17 @@ void Writer::Write(const VT(MW)& all_mw)
 			if (html_file.fail())
 			{
 				std::cout << "Failed to create HTML file at " << HTML_PATH << ". Maybe permissions?\n";
+				std::cout << "Also probably check the EXEC_FROM_VS macro...\n";
 				std::cout << "Writing to HTML file/s has been stopped!\n";
 				return;
 			}
+#if WRITE_CREATION_MESSAGES
 			else
 			{
 				std::cout << n.mw_namespace << ".html" << " created.\n";
 			}
-#endif
+#endif // WRITE_CREATION_MESSAGES
+#endif // BUILD || _DEBUG
 
 			html_file.close();
 		}

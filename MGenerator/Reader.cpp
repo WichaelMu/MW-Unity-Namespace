@@ -21,7 +21,11 @@ std::vector<MW> Reader::OpenFile()
 {
 	std::vector<MW> all_mw;
 
+#if EXEC_FROM_VS
+	const char* xml_path = "../MW/Output/Binaries/Release/netstandard2.0/MW.xml";
+#else
 	const char* xml_path = "../../MW/Output/Binaries/Release/netstandard2.0/MW.xml";
+#endif
 	file<> file(xml_path);
 
 	if (!file.data())
@@ -107,11 +111,7 @@ std::vector<MW> Reader::OpenFile()
 			else if (this_name == remarks)
 			{
 				// <remarks>remarks</remarks>
-
-				if (m.remarks.length() == 0)
-				{
-					m.remarks = summary_params_etc->value();
-				}
+				m.remarks = summary_params_etc->value();
 			}
 			else if (this_name == decorations)
 			{
