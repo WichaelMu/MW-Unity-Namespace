@@ -153,6 +153,8 @@ namespace MW.Math
 		public static bool IsPowerOfTwo(int Number) => (Number & (Number - 1)) == 0;
 
 		/// <summary>The greatest common divisor of A and B.</summary>
+		/// <param name="A"></param>
+		/// <param name="B"></param>
 		/// <decorations decor="public static int"></decorations>
 		public static int GreatestCommonDivisor(int A, int B)
 		{
@@ -167,6 +169,8 @@ namespace MW.Math
 		}
 
 		/// <summary>The lowest common multiple of A and B.</summary>
+		/// <param name="A"></param>
+		/// <param name="B"></param>
 		/// <decorations decor="public static int"></decorations>
 		public static int LowestCommonMultiple(int A, int B)
 		{
