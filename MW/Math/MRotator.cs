@@ -2,7 +2,7 @@
 using MW.Diagnostics;
 using MW.Extensions;
 using MW.Math;
-using MW.Math.Magic;
+using static MW.Math.Magic.Fast;
 using UnityEngine;
 using static MW.Utils;
 
@@ -26,8 +26,11 @@ namespace MW
 
 		static readonly MRotator Zero = new MRotator(0, 0, 0);
 		/// <summary>An MRotator with no rotation.</summary>
-		/// <decorations decor="public static readonly MVector"></decorations>
+		/// <decorations decor="public static readonly MRotator"></decorations>
 		public static readonly MRotator Neutral = Zero;
+
+		/// <summary>Rotator floating-point precision.</summary>
+		public const float kEpsilon = MVector.kEpsilon;
 
 		/// <summary>Makes a rotation with Pitch, Yaw and Roll.</summary>
 		/// <param name="P">Pitch.</param>
@@ -108,15 +111,15 @@ namespace MW
 				return R.NormaliseAngles();
 			}
 
-			R.Yaw = Mathf.Atan2(2f * Q.x * Q.w + 2f * Q.y * Q.z, 1 - 2f * (Q.z * Q.z + Q.w * Q.w));
-			R.Pitch = Fast.FArcSine(2f * (Q.x * Q.z - Q.w * Q.y));
-			R.Roll = Mathf.Atan2(2f * Q.x * Q.y + 2f * Q.z * Q.w, 1 - 2f * (Q.y * Q.y + Q.z * Q.z));
+			R.Yaw = FArcTangent2(2f * Q.x * Q.w + 2f * Q.y * Q.z, 1 - 2f * (Q.z * Q.z + Q.w * Q.w));
+			R.Pitch = FArcSine(2f * (Q.x * Q.z - Q.w * Q.y));
+			R.Roll = FArcTangent2(2f * Q.x * Q.y + 2f * Q.z * Q.w, 1 - 2f * (Q.y * Q.y + Q.z * Q.z));
 			return R.NormaliseAngles();
 		}
 
 		static float ModTowardsZero(float X, float Y)
 		{
-			float AbsY = Mathf.Abs(Y);
+			float AbsY = FAbs(Y);
 			if (AbsY <= 1e-8f)
 			{
 				Log.E("The Absolute value of Y is <= 1E-08F. Input Y: ", Y);
@@ -124,16 +127,18 @@ namespace MW
 			}
 
 			float Div = X / Y;
-			float Quotient = Mathf.Abs(Div) < 8388608.0f ? (float)System.Math.Truncate(Div) : Div;
+			float Quotient = FAbs(Div) < 8388608.0f ? (float)System.Math.Truncate(Div) : Div;
 			float IntPortion = Y * Quotient;
-			if (Mathf.Abs(IntPortion) > Mathf.Abs(X))
+			if (FAbs(IntPortion) > FAbs(X))
 			{
 				IntPortion = X;
 			}
 
 			float Result = X - IntPortion;
 
-			return Mathf.Clamp(Result, -AbsY, AbsY);
+			Clamp(ref Result, -AbsY, AbsY);
+
+			return Result;
 		}
 
 		/// <summary>Adds a rotation to the respective rotation component.</summary>
@@ -295,14 +300,14 @@ namespace MW
 		/// <param name="Left">Left-side comparison.</param>
 		/// <param name="Right">Right-side comparison.</param>
 		/// <docreturns>True if the square difference between Left and Right is less than kEpsilon ^ 2.</docreturns>
-		/// <returns>True if the square difference between Left and Right is less than <see cref="MVector.kEpsilon"/>^2.</returns>
+		/// <returns>True if the square difference between Left and Right is less than <see cref="kEpsilon"/>^2.</returns>
 		public static bool operator ==(MRotator Left, MRotator Right)
 		{
 			float P = Left.Pitch - Right.Pitch;
 			float Y = Left.Yaw - Right.Yaw;
 			float R = Left.Roll - Right.Roll;
 			float Sqr = P * P + Y * Y + R * R;
-			return Sqr < MVector.kEpsilon * MVector.kEpsilon;
+			return Sqr < kEpsilon * kEpsilon;
 		}
 
 		/// <summary>Compares two MRotators for inequality.</summary>
@@ -313,7 +318,7 @@ namespace MW
 		public static bool operator !=(MRotator Left, MRotator Right) => !(Left == Right);
 
 		public override bool Equals(object O) => O is MVector V && Equals(V);
-		public bool Equals(MRotator R) => this == R || Mathf.Abs(R.Pitch - Pitch + R.Yaw - Yaw + R.Roll - Roll) < 4f * MVector.kEpsilon;
+		public bool Equals(MRotator R) => this == R || FAbs(R.Pitch - Pitch + R.Yaw - Yaw + R.Roll - Roll) < 4f * kEpsilon;
 
 		/// <summary>Converts Pitch, Yaw, Roll into its corresponding <see cref="UnityEngine.Quaternion"/>.</summary>
 		/// <docs>Converts Pitch, Yaw, Roll into its corresponding Quaternion.</docs>
@@ -331,7 +336,7 @@ namespace MW
 		/// <returns>"Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll</returns>
 		public override string ToString()
 		{
-			return "Pitch: " + Pitch + " Yaw: " + Yaw + " Roll: " + Roll;
+			return $"Pitch: {Pitch} Yaw: {Yaw} Roll: {Roll}";
 		}
 
 		/// <summary>Rotation axes.</summary>

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using static MW.Math.Mathematics;
 using static MW.Math.Magic.Fast;
+using MW.Extensions;
 using UnityEngine;
 
 namespace MW
@@ -43,63 +46,76 @@ namespace MW
 		/// <decorations decor="public const float"></decorations>
 		public const float k1To255RGB = 0.0039215686274509803921568627451F;
 
-		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
-		/// <decorations decor="public static bool"></decorations>
-		/// <param name="Face">The EDirection self is facing.</param>
-		/// <param name="Self">The Transform searching for target.</param>
-		/// <param name="Target">The Transform to look out for.</param>
-		/// <param name="SearchAngle">The maximum degrees to search for target.</param>
+		[Obsolete("This method has been deprecated due to limitations with EDirection. Use InFOV(Vector3, Vector3, Vector3, float) instead!")]
 		public static bool InFOV(EDirection Face, Transform Self, Transform Target, float SearchAngle)
 		{
-
 			switch (Face)
 			{
 				case EDirection.Forward:
-					return Vector3.Angle(Self.forward, Target.position - Self.position) < SearchAngle;
+					return FAngle(Self.forward, (Target.position - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Right:
-					return Vector3.Angle(Self.right, Target.position - Self.position) < SearchAngle;
+					return FAngle(Self.right, (Target.position - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Back:
-					return Vector3.Angle(-Self.forward, Target.position - Self.position) < SearchAngle;
+					return FAngle(-Self.forward, (Target.position - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Left:
-					return Vector3.Angle(-Self.right, Target.position - Self.position) < SearchAngle;
+					return FAngle(-Self.right, (Target.position - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Up:
-					return Vector3.Angle(Self.up, Target.position - Self.position) < SearchAngle;
+					return FAngle(Self.up, (Target.position - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Down:
-					return Vector3.Angle(-Self.up, Target.position - Self.position) < SearchAngle;
+					return FAngle(-Self.up, (Target.position - Self.position).FNormalise()) < SearchAngle;
 				default:
 					Debug.LogWarning("There was a problem in determining a face direction");
 					return false;
 			}
 		}
 
-		/// <summary>If Self can see Target within SearchAngle degrees while facing EDirection.</summary>
-		/// <decorations decor="public static bool"></decorations>
-		/// <param name="Face">The EDirection self is facing.</param>
-		/// <param name="Self">The Transform searching for target.</param>
-		/// <param name="Target">The Vector3 position to look out for.</param>
-		/// <param name="SearchAngle">The maximum degrees to search for target.</param>
+		[Obsolete("This method has been deprecated due to limitations with EDirection. Use InFOV(Vector3, Transform, Vector3, float) instead!")]
 		public static bool InFOV(EDirection Face, Transform Self, Vector3 Target, float SearchAngle)
 		{
-
 			switch (Face)
 			{
 				case EDirection.Forward:
-					return Vector3.Angle(Self.forward, Target - Self.position) < SearchAngle;
+					return FAngle(Self.forward, (Target - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Right:
-					return Vector3.Angle(Self.right, Target - Self.position) < SearchAngle;
+					return FAngle(Self.right, (Target - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Back:
-					return Vector3.Angle(-Self.forward, Target - Self.position) < SearchAngle;
+					return FAngle(-Self.forward, (Target - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Left:
-					return Vector3.Angle(-Self.right, Target - Self.position) < SearchAngle;
+					return FAngle(-Self.right, (Target - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Up:
-					return Vector3.Angle(Self.up, Target - Self.position) < SearchAngle;
+					return FAngle(Self.up, (Target - Self.position).FNormalise()) < SearchAngle;
 				case EDirection.Down:
-					return Vector3.Angle(-Self.up, Target - Self.position) < SearchAngle;
+					return FAngle(-Self.up, (Target - Self.position).FNormalise()) < SearchAngle;
 				default:
 					Debug.LogWarning("There was a problem in determining a face direction");
 					return false;
 			}
 		}
+
+		/// <summary>If Self can see Target within SearchAngle degrees while facing Face.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="Face">The direction Self is facing.</param>
+		/// <param name="Self">The Transform searching for Target.</param>
+		/// <param name="Target">The position to look out for.</param>
+		/// <param name="SearchAngle">The maximum degrees to search for Target.</param>
+		/// <returns>True if Self can see Target within SearchAngle while facing Face.</returns>
+		public static bool InFOV(Vector3 Face, Vector3 Self, Vector3 Target, float SearchAngle)
+		{
+			Vector3 Direction = (Target - Self).FNormalise();
+			FVector FFace = FVector.Clone(ref Face);
+			FVector FDirection = FVector.Clone(ref Direction);
+
+			return FVector.Angle(FFace, FDirection) < SearchAngle;
+		}
+
+		/// <summary>If Self can see Target within SearchAngle degrees while facing Face.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="Face">The direction Self is facing.</param>
+		/// <param name="Self">The Transform searching for Target.</param>
+		/// <param name="Target">The position to look out for.</param>
+		/// <param name="SearchAngle">The maximum degrees to search for Target.</param>
+		/// <returns>True if Self can see Target within SearchAngle while facing Face.</returns>
+		public static bool InFOV(Vector3 Face, Transform Self, Vector3 Target, float SearchAngle) => InFOV(Face, Self.position, Target, SearchAngle);
 
 		/// <summary>If Self has an unobstructed line of sight to To.</summary>
 		/// <decorations decor="public static bool"></decorations>
@@ -153,9 +169,9 @@ namespace MW
 			bBool = !bBool;
 
 			if (bBool)
-				CallbackTrue();
+				CallbackTrue?.Invoke();
 			else
-				CallbackFalse();
+				CallbackFalse?.Invoke();
 		}
 
 		/// <summary>If Value is within the +- Limit of From.</summary>
@@ -173,7 +189,7 @@ namespace MW
 			if (Limit < 0)
 			{
 				//Debug.LogWarning("Please use a positive number");
-				Limit = Mathf.Abs(Limit);
+				Limit = FAbs(Limit);
 			}
 
 			return From + Limit > Value && Value > From - Limit;
@@ -230,19 +246,22 @@ namespace MW
 			Vector3[] vDirections = new Vector3[Resolution];
 
 			float fPhi = 1 + FSqrt(GoldenRatioModifier) * .5f;
-			float fInc = Mathf.PI * 2 * fPhi;
+			float fInc = k2PI * fPhi;
 
 			for (int i = 0; i < Resolution; i++)
 			{
-				float t = (float)i / Resolution;
-				float incline = Mathf.Acos(1 - 2 * t);
-				float azimuth = fInc * i;
+				float t = i * FInverse(Resolution);
+				float Incline = FArcCosine(1 - 2 * t);
+				float Azimuth = fInc * i;
 
-				float x = Mathf.Sin(incline) * Mathf.Cos(azimuth);
-				float y = Mathf.Sin(incline) * Mathf.Sin(azimuth);
-				float z = Mathf.Cos(incline);
+				SinCos(out float InclineSine, out float InclineCosine, Incline);
+				SinCos(out float AzimuthSine, out float AzimuthCosine, Azimuth);
 
-				vDirections[i] = new Vector3(x, y, z);
+				float X = InclineSine * AzimuthCosine;
+				float Y = InclineSine * AzimuthSine;
+				float Z = InclineCosine;
+
+				vDirections[i] = new Vector3(X, Y, Z);
 			}
 
 			return vDirections;
@@ -257,41 +276,39 @@ namespace MW
 		/// <returns>The Vector3[] points for the bridge.</returns>
 		public static Vector3[] Bridge(Vector3 Origin, Vector3 Target, int Resolution, float Height)
 		{
-			Vector3[] points = new Vector3[Resolution];
+			Vector3[] Points = new Vector3[Resolution];
 
 			Vector3 DirectionToTarget = (Target - Origin).normalized;
 
 			float Theta = 0f;
-			float HorizontalIncrement = 2 * Mathf.PI / Resolution;
+			float HorizontalIncrement = k2PI * FInverse(Resolution);
 			float ResolutionToDistance = Resolution * .5f - 1;
-			float DistanceIncrement = Vector3.Distance(Target, Origin) / ResolutionToDistance;
+			float DistanceIncrement = (Target - Origin).FMagnitude() * FInverse(ResolutionToDistance);
 
 			int k = 0;
 
 			for (float i = 0; i < Resolution; i += DistanceIncrement)
 			{
-				float y = Mathf.Sin(Theta);
+				float Y = Mathf.Sin(Theta);
 
-				if (y < 0)
+				if (Y < 0)
 					break;
 
 				Vector3 point = new Vector3
 				{
 					x = DirectionToTarget.x * i,
-					y = y * Height,
+					y = Y * Height,
 					z = DirectionToTarget.z * i
 				};
 
-				points[k] = point;
+				Points[k] = point;
 				Theta += HorizontalIncrement;
 
 				k++;
 			}
 
-			return points;
+			return Points;
 		}
-
-		public static string AsString(object Convert) => Convert.ToString();
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive.</summary>
 		/// <decorations decor="public static float"></decorations>
@@ -303,6 +320,7 @@ namespace MW
 		public static float MirrorNumber(float Number, float Minimum, float Maximum) => Minimum + Maximum - Number;
 
 		/// <summary>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with <see cref="MArray{T}.Reflect(int, int)"/>.</summary>
+		/// <docs>Mirrors Number about Minimum and Maximum, inclusive. Not to be confused with MArray&lt;T&gt;.Reflect(int, int).</docs>
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="Number">The number to anchor a reflection.</param>
 		/// <param name="Minimum">The minimum number that can be reflected.</param>
@@ -490,7 +508,65 @@ namespace MW
 			}
 		}
 
+		/// <summary>Gets the number of frames per second during runtime.</summary>
+		/// <returns>The number of frames per second.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int FPS() => (int)(1f / Time.unscaledDeltaTime);
+		public static int FPS() => (int)FInverse(Time.unscaledDeltaTime);
+
+		/// <summary>Executes a Delayed call to Function after Seconds by Owner.</summary>
+		/// <param name="Owner">The MonoBehaviour which owns this delayed call.</param>
+		/// <param name="Seconds">The number of seconds to wait until Function is called.</param>
+		/// <param name="Function">The Function to execute after Seconds has elapsed.</param>
+		/// <returns>The IEnumerator responsible for handling this delayed call.</returns>
+		public static IEnumerator Delay(MonoBehaviour Owner, float Seconds, Action Function)
+		{
+			if (Function == null)
+				return null;
+
+			if (Seconds < Time.deltaTime)
+			{
+				Function.Invoke();
+				return null;
+			}
+
+			IEnumerator DelayedCall = Internal_Delay(Seconds, Function);
+
+			Owner.StartCoroutine(DelayedCall);
+
+			return DelayedCall;
+		}
+
+		/// <summary>Executes a Delayed call to Function after another Dependent delayed call by Owner.</summary>
+		/// <param name="Owner">The MonoBehaviour which owns this delayed call.</param>
+		/// <param name="Dependent">The other delayed call to wait until Function can be executed.</param>
+		/// <param name="Function">The Function to execute after Dependent has finished.</param>
+		/// <returns>The IEnumerator responsible for handling this delayed call.</returns>
+		public static IEnumerator Delay(MonoBehaviour Owner, IEnumerator Dependent, Action Function)
+		{
+			if (Function == null || Dependent == null)
+				return null;
+
+			IEnumerator DelayedCall = Internal_Delay(Dependent, Function);
+
+			Owner.StartCoroutine(DelayedCall);
+
+			return DelayedCall;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		static IEnumerator Internal_Delay(float Seconds, Action Function)
+		{
+			yield return new WaitForSeconds(Seconds);
+
+			Function.Invoke();
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		static IEnumerator Internal_Delay(IEnumerator Dependent, Action Function)
+		{
+			yield return Dependent;
+
+			Function.Invoke();
+		}
 	}
 }

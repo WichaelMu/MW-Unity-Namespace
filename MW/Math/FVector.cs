@@ -1,4 +1,4 @@
-﻿using MW.Math;
+﻿using static MW.Utils;
 using static MW.Math.Magic.Fast;
 using MW.Extensions;
 using UnityEngine;
@@ -122,7 +122,7 @@ namespace MW
 		{
 			MRotator R;
 			R.Pitch = FArcSine(*pY);
-			R.Yaw = Mathf.Atan2(*pX, *pZ);
+			R.Yaw = FArcTangent2(*pX, *pZ);
 			R.Roll = 0f;
 
 			return R;
@@ -150,6 +150,28 @@ namespace MW
 
 			return this;
 		}
+
+		/// <summary>The angle between two vectors in degrees.</summary>
+		/// <decorations decor="public static unsafe float"></decorations>
+		/// <param name="L"></param>
+		/// <param name="R"></param>
+		/// <returns>An approximation of the angle between L and R in degrees, accurate to +-.1 degrees.</returns>
+		public static unsafe float Angle(FVector L, FVector R)
+		{
+			float ZeroOrEpsilon = FSqrt(L.SqrMagnitude * R.SqrMagnitude);
+			if (ZeroOrEpsilon < 1E-15f)
+				return 0f;
+
+			float Radians = Dot(L, R) * FInverse(ZeroOrEpsilon);
+			Clamp(ref Radians, -1f, 1f);
+			return FArcCosine(Radians) * Mathf.Rad2Deg;
+
+		}
+
+		/// <summary>The vector dot | product of Left and Right.</summary>
+		/// <remarks>Does not assume Left and Right are normalised.</remarks>
+		/// <decorations decors="public static unsafe float"></decorations>
+		public static unsafe float Dot(FVector L, FVector R) => *L.pX * *R.pX + *L.pY * *R.pY + *L.pZ * *R.pZ;
 
 		#endregion
 	}

@@ -33,6 +33,11 @@ namespace MW
 			HashMap = new(InitialSize);
 		}
 
+		public MArray(T[] Array) : this(Array.Length)
+		{
+			Push(Array);
+		}
+
 		/// <summary>Adds Item.</summary>
 		/// <decorations decor="public void"></decorations>
 		/// <param name="Item">The unique element to add.</param>

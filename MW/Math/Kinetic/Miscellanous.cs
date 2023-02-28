@@ -23,7 +23,7 @@ namespace MW.Kinetic
 			for (int i = 0; i < colliders.Length; i++)
 			{
 				Vector3 closestPoint = colliders[i].ClosestPoint(Self.position);
-				if (Utils.InFOV(EDirection.Forward, Self, closestPoint, Angle))
+				if (Utils.InFOV(MVector.Forward, Self, closestPoint, Angle))
 				{
 					float distance = Vector3.Distance(Self.position, closestPoint);
 					if (distance < min)

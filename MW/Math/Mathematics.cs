@@ -2,7 +2,7 @@
 using MW.Diagnostics;
 using MW.Easing;
 using MW.Kinetic;
-using MW.Math.Magic;
+using MW.Extensions;
 using UnityEngine;
 using static MW.Math.Magic.Fast;
 using static MW.Utils;
@@ -229,13 +229,13 @@ namespace MW.Math
 		/// <param name="ParallelThreshold">The threshold to consider parallel vectors.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Parallel(MVector M1, MVector M2, float ParallelThreshold = 0.999845f)
-		    => Mathf.Abs(M1 | M2) >= ParallelThreshold;
+		    => FAbs(M1 | M2) >= ParallelThreshold;
 
 		/// <summary>Whether Vector has been normalised.</summary>
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Vector">The vector to check.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNormalised(MVector Vector) => Mathf.Abs(1f - Vector.SqrMagnitude) < .01f;
+		public static bool IsNormalised(MVector Vector) => FAbs(1f - Vector.SqrMagnitude) < .01f;
 
 		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Z-Axis. (For 3D space)</summary>
 		/// <decorations decor="public static float"></decorations>
@@ -279,7 +279,7 @@ namespace MW.Math
 		/// <returns>Quaternion rotation from to.</returns>
 		public static Quaternion DirectionToQuat(Vector3 From, Vector3 To)
 		{
-			Vector3 Direction = (To - From).normalized;
+			Vector3 Direction = (To - From).FNormalise();
 
 			return V2Q(Direction);
 		}

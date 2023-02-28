@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using MW.Extensions;
+using MW.Math;
 
 namespace MW.HUD.Line
 {
@@ -43,7 +45,7 @@ namespace MW.HUD.Line
 		/// <param name="bUseWorldSpace">Should this line use world space?</param>
 		public static void DrawLine(GameObject Self, Vector3 From, Vector3 To, Color StartColour, Color EndColour, float LineWidth, Vector3 Offset, bool bUseWorldSpace = true)
 		{
-			LineRenderer LineRenderer = Self.GetComponent<LineRenderer>() ?? Self.AddComponent<LineRenderer>();
+			LineRenderer LineRenderer = Self.GetOrAddComponent<LineRenderer>();
 			LineRenderer.startColor = StartColour;
 			LineRenderer.endColor = EndColour;
 			LineRenderer.startWidth = LineWidth;
@@ -75,13 +77,14 @@ namespace MW.HUD.Line
 			LineRenderer.positionCount = NumberOfSegments + 1;
 			LineRenderer.useWorldSpace = bUseWorldSpace;
 
-			float DeltaTheta = (float)(2.0f * Mathf.PI) / NumberOfSegments;
+			float DeltaTheta = Utils.k2PI / NumberOfSegments;
 			float Theta = 0f;
 
 			for (int i = 0; i < NumberOfSegments + 1; i++)
 			{
-				float X = Radius * Mathf.Cos(Theta);
-				float Z = Radius * Mathf.Sin(Theta);
+				Mathematics.SinCos(out float Sine, out float Cosine, Theta);
+				float X = Radius * Cosine;
+				float Z = Radius * Sine;
 				Vector3 Pos = new Vector3(X, 0, Z);
 				LineRenderer.SetPosition(i, Pos + Around);
 				Theta += DeltaTheta;
@@ -99,7 +102,7 @@ namespace MW.HUD.Line
 		/// <param name="NumberOfSegments">The number of vertices of this circle.</param>
 		public static void DrawCircle(GameObject Self, Vector3 Around, float Radius, Color LineColour, float LineWidth, bool bUseWorldSpace = true, int NumberOfSegments = 1)
 		{
-			LineRenderer LineRenderer = Self.GetComponent<LineRenderer>() ?? Self.AddComponent<LineRenderer>();
+			LineRenderer LineRenderer = Self.GetOrAddComponent<LineRenderer>();
 			LineRenderer.startColor = LineColour;
 			LineRenderer.endColor = LineColour;
 			LineRenderer.startWidth = LineWidth;
@@ -107,13 +110,14 @@ namespace MW.HUD.Line
 			LineRenderer.positionCount = NumberOfSegments + 1;
 			LineRenderer.useWorldSpace = bUseWorldSpace;
 
-			float DeltaTheta = (float)(2.0f * Mathf.PI) / NumberOfSegments;
+			float DeltaTheta = Utils.k2PI / NumberOfSegments;
 			float Theta = 0f;
 
 			for (int i = 0; i < NumberOfSegments + 1; i++)
 			{
-				float X = Radius * Mathf.Cos(Theta);
-				float Z = Radius * Mathf.Sin(Theta);
+				Mathematics.SinCos(out float Sine, out float Cosine, Theta);
+				float X = Radius * Cosine;
+				float Z = Radius * Sine;
 				Vector3 Pos = new Vector3(X, 0, Z);
 				LineRenderer.SetPosition(i, Pos + Around);
 				Theta += DeltaTheta;

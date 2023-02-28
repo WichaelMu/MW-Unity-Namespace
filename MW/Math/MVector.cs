@@ -33,9 +33,7 @@ namespace MW
 		/// <param name="U">Uniform component.</param>
 		public unsafe MVector(float U) : this()
 		{
-			X = U;
-			Y = U;
-			Z = U;
+			X = Y = Z = U;
 		}
 
 		/// <summary>Construct with X and Y components only.</summary>
@@ -150,6 +148,7 @@ namespace MW
 		[Obsolete($"Use {nameof(RotateVector)} instead!")]
 		public static MVector MVectorFromAngle(float Degrees, EDirection Forward) => Mathematics.VectorFromAngle(Degrees, Forward);
 		/// <summary>The angle between two vectors in degrees.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>An approximation of the angle between L and R in degrees, accurate to +-.1 degrees.</returns>

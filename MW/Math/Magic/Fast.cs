@@ -122,11 +122,11 @@ namespace MW.Math.Magic
 			return N < 0f ? -R : R;
 		}
 
-		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan2(float, float))"/>.</summary>
+		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan2(float, float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Atan2().</docs>
 		/// <param name="Y">The Y component of a point.</param>
 		/// <param name="X">The X component of a point.</param>
-		/// <returns>Approximation of Atan2, accurate to +-.01 in radians.</returns>
+		/// <returns>Approximation of Atan2, accurate to +-.01 radians.</returns>
 		public static float FArcTangent2(float Y, float X)
 		{
 			if (Y == 0f && X == 0f)
@@ -145,56 +145,21 @@ namespace MW.Math.Magic
 			float YX = Y * FInverse(X);
 			float XY = X * FInverse(Y);
 
-			if (X >= 0f)
-			{
-				if (Y >= 0f)
-				{
-					if (Y < X)
-					{
-						return FArcTangent(YX);
-					}
-					else
-					{
-						return kHalfPI - FArcTangent(XY);
-					}
-				}
-				else
-				{
-					if (-Y < X)
-					{
-						return FArcTangent(YX);
-					}
-					else
-					{
-						return -kHalfPI - FArcTangent(XY);
-					}
-				}
-			}
-			else
-			{
-				if (Y >= 0f)
-				{
-					if (Y < -X)
-					{
-						return FArcTangent(YX) + kPI;
-					}
-					else
-					{
-						return kHalfPI - FArcTangent(XY);
-					}
-				}
-				else
-				{
-					if (-Y < -X)
-					{
-						return FArcTangent(YX) - kPI;
-					}
-					else
-					{
-						return -kHalfPI - FArcTangent(XY);
-					}
-				}
-			}
+			return X >= 0f
+				? Y >= 0f
+					? Y < X
+						? FArcTangent(YX)
+						: kHalfPI - FArcTangent(XY)
+					: -Y < X
+						? FArcTangent(YX)
+						: -kHalfPI - FArcTangent(XY)
+				: Y >= 0f
+					? Y < -X
+						? FArcTangent(YX) + kPI
+						: kHalfPI - FArcTangent(XY)
+					: -Y < -X
+						? FArcTangent(YX) - kPI
+						: -kHalfPI - FArcTangent(XY);
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
