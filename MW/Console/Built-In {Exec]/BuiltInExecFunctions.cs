@@ -13,6 +13,7 @@ namespace MW.Console
 
 		/// <summary>Exit the game.</summary>
 		/// <remarks>In editor mode, this will call Debug.Break() and print a quit message to the console.</remarks>
+		/// <decorations decor="public static void"></decorations>
 		[Exec("Exit the game.")]
 		public static void QuitGame()
 		{
@@ -26,6 +27,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Restarts and reloads the current scene.</summary>
+		/// <decorations decor="public static void"></decorations>
 		[Exec("Restarts and Reloads the current scene.")]
 		public static void RestartScene()
 		{
@@ -34,6 +36,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Sets Time.timeScale to InTimeScale.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="InTimeScale"></param>
 		[Exec("Sets Time.timeScale to InTimeScale")]
 		public static void SetTimeScale(float InTimeScale)
@@ -43,6 +46,7 @@ namespace MW.Console
 
 		/// <summary>Sets the game's target frame rate to InFPS.</summary>
 		/// <remarks>The minimum InFPS is 1.</remarks>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="InFPS"></param>
 		[Exec("Sets the game's Target Frame Rate to InFPS, minimum 1.")]
 		public static void SetTargetFPS(int InFPS)
@@ -56,6 +60,7 @@ namespace MW.Console
 		#region GameObject & Components
 
 		/// <summary>Sends Message to G.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="G">The GameObject to send Message to.</param>
 		/// <param name="Message">The Message to send to G.</param>
 		[Exec("Sends Message to G.")]
@@ -66,6 +71,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Sets G's active state to bInActive.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="G"></param>
 		/// <param name="bInActive"></param>
 		[Exec("Sets G's active state to bInActive.")]
@@ -75,6 +81,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Destroys G.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="G"></param>
 		[Exec("Destroys G.")]
 		public static void Destroy(GameObject G)
@@ -83,6 +90,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Destroys component M from it's GameObject.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="M"></param>
 		[Exec("Destroys component M from it's GameObject.")]
 		public static void DestroyComponent(MonoBehaviour M)
@@ -91,6 +99,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Sets M's active state to bInActive.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="M"></param>
 		/// <param name="bInActive"></param>
 		public static void SetComponentActive(MonoBehaviour M, bool bInActive)
@@ -99,6 +108,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Teleports T to Position in world space.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="T"></param>
 		/// <param name="Position"></param>
 		[Exec("Teleports T to Position in world space.")]
@@ -112,6 +122,7 @@ namespace MW.Console
 		#region Animations
 
 		/// <summary>Sets a float animation parameter</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Animator"></param>
 		/// <param name="Parameter"></param>
 		/// <param name="F"></param>
@@ -122,6 +133,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Sets a bool animation parameter.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Animator"></param>
 		/// <param name="Parameter"></param>
 		/// <param name="B"></param>
@@ -132,6 +144,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Sets an int animation parameter.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Animator"></param>
 		/// <param name="Parameter"></param>
 		/// <param name="I"></param>
@@ -142,6 +155,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Triggers an animation trigger.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Animator"></param>
 		/// <param name="Trigger"></param>
 		[Exec("Triggers an animation trigger.")]

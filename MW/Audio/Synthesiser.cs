@@ -30,6 +30,7 @@ namespace MW.Audio
 		internal const float kSampleFrequency96K = 3.2724923474893679567319201909161e-5f; // Mathf.PI * (1 / 96,000f)
 
 		/// <summary>Play Notes from Starting Note.</summary>
+		/// <decorations decor="public IEnumerator"></decorations>
 		/// <param name="StartingNote">The Note to begin with in Notes. Default is zero.</param>
 		/// <returns>The IEnumerator that plays the Notes.</returns>
 		public IEnumerator Play(uint StartingNote = 0)

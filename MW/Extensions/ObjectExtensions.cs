@@ -39,6 +39,7 @@ namespace MW.Extensions
 
 		/// <summary>Cast an object to T if it is attached, implemented, or derived.</summary>
 		/// <typeparam name="T">The Unity Component, Interface, or Type.</typeparam>
+		/// <decorations decor="public static T"></decorations>
 		/// <param name="O">The object to check if it is T is attached, implemented, or derived.</param>
 		/// <returns>O as T or default.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

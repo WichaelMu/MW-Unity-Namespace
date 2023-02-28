@@ -98,6 +98,7 @@ namespace MW
 		}
 
 		/// <summary>Removes all occurrences of Item.</summary>
+		/// <decorations decor="public int"></decorations>
 		/// <param name="Item">The item to remove.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist.</returns>
@@ -557,6 +558,7 @@ namespace MW
 			}
 
 			/// <summary>Data containing whether or not an accessed item has data associated with it.</summary>
+			/// <decorations decor="public bool"></decorations>
 			/// <docreturns>Whether or not an accessed item exists within an MArray{T}.</docreturns>
 			/// <returns><see langword="true"/> if the accessed item does not exist in this <see cref="MArray{T}"/>.</returns>
 			public bool IsNone() => Occurrences == kInvalid && Positions.Length == 0;

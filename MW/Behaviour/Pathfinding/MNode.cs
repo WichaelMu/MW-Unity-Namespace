@@ -68,6 +68,7 @@
 		public virtual int NumberOfDirections() => Neighbours.Num;
 
 		/// <summary>Is MNode M null?</summary>
+		/// <decorations decor="public static implicit operator bool"></decorations>
 		/// <param name="M"></param>
 		public static implicit operator bool(MNode M) => M != null;
 	}

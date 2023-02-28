@@ -123,10 +123,21 @@ std::vector<MW> Reader::OpenFile()
 			}
 		}
 
+#if WRITE_NO_DECORATIONS
+		if (!m.decorations.size() && m.mw_type == MEMBER && m.mw_name != "CONSTRUCTOR")
+		{
+			std::cout << m.mw_namespace << '.' << m.mw_class << '.' << m.mw_name << " has no decorations!\n";
+		}
+#endif // WRITE_NO_DECORATIONS
+
 		m.Print();
 
 		all_mw.push_back(m);
 	}
+
+#if WRITE_NO_DECORATIONS
+	std::cout << "Decoration checks complete!\n\n";
+#endif // WRITE_NO_DECORATIONS
 
 	delete doc;
 

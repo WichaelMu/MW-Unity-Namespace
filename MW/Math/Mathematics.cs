@@ -274,6 +274,7 @@ namespace MW.Math
 
 		/// <summary>Converts a normalised vector direction to a Quaternion rotation</summary>
 		/// <remarks>Roll (Z) cannot be calculated from a direction vector.</remarks>
+		/// <decorations decor="public static Quaternion"></decorations>
 		/// <param name="From">Origin</param>
 		/// <param name="To">Target</param>
 		/// <returns>Quaternion rotation from to.</returns>
@@ -286,6 +287,7 @@ namespace MW.Math
 
 		/// <summary>Converts a normalised vector to a Quaternion rotation.</summary>
 		/// <remarks>Roll (Z) cannot be calculated from a direction vector.</remarks>
+		/// <decorations decor="public static Quaternion"></decorations>
 		/// <param name="V">Normalised direction vector.</param>
 		/// <returns>Quaternion rotation without roll.</returns>
 		public static Quaternion V2Q(Vector3 V)
@@ -295,6 +297,7 @@ namespace MW.Math
 
 		/// <summary>Converts V to Pitch Yaw Roll.</summary>
 		/// <remarks>Roll (Z) cannot be calculated from a direction vector.</remarks>
+		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="V">Normalised direction vector.</param>
 		/// <returns>X = Pitch, Y = Yaw, Z = Roll = 0.</returns>
 		public static Vector3 V2PYR(Vector3 V)

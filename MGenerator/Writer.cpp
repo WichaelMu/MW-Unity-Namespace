@@ -89,9 +89,6 @@ constexpr const char* CSS_KEYWORD = Q(keyword);
 */
 constexpr const char* HTML_TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
-#define WRITE_CREATION_MESSAGES 1
-#define WRITE_DEBUG_LINES 0
-
 #if WRITE_DEBUG_LINES
 #define DEBUG_WRITELINE << "<p style=" Q(color:white) ">" INTER_INJECT_TEXT(__LINE__) << "</p>"
 #define GET_LINE << " " << __LINE__

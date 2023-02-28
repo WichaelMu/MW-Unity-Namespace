@@ -6,6 +6,7 @@ namespace MW.Debugger
 	public static class Arrow
 	{
 		/// <summary>Draws an Arrow as a Gizmo.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Position">The origin of the Arrow.</param>
 		/// <param name="Direction">The direction of the Arrow.</param>
 		/// <param name="ArrowHeadLength">The length of the Arrow head.</param>
@@ -21,6 +22,7 @@ namespace MW.Debugger
 		}
 
 		/// <summary>Draws an Arrow as a Gizmo.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Position">The origin of the Arrow.</param>
 		/// <param name="Direction">The direction of the Arrow.</param>
 		/// <param name="Colour">The colour of the Arrow.</param>
@@ -38,6 +40,7 @@ namespace MW.Debugger
 		}
 
 		/// <summary>Draws an Arrow as Debug.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Position">The origin of the Arrow.</param>
 		/// <param name="Direction">The direction of the Arrow.</param>
 		/// <param name="ArrowHeadLength">The length of the Arrow head.</param>
@@ -53,6 +56,7 @@ namespace MW.Debugger
 		}
 
 		/// <summary>Draws an Arrow as Debug.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Position">The origin of the Arrow.</param>
 		/// <param name="Direction">The direction of the Arrow.</param>
 		/// <param name="Colour">The colour of the Arrow.</param>

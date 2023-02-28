@@ -460,29 +460,23 @@ namespace MW
 
 		/// <summary><see cref="FAbs(float)"/> on all V's components.</summary>
 		/// <docs>Abs() on all V's components.</docs>
+		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="V">The Vector to Abs.</param>
 		/// <returns>An MVector with all positive components.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static MVector Abs(MVector V)
-		{
-			return new MVector
-			{
-				X = FAbs(V.X),
-				Y = FAbs(V.Y),
-				Z = FAbs(V.Z)
-			};
-		}
+		public static MVector Abs(MVector V) => V.Abs;
 
 		/// <summary>Modifies V to be positive on all components.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="V">The Vector to modify.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Abs(ref MVector V)
-		{
-			Abs(ref V.X);
-			Abs(ref V.Y);
-			Abs(ref V.Z);
-		}
+		public static void Abs(ref MVector V) => V = V.Abs;
 
+		/// <summary>Whether or not a float is considered to be zero.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="F">The float to check.</param>
+		/// <param name="Tolerance">The threshold for F to be considered zero.</param>
+		/// <returns>True if F is +- Tolerance of zero.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsZero(float F, float Tolerance = MVector.kEpsilon)
 		{
@@ -509,11 +503,13 @@ namespace MW
 		}
 
 		/// <summary>Gets the number of frames per second during runtime.</summary>
+		/// <decorations decor="public static int"></decorations>
 		/// <returns>The number of frames per second.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int FPS() => (int)FInverse(Time.unscaledDeltaTime);
 
 		/// <summary>Executes a Delayed call to Function after Seconds by Owner.</summary>
+		/// <decorations decor="public static IEnumerator"></decorations>
 		/// <param name="Owner">The MonoBehaviour which owns this delayed call.</param>
 		/// <param name="Seconds">The number of seconds to wait until Function is called.</param>
 		/// <param name="Function">The Function to execute after Seconds has elapsed.</param>
@@ -537,6 +533,7 @@ namespace MW
 		}
 
 		/// <summary>Executes a Delayed call to Function after another Dependent delayed call by Owner.</summary>
+		/// <decorations decor="public static IEnumerator"></decorations>
 		/// <param name="Owner">The MonoBehaviour which owns this delayed call.</param>
 		/// <param name="Dependent">The other delayed call to wait until Function can be executed.</param>
 		/// <param name="Function">The Function to execute after Dependent has finished.</param>

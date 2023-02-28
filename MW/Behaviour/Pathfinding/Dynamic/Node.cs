@@ -16,6 +16,7 @@ namespace MW.Pathfinding
 		}
 
 		/// <summary>Registers N as a neighbour, and this as N's neighbour.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="N">Neighbour.</param>
 		public void Push(Node N)
 		{

@@ -10,6 +10,7 @@ namespace MW.CameraUtils
 		const string kCameraIsNotOrthographicError = " is not orthographic";
 
 		/// <summary>Fires a ray from ReferenceCamera to mouse position.</summary>
+		/// <decorations decor="public static OrthographicRaycast"></decorations>
 		/// <param name="ReferenceCamera">The camera to fire a ray from using ScreenPointToRay.</param>
 		/// <returns>OrthographicRaycast</returns>
 		public static OrthographicRaycast Raycast(Camera ReferenceCamera)

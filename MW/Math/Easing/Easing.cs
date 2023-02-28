@@ -752,6 +752,7 @@ namespace MW.Easing
 		}
 
 		/// <summary></summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Start"></param>
 		/// <param name="End"></param>
 		/// <param name="Duration"></param>

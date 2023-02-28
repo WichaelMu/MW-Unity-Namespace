@@ -487,7 +487,7 @@ namespace MW.CameraUtils
 			{
 				Distance += DistanceDelta * (bInvertZ ? -1f : 1f) * -ScrollSensitivity;
 
-				Distance = Mathf.Clamp(Distance, MinMaxDistance.x, MinMaxDistance.y);
+				Clamp(ref Distance, MinMaxDistance.x, MinMaxDistance.y);
 			}
 		}
 

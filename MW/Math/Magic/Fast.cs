@@ -45,6 +45,7 @@ namespace MW.Math.Magic
 		public static float FSqrt(float F, int NewtonIterations = 3) => FInverseSqrt(Max(F, MVector.kEpsilon), NewtonIterations) * F;
 
 		/// <summary>Fast reciprocal/inverse function for any float N. 1f / N.</summary>
+		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">The number to take the inverse of.</param>
 		/// <param name="NewtonRaphsonIterations">The number of Newton Raphson iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
 		/// <returns>An approximation for calculating: 1 / N, within +-.001 of the real reciprocal with 5 Newton Raphson iterations.</returns>
@@ -106,6 +107,7 @@ namespace MW.Math.Magic
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan(float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Atan().</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="N">The ratio O/A.</param>
 		/// <returns>Inverse Tangent of N in radians, accurate to +-.01 radians.</returns>
 		public static float FArcTangent(float N)
@@ -124,6 +126,7 @@ namespace MW.Math.Magic
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan2(float, float)"/>.</summary>
 		/// <docs>Faster version of Mathf.Atan2().</docs>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="Y">The Y component of a point.</param>
 		/// <param name="X">The X component of a point.</param>
 		/// <returns>Approximation of Atan2, accurate to +-.01 radians.</returns>

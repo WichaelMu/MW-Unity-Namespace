@@ -175,12 +175,24 @@ namespace MW
 			return x * x + y * y + z * z;
 		}
 
+		/// <summary>Clamps Vector to a maximum Magnitude.</summary>
+		/// <decorations decor="public static MVector"></decorations>
+		/// <param name="Vector">The Vector to clamp.</param>
+		/// <param name="Magnitude">The maximum magnitude.</param>
+		/// <returns>The clamped Vector.</returns>
+		public static MVector ClampMagnitude(MVector Vector, float Magnitude)
+		{
+			if (Vector.SqrMagnitude > Magnitude * Magnitude)
+				return Magnitude * Vector.Normalised;
+			return Vector;
+		}
+
 		/// <summary>The square magnitude of this MVector.</summary>
 		/// <decorations decors="public float"></decorations>
 		public float SqrMagnitude { get => X * X + Y * Y + Z * Z; }
 		/// <summary>The magnitude of this MVector.</summary>
 		/// <decorations decors="public float"></decorations>
-		public float Magnitude { get => FSqrt(SqrMagnitude); }
+		public float Magnitude { get => FSqrt(SqrMagnitude); set => SetMagnitude(value); }
 		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
 		/// <docs>The Mathf.Abs(float) of this MVector's components.</docs>
 		/// <decorations decors="public MVector"></decorations>
@@ -201,6 +213,16 @@ namespace MW
 			this.X = X;
 			this.Y = Y;
 			this.Z = Z;
+		}
+
+		/// <summary>Sets the magnitude of this MVector.</summary>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="InMagnitude">The magnitude to set.</param>
+		public void SetMagnitude(float InMagnitude)
+		{
+			this = IsNormalised()
+				? InMagnitude * this
+				: InMagnitude * Normalised;
 		}
 
 		/// <summary>Whether this MVector is a unit vector. (If this MVector is Mathematics.IsNormalised(MVector).</summary>
@@ -289,7 +311,7 @@ namespace MW
 		/// <decorations decors="public MVector"></decorations>
 		public MVector Projection()
 		{
-			float fZ = 1f / Z;
+			float fZ = FInverse(Z);
 			return new MVector(X * fZ, Y * fZ, 1);
 		}
 
@@ -373,20 +395,26 @@ namespace MW
 		}
 
 		/// <summary>Euclidean distance between this MVector and another V.</summary>
-		/// <param name="V">The MVector to find distance.</param>
 		/// <decorations decors="public float"></decorations>
+		/// <param name="V">The MVector to find distance.</param>
 		/// <returns>The Euclidean distance between this MVector and V.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Distance(MVector V) => Distance(this, V);
 		/// <summary>The Euclidean distance, but without the square root calculation.</summary>
-		/// <param name="V">The MVector to find square distance.</param>
 		/// <decorations decors="public float"></decorations>
+		/// <param name="V">The MVector to find square distance.</param>
 		/// <returns>The square distance between this MVector and V.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float SqrDistance(MVector V) => SqrDistance(this, V);
 
+		/// <summary>Clamps this Vector's magnitude to ClampedMagnitude.</summary>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="ClampedMagnitude">The maximum magnitude of this Vector.</param>
+		public void ClampMagnitude(float ClampedMagnitude) => this = ClampMagnitude(this, ClampedMagnitude);
+
 		/// <summary>Get the <see cref="SqrMagnitude"/> of <paramref name="M"/>.</summary>
 		/// <docs>Get the SqrMagnitude of M.</docs>
+		/// <decorations decor="public static float operator~"></decorations>
 		/// <param name="M">The MVector.</param>
 		/// <docreturns>The SquMagnitude of M.</docreturns>
 		/// <returns><see cref="SqrMagnitude"/>.</returns>
