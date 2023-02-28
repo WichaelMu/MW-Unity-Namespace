@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using MW.IO;
 using MW.Diagnostics;
 using MW.Extensions;
 using UnityEngine;
@@ -48,6 +47,9 @@ namespace MW.Console
 		{
 			Funcs = new Dictionary<string, MethodExec<MethodInfo, ExecAttribute>>();
 			BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Static;
+
+			MArray<Type> Types = new MArray<Type>(ExecTypes);
+			Types.Push(typeof(BuiltInExecFunctions));
 
 			foreach (Type T in ExecTypes)
 			{
@@ -120,6 +122,7 @@ namespace MW.Console
 
 		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="RawParams"/>.</summary>
 		/// <docs>Executes MethodName with RawParams on Targets (if any).</docs>
+		/// <remarks>If no Targets are specified, MethodName will execute on all GameObjects of its declaring type.</remarks>
 		/// <decorations decor="public void"></decorations>
 		/// <param name="Targets">The names of GameObjects to execute MethodName on. If null or empty, Object.FindObjectOfType will be used instead.</param>
 		/// <param name="MethodName">The name of the method to execute. (This is case-sensitive)</param>
@@ -131,8 +134,11 @@ namespace MW.Console
 				try
 				{
 					MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
+					MethodInfo Method = Func.Method;
+					Type DeclaringType = Method.DeclaringType;
 
-					ParameterInfo[] MethodParams = Func.Method.GetParameters();
+
+					ParameterInfo[] MethodParams = Method.GetParameters();
 					object[] ExecParameters = new object[MethodParams.Length];
 
 					// Convert to correct Parameter types declared by the Exec function.
@@ -141,10 +147,11 @@ namespace MW.Console
 
 					if (Func.Method.IsStatic)
 					{
-						Func.Method.Invoke(null, ExecParameters);
+						Method.Invoke(null, ExecParameters);
 					}
 					else
 					{
+						// If we have targets, invoke MethodName on their respective components.
 						if (Targets != null && Targets.Length != 0)
 						{
 							foreach (string Target in Targets)
@@ -152,16 +159,23 @@ namespace MW.Console
 								if (string.IsNullOrEmpty(Target))
 									break;
 
-								Func.Method.Invoke(GetTargetFromString(Target).GetComponent(Func.Method.DeclaringType), ExecParameters);
+								Func.Method.Invoke(GetTargetFromString(Target).GetComponent(DeclaringType), ExecParameters);
 							}
 						}
+						// Otherwise, we FindObjectsOfType.
 						else
 						{
-							UObject ObjectTarget = FindObjectOfType(Func.Method.DeclaringType);
-							if (ObjectTarget)
+							UObject[] ObjectTargets = FindObjectsOfType(DeclaringType);
+							int Length = ObjectTargets.Length;
+
+							StringBuilder AllObjectsOfType = new StringBuilder();
+							AllObjectsOfType.Append($"{Method.Name} () was executed on {Length} GameObject{(Length == 1 ? "" : "s")}:").AppendLine();
+
+							for (int i = 0; i < Length; ++i)
 							{
-								Func.Method.Invoke(Convert.ChangeType(ObjectTarget, Func.Method.DeclaringType), ExecParameters);
-								O.Out($"Exec: {Func.Method.Name} on {ObjectTarget.name}");
+								UObject ObjectOfType = ObjectTargets[i];
+								ExecuteOnTarget(ObjectOfType, Method, DeclaringType, ExecParameters);
+								AllObjectsOfType.Append($"{ObjectOfType.name}").AppendLine();
 							}
 						}
 					}
@@ -189,9 +203,16 @@ namespace MW.Console
 			}
 		}
 
+		static void ExecuteOnTarget(UObject ObjectTarget, MethodInfo Method, Type DeclaringType, object[] ExecParameters)
+		{
+			Method.Invoke(Convert.ChangeType(ObjectTarget, DeclaringType), ExecParameters);
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		GameObject GetTargetFromString(string Target)
 		{
+			Target = Target.Trim();
+
 			if (string.IsNullOrEmpty(Target))
 				return null;
 
@@ -249,10 +270,10 @@ namespace MW.Console
 
 				string GameObjectName = StringValue.TrimStart(kGameObjectByNameIdentifier);
 
-				GameObject FindResult = GameObject.Find(GameObjectName);
+				GameObject FindResult = GetTargetFromString(GameObjectName);
 
 				if (!FindResult)
-					throw new NullReferenceException($"Could not find GameObject with name: {GameObjectName}");
+					throw new NullReferenceException($"Could not find GameObject with name: '{GameObjectName}'");
 
 				if (ExecParameterType == typeof(Transform))
 					TargetObject = FindResult.transform;
@@ -263,7 +284,7 @@ namespace MW.Console
 			{
 				string StringValue = RawParams[ParamIndex].Cast<string>();
 
-				if (StringValue.Length <= 2 || StringValue[0] != kGameObjectByNameIdentifier)
+				if (StringValue.Length < 2 || StringValue[0] != kGameObjectByNameIdentifier)
 					throw new ArgumentException($"[Exec] Function Parameters referencing a {nameof(MonoBehaviour)} must be prefixed with '{kGameObjectByNameIdentifier}'!");
 
 				string ComponentTarget = StringValue.TrimStart(kGameObjectByNameIdentifier);
@@ -271,15 +292,15 @@ namespace MW.Console
 				if (string.IsNullOrEmpty(ComponentTarget))
 					throw new NullReferenceException("The Target GameObject name is contains no identifier after a valid prefix!");
 
-				GameObject ComponentResult = GameObject.Find(ComponentTarget);
+				GameObject GameObjectWithComponent = GetTargetFromString(ComponentTarget);
 
-				if (!ComponentResult)
-					throw new NullReferenceException($"Could not find GameObject with name: {ComponentTarget}!");
+				if (!GameObjectWithComponent)
+					throw new NullReferenceException($"Could not find GameObject with name: '{ComponentTarget}'!");
 
-				TargetObject = ComponentResult.GetComponent(ExecParameterType);
+				TargetObject = GameObjectWithComponent.GetComponent(ExecParameterType);
 
 				if (TargetObject == null)
-					throw new NullReferenceException($"GameObject: {ComponentResult.name} doesn't have an attached {ExecParameterType}");
+					throw new NullReferenceException($"GameObject: '{GameObjectWithComponent.name}' doesn't have an attached {ExecParameterType}");
 			}
 			else if (ExecParameterType.IsPrimitive)
 			{
@@ -307,7 +328,8 @@ namespace MW.Console
 		/// <item><see cref="GameObject"/> and <see cref="Transform"/>, given a GameObject Target by hierarchy-name reference.</item>
 		/// <item>Any <see cref="MonoBehaviour"/> component, given a GameObject Target by hierarchy-name reference.</item>
 		/// <item>All primitive types.</item>
-		/// </list>
+		/// </list><br></br>
+		/// <b>** DO NOT CALL THIS BASE METHOD IF YOU ARE OVERRIDING **</b>
 		/// </remarks>
 		/// <docremarks>
 		/// Natively supported types are:&lt;br&gt;
@@ -315,7 +337,8 @@ namespace MW.Console
 		/// MRotator.&lt;br&gt;
 		/// GameObject and Transform, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
 		/// Any MonoBehaviour component, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
-		/// All primitive types.&lt;br&gt;
+		/// All primitive types.&lt;br&gt;&lt;br&gt;
+		/// &lt;span style="color:red;"&gt;Do not call the base method if you are overriding.&lt;/span&gt;
 		/// </docremarks>
 		/// <param name="RawParameters">The Parameters entered into as RawInput to the MConsole GUI.</param>
 		/// <param name="ParamIndex">The current index of the Parameters array that requires custom parsing.</param>
@@ -324,7 +347,7 @@ namespace MW.Console
 		/// <exception cref="NotImplementedException">Occurs when MConsole does not natively support ExecParameterType.</exception>
 		public virtual void HandleCustomParameter(object[] RawParameters, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
-			throw new NotImplementedException($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)} to support it.");
+			throw new NotImplementedException($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)}, and do not call base, to support it.");
 		}
 
 		Vector2 Scroll;
@@ -375,7 +398,7 @@ namespace MW.Console
 					foreach (ParameterInfo Param in Func.Value.Method.GetParameters())
 					{
 						string[] ParamSplit = Param.ParameterType.Name.Split('.');
-						ParamsBuilder.Append(ParamSplit[ParamSplit.Length - 1]).Append(" ").Append(Param.Name).Append(", ");
+						ParamsBuilder.Append(ParamSplit[ParamSplit.Length - 1]).Append(' ').Append(Param.Name).Append(", ");
 					}
 
 					string Text = $"{Func.Value.Method.Name} ({ParamsBuilder.ToString().TrimEnd(',', ' ')}) - {Func.Value.Exec.Description}";
