@@ -550,6 +550,31 @@ namespace MW
 			return DelayedCall;
 		}
 
+		/// <summary>Executes a Delayed call to Function after a Dependent delayed call, followed by AdditionalSeconds, by Owner.</summary>
+		/// <decorations decor="public static IEnumerator"></decorations>
+		/// <param name="Owner">The MonoBehaviour which owns this delayed call.</param>
+		/// <param name="Dependent">The other delayed call to wait until Function can be executed.</param>
+		/// <param name="AdditionalSeconds">The number of seconds to wait after Dependent has finished.</param>
+		/// <param name="Function">The Function to execute after Dependent has finished and AdditionalSeconds has elapsed.</param>
+		/// <returns>The IEnumerator responsible for handling this delayed call.</returns>
+		public static IEnumerator Delay(MonoBehaviour Owner, IEnumerator Dependent, float AdditionalSeconds, Action Function)
+		{
+			if (Function == null || Dependent == null)
+				return null;
+
+			if (AdditionalSeconds < Time.deltaTime)
+			{
+				Function.Invoke();
+				return null;
+			}
+
+			IEnumerator DelayedCall = Internal_Delay(Dependent, AdditionalSeconds, Function);
+
+			Owner.StartCoroutine(DelayedCall);
+
+			return DelayedCall;
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		static IEnumerator Internal_Delay(float Seconds, Action Function)
 		{
@@ -562,6 +587,15 @@ namespace MW
 		static IEnumerator Internal_Delay(IEnumerator Dependent, Action Function)
 		{
 			yield return Dependent;
+
+			Function.Invoke();
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		static IEnumerator Internal_Delay(IEnumerator Dependent, float Seconds, Action Function)
+		{
+			yield return Dependent;
+			yield return new WaitForSeconds(Seconds);
 
 			Function.Invoke();
 		}
