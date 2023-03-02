@@ -1,5 +1,6 @@
-﻿using MW.Math.Magic;
-using UnityEngine;
+﻿using UnityEngine;
+using static MW.Utils;
+using static MW.Math.Magic.Fast;
 using static MW.Debugger.Arrow;
 
 namespace MW.Kinetic
@@ -101,9 +102,9 @@ namespace MW.Kinetic
 				return false;
 			}
 
-			float Sqrt = Fast.FSqrt(Radicand);
+			float Sqrt = FSqrt(Radicand);
 
-			float GravityByDistance = 1 / (Gravity * DisplacementToTargetIgnoringAltitude);
+			float GravityByDistance = 1 * FInverse(Gravity * DisplacementToTargetIgnoringAltitude);
 
 			float Solution1 = (LaunchSpeedSquared + Sqrt) * GravityByDistance;
 			float Solution2 = (LaunchSpeedSquared - Sqrt) * GravityByDistance;
@@ -111,10 +112,10 @@ namespace MW.Kinetic
 			float ASqr1 = (Solution1 * Solution1) + 1f;
 			float BSqr1 = (Solution2 * Solution2) + 1f;
 
-			float ADisplacement = LaunchSpeedSquared / ASqr1;
-			float BDisplacement = LaunchSpeedSquared / BSqr1;
+			float ADisplacement = LaunchSpeedSquared * FInverse(ASqr1);
+			float BDisplacement = LaunchSpeedSquared * FInverse(BSqr1);
 
-			float DisplacementArcPreference = bFavourHighArc ? Mathf.Min(ADisplacement, BDisplacement) : Mathf.Max(ADisplacement, BDisplacement);
+			float DisplacementArcPreference = bFavourHighArc ? Min(ADisplacement, BDisplacement) : Max(ADisplacement, BDisplacement);
 			float Sign = bFavourHighArc
 				? (ADisplacement < BDisplacement)
 					? Mathf.Sign(Solution1)
@@ -125,8 +126,8 @@ namespace MW.Kinetic
 					: Mathf.Sign(Solution2)
 			;
 
-			float PreferenceMagnitude = Fast.FSqrt(DisplacementArcPreference);
-			float LaunchHeight = Fast.FSqrt(LaunchSpeedSquared - DisplacementArcPreference);
+			float PreferenceMagnitude = FSqrt(DisplacementArcPreference);
+			float LaunchHeight = FSqrt(LaunchSpeedSquared - DisplacementArcPreference);
 
 			LaunchVelocity = (PreferenceMagnitude * DirectionToTargetIgnoringAltitude) + (LaunchHeight * Sign * MVector.Up);
 
@@ -136,7 +137,7 @@ namespace MW.Kinetic
 				MVector DebugOrigin = Origin;
 				for (float TimeStep = 0f; TimeStep < 1f; TimeStep += kResolution)
 				{
-					float TimeInFlight = (TimeStep + kResolution) * DisplacementToTargetIgnoringAltitude / PreferenceMagnitude;
+					float TimeInFlight = (TimeStep + kResolution) * DisplacementToTargetIgnoringAltitude * FInverse(PreferenceMagnitude);
 
 					MVector DebugDestination = Origin + TimeInFlight * LaunchVelocity + new MVector(0f, .5f * -Gravity * TimeInFlight * TimeInFlight);
 
@@ -194,11 +195,11 @@ namespace MW.Kinetic
 			}
 
 			MVector DeltaXZ = new MVector(Target.X - Origin.X, 0f, Target.Z - Origin.Z);
-			float InverseGravity = 1f / GravityMagnitude;
+			float InverseGravity = 1f * FInverse(GravityMagnitude);
 
 			MVector VY = ComputeJumpVelocity(MVector.Up, TargetHeight, b3DGravity);
-			Time = (Fast.FSqrt(-2f * TargetHeight * InverseGravity) + Fast.FSqrt(2 * (DeltaY - TargetHeight) * InverseGravity));
-			MVector VXZ = DeltaXZ / Time;
+			Time = (FSqrt(-2f * TargetHeight * InverseGravity) + FSqrt(2 * (DeltaY - TargetHeight) * InverseGravity));
+			MVector VXZ = FInverse(Time) * DeltaXZ;
 
 			MVector LaunchVelocity = -Mathf.Sign(GravityMagnitude) * VY + VXZ;
 
@@ -244,7 +245,7 @@ namespace MW.Kinetic
 
 			MVector[] RetVal = new MVector[ArcResolution];
 
-			float InverseResolutionTime = Fast.FInverse(ArcResolution * Time);
+			float InverseResolutionTime = FInverse(ArcResolution * Time);
 
 			for (int i = 0; i <= ArcResolution; ++i)
 			{
@@ -269,7 +270,7 @@ namespace MW.Kinetic
 		/// <returns>An array of this Projectile's Position and velocity at the given Time.</returns>
 		public static MArray<ProjectileArcTracer> GetProjectileArc(Rigidbody Physics, Vector3 StartPosition, float Gravity, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
 		{
-			float SubstepDeltaTime = 1f / Resolution;
+			float SubstepDeltaTime = 1f * FInverse(Resolution);
 			MVector Velocity = Physics.velocity;
 			MVector End = StartPosition;
 			float Time = 0f;
@@ -277,7 +278,7 @@ namespace MW.Kinetic
 			MArray<ProjectileArcTracer> RetVal = new MArray<ProjectileArcTracer>(Resolution);
 			while (Time < MaxSimulationTime)
 			{
-				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				float ActualStepDeltaTime = Min(MaxSimulationTime - Time, SubstepDeltaTime);
 				Time += ActualStepDeltaTime;
 
 				StartPosition = End;
@@ -308,14 +309,14 @@ namespace MW.Kinetic
 		/// <returns>An array of this Projectile's Position and velocity at the given Time.</returns>
 		public static MArray<ProjectileArcTracer> GetProjectileArc(MVector Velocity, Vector3 StartPosition, float Gravity, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
 		{
-			float SubstepDeltaTime = 1f / Resolution;
+			float SubstepDeltaTime = 1f * FInverse(Resolution);
 			MVector End = StartPosition;
 			float Time = 0f;
 
 			MArray<ProjectileArcTracer> RetVal = new MArray<ProjectileArcTracer>(Resolution);
 			while (Time < MaxSimulationTime)
 			{
-				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				float ActualStepDeltaTime = Min(MaxSimulationTime - Time, SubstepDeltaTime);
 				Time += ActualStepDeltaTime;
 
 				StartPosition = End;
@@ -351,7 +352,7 @@ namespace MW.Kinetic
 		/// <returns>True if this Projectile will Collide with something in CollisionLayer.</returns>
 		public static bool GetProjectileArc(Rigidbody Physics, Vector3 StartPosition, float Gravity, out MArray<ProjectileArcTracer> Trajectory, float ProjectileRadius, LayerMask CollisionLayer, out MArray<ProjectileArcCollision> Collisions, bool bStopOnCollision = true, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
 		{
-			float SubstepDeltaTime = 1f / Resolution;
+			float SubstepDeltaTime = 1f * FInverse(Resolution);
 			MVector Velocity = Physics.velocity;
 			MVector End = StartPosition;
 			float Time = 0f;
@@ -360,7 +361,7 @@ namespace MW.Kinetic
 			Collisions = new MArray<ProjectileArcCollision>();
 			while (Time < MaxSimulationTime)
 			{
-				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				float ActualStepDeltaTime = Min(MaxSimulationTime - Time, SubstepDeltaTime);
 				Time += ActualStepDeltaTime;
 
 				StartPosition = End;
@@ -408,7 +409,7 @@ namespace MW.Kinetic
 		/// <returns>True if this Projectile will Collide with something in CollisionLayer.</returns>
 		public static bool GetProjectileArc(GameObject Projectile, MVector Velocity, Vector3 StartPosition, float Gravity, out MArray<ProjectileArcTracer> Trajectory, float ProjectileRadius, LayerMask CollisionLayer, out MArray<ProjectileArcCollision> Collisions, bool bStopOnCollision = true, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
 		{
-			float SubstepDeltaTime = 1f / Resolution;
+			float SubstepDeltaTime = 1f * FInverse(Resolution);
 			MVector End = StartPosition;
 			float Time = 0f;
 
@@ -416,7 +417,7 @@ namespace MW.Kinetic
 			Collisions = new MArray<ProjectileArcCollision>();
 			while (Time < MaxSimulationTime)
 			{
-				float ActualStepDeltaTime = Mathf.Min(MaxSimulationTime - Time, SubstepDeltaTime);
+				float ActualStepDeltaTime = Min(MaxSimulationTime - Time, SubstepDeltaTime);
 				Time += ActualStepDeltaTime;
 
 				StartPosition = End;
@@ -500,7 +501,7 @@ namespace MW.Kinetic
 		{
 			float U = -2f * GravityMagnitude * TargetHeight;
 
-			return Fast.FSqrt(U) * Up;
+			return FSqrt(U) * Up;
 		}
 	}
 
