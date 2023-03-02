@@ -245,7 +245,7 @@ namespace MW.CameraUtils
 		void PlaceCamera()
 		{
 			// Where the Spring Arm will point towards.
-			Vector3 ArmDirection = Vector3.one;
+			Vector3 ArmDirection;
 			Vector3 FinalPosition;
 			Quaternion FinalRotation = Quaternion.Euler(CameraRotation);
 
@@ -258,8 +258,10 @@ namespace MW.CameraUtils
 				HorizontalOrbit *= Mathf.Deg2Rad;
 
 				// Convert Angles to Vectors.
-				Vector3 Ground = new Vector3(Mathf.Sin(VerticalOrbit), 0, Mathf.Cos(VerticalOrbit)); // XZ.
-				Vector3 Up = new Vector3(0, Mathf.Sin(HorizontalOrbit), Mathf.Cos(HorizontalOrbit)); // XYZ.
+				SinCos(out float VerticalSine, out float VerticalCosine, VerticalOrbit);
+				SinCos(out float HorizontalSine, out float HorizontalCosine, HorizontalOrbit);
+				Vector3 Ground = new Vector3(VerticalSine, 0, VerticalCosine); // XZ.
+				Vector3 Up = new Vector3(0, HorizontalSine, HorizontalCosine); // XYZ.
 
 				// Ground's XZ and Up's Y will be used to define the direction of the Spring Arm.
 				ArmDirection = new Vector3(Ground.x, Up.y, Ground.z).normalized;
