@@ -50,5 +50,25 @@ namespace MW.Extensions
 
 			return Behaviour != null;
 		}
+
+		/// <summary>Does G have an attached T component?</summary>
+		/// <typeparam name="T">The type of component to check if G has.</typeparam>
+		/// <decorations decor="|Extension| bool"></decorations>
+		/// <param name="G">The GameObject to check if it has an attached T component.</param>
+		/// <returns>True if G has an attached T component.</returns>
+		public static bool Is<T>(this GameObject G) where T : Component
+			=> G.Is<T>(out _);
+
+		/// <summary>Does G have an attached T component?</summary>
+		/// <typeparam name="T">The type to check if G has or is.</typeparam>
+		/// <decorations decor="|Extension| bool"></decorations>
+		/// <param name="G">The GameObject to check if it has or is T.</param>
+		/// <param name="Component">Out the attached Component, otherwise null.</param>
+		/// <returns>True if G has an attached T component.</returns>
+		public static bool Is<T>(this GameObject G, out T Component) where T : Component
+		{
+			G.TryGetComponent(out Component);
+			return Component != null;
+		}
 	}
 }
