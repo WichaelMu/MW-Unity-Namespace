@@ -184,17 +184,14 @@ namespace MW
 		/// <decorations decor="public static MRotator"></decorations>
 		/// <param name="From">The beginning rotation.</param>
 		/// <param name="To">The target rotation.</param>
-		/// <param name="NormalisedAlpha">The percentage of interpolation, from zero to one.</param>
+		/// <param name="Alpha">The percentage of interpolation.</param>
 		/// <param name="Equation">The equation to interpolate. Default is Linear.</param>
 		/// <returns>An interpolated MRotator between From and To.</returns>
-		public static MRotator Interpolate(MRotator From, MRotator To, float NormalisedAlpha, EEquation Equation = EEquation.Linear)
+		public static MRotator Interpolate(MRotator From, MRotator To, float Alpha, EEquation Equation = EEquation.Linear)
 		{
-			if (NormalisedAlpha >= 1f)
-				return To;
-
-			float P = Easing.Interpolate.Ease(Equation, From.Pitch, To.Pitch, NormalisedAlpha);
-			float Y = Easing.Interpolate.Ease(Equation, From.Yaw, To.Yaw, NormalisedAlpha);
-			float R = Easing.Interpolate.Ease(Equation, From.Roll, To.Roll, NormalisedAlpha);
+			float P = Easing.Interpolate.Ease(Equation, From.Pitch, To.Pitch, Alpha);
+			float Y = Easing.Interpolate.Ease(Equation, From.Yaw, To.Yaw, Alpha);
+			float R = Easing.Interpolate.Ease(Equation, From.Roll, To.Roll, Alpha);
 
 			return new MRotator(P, Y, R);
 		}
@@ -203,21 +200,12 @@ namespace MW
 		/// <decorations decor="public static MRotator"></decorations>
 		/// <param name="From">The beginning rotation.</param>
 		/// <param name="To">The target rotation.</param>
-		/// <param name="NormalisedAlpha">The percentage of interpolation, from zero to one.</param>
-		/// <param name="NormalisedCurve">The curve describing the speed of the interpolation.</param>
+		/// <param name="Alpha">The percentage of interpolation.</param>
+		/// <param name="Curve">The curve describing the speed of the interpolation.</param>
 		/// <returns>An interpolated MRotator between From and To.</returns>
-		public static MRotator Interpolate(MRotator From, MRotator To, float NormalisedAlpha, AnimationCurve NormalisedCurve)
+		public static MRotator Interpolate(MRotator From, MRotator To, float Alpha, AnimationCurve Curve)
 		{
-			if (NormalisedCurve.Evaluate(1f) != 1f || NormalisedCurve.Evaluate(0f) != 0f)
-			{
-				Log.E(nameof(NormalisedCurve), "is not normalised!\n", "Input Evaluation(0) ==", NormalisedCurve.Evaluate(0), "Input Evaluation(1) ==", NormalisedCurve.Evaluate(1f));
-				return Zero;
-			}
-
-			if (NormalisedAlpha >= 1f)
-				return To;
-
-			float Evaluation = NormalisedCurve.Evaluate(NormalisedAlpha);
+			float Evaluation = Curve.Evaluate(Alpha);
 
 			float P = Mathf.Lerp(From.Pitch, To.Pitch, Evaluation);
 			float Y = Mathf.Lerp(From.Yaw, To.Yaw, Evaluation);
