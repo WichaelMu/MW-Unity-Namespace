@@ -187,6 +187,21 @@ namespace MW
 			return Vector;
 		}
 
+		/// <summary>Scale Normal to reach the point defined by Vector in 2D space.</summary>
+		/// <decorations decor="public static MVector"></decorations>
+		/// <param name="Vector">The point to scale Normal by.</param>
+		/// <param name="Normal">The direction to scale towards Vector in 2D space.</param>
+		/// <returns>Vector projected onto Normal.</returns>
+		public static MVector ProjectOnNormal(MVector Vector, MVector Normal)
+		{
+			if (Normal.SqrMagnitude < kEpsilon)
+				return Zero;
+			float NormalDot = Normal | Normal;
+			float Dot = Vector | Normal;
+			return Dot * Normal / NormalDot;
+
+		}
+
 		/// <summary>The square magnitude of this MVector.</summary>
 		/// <decorations decors="public float"></decorations>
 		public float SqrMagnitude { get => X * X + Y * Y + Z * Z; }
@@ -314,6 +329,12 @@ namespace MW
 			float fZ = FInverse(Z);
 			return new MVector(X * fZ, Y * fZ, 1);
 		}
+
+		/// <summary>Scale Normal to reach the point defined by this vector in 2D space.</summary>
+		/// <decorations decor="public static MVector"></decorations>
+		/// <param name="Normal">The direction to scale towards this vector in 2D space.</param>
+		/// <returns>This vector projected onto Normal.</returns>
+		public MVector ProjectOnNormal(MVector Normal) => ProjectOnNormal(this, Normal);
 
 		/// <summary>Ignores the X component of this MVector.</summary>
 		/// <remarks>Modifies this MVector.</remarks>
