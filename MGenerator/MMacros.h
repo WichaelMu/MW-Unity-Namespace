@@ -19,7 +19,7 @@
 /* If we are debugging through the Visual Studio Debugger. */
 #define EXEC_FROM_VS 0
 /* Write the .html files that are created. */
-#define WRITE_CREATION_MESSAGES 1
+#define WRITE_CREATION_MESSAGES 0
 /* Write the line of .cpp code responsible for writing to the .html documentation file. */
 #define WRITE_DEBUG_LINES 0
 /* Write the class and MEMBER if it has no decorations. */
