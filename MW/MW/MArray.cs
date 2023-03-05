@@ -8,6 +8,7 @@ namespace MW
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
 	/// <decorations decor="public class {T} : MArray, IEnumerable{T}"></decorations>
+	[Serializable]
 	public class MArray<T> : MArray, IEnumerable<T>
 	{
 		[UnityEngine.SerializeField] List<T> Items;
