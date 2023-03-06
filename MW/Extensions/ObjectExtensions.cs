@@ -28,7 +28,7 @@ namespace MW.Extensions
 		/// <typeparam name="T">The class to convert O to.</typeparam>
 		/// <decorations decor="|Extension| T"></decorations>
 		/// <param name="O">The object to cast.</param>
-		/// <returns>T class type of O if O is T, otherwise null.</returns>
+		/// <returns>O of type T if O is T, otherwise null.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T Cast<T>(this object O)
 		{

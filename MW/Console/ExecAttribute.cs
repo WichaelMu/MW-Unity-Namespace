@@ -27,6 +27,8 @@ namespace MW.Console
 		/// <decorations decor="public object[]"></decorations>
 		public object[] ExecParams;
 
+		internal bool bIsInternal;
+
 		/// <summary>Default Exec.</summary>
 		public ExecAttribute() { Description = string.Empty; GameObjectTargetsByName = Array.Empty<string>(); }
 
@@ -46,9 +48,7 @@ namespace MW.Console
 		/// <param name="Params">The Parameters to execute with bOnAwake.</param>
 		public ExecAttribute(string Desc, bool bOnAwake, params object[] Params) : this(Desc) { bExecOnAwake = bOnAwake; ExecParams = Params; }
 
-		/// <summary>An Exec used for automated testing</summary>
-		/// <param name="bIsTestExec">Must be true to be used upon Awake().</param>
-		public ExecAttribute(bool bIsTestExec) : this(string.Empty, true) { bHideInConsole = bIsTestExec; }
+		internal ExecAttribute(bool bIsInternal) { this.bIsInternal = bIsInternal; }
 	}
 
 	public struct MethodExec<T1, T2>

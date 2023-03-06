@@ -67,13 +67,34 @@ namespace MW
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public MVector(Vector2 xy) : this(xy.x, xy.y) { }
 
-		public float this[int i] => i switch
+		public float this[int i]
 		{
-			0 => X,
-			1 => Y,
-			2 => Z,
-			_ => throw new IndexOutOfRangeException("Vector index " + i + " is out of range! Expected i >= 0 && i <= 2.\nInput i: " + i)
-		};
+			get => i switch
+			{
+				0 => X,
+				1 => Y,
+				2 => Z,
+				_ => throw new IndexOutOfRangeException("Vector index " + i + " is out of range! Expected i >= 0 && i <= 2.\nInput i: " + i)
+			};
+
+			set
+			{
+				switch (i)
+				{
+					case 0:
+						X = value;
+						break;
+					case 1:
+						Y = value;
+						break;
+					case 2:
+						Z = value;
+						break;
+					default:
+						throw new IndexOutOfRangeException("Vector index " + i + " is out of range! Expected i >= 0 && i <= 2.\nInput i: " + i);
+				}
+			}
+		}
 
 		static readonly MVector zero = new MVector(0);
 		static readonly MVector right = new MVector(1, 0, 0);
@@ -198,8 +219,19 @@ namespace MW
 				return Zero;
 			float NormalDot = Normal | Normal;
 			float Dot = Vector | Normal;
-			return Dot * Normal / NormalDot;
 
+			return Dot * Normal / NormalDot;
+		}
+
+		public static MVector Parse(string In)
+		{
+			string[] Split = In.Split(' ');
+			MVector RetVal = new MVector();
+			int Axis = 0;
+			foreach (string S in Split)
+				if (float.TryParse(S, out float Component))
+					RetVal[Axis++] = Component;
+			return RetVal;
 		}
 
 		/// <summary>The square magnitude of this MVector.</summary>
@@ -659,6 +691,10 @@ namespace MW
 		/// <decorations decors="public static implicit operator Color"></decorations>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static implicit operator Color(MVector V) => Colour.Colour255(V.X, V.Y, V.Z);
+
+		/// <summary>The MVector representation of a Colour ranged from 0 - 255 RGB/XYZ.</summary>
+		/// <decorations decor="public static implicit operator MVector"></decorations>
+		public static implicit operator MVector(Color C) => Colour.Get255RGB(C);
 
 		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
 		/// <decorations decors="public override int"></decorations>

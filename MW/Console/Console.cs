@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using MW.Diagnostics;
 using MW.Extensions;
+using MW.Conversion;
 using UnityEngine;
 using UObject = UnityEngine.Object;
 
@@ -38,20 +38,24 @@ namespace MW.Console
 		/// <decorations decor="protected string"></decorations>
 		protected string PreviousInput;
 
-		const char kTargetGameObjectIdentifier = '@';
-		const char kGameObjectByNameIdentifier = '#';
+		protected const char kTargetGameObjectIdentifier = '@';
+		protected const char kGameObjectByNameIdentifier = '#';
+
+		StringBuilder OutputLog;
 
 		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
 		/// <decorations decor="public virtual void"></decorations>
 		public virtual void Awake()
 		{
+			OutputLog = new StringBuilder();
+			WriteToOutput("-- MW Unity Namespace - MConsole --", MConsoleColourLibrary.Green);
 			Funcs = new Dictionary<string, MethodExec<MethodInfo, ExecAttribute>>();
-			BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Static;
+			BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
 
 			MArray<Type> Types = new MArray<Type>(ExecTypes);
 			Types.Push(typeof(BuiltInExecFunctions));
 
-			foreach (Type T in ExecTypes)
+			foreach (Type T in Types)
 			{
 				IEnumerable<MethodInfo> Methods = T.Assembly.GetTypes()
 					.SelectMany(Type => Type.GetMethods(MethodFlags));
@@ -63,17 +67,13 @@ namespace MW.Console
 					if (Command == null)
 						continue;
 
+					if (Funcs.ContainsKey(Method.Name))
+						MConsoleErrorHander.NotifyDuplicateFunction(Method);
+
 					Funcs.Add(Method.Name, new MethodExec<MethodInfo, ExecAttribute>(Method, Command));
 
 					if (Command.bExecOnAwake)
-					{
 						Exec(Command.GameObjectTargetsByName, Method.Name, Command.ExecParams);
-					}
-
-					if (Command.bHideInConsole)
-					{
-						Funcs.Remove(Method.Name);
-					}
 				}
 			}
 		}
@@ -129,77 +129,93 @@ namespace MW.Console
 		/// <param name="RawParams">The parameters to pass to the method.</param>
 		public void Exec(string[] Targets, string MethodName, params object[] RawParams)
 		{
-			if (Funcs.ContainsKey(MethodName))
+			if (CheckInternallyDefinedCommands(MethodName, RawParams))
+				return;
+
+			if (!Funcs.ContainsKey(MethodName))
 			{
-				try
+				WriteToOutput($"Unknown Exec Function: '{MethodName}'", MConsoleColourLibrary.Red);
+				return;
+			}
+
+			try
+			{
+				MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
+				MethodInfo Method = Func.Method;
+				Type DeclaringType = Method.DeclaringType;
+
+
+				ParameterInfo[] MethodParams = Method.GetParameters();
+				object[] ExecParameters = new object[MethodParams.Length];
+
+				// Convert to correct Parameter types declared by the Exec function.
+				for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParams.Length; ++ExecParamIndex)
+					GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType);
+
+				if (Func.Method.IsStatic)
 				{
-					MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
-					MethodInfo Method = Func.Method;
-					Type DeclaringType = Method.DeclaringType;
-
-
-					ParameterInfo[] MethodParams = Method.GetParameters();
-					object[] ExecParameters = new object[MethodParams.Length];
-
-					// Convert to correct Parameter types declared by the Exec function.
-					for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParams.Length; ++ExecParamIndex)
-						GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType);
-
-					if (Func.Method.IsStatic)
+					Method.Invoke(null, ExecParameters);
+				}
+				else
+				{
+					// If we have targets, invoke MethodName on their respective components.
+					if (Targets != null && Targets.Length != 0)
 					{
-						Method.Invoke(null, ExecParameters);
+						StringBuilder ExecTargets = new StringBuilder();
+						ExecTargets.Append($"{MethodName} was Executed with {new MArray<object>(ExecParameters).Print()} on: ");
+
+						foreach (string Target in Targets)
+						{
+							if (string.IsNullOrEmpty(Target))
+								break;
+
+							if (GetTargetFromString(Target, out GameObject TargetObject))
+							{
+								Func.Method.Invoke(TargetObject.GetComponent(DeclaringType), ExecParameters);
+								ExecTargets.Append($"'{Target}' ");
+							}
+						}
+
+						WriteToOutput(ExecTargets);
 					}
+					// Otherwise, we FindObjectsOfType.
 					else
 					{
-						// If we have targets, invoke MethodName on their respective components.
-						if (Targets != null && Targets.Length != 0)
+						UObject[] ObjectTargets = FindObjectsOfType(DeclaringType);
+						int Length = ObjectTargets.Length;
+
+						StringBuilder AllObjectsOfType = new StringBuilder();
+						AllObjectsOfType.Append($"{Method.Name} () was executed on {Length} GameObject{(Length == 1 ? "" : "s")}:");
+
+						for (int i = 0; i < Length; ++i)
 						{
-							foreach (string Target in Targets)
-							{
-								if (string.IsNullOrEmpty(Target))
-									break;
-
-								Func.Method.Invoke(GetTargetFromString(Target).GetComponent(DeclaringType), ExecParameters);
-							}
+							UObject ObjectOfType = ObjectTargets[i];
+							ExecuteOnTarget(ObjectOfType, Method, DeclaringType, ExecParameters);
+							AllObjectsOfType.Append($"'{ObjectOfType.name}' ");
 						}
-						// Otherwise, we FindObjectsOfType.
-						else
-						{
-							UObject[] ObjectTargets = FindObjectsOfType(DeclaringType);
-							int Length = ObjectTargets.Length;
 
-							StringBuilder AllObjectsOfType = new StringBuilder();
-							AllObjectsOfType.Append($"{Method.Name} () was executed on {Length} GameObject{(Length == 1 ? "" : "s")}:").AppendLine();
-
-							for (int i = 0; i < Length; ++i)
-							{
-								UObject ObjectOfType = ObjectTargets[i];
-								ExecuteOnTarget(ObjectOfType, Method, DeclaringType, ExecParameters);
-								AllObjectsOfType.Append($"{ObjectOfType.name}").AppendLine();
-							}
-						}
+						WriteToOutput(AllObjectsOfType);
 					}
 				}
-				catch (Exception E)
-				{
-					StringBuilder ErrorBuilder = new StringBuilder();
 
-					for (int i = 0; i < RawParams.Length; ++i)
-					{
-						if (RawParams[i] == null)
-							continue;
 
-						ErrorBuilder.Append(RawParams[i].ToString().TrimStart(kGameObjectByNameIdentifier, kTargetGameObjectIdentifier));
-						if (i != RawParams.Length - 1)
-							ErrorBuilder.Append(", ");
-					}
-
-					Log.E($"Failed to execute {MethodName} ({ErrorBuilder}) - {E.Message}\n{E}");
-				}
+				ScrollOutputLog.y = GetOutputLogHeight(out _);
 			}
-			else
+			catch (Exception E)
 			{
-				Debug.LogError($"Unknown Command: {MethodName}");
+				StringBuilder ErrorBuilder = new StringBuilder();
+
+				for (int i = 0; i < RawParams.Length; ++i)
+				{
+					if (RawParams[i] == null)
+						continue;
+
+					ErrorBuilder.Append(RawParams[i].ToString().TrimStart(kGameObjectByNameIdentifier, kTargetGameObjectIdentifier));
+					if (i != RawParams.Length - 1)
+						ErrorBuilder.Append(", ");
+				}
+
+				WriteToOutput($"Failed to execute {MethodName} ({ErrorBuilder}) - {E.Message}\n{E}", MConsoleColourLibrary.Red);
 			}
 		}
 
@@ -214,15 +230,31 @@ namespace MW.Console
 			Target = Target.Trim();
 
 			if (string.IsNullOrEmpty(Target))
+			{
+				WriteToOutput($"Target is empty!", MConsoleColourLibrary.Yellow);
 				return null;
+			}
 
 			return GameObject.Find(Target);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected bool GetTargetFromString(string Target, out GameObject TargetObject)
+		{
+			TargetObject = GetTargetFromString(Target);
+			if (!TargetObject)
+				WriteToOutput($"Could not find Target named: '{Target}'.", MConsoleColourLibrary.Yellow);
+
+			return TargetObject;
 		}
 
 		void GetCustomParameterType(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			if (ParamIndex < 0 || ParamIndex >= RawParams.Length)
-				throw new ArgumentOutOfRangeException($"Parameter Index is out of range! Expected 0 <= {nameof(ParamIndex)} ({ParamIndex}) < {nameof(RawParams)}.Length ({RawParams.Length})!");
+			{
+				WriteToOutput($"Parameter Index is out of range! Expected 0 <= {nameof(ParamIndex)} ({ParamIndex}) < {nameof(RawParams)}.Length ({RawParams.Length})!", MConsoleColourLibrary.Red);
+				return;
+			}
 
 			// Test against known types.
 			if (ExecParameterType == typeof(MVector)) // MVector.
@@ -266,14 +298,21 @@ namespace MW.Console
 				string StringValue = RawParams[ParamIndex].Cast<string>();
 
 				if (StringValue[0] != kGameObjectByNameIdentifier)
-					throw new ArgumentException($"GameObject and Transform [Exec] Function Parameters must be prefixed with {kGameObjectByNameIdentifier}!");
+				{
+					WriteToOutput($"GameObject and Transform [Exec] Function Parameters must be prefixed with {kGameObjectByNameIdentifier}!", MConsoleColourLibrary.Red);
+					return;
+				}
 
-				string GameObjectName = StringValue.TrimStart(kGameObjectByNameIdentifier);
+				string GameObjectName = StringValue.TrimStart(kGameObjectByNameIdentifier)
+									.Replace("##", " ");
 
 				GameObject FindResult = GetTargetFromString(GameObjectName);
 
 				if (!FindResult)
-					throw new NullReferenceException($"Could not find GameObject with name: '{GameObjectName}'");
+				{
+					WriteToOutput($"Could not find GameObject with name: '{GameObjectName}'", MConsoleColourLibrary.Red);
+					return;
+				}
 
 				if (ExecParameterType == typeof(Transform))
 					TargetObject = FindResult.transform;
@@ -285,28 +324,44 @@ namespace MW.Console
 				string StringValue = RawParams[ParamIndex].Cast<string>();
 
 				if (StringValue.Length < 2 || StringValue[0] != kGameObjectByNameIdentifier)
-					throw new ArgumentException($"[Exec] Function Parameters referencing a {nameof(MonoBehaviour)} must be prefixed with '{kGameObjectByNameIdentifier}'!");
+				{
+					WriteToOutput($"[Exec] Function Parameters referencing a {nameof(MonoBehaviour)} must be prefixed with '{kGameObjectByNameIdentifier}'!", MConsoleColourLibrary.Red);
+					return;
+				}
 
 				string ComponentTarget = StringValue.TrimStart(kGameObjectByNameIdentifier);
 
 				if (string.IsNullOrEmpty(ComponentTarget))
-					throw new NullReferenceException("The Target GameObject name is contains no identifier after a valid prefix!");
+				{
+					WriteToOutput("The Target GameObject name is contains no identifier after a valid prefix!", MConsoleColourLibrary.Red);
+					return;
+				}
 
 				GameObject GameObjectWithComponent = GetTargetFromString(ComponentTarget);
 
 				if (!GameObjectWithComponent)
-					throw new NullReferenceException($"Could not find GameObject with name: '{ComponentTarget}'!");
+				{
+					WriteToOutput($"Could not find GameObject with name: '{ComponentTarget}'!", MConsoleColourLibrary.Red);
+					return;
+				}
 
 				TargetObject = GameObjectWithComponent.GetComponent(ExecParameterType);
 
 				if (TargetObject == null)
-					throw new NullReferenceException($"GameObject: '{GameObjectWithComponent.name}' doesn't have an attached {ExecParameterType}");
+				{
+					WriteToOutput($"GameObject: '{GameObjectWithComponent.name}' doesn't have an attached {ExecParameterType}", MConsoleColourLibrary.Red);
+					return;
+				}
 			}
-			else if (ExecParameterType.IsPrimitive)
+			else if (ExecParameterType == typeof(string)) // String.
+			{
+				TargetObject = RawParams[ParamIndex].Cast<string>();
+			}
+			else if (ExecParameterType.IsPrimitive) // Any other primitive.
 			{
 				HandlePrimitiveParameter(ref TargetObject, RawParams[ParamIndex], ExecParameterType);
 			}
-			else
+			else // Any custom type.
 			{
 				HandleCustomParameter(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 			}
@@ -347,10 +402,82 @@ namespace MW.Console
 		/// <exception cref="NotImplementedException">Occurs when MConsole does not natively support ExecParameterType.</exception>
 		public virtual void HandleCustomParameter(object[] RawParameters, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
-			throw new NotImplementedException($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)}, and do not call base, to support it.");
+			WriteToOutput($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)}, and do not call base, to support it.", MConsoleColourLibrary.Yellow);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected virtual void WriteToOutput(string Output)
+		{
+			OutputLog.Append(Output).Append('\n');
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected virtual void WriteToOutput(StringBuilder Output)
+		{
+			OutputLog.Append(Output).Append('\n');
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void WriteToOutput(string Output, MVector Colour)
+		{
+			OutputLog.Append(Colour.ToString()).Append('\\');
+			WriteToOutput(Output);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void WriteToOutput(StringBuilder Output, MVector Colour)
+		{
+			OutputLog.Append(Colour.ToString()).Append('\\');
+			WriteToOutput(Output);
+		}
+
+		const float kConsoleFontHeight = 20f;
+		float GetOutputLogHeight(out string[] Output)
+		{
+			Output = OutputLog.ToString().Split('\n');
+			return kConsoleFontHeight * Output.Length + 10;
+		}
+
+		protected virtual string GetPersistentOutput()
+			=> $"FPS: {Utils.FPS():D3} | Delta Time: {Time.deltaTime:F3} | ";
+
+		bool CheckInternallyDefinedCommands(string Command, object[] Parameters)
+		{
+			switch (Command)
+			{
+				case "__CLEAR__":
+					OutputLog.Clear();
+					break;
+				case "__SET_RATIO__":
+					if (Parameters != null && Parameters.Length != 0)
+					{
+						if (Parameters[0].Is(out float InRatio))
+						{
+							Utils.Clamp(ref InRatio, 0f, 1f);
+							ConsoleRatio = InRatio;
+						}
+						else
+						{
+							WriteToOutput($"__SET_RATIO__ invoked, expected a float.", MConsoleColourLibrary.Red);
+							ConsoleRatio = kDefaultConsoleRatio;
+						}
+					}
+					else
+					{
+						ConsoleRatio = kDefaultConsoleRatio;
+					}
+					break;
+				default:
+					return false;
+			}
+
+			return true;
+		}
+
+		const float kDefaultConsoleRatio = .75f;
+		float ConsoleRatio = kDefaultConsoleRatio;
 		Vector2 Scroll;
+		Vector2 ScrollOutputLog;
 
 		/// <summary>Draws the Console to the in-game viewport.</summary>
 		/// <decorations decor="public virtual void"></decorations>
@@ -382,7 +509,7 @@ namespace MW.Console
 
 			if (Funcs.Count > 0)
 			{
-				float FuncsHeight = Screen.height * .75f;
+				float FuncsHeight = Screen.height * ConsoleRatio;
 
 				GUI.Box(new Rect(0, Y, Screen.width, FuncsHeight), "");
 				Rect ExecList = new Rect(0, 0, Screen.width - 30, 20 * Funcs.Count);
@@ -394,6 +521,9 @@ namespace MW.Console
 #pragma warning disable UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Start().
 				foreach (KeyValuePair<string, MethodExec<MethodInfo, ExecAttribute>> Func in Funcs)
 				{
+					if (Func.Value.Exec.bHideInConsole)
+						continue;
+
 					StringBuilder ParamsBuilder = new StringBuilder();
 					foreach (ParameterInfo Param in Func.Value.Method.GetParameters())
 					{
@@ -403,23 +533,75 @@ namespace MW.Console
 
 					string Text = $"{Func.Value.Method.Name} ({ParamsBuilder.ToString().TrimEnd(',', ' ')}) - {Func.Value.Exec.Description}";
 
-					Rect TextRect = new Rect(5, 20 * i++, ExecList.width - 100, 20);
+					Rect TextRect = new Rect(5, 20 * i++, ExecList.width - 100, kConsoleFontHeight);
 
 					GUI.Label(TextRect, Text);
 				}
 #pragma warning restore UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Start().
 
+				Y += FuncsHeight;
+
 				GUI.EndScrollView();
 
-				Y += FuncsHeight;
+				float OutputLogHeight = Screen.height * (1f - ConsoleRatio);
+				float OutputScrollHeight = OutputLogHeight - 33;
+
+				GUI.Box(new Rect(0, Y + kConsoleFontHeight, Screen.width, OutputLogHeight), "");
+				Rect OutputLogList = new Rect(0, 0, Screen.width - 30, GetOutputLogHeight(out string[] Output));
+				ScrollOutputLog = GUI.BeginScrollView(new Rect(0, Y + 25, Screen.width, OutputScrollHeight), ScrollOutputLog, OutputLogList);
+
+				i = 0;
+				for (; i < Output.Length; i++)
+				{
+					Rect OutputTextRect = new Rect(5, 20 * i, OutputLogList.width - 100, kConsoleFontHeight);
+					string StringValue = Output[i];
+					string[] ColourSeparator = StringValue.Split('\\');
+
+					if (ColourSeparator.Length == 1)
+					{
+						GUI.contentColor = Color.white;
+						GUI.Label(OutputTextRect, StringValue);
+					}
+					else
+					{
+						Color OutputColour = MVector.Parse(ColourSeparator[0]);
+						GUI.contentColor = OutputColour;
+						GUI.Label(OutputTextRect, ColourSeparator[1]);
+					}
+				}
+
+				Rect PersistentRect = new Rect(5, 20 * (i - 1), OutputLogList.width - 100, kConsoleFontHeight);
+				GUI.contentColor = MConsoleColourLibrary.Green;
+				GUI.Label(PersistentRect, GetPersistentOutput());
+
+				GUI.EndScrollView();
 			}
 
-			GUI.Box(new Rect(0, Y, Screen.width, 30), "");
+			GUI.contentColor = GUI.color = new MVector(190, 183, 255);
 			GUI.backgroundColor = Color.white;
 
 			GUI.SetNextControlName("Exec Text Field");
-			RawInput = GUI.TextField(new Rect(10f, Y + 5f, Screen.width - 20f, 20f), RawInput);
+			RawInput = GUI.TextField(new Rect(2.5f, Y, Screen.width, kConsoleFontHeight), RawInput);
 			GUI.FocusControl("Exec Text Field");
 		}
+	}
+
+	internal class MConsoleErrorHander
+	{
+		internal static void NotifyDuplicateFunction(MethodInfo Method)
+		{
+			throw new ArgumentException($"An [Exec] Function named: '{Method.Name}' already exists! '{nameof(MConsole)} does not support method overloading. Or, you may be trying to add assemblies with duplicate function names into {nameof(MConsole.ExecTypes)}.");
+		}
+	}
+
+	internal class MConsoleColourLibrary
+	{
+		static Color red = (MVector)Colour.ColourHex("#FF4444");
+		static Color yel = (MVector)Colour.ColourHex("#FFD344");
+		static Color gre = (MVector)Colour.ColourHex("#95FF44");
+
+		internal static Color Red => red;
+		internal static Color Yellow => yel;
+		internal static Color Green => gre;
 	}
 }
