@@ -48,7 +48,8 @@ namespace MW.Console
 		public virtual void Awake()
 		{
 			OutputLog = new StringBuilder();
-			WriteToOutput("-- MW Unity Namespace - MConsole --", MConsoleColourLibrary.Green);
+			WriteDefaultMessage();
+
 			Funcs = new Dictionary<string, MethodExec<MethodInfo, ExecAttribute>>();
 			BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
 
@@ -68,7 +69,7 @@ namespace MW.Console
 						continue;
 
 					if (Funcs.ContainsKey(Method.Name))
-						MConsoleErrorHander.NotifyDuplicateFunction(Method);
+						MConsoleErrorHander.NotifyDuplicateFunction(Method, Funcs[Method.Name].Method);
 
 					Funcs.Add(Method.Name, new MethodExec<MethodInfo, ExecAttribute>(Method, Command));
 
@@ -135,6 +136,7 @@ namespace MW.Console
 			if (!Funcs.ContainsKey(MethodName))
 			{
 				WriteToOutput($"Unknown Exec Function: '{MethodName}'", MConsoleColourLibrary.Red);
+				SuggestExecFunctions(MethodName, RawParams.Length);
 				return;
 			}
 
@@ -162,7 +164,7 @@ namespace MW.Console
 					if (Targets != null && Targets.Length != 0)
 					{
 						StringBuilder ExecTargets = new StringBuilder();
-						ExecTargets.Append($"{MethodName} was Executed with {new MArray<object>(ExecParameters).Print()} on: ");
+						ExecTargets.Append($"{MethodName} was Executed with ({new MArray<object>(ExecParameters).Print(Separator: ", ")}) on: ");
 
 						foreach (string Target in Targets)
 						{
@@ -197,7 +199,6 @@ namespace MW.Console
 						WriteToOutput(AllObjectsOfType);
 					}
 				}
-
 
 				ScrollOutputLog.y = GetOutputLogHeight(out _);
 			}
@@ -420,14 +421,14 @@ namespace MW.Console
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected void WriteToOutput(string Output, MVector Colour)
 		{
-			OutputLog.Append(Colour.ToString()).Append('\\');
+			OutputLog.Append(Colour).Append('\\');
 			WriteToOutput(Output);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected void WriteToOutput(StringBuilder Output, MVector Colour)
 		{
-			OutputLog.Append(Colour.ToString()).Append('\\');
+			OutputLog.Append(Colour).Append('\\');
 			WriteToOutput(Output);
 		}
 
@@ -436,6 +437,12 @@ namespace MW.Console
 		{
 			Output = OutputLog.ToString().Split('\n');
 			return kConsoleFontHeight * Output.Length + 10;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void WriteDefaultMessage()
+		{
+			WriteToOutput("-- MW Unity Namespace - MConsole --", MConsoleColourLibrary.Green);
 		}
 
 		protected virtual string GetPersistentOutput()
@@ -447,13 +454,14 @@ namespace MW.Console
 			{
 				case "__CLEAR__":
 					OutputLog.Clear();
+					WriteDefaultMessage();
 					break;
 				case "__SET_RATIO__":
 					if (Parameters != null && Parameters.Length != 0)
 					{
 						if (Parameters[0].Is(out float InRatio))
 						{
-							Utils.Clamp(ref InRatio, 0f, 1f);
+							Utils.Clamp(ref InRatio, .15f, .85f);
 							ConsoleRatio = InRatio;
 						}
 						else
@@ -472,6 +480,22 @@ namespace MW.Console
 			}
 
 			return true;
+		}
+
+		void SuggestExecFunctions(string AttemptedExecName, int ArgC)
+		{
+			StringBuilder SimilarExecs = new StringBuilder();
+
+			foreach (KeyValuePair<string, MethodExec<MethodInfo, ExecAttribute>> Exec in Funcs)
+				if (Exec.Value.Method.GetParameters().Length == ArgC)
+					if (Utils.Compare(AttemptedExecName, Exec.Key) > .8f)
+						SimilarExecs.Append(Exec.Key).Append('\n');
+
+			if (SimilarExecs.Length > 0)
+			{
+				WriteToOutput($"We found some similar Exec functions with {ArgC} parameters.", MConsoleColourLibrary.Purple);
+				WriteToOutput(SimilarExecs, MConsoleColourLibrary.Purple);
+			}
 		}
 
 		const float kDefaultConsoleRatio = .75f;
@@ -518,7 +542,7 @@ namespace MW.Console
 				Scroll = GUI.BeginScrollView(new Rect(0, Y + 5, Screen.width, FuncsHeight), Scroll, ExecList);
 
 				int i = 0;
-#pragma warning disable UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Start().
+#pragma warning disable UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Awake().
 				foreach (KeyValuePair<string, MethodExec<MethodInfo, ExecAttribute>> Func in Funcs)
 				{
 					if (Func.Value.Exec.bHideInConsole)
@@ -537,7 +561,7 @@ namespace MW.Console
 
 					GUI.Label(TextRect, Text);
 				}
-#pragma warning restore UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Start().
+#pragma warning restore UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Awake().
 
 				Y += FuncsHeight;
 
@@ -557,16 +581,15 @@ namespace MW.Console
 					string StringValue = Output[i];
 					string[] ColourSeparator = StringValue.Split('\\');
 
-					if (ColourSeparator.Length == 1)
+					if (ColourSeparator.Length > 1 && MVector.TryParse(ColourSeparator[0], out MVector OutputColour))
 					{
-						GUI.contentColor = Color.white;
-						GUI.Label(OutputTextRect, StringValue);
+						GUI.contentColor = OutputColour;
+						GUI.Label(OutputTextRect, ColourSeparator[1]);
 					}
 					else
 					{
-						Color OutputColour = MVector.Parse(ColourSeparator[0]);
-						GUI.contentColor = OutputColour;
-						GUI.Label(OutputTextRect, ColourSeparator[1]);
+						GUI.contentColor = Color.white;
+						GUI.Label(OutputTextRect, StringValue);
 					}
 				}
 
@@ -577,7 +600,7 @@ namespace MW.Console
 				GUI.EndScrollView();
 			}
 
-			GUI.contentColor = GUI.color = new MVector(190, 183, 255);
+			GUI.contentColor = GUI.color = MConsoleColourLibrary.Purple;
 			GUI.backgroundColor = Color.white;
 
 			GUI.SetNextControlName("Exec Text Field");
@@ -588,20 +611,24 @@ namespace MW.Console
 
 	internal class MConsoleErrorHander
 	{
-		internal static void NotifyDuplicateFunction(MethodInfo Method)
+		internal static void NotifyDuplicateFunction(MethodInfo Method, MethodInfo Existing)
 		{
-			throw new ArgumentException($"An [Exec] Function named: '{Method.Name}' already exists! '{nameof(MConsole)} does not support method overloading. Or, you may be trying to add assemblies with duplicate function names into {nameof(MConsole.ExecTypes)}.");
+			throw new ArgumentException($"An [Exec] Function named: '{Method.Name}' already exists! '{nameof(MConsole)} does not support method overloading." +
+				$"Or, you may be trying to add assemblies with duplicate function names into {nameof(MConsole.ExecTypes)}.\n\t" +
+				$"First appearance was in the assembly: '{Existing.GetType().Assembly}', this appearance is in the assembly: '{Method.GetType().Assembly}'.");
 		}
 	}
 
 	internal class MConsoleColourLibrary
 	{
-		static Color red = (MVector)Colour.ColourHex("#FF4444");
-		static Color yel = (MVector)Colour.ColourHex("#FFD344");
-		static Color gre = (MVector)Colour.ColourHex("#95FF44");
+		static Color red = Colour.ColourHex("#FF4444");
+		static Color yel = Colour.ColourHex("#FFD344");
+		static Color gre = Colour.ColourHex("#95FF44");
+		static Color pur = Colour.ColourHex("#BD53FF");
 
 		internal static Color Red => red;
 		internal static Color Yellow => yel;
 		internal static Color Green => gre;
+		internal static Color Purple => pur;
 	}
 }
