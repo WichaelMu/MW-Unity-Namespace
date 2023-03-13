@@ -86,7 +86,7 @@ namespace MW.Extensions
 		/// <param name="Flags">The flags to check against and consider a float as inoperable.</param>
 		/// <returns>True if F returns a positive result against Flags.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static unsafe bool IsIllegalFloat(this float F, EIllegalFlags Flags = EIllegalFlags.NaN | EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity)
+		public static bool IsIllegalFloat(this float F, EIllegalFlags Flags = EIllegalFlags.NaN | EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity)
 		{
 			int T = F.GetBits();
 			return
