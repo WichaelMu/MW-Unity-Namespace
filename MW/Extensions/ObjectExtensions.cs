@@ -37,19 +37,17 @@ namespace MW.Extensions
 				: (T)Convert.ChangeType(O, typeof(T));
 		}
 
-		/// <summary>Cast an object to T if it is attached, implemented, or derived.</summary>
+		/// <summary>Cast a GameObject to T if it is attached, implemented, or derived.</summary>
 		/// <typeparam name="T">The Unity Component, Interface, or Type.</typeparam>
 		/// <decorations decor="public static T"></decorations>
 		/// <param name="O">The object to check if it is T is attached, implemented, or derived.</param>
 		/// <returns>O as T or default.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static T CastAll<T>(this object O)
+		public static T UCast<T>(this object O)
 		{
 			if (O.Is(out GameObject G))
-				return G.GetComponent<T>();
-
-			if (O.Implements(out T Interface))
-				return Interface;
+				if (G.TryGetComponent(typeof(T), out Component Component))
+					return Component.Cast<T>();
 
 			return O.Cast<T>();
 		}
