@@ -132,5 +132,12 @@ namespace MTest
 			Assert.AreEqual(One, MVector.Zero);
 			Assert.AreEqual(Zero, new MVector(-1));
 		}
+
+		[TestMethod]
+		public void StrCompTests()
+		{
+			Assert.IsTrue(Utils.Compare("Left String", "Right String") > .75f);
+			Assert.IsTrue(Utils.Compare("Completely DIFFERENT", "This should be something that is not in any way similar to the Base String") < .35f);
+		}
 	}
 }

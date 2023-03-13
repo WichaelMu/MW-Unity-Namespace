@@ -441,6 +441,27 @@ namespace MW
 			return F1 < F2 ? F1 : F2;
 		}
 
+		/// <summary>The larger value between I1 and I2.</summary>
+		/// <decorations decor="public static int"></decorations>
+		/// <param name="I1"></param>
+		/// <param name="I2"></param>
+		/// <returns>The larger of the two given ints.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int Max(int I1, int I2)
+		{
+			return I1 < I2 ? I2 : I1;
+		}
+
+		/// <summary>The smaller value between I1 and I2.</summary>
+		/// <decorations decor="public static int"></decorations>
+		/// <param name="I1"></param>
+		/// <param name="I2"></param>
+		/// <returns>The smaller of the two given ints.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int Min(int I1, int I2)
+		{
+			return I1 < I2 ? I1 : I2;
+		}
 
 		/// <summary>Modifies I to be its Absolute Value.</summary>
 		/// <remarks><see langword="ref"/> version of <see cref="FAbs(int)"/>.</remarks>
@@ -598,6 +619,88 @@ namespace MW
 			yield return new WaitForSeconds(Seconds);
 
 			Function.Invoke();
+		}
+
+		/// <summary>Compares two strings for similarity.</summary>
+		/// <param name="BaseString">The string to compare against.</param>
+		/// <param name="CompString">The string to compare to.</param>
+		/// <param name="bCaseSensitive">True to consider character casing in the similarity calculation.</param>
+		/// <param name="bConsiderSpaces">True to consider space ' ' characters in the similarity calculation.</param>
+		/// <returns>A score between 0 to 1 depending on how similar CompString is to BaseString. 0 = Completely different, 1 = Identical.</returns>
+		public static float Compare(string BaseString, string CompString, bool bCaseSensitive = false, bool bConsiderSpaces = false)
+		{
+			if (BaseString == CompString)
+				return 1f;
+
+			if (bCaseSensitive)
+			{
+				BaseString = BaseString.ToUpper();
+				CompString = CompString.ToUpper();
+			}
+
+			if (!bConsiderSpaces)
+			{
+				BaseString = BaseString.Replace(" ", "");
+				CompString = CompString.Replace(" ", "");
+			}
+
+			int BaseLength = BaseString.Length;
+			int CompLength = CompString.Length;
+			_ = (BaseLength < CompLength)
+				? BaseString += new string(' ', CompLength - BaseLength)
+				: CompString += new string(' ', BaseLength - CompLength);
+
+			BaseLength = BaseString.Length;
+			CompLength = CompString.Length;
+
+			float MatchingCharacterRange = Max((BaseLength * .5f) - 1f, 0f);
+			float Matches = 0f;
+
+			bool[] BaseMatches = new bool[BaseLength];
+			bool[] CompMatches = new bool[BaseLength];
+
+			for (int i = 0; i < BaseLength; i++)
+			{
+				int Start = (int)Max(i - MatchingCharacterRange, 0f);
+				int End = (int)Min(i + MatchingCharacterRange, BaseLength - 1f);
+				for (int k = Start; k <= End; k++)
+				{
+					if (BaseString[i] == CompString[k] && !CompMatches[k])
+					{
+						Matches++;
+						BaseMatches[i] = true;
+						CompMatches[k] = true;
+						break;
+					}
+				}
+			}
+
+			if (Matches == 0f)
+				return 0f;
+
+			int Transpositions = 0;
+			int CompIndex = 0;
+			for (int i = 0; i < BaseLength; i++)
+			{
+				if (BaseMatches[i])
+				{
+					while (!CompMatches[CompIndex])
+						CompIndex++;
+
+					if (BaseString[i] != CompString[CompIndex])
+						Transpositions++;
+
+					CompIndex++;
+				}
+			}
+
+			Transpositions = (int)(Transpositions * .5f);
+
+			float S1Length = FInverse(BaseLength);
+			float S2Length = FInverse(CompLength);
+			float InvMatches = FInverse(Matches);
+
+			return ((Matches * S1Length) + (Matches * S2Length) + ((Matches - Transpositions) * InvMatches)) * kOneThird;
 		}
 	}
 }
