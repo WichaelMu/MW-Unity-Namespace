@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using MW.Conversion;
 using MW.Math;
+using MW.Extensions;
 using UnityEngine;
 using static MW.Math.Magic.Fast;
 
@@ -226,13 +227,34 @@ namespace MW
 		public static MVector Parse(string In)
 		{
 			string[] Split = In.Split(' ');
-			MVector RetVal = new MVector();
+			MVector RetVal = NaN;
 			int Axis = 0;
 			foreach (string S in Split)
 				if (float.TryParse(S, out float Component))
 					RetVal[Axis++] = Component;
 			return RetVal;
 		}
+
+		public static bool TryParse(string In, out MVector V)
+		{
+			string[] Split = In.Split(' ');
+
+			if (Split.Length == 6 && Split[0][0] == 'X' && Split[2][0] == 'Y' && Split[4][0] == 'Z')
+			{
+				V = Parse(In);
+				return ComponentsCheckNaNInf(V);
+			}
+
+			V = NaN;
+			return false;
+		}
+
+		/// <summary>Check V's components for NaN of +-Infinity.</summary>
+		/// <param name="V">The vector to check.</param>
+		/// <returns>True if V contains any illegal components.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool ComponentsCheckNaNInf(MVector V)
+			=> V[0].IsIllegalFloat() || V[1].IsIllegalFloat() || V[2].IsIllegalFloat();
 
 		/// <summary>The square magnitude of this MVector.</summary>
 		/// <decorations decors="public float"></decorations>
@@ -649,24 +671,18 @@ namespace MW
 		/// <summary><see langword="true"/>if the MVector is non-zero.</summary>
 		/// <decorations decor="public static bool operator true"></decorations>
 		/// <param name="M">The Vector to check.</param>
-		/// <docreturns>M != MVector(NaN) &amp;&amp; M != MVector.Zero &amp;&amp; M.SqrMagnitude &gt; MVector.kEpsilon.</docreturns>
-		/// <returns><paramref name="M"/> != <see cref="NaN"/> &amp;&amp; M != <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &gt; <see cref="kEpsilon"/>.</returns>
+		/// <docreturns>M != MVector(NaN) &amp;&amp; M != MVector.Zero &amp;&amp; M.SqrMagnitude &gt; MVector.kEpsilon &amp;&amp; !ComponentsCheckNaN(M).</docreturns>
+		/// <returns><paramref name="M"/> != <see cref="NaN"/> &amp;&amp; M != <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &gt; <see cref="kEpsilon"/> &amp;&amp; !<see cref="ComponentsCheckNaNInf(MVector)"/>.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool operator true(MVector M) => M != NaN && M != Zero && M.SqrMagnitude > kEpsilon;
+		public static bool operator true(MVector M) => M != NaN && M != Zero && M.SqrMagnitude > kEpsilon && !ComponentsCheckNaNInf(M);
 
 		/// <summary><see langword="true"/>if the MVector is zero or considered zero.</summary>
 		/// <decorations decor="public static bool operator false"></decorations>
 		/// <param name="M">The Vector to check.</param>
-		/// <docreturns>M == MVector(NaN) &amp;&amp; M == MVector.Zero &amp;&amp; M.SqrMagnitude &lt; MVector.kEpsilon.</docreturns>
-		/// <returns><paramref name="M"/> == <see cref="NaN"/> &amp;&amp; M == <see cref="Zero"/> &amp;&amp; <paramref name="M"/>'s <see cref="SqrMagnitude"/> &lt; <see cref="kEpsilon"/>.</returns>
+		/// <docreturns>M == MVector(NaN) || M == MVector.Zero || M.SqrMagnitude &lt; MVector.kEpsilon || ComponentsCheckNaNInf(M).</docreturns>
+		/// <returns><paramref name="M"/> == <see cref="NaN"/> || M == <see cref="Zero"/> || <paramref name="M"/>'s <see cref="SqrMagnitude"/> &lt; <see cref="kEpsilon"/> || <see cref="ComponentsCheckNaNInf(MVector)"/>.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool operator false(MVector M) => M == NaN || M == Zero || M.SqrMagnitude < kEpsilon;
-
-		/// <summary>Automatic conversion from an MVector to a bool. <see cref="operator true(MVector)"/> and <see cref="operator false(MVector)"/>.</summary>
-		/// <docs>Automatic conversion from an MVector to a bool. See operator true and operator false.</docs>
-		/// <decorations decor="public static implicit operator bool"></decorations>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static implicit operator bool(MVector M) => M;
+		public static bool operator false(MVector M) => M == NaN || M == Zero || M.SqrMagnitude < kEpsilon || ComponentsCheckNaNInf(M);
 
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		/// <decorations decors="public static implicit operator Vector3"></decorations>
@@ -712,6 +728,7 @@ namespace MW
 		/// <decorations decors="public string"></decorations>
 		/// <param name="Format">The format to present float values.</param>
 		/// <returns>A string with X, Y, and Z formatted according to Format.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public string ToString(string Format)
 		{
 			return ToString(Format, null);
@@ -725,14 +742,10 @@ namespace MW
 		public string ToString(string Format, IFormatProvider Provider)
 		{
 			if (string.IsNullOrEmpty(Format))
-			{
 				Format = "F1";
-			}
 
 			if (Provider == null)
-			{
 				Provider = CultureInfo.InvariantCulture.NumberFormat;
-			}
 
 			return $"X: {X.ToString(Format, Provider)} Y: {Y.ToString(Format, Provider)} Z: {Z.ToString(Format, Provider)}";
 		}
