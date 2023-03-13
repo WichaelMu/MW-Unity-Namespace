@@ -357,8 +357,9 @@ namespace MW
 		/// <remarks>Assumes that T has a readable ToString() defined.</remarks>
 		/// <decorations decor="public string"></decorations>
 		/// <param name="bWithIndex">Should the resulting string include the index of every item?</param>
+		/// <param name="Separator">The string that will separate each element.</param>
 		/// <returns>A string form of all T.</returns>
-		public string Print(bool bWithIndex = false)
+		public string Print(bool bWithIndex = false, string Separator = "")
 		{
 			StringBuilder SB = new();
 
@@ -368,7 +369,7 @@ namespace MW
 				{
 					SB.Append(i + ": " + Items[i].ToString());
 					if (i != Num - 1)
-						SB.Append(", ");
+						SB.Append(Separator);
 				}
 			}
 			else
@@ -377,7 +378,7 @@ namespace MW
 				{
 					SB.Append(Items[i].ToString());
 					if (i != Num - 1)
-						SB.Append(", ");
+						SB.Append(Separator);
 				}
 			}
 
