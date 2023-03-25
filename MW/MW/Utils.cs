@@ -347,6 +347,9 @@ namespace MW
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Clamp(ref int I, int Min, int Max)
 		{
+			if (Min > Max)
+				Swap(ref Min, ref Max);
+
 			if (I < Min)
 			{
 				I = Min;
