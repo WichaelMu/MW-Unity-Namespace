@@ -148,21 +148,24 @@ namespace MW.Math.Magic
 			float YX = Y * FInverse(X);
 			float XY = X * FInverse(Y);
 
+			float TYX = FArcTangent(YX);
+			float TPXY = FArcTangent(XY);
+
 			return X >= 0f
 				? Y >= 0f
 					? Y < X
-						? FArcTangent(YX)
-						: kHalfPI - FArcTangent(XY)
+						? TYX
+						: kHalfPI - TPXY
 					: -Y < X
-						? FArcTangent(YX)
-						: -kHalfPI - FArcTangent(XY)
+						? TYX
+						: -kHalfPI - TPXY
 				: Y >= 0f
 					? Y < -X
-						? FArcTangent(YX) + kPI
-						: kHalfPI - FArcTangent(XY)
+						? TYX + kPI
+						: kHalfPI - TPXY
 					: -Y < -X
-						? FArcTangent(YX) - kPI
-						: -kHalfPI - FArcTangent(XY);
+						? TYX - kPI
+						: -kHalfPI - TPXY;
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>
