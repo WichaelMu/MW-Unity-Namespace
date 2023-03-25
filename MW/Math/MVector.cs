@@ -360,7 +360,7 @@ namespace MW
 			MRotator R = new MRotator();
 
 			R.Pitch = FArcSine(Y);
-			R.Yaw = Mathf.Atan2(X, Z);
+			R.Yaw = FArcTangent2(X, Z);
 			R.Roll = 0;
 
 			return R * Mathf.Rad2Deg;
