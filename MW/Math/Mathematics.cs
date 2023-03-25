@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using MW.Diagnostics;
 using MW.Easing;
 using MW.Kinetic;
@@ -253,10 +254,7 @@ namespace MW.Math
 			return -Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
 		}
 
-		/// <summary>Returns a normalised MVector at Degrees, relative to ForwardDirection.</summary>
-		/// <decorations decor="public static MVector"></decorations>
-		/// <param name="Degrees">The angle offset.</param>
-		/// <param name="ForwardDirection">The forward direction.</param>
+		[Obsolete($"Use {nameof(MVector.RotateVector)} instead!")]
 		public static MVector VectorFromAngle(float Degrees, EDirection ForwardDirection)
 		{
 			return ForwardDirection switch
@@ -305,7 +303,7 @@ namespace MW.Math
 			Vector3 EulerRadians = new Vector3
 			{
 				x = FArcSine(V.y),
-				y = Mathf.Atan2(V.x, V.z),
+				y = FArcTangent2(V.x, V.z),
 				z = 0
 			};
 
@@ -313,6 +311,7 @@ namespace MW.Math
 		}
 
 		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
+		/// <remarks>Out Sine and Cosine are accurate to 2.4E-5 of the real sine and cosine of Angle.</remarks>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Sine">The Sine result over AngleInDegrees.</param>
 		/// <param name="Cosine">The Cosine result over AngleInDegrees.</param>

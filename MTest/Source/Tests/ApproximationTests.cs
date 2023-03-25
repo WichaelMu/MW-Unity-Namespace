@@ -13,11 +13,11 @@ namespace MTest
 		[TestMethod]
 		public void SinCosTests()
 		{
-			for (float F = -365f; F <= 365f; F += .23f)
+			for (float F = -365f; F <= 365f; F += .07f)
 			{
 				Mathematics.SinCos(out float S, out float C, F);
-				FloatToleranceCheck(Mathf.Sin(F), S, "Sine");
-				FloatToleranceCheck(Mathf.Cos(F), C, "Cosine");
+				FloatToleranceCheck(Mathf.Sin(F), S, "Sine", .000024f);
+				FloatToleranceCheck(Mathf.Cos(F), C, "Cosine", .000024f);
 			}
 		}
 
