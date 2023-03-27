@@ -28,7 +28,7 @@ namespace MTest
 
 			for (float F = 0f; F <= 1500.442; F += .023f)
 			{
-				FloatToleranceCheck(Mathf.Sqrt(F), FSqrt(F), "Fast Sqrt");
+				FloatToleranceCheck(Mathf.Sqrt(F), FSqrt(F), "Fast Sqrt", .00001f);
 			}
 
 			System.Random R = new System.Random();
@@ -48,6 +48,12 @@ namespace MTest
 			{
 				FloatToleranceCheck(1f / F, FInverse(F), "Fast Inverse");
 			}
+		}
+
+		[TestMethod]
+		public void IntegralTests()
+		{
+			FloatToleranceCheck(177.94934906f, FIntegral(0, Utils.kPI, F => MathF.Pow(6.33f, F)), "Fast Integral", .05f);
 		}
 
 		[TestMethod]

@@ -40,7 +40,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <param name="NewtonIterations">The number of Newton Iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
-		/// <returns>An approximation for the Square Root of F, within +-.001 of the real square root with 3 Newton Iterations.</returns>
+		/// <returns>An approximation for the Square Root of F, within +-.00001 of the real square root with 3 Newton Iterations.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float FSqrt(float F, int NewtonIterations = 3) => FInverseSqrt(Max(F, MVector.kEpsilon), NewtonIterations) * F;
 
@@ -62,6 +62,34 @@ namespace MW.Math.Magic
 				R *= -R * N + 2f;
 
 			return R;
+		}
+
+		/// <summary>Approximates the integral between LowerLimit and UpperLimit by Delta.</summary>
+		/// <decorations decor="public static float"></decorations>
+		/// <param name="LowerLimit">The lower limit.</param>
+		/// <param name="UpperLimit">The upper limit.</param>
+		/// <param name="Func">The function to pass in.</param>
+		/// <param name="Delta">The delta.</param>
+		/// <returns>An approximation of LowerLimit ∫ UpperLimit Func() Deltax.</returns>
+		public static float FIntegral(float LowerLimit, float UpperLimit, System.Func<float, float> Func, float Delta = .0001f)
+		{
+			if (Func == null || Delta == 0f)
+				return float.NaN;
+
+			if (Delta < 0f)
+				FAbs(ref Delta);
+
+			float Result = 0f;
+			long Deltas = (long)((UpperLimit - LowerLimit) * FInverse(Delta));
+
+			for (long i = 0; i < Deltas; ++i)
+			{
+				float Begin = LowerLimit + i * Delta;
+				float End = LowerLimit + (i + 1) * Delta;
+				Result += Delta * (Func.Invoke(Begin) + Func.Invoke(End)) * .5f;
+			}
+
+			return Result;
 		}
 
 		////////////////////////////////////////////////////////////////////////////////
