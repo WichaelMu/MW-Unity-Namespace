@@ -25,7 +25,7 @@ namespace MW.Pathfinding
 			Path = new();
 			bool bFoundPath = false;
 
-			THeap<T> Open = new(MapSize);
+			THeap<T> Open = new(MapSize, (MNL, MNR) => MNL.CompareTo(MNR));
 			HashSet<T> Closed = new();
 			Open.Add(Origin);
 

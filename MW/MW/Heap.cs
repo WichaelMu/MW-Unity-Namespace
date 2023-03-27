@@ -9,9 +9,10 @@ namespace MW
 	/// <decorations decor="public class {T} where T : IHeapItem{T}"></decorations>
 	public class THeap<T> where T : IHeapItem<T>
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add read-only modifier", Justification = "TItems needs to be modified when adding or removing from THeap.")]
 		T[] Items;
 		int Count;
+
+		SortFunc<T> SortFunc;
 
 		/// <summary>The number of elements in the heap.</summary>
 		/// <decorations decor="public int"></decorations>
@@ -23,11 +24,21 @@ namespace MW
 			}
 		}
 
-		/// <summary>Generates a new Heap, initialised with MaxSize.</summary>
-		/// <param name="MaxSize"></param>
-		public THeap(uint MaxSize)
+		/// <summary>Generates a new Heap.</summary>
+		/// <remarks>Initialised with an initial size of 32.</remarks>
+		/// <param name="HeapOrder">The ordering in which to sort T in a heap.</param>
+		public THeap(SortFunc<T> HeapOrder)
 		{
-			Items = new T[MaxSize];
+			SortFunc = HeapOrder;
+			Items = new T[32];
+		}
+
+		/// <summary>Generates a new Heap, initialised with MaxSize.</summary>
+		/// <param name="InitialSize">The size of the heap.</param>
+		/// <param name="HeapOrder">The ordering in which to sort T in a heap.</param>
+		public THeap(uint InitialSize, SortFunc<T> HeapOrder) : this(HeapOrder)
+		{
+			Items = new T[InitialSize];
 		}
 
 		/// <summary>Adds an item to this Heap.</summary>
@@ -35,6 +46,9 @@ namespace MW
 		/// <param name="Item">The item to add.</param>
 		public void Add(T Item)
 		{
+			if (Count == Items.Length)
+				Resize(Count + 5);
+
 			Item.HeapItemIndex = Count;
 			Items[Count] = Item;
 
@@ -99,6 +113,21 @@ namespace MW
 			}
 		}
 
+		/// <summary>Reduces this Heap's memory usage to smallest possible required to store its elements.</summary>
+		/// <returns>The shrunk array.</returns>
+		public T[] Shrink()
+		{
+			Resize(Count);
+			return Array();
+		}
+
+		void Resize(int NewSize)
+		{
+			T[] Resized = new T[NewSize];
+			System.Array.Copy(Items, Resized, Count);
+			Items = Resized;
+		}
+
 		void SortDown(T Item)
 		{
 			while (true)
@@ -113,13 +142,13 @@ namespace MW
 
 					if (nRight < Count)
 					{
-						if (Items[nLeft].CompareTo(Items[nRight]) < 0)
+						if (SortFunc(Items[nLeft], Items[nRight]) < 0)
 						{
 							nSwap = nRight;
 						}
 					}
 
-					if (Item.CompareTo(Items[nSwap]) < 0)
+					if (SortFunc(Item, Items[nSwap]) < 0)
 					{
 						Swap(Item, Items[nSwap]);
 					}
@@ -143,7 +172,7 @@ namespace MW
 			{
 				T TParent = Items[nParent];
 
-				if (Item.CompareTo(TParent) > 0)
+				if (SortFunc(Item, TParent) > 0)
 				{
 					Swap(Item, TParent);
 				}
@@ -181,8 +210,8 @@ namespace MW
 
 	/// <summary>The Interface that T must implement if it is to be used as a Heap.</summary>
 	/// <typeparam name="T">The type to make compatible with THeap.</typeparam>
-	/// <decorations decor="public interface {T} : IComparable{T}"></decorations>
-	public interface IHeapItem<T> : System.IComparable<T>
+	/// <decorations decor="public interface {T}"></decorations>
+	public interface IHeapItem<T>
 	{
 		/// <summary>The position in a THeap.</summary>
 		int HeapItemIndex { get; set; }

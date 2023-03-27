@@ -5,8 +5,8 @@ namespace MW.Pathfinding
 	/// <summary>The Interface that T must implement if it is to be used by <see cref="Pathfinding{T}"/>.</summary>
 	/// <docs>The Interface that T must implement if it is to be used by Pathfinding.</docs>
 	/// <typeparam name="T">The type to declare a node.</typeparam>
-	/// <decorations decor="public interface {T} where T : IComparable{T}"></decorations>
-	public interface INode<T> where T : IComparable<T>
+	/// <decorations decor="public interface {T}"></decorations>
+	public interface INode<T>
 	{
 		/// <summary>This Node's F score.</summary>
 		/// <decorations decor="float"></decorations>

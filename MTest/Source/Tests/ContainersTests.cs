@@ -302,7 +302,7 @@ namespace MTest
 		[TestMethod]
 		public void THeapTests()
 		{
-			THeap<TTestClass> Heap = new(11);
+			THeap<TTestClass> Heap = new(11, (L, R) => L.CompareTo(R));
 			Heap.Add(new TTestClass(46));
 			Heap.Add(new TTestClass(42));
 			Heap.Add(new TTestClass(52));
@@ -318,7 +318,7 @@ namespace MTest
 			for (byte i = 0; i < Heap.Num; ++i)
 				Assert.IsTrue(Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, "Minimum Heap");
 
-			THeap<TTestClass> Heap1 = new THeap<TTestClass>(3);
+			THeap<TTestClass> Heap1 = new THeap<TTestClass>(3, (L, R) => L.CompareTo(R));
 
 			TTestClass Item1 = new TTestClass(4);
 			TTestClass Item2 = new TTestClass(-1);

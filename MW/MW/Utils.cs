@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace MW
 {
+	public delegate int SortFunc<in T>(T L, T R);
+
 	/// <summary>Helper Variables and Functions.</summary>
 	/// <decorations decor="public static class"></decorations>
 	public static class Utils
