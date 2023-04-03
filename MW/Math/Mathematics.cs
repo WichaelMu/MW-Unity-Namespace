@@ -379,6 +379,11 @@ namespace MW.Math
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Distance(Vector3 L, Vector3 R) => FSqrt(SqrDistance(L, R));
 
+		/// <summary>The distance over the circumference of a circle given two points and radius.</summary>
+		/// <param name="A">Point A.</param>
+		/// <param name="B">Point B.</param>
+		/// <param name="Radius">Radius of the sphere.</param>
+		/// <returns>The distance between two points given a radius.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcDistance(MVector A, MVector B, float Radius) => Radius * FArcCosine((A | B) * FInverse(Radius * Radius));
 	}
