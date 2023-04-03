@@ -102,6 +102,7 @@ namespace MW.Console
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="M"></param>
 		/// <param name="bInActive"></param>
+		[Exec("Sets component M active state to bInActive.")]
 		public static void SetComponentActive(MonoBehaviour M, bool bInActive)
 		{
 			M.enabled = bInActive;

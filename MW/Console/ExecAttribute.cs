@@ -22,6 +22,10 @@ namespace MW.Console
 		/// <docs>True if this method should not appear in the Console GUI.</docs>
 		/// <decorations decor="public bool"></decorations>
 		public bool bHideInConsole;
+		/// <summary><see langword="true"/> if this method requires a target to be executed.</summary>
+		/// <docs>True if this method requires a target to be executed.</docs>
+		/// <decorations decor="public bool"></decorations>
+		public bool bRequireTarget;
 		/// <summary>The parameters to automatically execute when <see cref="bExecOnAwake"/> is <see langword="true"/>.</summary>
 		/// <docs>The parameters to automatically execute when bExecOnAwake is true.</docs>
 		/// <decorations decor="public object[]"></decorations>
@@ -31,6 +35,11 @@ namespace MW.Console
 
 		/// <summary>Default Exec.</summary>
 		public ExecAttribute() { Description = string.Empty; GameObjectTargetsByName = Array.Empty<string>(); }
+
+		/// <summary>Exec specifying if a Target is Required and a Description.</summary>
+		/// <param name="bTargetRequired">True if a Target is Required to Exec.</param>
+		/// <param name="Desc">The Description.</param>
+		public ExecAttribute(bool bTargetRequired, string Desc) : this(Desc) { bRequireTarget = bTargetRequired; }
 
 		/// <summary>Exec with a Description.</summary>
 		/// <param name="Desc">The Description.</param>

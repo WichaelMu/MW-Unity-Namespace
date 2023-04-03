@@ -135,24 +135,52 @@ namespace MW.Console
 
 			if (!Funcs.ContainsKey(MethodName))
 			{
-				WriteToOutput($"Unknown Exec Function: '{MethodName}'", MConsoleColourLibrary.Red);
-				SuggestExecFunctions(MethodName, RawParams.Length);
+				WriteToOutput($"-- Unknown Exec Function -- '{MethodName}'", MConsoleColourLibrary.Red);
+				SuggestExecFunctions(MethodName);
 				return;
 			}
 
 			try
 			{
 				MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
+
+				ExecAttribute Exec = Func.Exec;
+				if (Exec.bRequireTarget && Targets.Length == 0)
+				{
+					WriteToOutput($"-- Target Required -- Exec '{MethodName}' requires a target to be Executed.\n" +
+						$"Prefix Targets with '{kTargetGameObjectIdentifier}' before their name in the Editor hierarchy.", MConsoleColourLibrary.Red);
+				}
+
 				MethodInfo Method = Func.Method;
 				Type DeclaringType = Method.DeclaringType;
 
-
 				ParameterInfo[] MethodParams = Method.GetParameters();
+				int RawParamsArgC = RawParams.Length;
+
+				bool bContainsFloatArray = false;
+				foreach (ParameterInfo Param in MethodParams)
+				{
+					Type ParamType = Param.ParameterType;
+					if (ParamType == typeof(MVector) || ParamType == typeof(Vector3) || ParamType == typeof(MRotator))
+					{
+						bContainsFloatArray = true;
+						break;
+					}
+				}
+
+				if (!bContainsFloatArray && MethodParams.Length != RawParamsArgC)
+				{
+					WriteToOutput($"-- Parameter Mismatch -- Exec: '{MethodName}' requires {MethodParams.Length} parameter{(MethodParams.Length == 1 ? "" : "s")}, " +
+						$"but {RawParamsArgC} {(RawParamsArgC == 1 ? "was" : "were")} given.", MConsoleColourLibrary.Yellow);
+					return;
+				}
+
 				object[] ExecParameters = new object[MethodParams.Length];
 
 				// Convert to correct Parameter types declared by the Exec function.
-				for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParams.Length; ++ExecParamIndex)
-					GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType);
+				for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParamsArgC; ++ExecParamIndex)
+					if (!GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType))
+						return;
 
 				if (Func.Method.IsStatic)
 				{
@@ -249,12 +277,12 @@ namespace MW.Console
 			return TargetObject;
 		}
 
-		void GetCustomParameterType(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
+		bool GetCustomParameterType(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			if (ParamIndex < 0 || ParamIndex >= RawParams.Length)
 			{
 				WriteToOutput($"Parameter Index is out of range! Expected 0 <= {nameof(ParamIndex)} ({ParamIndex}) < {nameof(RawParams)}.Length ({RawParams.Length})!", MConsoleColourLibrary.Red);
-				return;
+				return false;
 			}
 
 			// Test against known types.
@@ -269,6 +297,11 @@ namespace MW.Console
 
 					TargetObject = RetVal;
 				}
+				else
+				{
+					WriteToOutput($"{nameof(MVector)} requires 3 float parameters.", MConsoleColourLibrary.Red);
+					return false;
+				}
 			}
 			else if (ExecParameterType == typeof(Vector3)) // Vector3.
 			{
@@ -280,6 +313,11 @@ namespace MW.Console
 					RetVal.z = RawParams[ParamIndex].Cast<float>();
 
 					TargetObject = RetVal;
+				}
+				else
+				{
+					WriteToOutput($"{nameof(Vector3)} requires 3 float parameters.", MConsoleColourLibrary.Red);
+					return false;
 				}
 			}
 			else if (ExecParameterType == typeof(MRotator)) // MRotator.
@@ -293,6 +331,11 @@ namespace MW.Console
 
 					TargetObject = RetVal;
 				}
+				else
+				{
+					WriteToOutput($"{nameof(MRotator)} requires 3 float parameters.", MConsoleColourLibrary.Red);
+					return false;
+				}
 			}
 			else if (ExecParameterType == typeof(GameObject) || ExecParameterType == typeof(Transform)) // GameObject or Transform.
 			{
@@ -301,7 +344,7 @@ namespace MW.Console
 				if (StringValue[0] != kGameObjectByNameIdentifier)
 				{
 					WriteToOutput($"GameObject and Transform [Exec] Function Parameters must be prefixed with {kGameObjectByNameIdentifier}!", MConsoleColourLibrary.Red);
-					return;
+					return false;
 				}
 
 				string GameObjectName = StringValue.TrimStart(kGameObjectByNameIdentifier)
@@ -312,7 +355,7 @@ namespace MW.Console
 				if (!FindResult)
 				{
 					WriteToOutput($"Could not find GameObject with name: '{GameObjectName}'", MConsoleColourLibrary.Red);
-					return;
+					return false;
 				}
 
 				if (ExecParameterType == typeof(Transform))
@@ -327,7 +370,7 @@ namespace MW.Console
 				if (StringValue.Length < 2 || StringValue[0] != kGameObjectByNameIdentifier)
 				{
 					WriteToOutput($"[Exec] Function Parameters referencing a {nameof(MonoBehaviour)} must be prefixed with '{kGameObjectByNameIdentifier}'!", MConsoleColourLibrary.Red);
-					return;
+					return false;
 				}
 
 				string ComponentTarget = StringValue.TrimStart(kGameObjectByNameIdentifier);
@@ -335,7 +378,7 @@ namespace MW.Console
 				if (string.IsNullOrEmpty(ComponentTarget))
 				{
 					WriteToOutput("The Target GameObject name is contains no identifier after a valid prefix!", MConsoleColourLibrary.Red);
-					return;
+					return false;
 				}
 
 				GameObject GameObjectWithComponent = GetTargetFromString(ComponentTarget);
@@ -343,7 +386,7 @@ namespace MW.Console
 				if (!GameObjectWithComponent)
 				{
 					WriteToOutput($"Could not find GameObject with name: '{ComponentTarget}'!", MConsoleColourLibrary.Red);
-					return;
+					return false;
 				}
 
 				TargetObject = GameObjectWithComponent.GetComponent(ExecParameterType);
@@ -351,7 +394,7 @@ namespace MW.Console
 				if (TargetObject == null)
 				{
 					WriteToOutput($"GameObject: '{GameObjectWithComponent.name}' doesn't have an attached {ExecParameterType}", MConsoleColourLibrary.Red);
-					return;
+					return false;
 				}
 			}
 			else if (ExecParameterType == typeof(string)) // String.
@@ -368,6 +411,7 @@ namespace MW.Console
 			}
 
 			++ParamIndex;
+			return true;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -482,18 +526,17 @@ namespace MW.Console
 			return true;
 		}
 
-		void SuggestExecFunctions(string AttemptedExecName, int ArgC)
+		void SuggestExecFunctions(string AttemptedExecName)
 		{
 			StringBuilder SimilarExecs = new StringBuilder();
 
 			foreach (KeyValuePair<string, MethodExec<MethodInfo, ExecAttribute>> Exec in Funcs)
-				if (Exec.Value.Method.GetParameters().Length == ArgC)
-					if (Utils.Compare(AttemptedExecName, Exec.Key) > .8f)
-						SimilarExecs.Append(Exec.Key).Append('\n');
+				if (Utils.Compare(AttemptedExecName, Exec.Key) > .8f)
+					SimilarExecs.Append('\t').Append(Exec.Key).Append('\n');
 
 			if (SimilarExecs.Length > 0)
 			{
-				WriteToOutput($"We found some similar Exec functions with {ArgC} parameters.", MConsoleColourLibrary.Purple);
+				WriteToOutput($"\tWe found some similar Exec functions.", MConsoleColourLibrary.Purple);
 				WriteToOutput(SimilarExecs, MConsoleColourLibrary.Purple);
 			}
 		}
