@@ -239,15 +239,26 @@ namespace MW
 		{
 			string[] Split = In.Split(' ');
 
-			if (Split.Length == 6 && Split[0][0] == 'X' && Split[2][0] == 'Y' && Split[4][0] == 'Z')
+			if (Split.Length > 5 && Split[0][0] == 'X' && Split[2][0] == 'Y' && Split[4][0] == 'Z')
 			{
 				V = Parse(In);
-				return ComponentsCheckNaNInf(V);
+				return !ContainsNaN(V);
 			}
 
 			V = NaN;
 			return false;
 		}
+
+		/// <summary>Checks V's components for NaN.</summary>
+		/// <param name="V">The vector to check.</param>
+		/// <returns>True if V contains NaN.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool ContainsNaN(MVector V) => V[0].IsIllegalFloat(EIllegalFlags.NaN) || V[1].IsIllegalFloat(EIllegalFlags.NaN) || V[2].IsIllegalFloat(EIllegalFlags.NaN);
+		/// <summary>Checks V's components for +- Infinity.</summary>
+		/// <param name="V">The vector to check.</param>
+		/// <returns>True if V contains +- Infinity.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool ContainsInf(MVector V) => V[0].IsIllegalFloat(EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity) || V[1].IsIllegalFloat(EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity) || V[2].IsIllegalFloat(EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity);
 
 		/// <summary>Check V's components for NaN of +-Infinity.</summary>
 		/// <param name="V">The vector to check.</param>
