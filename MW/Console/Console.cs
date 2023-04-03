@@ -34,9 +34,10 @@ namespace MW.Console
 		/// <summary>The raw string input given by the developer using MConsole's GUI.</summary>
 		/// <decorations decor="protected string"></decorations>
 		protected string RawInput;
-		/// <summary>The previous Exec'd function called by MConsole.</summary>
-		/// <decorations decor="protected string"></decorations>
-		protected string PreviousInput;
+		/// <summary>The previous Exec'd functions called by MConsole.</summary>
+		/// <decorations decor="protected MArray&lt;string&gt;"></decorations>
+		protected MArray<string> PreviousInputs;
+		int InputsIndex = 0;
 
 		protected const char kTargetGameObjectIdentifier = '@';
 		protected const char kGameObjectByNameIdentifier = '#';
@@ -47,6 +48,7 @@ namespace MW.Console
 		/// <decorations decor="public virtual void"></decorations>
 		public virtual void Awake()
 		{
+			PreviousInputs = new MArray<string>();
 			OutputLog = new StringBuilder();
 			WriteDefaultMessage();
 
@@ -114,7 +116,7 @@ namespace MW.Console
 
 				Exec(TargetsArgV, Func, ArgV);
 
-				PreviousInput = RawInput;
+				PreviousInputs.Push(RawInput);
 
 			}
 
@@ -244,13 +246,13 @@ namespace MW.Console
 						ErrorBuilder.Append(", ");
 				}
 
-				WriteToOutput($"Failed to execute {MethodName} ({ErrorBuilder}) - {E.Message}\n{E}", MConsoleColourLibrary.Red);
+				WriteToOutput($"Failed to execute {MethodName} ({ErrorBuilder}) - {E.Message}", MConsoleColourLibrary.Red);
 			}
 		}
 
 		static void ExecuteOnTarget(UObject ObjectTarget, MethodInfo Method, Type DeclaringType, object[] ExecParameters)
 		{
-			Method.Invoke(Convert.ChangeType(ObjectTarget, DeclaringType), ExecParameters);
+			Method.Invoke(ObjectTarget.Cast(DeclaringType), ExecParameters);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -567,9 +569,20 @@ namespace MW.Console
 				return;
 			}
 
-			if (Event.current.Equals(Event.KeyboardEvent("Up")))
+			if (!PreviousInputs.IsEmpty())
 			{
-				RawInput = PreviousInput;
+				if (Event.current.Equals(Event.KeyboardEvent("Up")))
+				{
+					InputsIndex--;
+					Utils.ClampMin(ref InputsIndex, 0);
+					RawInput = PreviousInputs[InputsIndex];
+				}
+				else if (Event.current.Equals(Event.KeyboardEvent("Down")))
+				{
+					InputsIndex++;
+					Utils.ClampMax(ref InputsIndex, PreviousInputs.Num - 1);
+					RawInput = PreviousInputs[InputsIndex];
+				}
 			}
 
 			float Y = 0f;

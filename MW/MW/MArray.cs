@@ -199,10 +199,10 @@ namespace MW
 		/// <summary>Whether or not Index is within range.</summary>
 		/// <decorations decor="public bool"></decorations>
 		/// <param name="Index">The Index to check for range.</param>
-		/// <returns>If Index is greater than or equal to zero and less than the number of elements.</returns>
+		/// <returns>If this MArray is not empty Index is greater than or equal to zero and less than the number of elements.</returns>
 		public bool InRange(int Index)
 		{
-			bool bInRange = Index >= 0 && Index < Num;
+			bool bInRange = !IsEmpty() && Index >= 0 && Index < Num;
 
 			//if (!bInRange) throw new IndexOutOfRangeException("Index check failed. (Index >= 0 && Index < Num) == false with an index of " + Index);
 

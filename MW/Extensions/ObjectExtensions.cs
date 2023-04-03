@@ -24,6 +24,10 @@ namespace MW.Extensions
 			return Casted != null;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static object Cast(this object O, Type Type)
+			=> Convert.ChangeType(O, Type);
+
 		/// <summary>Cast an object to a Type.</summary>
 		/// <typeparam name="T">The class to convert O to.</typeparam>
 		/// <decorations decor="|Extension| T"></decorations>
