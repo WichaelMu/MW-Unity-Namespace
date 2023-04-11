@@ -352,4 +352,19 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 *.exe
+
+# MW Specific Ignores
 Extensions/*
+
+# MW Sandpit Ignores
+MSandpit/MSandpit/Assets/MScripts/*
+MSandpit/MSandpit/Assets/MW/*
+MSandpit/MSandpit/Assets/Scenes/*
+MSandpit/MSandpit/Library/*
+MSandpit/MSandpit/Logs/*
+MSandpit/MSandpit/obj/*
+MSandpit/MSandpit/Packages/*
+MSandpit/MSandpit/ProjectSettings/*
+MSandpit/MSandpit/Temp/*
+MSandpit/MSandpit/UserSettings/*
+MSandpit/MSandpit/.vsconfig

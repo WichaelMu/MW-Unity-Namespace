@@ -1,14 +1,18 @@
 
-@echo .
-@echo ----------------------------
-@echo      POST_BUILD_EVENTS
-@echo ----------------------------
-@echo.
+@ECHO .
+@ECHO ----------------------------
+@ECHO      POST_BUILD_EVENTS
+@ECHO ----------------------------
+@ECHO .
 
-@cd ..
-@cd MGenerator
-@call GenerateDocs
+@CD ..
+@CD MGenerator
+@CALL GenerateDocs
 
-@cd..
-@cd MTest
-@call RunMTest
+@CD ..
+@CD MTest
+@CALL RunMTest
+
+@CD ..
+@CD Scripts
+@CALL CopyMWToSandpit
