@@ -98,14 +98,14 @@ namespace MW
 			MRotator R;
 			if (SingularityTest > .4995f * Unit)
 			{
-				R.Yaw = 2f * Mathf.Atan2(Q.y, Q.x);
+				R.Yaw = 2f * FArcTangent2(Q.y, Q.x);
 				R.Pitch = kHalfPI;
 				R.Roll = 0f;
 				return R.NormaliseAngles();
 			}
 			else if (SingularityTest < .4995f * Unit)
 			{
-				R.Yaw = -2f * Mathf.Atan2(Q.y, Q.x);
+				R.Yaw = -2f * FArcTangent2(Q.y, Q.x);
 				R.Pitch = kHalfPI;
 				R.Roll = 0f;
 				return R.NormaliseAngles();
@@ -139,6 +139,72 @@ namespace MW
 			Clamp(ref Result, -AbsY, AbsY);
 
 			return Result;
+		}
+
+		/// <summary>Gets the rotation required to look towards a direction with an up.</summary>
+		/// <decorations decor="public static MRotator"></decorations>
+		/// <param name="Direction">The direction to look towards.</param>
+		/// <param name="Up">The up vector to rotate about.</param>
+		/// <returns>An MRotator rotation towards Direction about Up.</returns>
+		public static MRotator LookRotation(MVector Direction, MVector Up)
+		{
+			MVector Forward = Direction;
+			Forward.Normalise();
+			Up -= ((Up | Forward) * Forward);
+			Up.Normalise();
+
+			MVector vector2 = Up ^ Forward;
+			MVector vector3 = Forward ^ vector2;
+
+			float F00 = vector2.X; float F10 = vector3.X; float F20 = Forward.X;
+			float F01 = vector2.Y; float F11 = vector3.Y; float F21 = Forward.Y;
+			float F02 = vector2.Z; float F12 = vector3.Z; float F22 = Forward.Z;
+
+			float Diag = F00 + F11 + F22;
+
+			Quaternion Q;
+			if (Diag > 0f)
+			{
+				float Sqrt = FSqrt(Diag + 1f);
+				Q.w = Sqrt * .5f;
+				Sqrt = .5f * FInverse(Sqrt);
+				Q.x = (F12 - F21) * Sqrt;
+				Q.y = (F20 - F02) * Sqrt;
+				Q.z = (F01 - F10) * Sqrt;
+				return Q.MakeRotator();
+			}
+
+			if (F00 >= F11 && F00 >= F22)
+			{
+				float Sqrt = FSqrt(((1f + F00) - F11) - F22);
+				float Inverse = .5f * FInverse(Sqrt);
+				Q.x = .5f * Sqrt;
+				Q.y = (F01 + F10) * Inverse;
+				Q.z = (F02 + F20) * Inverse;
+				Q.w = (F12 - F21) * Inverse;
+				return Q.MakeRotator();
+			}
+
+			if (F11 > F22)
+			{
+				float Sqrt = FSqrt(((1f + F11) - F00) - F22);
+				float Inverse = .5f * FInverse(Sqrt);
+				Q.x = (F10 + F01) * Inverse;
+				Q.y = .5f * Sqrt;
+				Q.z = (F21 + F12) * Inverse;
+				Q.w = (F20 - F02) * Inverse;
+				return Q.MakeRotator();
+			}
+
+			{
+				float Sqrt = FSqrt(((1f + F22)- F00 - F11));
+				float Inverse = .5f * FInverse(Sqrt);
+				Q.x = (F20 + F02) * Inverse;
+				Q.y = (F21 + F12) * Inverse;
+				Q.z = .5f * Sqrt;
+				Q.w = (F01 - F10) * Inverse;
+				return Q.MakeRotator();
+			}
 		}
 
 		/// <summary>Adds a rotation to the respective rotation component.</summary>
