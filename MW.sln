@@ -16,7 +16,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MGenerator", "MGenerator\Ge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MWEditor", "MWEditor\MWEditor.csproj", "{1272E28A-70E1-47C2-8496-5B8398339F9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "MSandpit\MSandpit\Assembly-CSharp.csproj", "{CFF12404-70DB-4755-F269-97860056F070}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "MSandpit\Assembly-CSharp.csproj", "{CFF12404-70DB-4755-F269-97860056F070}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
