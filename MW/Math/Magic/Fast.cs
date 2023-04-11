@@ -4,6 +4,12 @@ using static MW.Utils;
 
 namespace MW.Math.Magic
 {
+	/// <summary>Delegate for FIntegral.</summary>
+	/// <decorations decor="public delegate float"></decorations>
+	/// <param name="F">Input.</param>
+	/// <returns>Float.</returns>
+	public delegate float IntegralFunction(float F);
+
 	/// <summary>Fast implementations of common Mathematical functions using Bit Magic.</summary>
 	/// <decorations decor="public static class"></decorations>
 	public static class Fast
@@ -71,7 +77,7 @@ namespace MW.Math.Magic
 		/// <param name="Func">The function to pass in.</param>
 		/// <param name="Delta">The delta.</param>
 		/// <returns>An approximation of LowerLimit ∫ UpperLimit Func() Deltax.</returns>
-		public static float FIntegral(float LowerLimit, float UpperLimit, System.Func<float, float> Func, float Delta = .0001f)
+		public static float FIntegral(float LowerLimit, float UpperLimit, IntegralFunction Func, float Delta = .0001f)
 		{
 			if (Func == null || Delta == 0f)
 				return float.NaN;
