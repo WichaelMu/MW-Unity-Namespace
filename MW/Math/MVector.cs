@@ -250,17 +250,20 @@ namespace MW
 		}
 
 		/// <summary>Checks V's components for NaN.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="V">The vector to check.</param>
 		/// <returns>True if V contains NaN.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool ContainsNaN(MVector V) => V[0].IsIllegalFloat(EIllegalFlags.NaN) || V[1].IsIllegalFloat(EIllegalFlags.NaN) || V[2].IsIllegalFloat(EIllegalFlags.NaN);
 		/// <summary>Checks V's components for +- Infinity.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="V">The vector to check.</param>
 		/// <returns>True if V contains +- Infinity.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool ContainsInf(MVector V) => V[0].IsIllegalFloat(EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity) || V[1].IsIllegalFloat(EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity) || V[2].IsIllegalFloat(EIllegalFlags.PositiveInfinity | EIllegalFlags.NegativeInfinity);
 
 		/// <summary>Check V's components for NaN of +-Infinity.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="V">The vector to check.</param>
 		/// <returns>True if V contains any illegal components.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

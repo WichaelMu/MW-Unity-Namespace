@@ -380,6 +380,7 @@ namespace MW.Math
 		public static float Distance(Vector3 L, Vector3 R) => FSqrt(SqrDistance(L, R));
 
 		/// <summary>The distance over the circumference of a circle given two points and radius.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="A">Point A.</param>
 		/// <param name="B">Point B.</param>
 		/// <param name="Radius">Radius of the sphere.</param>

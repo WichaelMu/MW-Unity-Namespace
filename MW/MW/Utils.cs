@@ -627,6 +627,7 @@ namespace MW
 		}
 
 		/// <summary>Compares two strings for similarity.</summary>
+		/// <decorations decor="public static float"></decorations>
 		/// <param name="BaseString">The string to compare against.</param>
 		/// <param name="CompString">The string to compare to.</param>
 		/// <param name="bCaseSensitive">True to consider character casing in the similarity calculation.</param>

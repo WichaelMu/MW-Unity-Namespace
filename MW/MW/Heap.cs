@@ -114,6 +114,7 @@ namespace MW
 		}
 
 		/// <summary>Reduces this Heap's memory usage to smallest possible required to store its elements.</summary>
+		/// <decorations decor="public T[]"></decorations>
 		/// <returns>The shrunk array.</returns>
 		public T[] Shrink()
 		{
