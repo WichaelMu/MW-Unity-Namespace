@@ -357,14 +357,13 @@ MigrationBackup/
 Extensions/*
 
 # MW Sandpit Ignores
-MSandpit/Assets/MScripts/*
-MSandpit/Assets/MW/*
+MSandpit/Assets/MScripts/*.cs
+MSandpit/Assets/MW/*.dll
+MSandpit/Assets/MW/*.xml
 MSandpit/Assets/Scenes/*
 MSandpit/Library/*
 MSandpit/Logs/*
 MSandpit/obj/*
-MSandpit/Packages/*
-MSandpit/ProjectSettings/*
 MSandpit/Temp/*
 MSandpit/UserSettings/*
 MSandpit/.vsconfig
