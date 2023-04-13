@@ -1,5 +1,5 @@
 #include <iostream>
-#include <fstream>
+#include <sys/stat.h>
 
 #include "Reader.h"
 #include "SwapChars.h"
@@ -26,14 +26,18 @@ std::vector<MW> Reader::OpenFile()
 #else
 	const char* xml_path = "../../MW/Output/Binaries/Release/netstandard2.0/MW.xml";
 #endif
-	file<> file(xml_path);
 
-	if (!file.data())
+	if (!FileExists(xml_path))
 	{
 		std::cout << "The MW.xml file at: " << xml_path << " cannot be found, or opened!\n";
 		std::cout << "HTML Generator will now terminate!\n";
+#if !EXEC_FROM_VS
+		std::cout << std::endl;
+#endif
 		std::exit(-1);
 	}
+
+	file<> file(xml_path);
 
 	xml_document<>* doc = new xml_document<>();
 	doc->parse<0>(file.data());
@@ -393,4 +397,10 @@ void Reader::ProcessPredefinedGenericType(std::string& param)
 
 	if (index_of_angle_bracket != std::string::npos && index_of_dot != std::string::npos)
 		param.erase(param.begin() + index_of_angle_bracket + 1, param.begin() + index_of_dot + 1);
+}
+
+bool Reader::FileExists(const char* file_name)
+{
+	struct stat buffer;
+	return (stat(file_name, &buffer) == 0);
 }
