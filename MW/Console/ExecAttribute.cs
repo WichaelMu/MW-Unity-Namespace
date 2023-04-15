@@ -31,7 +31,7 @@ namespace MW.Console
 		/// <decorations decor="public object[]"></decorations>
 		public object[] ExecParams;
 
-		internal bool bIsInternal;
+		internal bool bIsBuiltIn;
 
 		/// <summary>Default Exec.</summary>
 		public ExecAttribute() { Description = string.Empty; GameObjectTargetsByName = Array.Empty<string>(); }
@@ -56,8 +56,11 @@ namespace MW.Console
 		/// <param name="bOnAwake">If this method should be executed on start.</param>
 		/// <param name="Params">The Parameters to execute with bOnAwake.</param>
 		public ExecAttribute(string Desc, bool bOnAwake, params object[] Params) : this(Desc) { bExecOnAwake = bOnAwake; ExecParams = Params; }
+	}
 
-		internal ExecAttribute(bool bIsInternal) { this.bIsInternal = bIsInternal; }
+	internal class BuiltInExecAttribute : ExecAttribute
+	{
+		internal BuiltInExecAttribute(string Desc) : base(Desc) { bIsBuiltIn = true; }
 	}
 
 	public struct MethodExec<T1, T2>

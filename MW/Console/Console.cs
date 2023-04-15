@@ -7,6 +7,7 @@ using System.Text;
 using MW.Extensions;
 using MW.Conversion;
 using UnityEngine;
+using UE = UnityEngine;
 using UObject = UnityEngine.Object;
 
 namespace MW.Console
@@ -41,8 +42,12 @@ namespace MW.Console
 
 		protected const char kTargetGameObjectIdentifier = '@';
 		protected const char kGameObjectByNameIdentifier = '#';
+		protected const char kArrayDeclaration = '{';
+		protected const char kArrayTermination = '}';
 
 		StringBuilder OutputLog;
+
+		bool bShowBuiltIn = true;
 
 		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
 		/// <decorations decor="public virtual void"></decorations>
@@ -87,6 +92,7 @@ namespace MW.Console
 		public virtual void ShowConsole()
 		{
 			bShowConsole = !bShowConsole;
+			RawInput = "";
 		}
 
 		void BuildExec()
@@ -116,8 +122,8 @@ namespace MW.Console
 
 				Exec(TargetsArgV, Func, ArgV);
 
+				InputsIndex = PreviousInputs.Num;
 				PreviousInputs.Push(RawInput);
-
 			}
 
 			RawInput = "";
@@ -142,48 +148,54 @@ namespace MW.Console
 				return;
 			}
 
+			MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
+
+			ExecAttribute Exec = Func.Exec;
+			if (Exec.bRequireTarget && Targets.Length == 0)
+			{
+				WriteToOutput($"-- Target Required -- Exec '{MethodName}' requires a target to be Executed.\n" +
+					$"Prefix Targets with '{kTargetGameObjectIdentifier}' before their name in the Editor hierarchy.", MConsoleColourLibrary.Red);
+			}
+
+			MethodInfo Method = Func.Method;
+			Type DeclaringType = Method.DeclaringType;
+
+			ParameterInfo[] MethodParams = Method.GetParameters();
+			int RawParamsArgC = RawParams.Length;
+
+			bool bContainsArray = false;
+			foreach (ParameterInfo Param in MethodParams)
+			{
+				Type ParamType = Param.ParameterType;
+				if (ParamType.IsArray || ParamType == typeof(MVector) || ParamType == typeof(Vector3) || ParamType == typeof(MRotator))
+				{
+					bContainsArray = true;
+					break;
+				}
+			}
+
+			if (!bContainsArray && MethodParams.Length != RawParamsArgC)
+			{
+				WriteToOutput($"-- Parameter Mismatch -- Exec: '{MethodName}' requires {MethodParams.Length} parameter{(MethodParams.Length == 1 ? "" : "s")}, " +
+					$"but {RawParamsArgC} {(RawParamsArgC == 1 ? "was" : "were")} given.", MConsoleColourLibrary.Yellow);
+				return;
+			}
+
+			object[] ExecParameters = new object[MethodParams.Length];
+
+			// Convert to correct Parameter types declared by the Exec function.
+			for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParamsArgC; ++ExecParamIndex)
+				if (!GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType))
+					return;
+
+			// Remove Array Declaration and Terminations from being passed in and executed.
+			MArray<object> StrippedArray = new MArray<object>(ExecParameters);
+			StrippedArray.PullAll(kArrayDeclaration);
+			StrippedArray.PullAll(kArrayTermination);
+			ExecParameters = StrippedArray.TArray();
+
 			try
 			{
-				MethodExec<MethodInfo, ExecAttribute> Func = Funcs[MethodName];
-
-				ExecAttribute Exec = Func.Exec;
-				if (Exec.bRequireTarget && Targets.Length == 0)
-				{
-					WriteToOutput($"-- Target Required -- Exec '{MethodName}' requires a target to be Executed.\n" +
-						$"Prefix Targets with '{kTargetGameObjectIdentifier}' before their name in the Editor hierarchy.", MConsoleColourLibrary.Red);
-				}
-
-				MethodInfo Method = Func.Method;
-				Type DeclaringType = Method.DeclaringType;
-
-				ParameterInfo[] MethodParams = Method.GetParameters();
-				int RawParamsArgC = RawParams.Length;
-
-				bool bContainsFloatArray = false;
-				foreach (ParameterInfo Param in MethodParams)
-				{
-					Type ParamType = Param.ParameterType;
-					if (ParamType == typeof(MVector) || ParamType == typeof(Vector3) || ParamType == typeof(MRotator))
-					{
-						bContainsFloatArray = true;
-						break;
-					}
-				}
-
-				if (!bContainsFloatArray && MethodParams.Length != RawParamsArgC)
-				{
-					WriteToOutput($"-- Parameter Mismatch -- Exec: '{MethodName}' requires {MethodParams.Length} parameter{(MethodParams.Length == 1 ? "" : "s")}, " +
-						$"but {RawParamsArgC} {(RawParamsArgC == 1 ? "was" : "were")} given.", MConsoleColourLibrary.Yellow);
-					return;
-				}
-
-				object[] ExecParameters = new object[MethodParams.Length];
-
-				// Convert to correct Parameter types declared by the Exec function.
-				for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParamsArgC; ++ExecParamIndex)
-					if (!GetCustomParameterType(RawParams, ref RawParamIndex, ref ExecParameters[ExecParamIndex], MethodParams[ExecParamIndex].ParameterType))
-						return;
-
 				if (Func.Method.IsStatic)
 				{
 					Method.Invoke(null, ExecParameters);
@@ -365,7 +377,7 @@ namespace MW.Console
 				else
 					TargetObject = FindResult;
 			}
-			else if (typeof(MonoBehaviour).IsAssignableFrom(ExecParameterType)) // Components.
+			else if (typeof(MonoBehaviour).IsAssignableFrom(ExecParameterType) || typeof(UE.Behaviour).IsAssignableFrom(ExecParameterType)) // Components.
 			{
 				string StringValue = RawParams[ParamIndex].Cast<string>();
 
@@ -407,9 +419,34 @@ namespace MW.Console
 			{
 				HandlePrimitiveParameter(ref TargetObject, RawParams[ParamIndex], ExecParameterType);
 			}
+			else if (ExecParameterType.IsArray)
+			{
+				if (RawParams[ParamIndex].Cast<string>()[0] != kArrayDeclaration)
+				{
+					WriteToOutput($"To parse arrays into Exec functions, they must be wrapped with {kArrayDeclaration} and {kArrayTermination}", MConsoleColourLibrary.Red);
+					return false;
+				}
+
+				ParamIndex++;
+				MArray<object> Array = new MArray<object>();
+				Type ElementType = ExecParameterType.GetElementType();
+
+				do
+				{
+					object Element = default;
+					if (!GetCustomParameterType(RawParams, ref ParamIndex, ref Element, ElementType))
+						return false;
+
+					Array.Push(Element);
+				} while (RawParams[ParamIndex].Cast<string>()[0] != kArrayTermination);
+
+				++ParamIndex;
+				return MConsoleArrayParser.Convert(this, ref TargetObject, ElementType, Array);
+			}
 			else // Any custom type.
 			{
-				HandleCustomParameter(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
+				++ParamIndex;
+				return HandleCustomParameter(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 			}
 
 			++ParamIndex;
@@ -447,9 +484,26 @@ namespace MW.Console
 		/// <param name="TargetObject">The fully parsed custom type parameter as an object.</param>
 		/// <param name="ExecParameterType">The [Exec] function's required parameter type.</param>
 		/// <exception cref="NotImplementedException">Occurs when MConsole does not natively support ExecParameterType.</exception>
-		public virtual void HandleCustomParameter(object[] RawParameters, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
+		/// <returns>True if the Custom Parameter was properly handled.</returns>
+		public virtual bool HandleCustomParameter(object[] RawParameters, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			WriteToOutput($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)}, and do not call base, to support it.", MConsoleColourLibrary.Yellow);
+			return false;
+		}
+
+		public virtual bool HandleCustomArrayType(MConsole Console, ref object TargetObject, Type ElementType, MArray<object> Elements)
+		{
+			WriteToOutput($"{nameof(MConsole)} does not natively support the element type: {ElementType}. Override {nameof(HandleCustomArrayType)}, and do not call base, to support it.", MConsoleColourLibrary.Yellow);
+
+			StringBuilder CodeSnippet = new StringBuilder();
+			CodeSnippet.AppendLine()
+				.Append('\t').Append("MArray<T> Array = new MArray<T>();").AppendLine()
+				.Append("\t\t").Append("foreach (object Element in Elements)").AppendLine()
+				.Append("\t\t\t").Append("Array.Push(Element.Cast<T>());").AppendLine()
+				.Append('\t').Append("return Array.TArray();").AppendLine();
+
+			WriteToOutput($"To support arrays of custom types, follow and adapt the following example: {CodeSnippet}");
+			return false;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -521,6 +575,9 @@ namespace MW.Console
 						ConsoleRatio = kDefaultConsoleRatio;
 					}
 					break;
+				case "__TOGGLE_BUILTIN__":
+					bShowBuiltIn = !bShowBuiltIn;
+					break;
 				default:
 					return false;
 			}
@@ -554,6 +611,7 @@ namespace MW.Console
 		{
 			if (!bShowConsole)
 			{
+				InputsIndex = PreviousInputs.Num - 1;
 				return;
 			}
 
@@ -571,15 +629,17 @@ namespace MW.Console
 
 			if (!PreviousInputs.IsEmpty())
 			{
-				if (Event.current.Equals(Event.KeyboardEvent("Up")))
+				if (Event.current.Equals(Event.KeyboardEvent("Up"))) // Going to earliest-entered.
 				{
-					InputsIndex--;
+					if (!string.IsNullOrEmpty(RawInput))
+						InputsIndex--;
 					Utils.ClampMin(ref InputsIndex, 0);
 					RawInput = PreviousInputs[InputsIndex];
 				}
-				else if (Event.current.Equals(Event.KeyboardEvent("Down")))
+				else if (Event.current.Equals(Event.KeyboardEvent("Down"))) // Going to latest-entered.
 				{
-					InputsIndex++;
+					if (!string.IsNullOrEmpty(RawInput))
+						InputsIndex++;
 					Utils.ClampMax(ref InputsIndex, PreviousInputs.Num - 1);
 					RawInput = PreviousInputs[InputsIndex];
 				}
@@ -594,7 +654,6 @@ namespace MW.Console
 				GUI.Box(new Rect(0, Y, Screen.width, FuncsHeight), "");
 				Rect ExecList = new Rect(0, 0, Screen.width - 30, 20 * Funcs.Count);
 
-				GUI.backgroundColor = Color.white;
 				Scroll = GUI.BeginScrollView(new Rect(0, Y + 5, Screen.width, FuncsHeight), Scroll, ExecList);
 
 				int i = 0;
@@ -603,6 +662,18 @@ namespace MW.Console
 				{
 					if (Func.Value.Exec.bHideInConsole)
 						continue;
+
+					if (Func.Value.Exec.bIsBuiltIn)
+					{
+						if (!bShowBuiltIn)
+							continue;
+
+						GUI.contentColor = MConsoleColourLibrary.BuiltIn;
+					}
+					else
+					{
+						GUI.contentColor = MConsoleColourLibrary.White;
+					}
 
 					StringBuilder ParamsBuilder = new StringBuilder();
 					foreach (ParameterInfo Param in Func.Value.Method.GetParameters())
@@ -614,6 +685,7 @@ namespace MW.Console
 					string Text = $"{Func.Value.Method.Name} ({ParamsBuilder.ToString().TrimEnd(',', ' ')}) - {Func.Value.Exec.Description}";
 
 					Rect TextRect = new Rect(5, 20 * i++, ExecList.width - 100, kConsoleFontHeight);
+
 
 					GUI.Label(TextRect, Text);
 				}
@@ -644,7 +716,7 @@ namespace MW.Console
 					}
 					else
 					{
-						GUI.contentColor = Color.white;
+						GUI.contentColor = MConsoleColourLibrary.White;
 						GUI.Label(OutputTextRect, StringValue);
 					}
 				}
@@ -656,12 +728,73 @@ namespace MW.Console
 				GUI.EndScrollView();
 			}
 
-			GUI.contentColor = GUI.color = MConsoleColourLibrary.Purple;
-			GUI.backgroundColor = Color.white;
+			GUI.backgroundColor = GUI.contentColor = GUI.color = MConsoleColourLibrary.Purple;
 
 			GUI.SetNextControlName("Exec Text Field");
 			RawInput = GUI.TextField(new Rect(2.5f, Y, Screen.width, kConsoleFontHeight), RawInput);
 			GUI.FocusControl("Exec Text Field");
+		}
+
+		class MConsoleArrayParser
+		{
+			internal static bool Convert(MConsole Console, ref object TargetObject, Type ElementType, MArray<object> Elements)
+			{
+				bool bSuccessfulConversion = true;
+
+				if (ElementType == typeof(MVector))
+				{
+					TargetObject = Make<MVector>(Elements);
+				}
+				else if (ElementType == typeof(Vector3))
+				{
+					TargetObject = Make<Vector3>(Elements);
+				}
+				else if (ElementType == typeof(MRotator))
+				{
+					TargetObject = Make<MRotator>(Elements);
+				}
+				else if (ElementType == typeof(GameObject))
+				{
+					TargetObject = Make<GameObject>(Elements);
+				}
+				else if (ElementType == typeof(Transform))
+				{
+					TargetObject = Make<Transform>(Elements);
+				}
+				else if (ElementType == typeof(MonoBehaviour))
+				{
+					TargetObject = Make<MonoBehaviour>(Elements);
+				}
+				else if (ElementType == typeof(UE.Behaviour))
+				{
+					TargetObject = Make<UE.Behaviour>(Elements);
+				}
+				else if (ElementType == typeof(string))
+				{
+					TargetObject = Make<string>(Elements);
+				}
+				else if (ElementType.IsPrimitive)
+				{
+					TargetObject = Elements.TArray();
+				}
+				else
+				{
+					bSuccessfulConversion = Console.HandleCustomArrayType(Console, ref TargetObject, ElementType, Elements);
+
+					if (TargetObject == null)
+						Console.WriteToOutput($"The type: '{ElementType.Name}' cannot be parsed into an Array.", MConsoleColourLibrary.Red);
+				}
+
+				return bSuccessfulConversion;
+			}
+
+			static T[] Make<T>(MArray<object> Elements)
+			{
+				MArray<T> Array = new MArray<T>();
+				foreach (object Element in Elements)
+					Array.Push(Element.Cast<T>());
+				return Array.TArray();
+			}
 		}
 	}
 
@@ -680,11 +813,21 @@ namespace MW.Console
 		static Color red = Colour.ColourHex("#FF4444");
 		static Color yel = Colour.ColourHex("#FFD344");
 		static Color gre = Colour.ColourHex("#95FF44");
-		static Color pur = Colour.ColourHex("#BD53FF");
+		static Color pur = Colour.ColourHex("#BEB7FF");
+
+		static Color bla = Colour.ColourHex("#444444");
+		static Color whi = Colour.ColourHex("#FFFFFF");
+
+		static Color bti = Colour.ColourHex("#44FF44");
 
 		internal static Color Red => red;
 		internal static Color Yellow => yel;
 		internal static Color Green => gre;
 		internal static Color Purple => pur;
+
+		internal static Color Black => bla;
+		internal static Color White => whi;
+
+		internal static Color BuiltIn = bti;
 	}
 }

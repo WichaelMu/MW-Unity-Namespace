@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace MW.Console
 {
-	/// <summary>A list of built-in [Exec] Functions.</summary>
+	/// <summary>A list of built-in [BuiltInExec] Functions.</summary>
 	public static class BuiltInExecFunctions
 	{
 
@@ -14,7 +14,7 @@ namespace MW.Console
 		/// <summary>Exit the game.</summary>
 		/// <remarks>In editor mode, this will call Debug.Break() and print a quit message to the console.</remarks>
 		/// <decorations decor="public static void"></decorations>
-		[Exec("Exit the game.")]
+		[BuiltInExec("Exit the game.")]
 		public static void QuitGame()
 		{
 			Application.Quit();
@@ -22,13 +22,13 @@ namespace MW.Console
 			if (Application.isEditor)
 			{
 				Debug.Break();
-				Log.P($"The game has quit in editor mode with [Exec] {nameof(QuitGame)}().");
+				Log.P($"The game has quit in editor mode with [BuiltInExec] {nameof(QuitGame)}().");
 			}
 		}
 
 		/// <summary>Restarts and reloads the current scene.</summary>
 		/// <decorations decor="public static void"></decorations>
-		[Exec("Restarts and Reloads the current scene.")]
+		[BuiltInExec("Restarts and Reloads the current scene.")]
 		public static void RestartScene()
 		{
 			Scene CurrentScene = SceneManager.GetActiveScene();
@@ -38,7 +38,7 @@ namespace MW.Console
 		/// <summary>Sets Time.timeScale to InTimeScale.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="InTimeScale"></param>
-		[Exec("Sets Time.timeScale to InTimeScale")]
+		[BuiltInExec("Sets Time.timeScale to InTimeScale")]
 		public static void SetTimeScale(float InTimeScale)
 		{
 			Time.timeScale = InTimeScale;
@@ -48,7 +48,7 @@ namespace MW.Console
 		/// <remarks>The minimum InFPS is 1.</remarks>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="InFPS"></param>
-		[Exec("Sets the game's Target Frame Rate to InFPS, minimum 1.")]
+		[BuiltInExec("Sets the game's Target Frame Rate to InFPS, minimum 1.")]
 		public static void SetTargetFPS(int InFPS)
 		{
 			ClampMin(ref InFPS, 1);
@@ -63,7 +63,7 @@ namespace MW.Console
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="G">The GameObject to send Message to.</param>
 		/// <param name="Message">The Message to send to G.</param>
-		[Exec("Sends Message to G.")]
+		[BuiltInExec("Sends Message to G.")]
 		public static void SendMessage(GameObject G, string Message)
 		{
 			if (!string.IsNullOrEmpty(Message.Trim()))
@@ -74,7 +74,7 @@ namespace MW.Console
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="G"></param>
 		/// <param name="bInActive"></param>
-		[Exec("Sets G's active state to bInActive.")]
+		[BuiltInExec("Sets G's active state to bInActive.")]
 		public static void SetActive(GameObject G, bool bInActive)
 		{
 			G.SetActive(bInActive);
@@ -83,7 +83,7 @@ namespace MW.Console
 		/// <summary>Destroys G.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="G"></param>
-		[Exec("Destroys G.")]
+		[BuiltInExec("Destroys G.")]
 		public static void Destroy(GameObject G)
 		{
 			Object.Destroy(G);
@@ -92,7 +92,7 @@ namespace MW.Console
 		/// <summary>Destroys component M from it's GameObject.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="M"></param>
-		[Exec("Destroys component M from it's GameObject.")]
+		[BuiltInExec("Destroys component M from it's GameObject.")]
 		public static void DestroyComponent(MonoBehaviour M)
 		{
 			Object.Destroy(M);
@@ -102,7 +102,7 @@ namespace MW.Console
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="M"></param>
 		/// <param name="bInActive"></param>
-		[Exec("Sets component M active state to bInActive.")]
+		[BuiltInExec("Sets component M active state to bInActive.")]
 		public static void SetComponentActive(MonoBehaviour M, bool bInActive)
 		{
 			M.enabled = bInActive;
@@ -112,10 +112,17 @@ namespace MW.Console
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="T"></param>
 		/// <param name="Position"></param>
-		[Exec("Teleports T to Position in world space.")]
+		[BuiltInExec("Teleports T to Position in world space.")]
 		public static void Teleport(Transform T, Vector3 Position)
 		{
 			T.position = Position;
+		}
+
+		[BuiltInExec("Params Test")]
+		public static void T(Vector3 Position, params Transform[] T)
+		{
+			foreach (Transform t in T)
+				t.position = Position;
 		}
 
 		#endregion
@@ -127,7 +134,7 @@ namespace MW.Console
 		/// <param name="Animator"></param>
 		/// <param name="Parameter"></param>
 		/// <param name="F"></param>
-		[Exec("Sets a float animation parameter.")]
+		[BuiltInExec("Sets a float animation parameter.")]
 		public static void F_SetAnimationParameter(Animator Animator, string Parameter, float F)
 		{
 			Animator.SetFloat(Parameter, F);
@@ -138,7 +145,7 @@ namespace MW.Console
 		/// <param name="Animator"></param>
 		/// <param name="Parameter"></param>
 		/// <param name="B"></param>
-		[Exec("Sets a bool animation parameter.")]
+		[BuiltInExec("Sets a bool animation parameter.")]
 		public static void B_SetAnimationParameter(Animator Animator, string Parameter, bool B)
 		{
 			Animator.SetBool(Parameter, B);
@@ -149,7 +156,7 @@ namespace MW.Console
 		/// <param name="Animator"></param>
 		/// <param name="Parameter"></param>
 		/// <param name="I"></param>
-		[Exec("Sets a int animation parameter.")]
+		[BuiltInExec("Sets a int animation parameter.")]
 		public static void I_SetAnimationParameter(Animator Animator, string Parameter, int I)
 		{
 			Animator.SetInteger(Parameter, I);
@@ -159,7 +166,7 @@ namespace MW.Console
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Animator"></param>
 		/// <param name="Trigger"></param>
-		[Exec("Triggers an animation trigger.")]
+		[BuiltInExec("Triggers an animation trigger.")]
 		public static void TriggerAnimation(Animator Animator, string Trigger)
 		{
 			Animator.SetTrigger(Trigger);

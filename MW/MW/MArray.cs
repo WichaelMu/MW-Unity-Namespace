@@ -385,12 +385,20 @@ namespace MW
 			return SB.ToString();
 		}
 
-		/// <summary>Converts this MArray into T[].</summary>
+		/// <summary>This MArray as T[].</summary>
 		/// <decorations decor="public T[]"></decorations>
 		/// <returns>T[].</returns>
 		public T[] TArray()
 		{
 			return Items.ToArray();
+		}
+
+		/// <summary>This MArray as List&lt;T&gt;</summary>
+		/// <decorations decor="public List&lt;T&gt;"></decorations>
+		/// <returns>List&lt;T&gt;</returns>
+		public List<T> LArray()
+		{
+			return Items;
 		}
 
 		/// <summary>Square bracket accessor.</summary>
@@ -503,7 +511,7 @@ namespace MW
 		}
 
 		public static implicit operator int(MArray<T> Any) => Any.Num;
-		public static implicit operator List<T>(MArray<T> Any) => Any.Items;
+		public static implicit operator List<T>(MArray<T> Any) => Any.LArray();
 		public static implicit operator T[](MArray<T> Any) => Any.TArray();
 
 		/// <summary>The incoming and reflected Item of this mirror over the provided Minimum and Maximum Num.</summary>

@@ -592,7 +592,7 @@ namespace MW.CameraUtils
 
 		/// <summary>Toggles No Clip.</summary>
 		/// <decorations decor="[Exec] public void"></decorations>
-		[Exec("Toggles No Clip on the first Spring Arm.")]
+		[BuiltInExec("Toggles No Clip on the target Spring Arm.", bRequireTarget = true)]
 		public void NoClip()
 		{
 			bNoClip = !bNoClip;
@@ -603,7 +603,7 @@ namespace MW.CameraUtils
 
 		/// <summary>Teleports Target to the Spring Arm's position.</summary>
 		/// <decorations decor="[Exec] public void"></decorations>
-		[Exec("Teleports this Spring Arm's Target to the current position.")]
+		[BuiltInExec("Teleports this Spring Arm's Target to the current position.", bRequireTarget = true)]
 		public void TP_Pos()
 		{
 			if (bNoClip)

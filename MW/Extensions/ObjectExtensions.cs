@@ -37,8 +37,8 @@ namespace MW.Extensions
 		public static T Cast<T>(this object O)
 		{
 			return O is T R
-				? R
-				: (T)Convert.ChangeType(O, typeof(T));
+				  ? R
+				  : (T)Convert.ChangeType(O, typeof(T));
 		}
 
 		/// <summary>Cast a GameObject to T if it is attached, implemented, or derived.</summary>
