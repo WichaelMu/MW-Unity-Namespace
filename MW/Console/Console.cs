@@ -545,8 +545,29 @@ namespace MW.Console
 			WriteToOutput("-- MW Unity Namespace - MConsole --", MConsoleColourLibrary.Green);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void WriteHelpMessage()
+		{
+			WriteToOutput("-- Help --", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t{nameof(MConsole)} is a developer tool for debugging and arbitrary code execution during runtime.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tAbove are a list of [Exec] functions that you can execute at will, with most supported parameter types in Unity and the MW Namespace.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tSome [Exec] functions are 'Built-In' and can be hidden by executing '__TOGGLE_BUILTIN__' in the text area.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tTo add your own functions here, simply add 'using MW.Console;' and mark your methods and functions with the [Exec] attribute.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t\tOnly public, static, and instance functions are included. Private [Exec] functions are ignored.", MConsoleColourLibrary.Yellow);
+			WriteToOutput("");
+			WriteToOutput($"\tThere are also a few functions that are 'Internal'.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__SET_RATIO__ - Sets the ratio for the Console. It accepts values between .15 to .85 as a percentage of your screen's height. Default is {kDefaultConsoleRatio}.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__HELP__, ?, -h, and --help - Shows this help message.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput("");
+			WriteToOutput($"\tWhen making a game, you will eventually need to make your own types and aren't natively supported by {nameof(MConsole)}.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tCustom parameters can be handled by overriding certain functions, such as {nameof(HandleCustomParameter)} for function parameters or {nameof(HandleCustomArrayType)} for arrays.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput("");
+		}
+
 		protected virtual string GetPersistentOutput()
-			=> $"FPS: {Utils.FPS():D3} | Delta Time: {Time.deltaTime:F3} | ";
+			=> $"FPS: {Utils.FPS():D3} | Delta Time: {Time.deltaTime:F3} | Exec __HELP__ for Help |";
 
 		bool CheckInternallyDefinedCommands(string Command, object[] Parameters)
 		{
@@ -578,6 +599,12 @@ namespace MW.Console
 				case "__TOGGLE_BUILTIN__":
 					bShowBuiltIn = !bShowBuiltIn;
 					break;
+				case "__HELP__":
+				case "?":
+				case "-h":
+				case "--help":
+					WriteHelpMessage();
+					break;
 				default:
 					return false;
 			}
@@ -604,6 +631,8 @@ namespace MW.Console
 		float ConsoleRatio = kDefaultConsoleRatio;
 		Vector2 Scroll;
 		Vector2 ScrollOutputLog;
+		float t = 0f;
+		bool bHelpMessageHasBeenShown = false;
 
 		/// <summary>Draws the Console to the in-game viewport.</summary>
 		/// <decorations decor="public virtual void"></decorations>
@@ -612,7 +641,17 @@ namespace MW.Console
 			if (!bShowConsole)
 			{
 				InputsIndex = PreviousInputs.Num - 1;
+				t = 0f;
 				return;
+			}
+
+			if (string.IsNullOrEmpty(RawInput))
+				t += Time.deltaTime;
+
+			if (t > 5f && !bHelpMessageHasBeenShown)
+			{
+				bHelpMessageHasBeenShown = true;
+				WriteHelpMessage();
 			}
 
 			if (Event.current.Equals(Event.KeyboardEvent("Return")))
@@ -813,6 +852,7 @@ namespace MW.Console
 		static Color red = Colour.ColourHex("#FF4444");
 		static Color yel = Colour.ColourHex("#FFD344");
 		static Color gre = Colour.ColourHex("#95FF44");
+		static Color lim = Colour.ColourHex("#26F04B");
 		static Color pur = Colour.ColourHex("#BEB7FF");
 
 		static Color bla = Colour.ColourHex("#444444");
@@ -823,6 +863,7 @@ namespace MW.Console
 		internal static Color Red => red;
 		internal static Color Yellow => yel;
 		internal static Color Green => gre;
+		internal static Color LimeGreen => lim;
 		internal static Color Purple => pur;
 
 		internal static Color Black => bla;
