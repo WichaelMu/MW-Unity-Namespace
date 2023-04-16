@@ -458,7 +458,7 @@ namespace MW.Console
 			=> TargetObject = Convert.ChangeType(RawParameter, ParameterType);
 
 		/// <summary>Handles custom parameter types for MConsole to parse and execute methods and functions.</summary>
-		/// <decorations decor="public virtual void"></decorations>
+		/// <decorations decor="public virtual bool"></decorations>
 		/// <remarks>
 		/// Natively supported types are:<br></br>
 		/// <list type="bullet">
@@ -484,14 +484,41 @@ namespace MW.Console
 		/// <param name="TargetObject">The fully parsed custom type parameter as an object.</param>
 		/// <param name="ExecParameterType">The [Exec] function's required parameter type.</param>
 		/// <exception cref="NotImplementedException">Occurs when MConsole does not natively support ExecParameterType.</exception>
-		/// <returns>True if the Custom Parameter was properly handled.</returns>
+		/// <returns>True if the Custom Parameter was properly handled and TargetObject is the type and value of the custom ExecParameterType.</returns>
 		public virtual bool HandleCustomParameter(object[] RawParameters, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			WriteToOutput($"{nameof(MConsole)} does not natively support type: {ExecParameterType}. Override {nameof(HandleCustomParameter)}, and do not call base, to support it.", MConsoleColourLibrary.Yellow);
 			return false;
 		}
 
-		public virtual bool HandleCustomArrayType(MConsole Console, ref object TargetObject, Type ElementType, MArray<object> Elements)
+		/// <summary>Handles custom array types for MConsole to parse arrays and pass them into methods and functions.</summary>
+		/// <decorations decor="public virtual bool"></decorations>
+		/// <remarks>
+		/// Natively supported types are:<br></br>
+		/// <list type="bullet">
+		/// <item><see cref="MVector"/> and <see cref="Vector3"/>.</item>
+		/// <item><see cref="MRotator"/>.</item>
+		/// <item><see cref="GameObject"/> and <see cref="Transform"/>, given a GameObject Target by hierarchy-name reference.</item>
+		/// <item>Any <see cref="MonoBehaviour"/> component, given a GameObject Target by hierarchy-name reference.</item>
+		/// <item>All primitive types.</item>
+		/// </list><br></br>
+		/// <b>** DO NOT CALL THIS BASE METHOD IF YOU ARE OVERRIDING **</b>
+		/// </remarks>
+		/// <docremarks>
+		/// Natively supported types are:&lt;br&gt;
+		/// MVector and Vector3.&lt;br&gt;
+		/// MRotator.&lt;br&gt;
+		/// GameObject and Transform, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
+		/// Any MonoBehaviour component, given a GameObject Target by hierarchy-name reference.&lt;br&gt;
+		/// All primitive types.&lt;br&gt;&lt;br&gt;
+		/// &lt;span style="color:red;"&gt;Do not call the base method if you are overriding.&lt;/span&gt;
+		/// </docremarks>
+
+		/// <param name="TargetObject">The fully parsed single-dimensional array of the custom type parameter.</param>
+		/// <param name="ElementType">The array's element type.</param>
+		/// <param name="Elements">The elements of the array as objects. These need to be cast into ElementType.</param>
+		/// <returns>True if an array of ElementType was successfully parsed into TargetObject and holds the value of all Elements.</returns>
+		public virtual bool HandleCustomArrayType(ref object TargetObject, Type ElementType, MArray<object> Elements)
 		{
 			WriteToOutput($"{nameof(MConsole)} does not natively support the element type: {ElementType}. Override {nameof(HandleCustomArrayType)}, and do not call base, to support it.", MConsoleColourLibrary.Yellow);
 
@@ -818,7 +845,7 @@ namespace MW.Console
 				}
 				else
 				{
-					bSuccessfulConversion = Console.HandleCustomArrayType(Console, ref TargetObject, ElementType, Elements);
+					bSuccessfulConversion = Console.HandleCustomArrayType(ref TargetObject, ElementType, Elements);
 
 					if (TargetObject == null)
 						Console.WriteToOutput($"The type: '{ElementType.Name}' cannot be parsed into an Array.", MConsoleColourLibrary.Red);
