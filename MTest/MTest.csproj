@@ -25,6 +25,12 @@
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
+  </ItemGroup> 
+	
+  <ItemGroup>
+    <Compile Remove="Output\Intermediate\**" />
+    <EmbeddedResource Remove="Output\Intermediate\**" />
+    <None Remove="Output\Intermediate\**" />
   </ItemGroup>
 
   <ItemGroup>

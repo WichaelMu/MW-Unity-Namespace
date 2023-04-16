@@ -1,7 +1,7 @@
 
 @ECHO .
 @ECHO ----------------------------
-@ECHO      POST_BUILD_EVENTS
+@ECHO      POST BUILD EVENTS
 @ECHO ----------------------------
 @ECHO .
 

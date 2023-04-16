@@ -1,29 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <BaseOutputPath>Output\Binaries</BaseOutputPath>
-    <BaseIntermediateOutputPath>Output\Intermediate</BaseIntermediateOutputPath>
-    <Configurations>Debug;Release</Configurations>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<BaseOutputPath>Output\Binaries</BaseOutputPath>
+		<BaseIntermediateOutputPath>Output\Intermediate</BaseIntermediateOutputPath>
+		<Configurations>Debug;Release</Configurations>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="obj\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<None Remove="obj\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MW.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MW.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="UnityEditor">
-      <HintPath>..\Extensions\UnityEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\Extensions\UnityEngine.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Output\Intermediate\**" />
+		<EmbeddedResource Remove="Output\Intermediate\**" />
+		<None Remove="Output\Intermediate\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="UnityEditor">
+			<HintPath>..\Extensions\UnityEditor.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+			<HintPath>..\Extensions\UnityEngine.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
 </Project>

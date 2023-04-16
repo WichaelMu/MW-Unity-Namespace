@@ -62,14 +62,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Remove="MW\Output\Intermediate\**" />
+		<EmbeddedResource Remove="MW\Output\Intermediate\**" />
+		<None Remove="MW\Output\Intermediate\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="Unity.TextMeshPro">
-		  <HintPath>Extensions\Unity.TextMeshPro.dll</HintPath>
+			<HintPath>Extensions\Unity.TextMeshPro.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEditor">
-		  <HintPath>Extensions\UnityEditor.dll</HintPath>
+			<HintPath>Extensions\UnityEditor.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine">
-		  <HintPath>Extensions\UnityEngine.dll</HintPath>
+			<HintPath>Extensions\UnityEngine.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
@@ -81,7 +87,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="@cd Scripts&#xD;&#xA;@call PostBuildEvent" />
+		<Exec Command="@cd Scripts&#xD;&#xA;@call PostBuildEvent" />
 	</Target>
 
 </Project>
