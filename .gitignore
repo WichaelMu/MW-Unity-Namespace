@@ -366,5 +366,6 @@ MSandpit/Logs/*
 MSandpit/obj/*
 MSandpit/Temp/*
 MSandpit/UserSettings/*
+MSandpit/ProjectSettings/*
 MSandpit/.vsconfig
 MSandpit/Assembly-CSharp.csproj
