@@ -68,6 +68,7 @@ namespace MW.Extensions
 
 		/// <summary>Check if O implements interface I.</summary>
 		/// <typeparam name="I">The interface to cast O to.</typeparam>
+		/// <remarks>This is identical to O.Cast&lt;I&gt;() != null.</remarks>
 		/// <decorations decor="|Extension| bool"></decorations>
 		/// <param name="O">The object to convert.</param>
 		/// <param name="Interface">O's implementation of I.</param>
