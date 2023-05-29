@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using MW.Easing;
+using MW.Extensions;
+using UnityEditor;
+using UnityEngine;
 
 namespace MW.Diagnostics
 {
@@ -8,8 +14,8 @@ namespace MW.Diagnostics
 	{
 		/// <summary>Gets the current stack trace information.</summary>
 		/// <decorations decor="public static string"></decorations>
-		/// <returns>The stack trace as a string.</returns>
-		public static string Here() => Environment.StackTrace;
+		/// <returns>StacktraceInfo struct.</returns>
+		public static StacktraceInfo Here() => StacktraceInfo.Construct(Environment.StackTrace);
 
 		/// <summary>Stacktrace using <see cref="Log.P(object[])"/> with <see cref="EVerbosity"/>.</summary>
 		/// <docs>Stacktrace using Log.P with EVerbosity verbosity.</docs>
@@ -53,5 +59,36 @@ namespace MW.Diagnostics
 					return;
 			}
 		}
+	}
+
+	/// <summary>Information regarding a Stacktrace.</summary>
+	/// <decorations decors="public struct"></decorations>
+	public struct StacktraceInfo
+	{
+		/// <summary>The string value of the stacktrace.</summary>
+		/// <decorations decors="public string"></decorations>
+		public string Stacktrace;
+		/// <summary>The Type of the calling Class.</summary>
+		/// <decorations decors="public Type"></decorations>
+		public Type Class;
+		/// <summary>The Method or Function that called this Stacktrace.</summary>
+		/// <decorations decors="public MethodInfo"></decorations>
+		public MethodInfo Function;
+
+		internal static StacktraceInfo Construct(string Stacktrace)
+		{
+			StacktraceInfo RetVal;
+			RetVal.Stacktrace = Stacktrace;
+
+			StackFrame F = new StackFrame(2, true);
+			RetVal.Function = (MethodInfo)F.GetMethod();
+			RetVal.Class = RetVal.Function.DeclaringType;
+
+			return RetVal;
+		}
+
+		/// <summary>Implicit string conversion to the string value of the stacktrace.</summary>
+		/// <decorations decors="public static implicit operator string"></decorations>
+		public static implicit operator string(StacktraceInfo StacktraceInfo) => StacktraceInfo.Stacktrace;
 	}
 }
