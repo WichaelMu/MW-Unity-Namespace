@@ -3,7 +3,7 @@ using UnityEditor;
 using MW;
 
 [CustomPropertyDrawer(typeof(MRotator))]
-public class MRotatorEditor : PropertyDrawer
+internal class MRotatorEditor : PropertyDrawer
 {
 	public override void OnGUI(Rect Position, SerializedProperty Property, GUIContent Label)
 	{
