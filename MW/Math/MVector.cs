@@ -249,6 +249,11 @@ namespace MW
 			return false;
 		}
 
+		public static MVector ComponentWiseMultiplication(MVector A, MVector B)
+		{
+			return new MVector(A.X * B.X, A.Y * B.Y, A.Z * B.Z);
+		}
+
 		/// <summary>Checks V's components for NaN.</summary>
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="V">The vector to check.</param>
@@ -483,6 +488,11 @@ namespace MW
 			return this;
 		}
 
+		public MVector ComponentWiseMultiplication(MVector Scalars)
+		{
+			return ComponentWiseMultiplication(Scalars, this);
+		}
+
 		/// <summary>Euclidean distance between this MVector and another V.</summary>
 		/// <decorations decors="public float"></decorations>
 		/// <param name="V">The MVector to find distance.</param>
@@ -551,6 +561,7 @@ namespace MW
 		/// <returns>(MVector V, float S) => new MVector(V.X * S, V.Y * S, V.Z * S)</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator *(float S, MVector V) => new MVector(V.X * S, V.Y * S, V.Z * S);
+		public static MVector operator *(MVector A, MVector B) => ComponentWiseMultiplication(A, B);
 		/// <summary>Divides an MVector by a scalar on all components.</summary>
 		/// <remarks>If d == 0, this will throw a DivideByZeroException.</remarks>
 		/// <decorations decors="public static MVector operator/"></decorations>
