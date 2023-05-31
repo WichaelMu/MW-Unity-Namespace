@@ -153,12 +153,12 @@ namespace MW
 			Up -= ((Up | Forward) * Forward);
 			Up.Normalise();
 
-			MVector vector2 = Up ^ Forward;
-			MVector vector3 = Forward ^ vector2;
+			MVector V1 = Up ^ Forward;
+			MVector V2 = Forward ^ V1;
 
-			float F00 = vector2.X; float F10 = vector3.X; float F20 = Forward.X;
-			float F01 = vector2.Y; float F11 = vector3.Y; float F21 = Forward.Y;
-			float F02 = vector2.Z; float F12 = vector3.Z; float F22 = Forward.Z;
+			float F00 = V1.X; float F10 = V2.X; float F20 = Forward.X;
+			float F01 = V1.Y; float F11 = V2.Y; float F21 = Forward.Y;
+			float F02 = V1.Z; float F12 = V2.Z; float F22 = Forward.Z;
 
 			float Diag = F00 + F11 + F22;
 
@@ -197,7 +197,7 @@ namespace MW
 			}
 
 			{
-				float Sqrt = FSqrt(((1f + F22)- F00 - F11));
+				float Sqrt = FSqrt(((1f + F22) - F00 - F11));
 				float Inverse = .5f * FInverse(Sqrt);
 				Q.x = (F20 + F02) * Inverse;
 				Q.y = (F21 + F12) * Inverse;
@@ -349,6 +349,21 @@ namespace MW
 			return R;
 		}
 
+		public static MRotator operator *(MRotator L, MRotator R)
+		{
+			Quaternion A = L.Quaternion();
+			Quaternion B = R.Quaternion();
+
+			Quaternion RetVal = new Quaternion(
+				A.w * B.x + A.x * B.w + A.y * B.z - A.z * B.y,
+				A.w * B.y + A.y * B.w + A.z * B.x - A.x * B.z,
+				A.w * B.z + A.z * B.w + A.x * B.y - A.y * B.x,
+				A.w * B.w - A.x * B.x - A.y * B.y - A.z * B.z
+			);
+
+			return new MRotator(RetVal);
+		}
+
 		/// <summary>Compares two MRotators for equality.</summary>
 		/// <decorations decor="public static bool operator=="></decorations>
 		/// <param name="Left">Left-side comparison.</param>
@@ -379,6 +394,29 @@ namespace MW
 		/// <decorations decor="public static implicit operator Quaternion"></decorations>
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
+
+		public static MVector operator *(MRotator Rotation, MVector Point)
+		{
+			Quaternion R = Rotation.Quaternion();
+
+			MVector XYZ = new MVector(R.x, R.y, R.z);
+			MVector V0 = 2f * XYZ;
+			MVector V1 = V0 * XYZ;
+			MVector V2 = new MVector(R.x, R.x, R.y) * new MVector(V0.Y, V0.Z, V0.Z);
+			MVector V3 = new MVector(R.w) * V0;
+
+			MVector RetVal;
+			RetVal.X = (1f - (V1.Y + V1.Z)) * Point.X + (V2.X - V3.Z) * Point.Y + (V2.Y + V3.Y) * Point.Z;
+			RetVal.Y = (V2.X + V3.Z) * Point.X + (1f - (V1.X + V1.Z)) * Point.Y + (V2.Z - V3.X) * Point.Z;
+			RetVal.Z = (V2.Y - V3.Y) * Point.X + (V2.Z + V3.X) * Point.Y + (1f - (V1.X + V1.Y)) * Point.Z;
+
+			return RetVal;
+		}
+
+		public static Vector3 operator *(MRotator Rotation, Vector3 Point)
+		{
+			return Rotation * Point.MV();
+		}
 
 		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
 		/// <decorations decors="public override int"></decorations>
