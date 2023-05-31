@@ -7,6 +7,7 @@ using static MW.Math.Mathematics;
 using static MW.Utils;
 using static MW.Debugger.Arrow;
 using static MW.Math.Magic.Fast;
+using UnityEngine.PlayerLoop;
 
 namespace MW.CameraUtils
 {
@@ -44,22 +45,28 @@ namespace MW.CameraUtils
 		public float Distance;
 		/// <summary>The world-rotation of <see cref="Boom"/>, about <see cref="Target"/> + <see cref="TargetOffset"/>.</summary>
 		/// <docs>The world-rotation of Boom, about Target + TargetOffset.</docs>
-		/// <decorations decor="public Vector3"></decorations>
-		[SerializeField] Vector3 GimbalRotation;
+		/// <decorations decor="public protected MRotator"></decorations>
+		[SerializeField] protected MRotator GimbalRotation;
 		/// <summary>The world-rotation of <see cref="Boom "/> as it looks and faces <see cref="Target"/>.</summary>
 		/// <docs>The world-rotation of Boom as it looks and faces Target.</docs>
-		/// <decorations decor="public Vector3"></decorations>
-		[SerializeField] protected Vector3 CameraRotation;
-		/// <summary><see langword="true"></see> to inherit <see cref="Target"/>'s rotation.</summary>
-		/// <docs>True to inherit Target's rotation.</docs>
-		/// <decorations decor="public bool"></decorations>
-		public bool bInheritRotation;
-		/// <summary><see langword="true"/> to inherit the <see cref="Target"/>'s Pitch rotation only.</summary>
-		/// <docs>True to inherit the Target's Pitch rotation only.</docs>
+		/// <decorations decor="public protected MRotator"></decorations>
+		[SerializeField] protected MRotator CameraRotation;
+		/// <summary><see langword="true"/> to inherit the <see cref="Target"/>'s Pitch.</summary>
+		/// <docs>True to inherit the Target's Pitch rotation.</docs>
 		/// <decorations decor="[SerializeField] bool"></decorations>
 		[SerializeField] bool bInheritPitch;
-		[HideInInspector, SerializeField] Vector3 DefaultGimbalRotation;
-		[HideInInspector, SerializeField] Vector3 DefaultCameraRotation;
+		/// <summary><see langword="true"/> to inherit the <see cref="Target"/>'s Yaw.</summary>
+		/// <docs>True to inherit the Target's Yaw rotation.</docs>
+		/// <decorations decor="[SerializeField] bool"></decorations>
+		[SerializeField] bool bInheritYaw;
+		/// <summary><see langword="true"/> to inherit the <see cref="Target"/>'s Roll.</summary>
+		/// <docs>True to inherit the Target's Roll rotation.</docs>
+		/// <decorations decor="[SerializeField] bool"></decorations>
+		[SerializeField] bool bInheritRoll;
+		[SerializeField] bool bShouldLookAtTarget = true;
+		bool bIsInheritingAnyRotation => bInheritPitch || bInheritYaw || bInheritRoll;
+		[HideInInspector, SerializeField] MRotator DefaultGimbalRotation;
+		[HideInInspector, SerializeField] MRotator DefaultCameraRotation;
 
 		/// <summary><see langword="true"></see> to let the mouse wheel control <see cref="Distance"/>.</summary>
 		/// <docs>True to let the mouse wheel control Distance.</docs>
@@ -90,10 +97,9 @@ namespace MW.CameraUtils
 		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField] float MaxPanDistance = 5f;
 
-		Vector3 GimbalRotationInherited;
-		Vector3 CameraRotationInherited;
+		MRotator GimbalRotationInherited;
+		MRotator CameraRotationInherited;
 		Vector3 OriginalTargetOffset;
-		float PitchDegrees;
 
 		/// <summary><see langword="true"></see> to invert the Controls when Orbiting about the world X-Axis.</summary>
 		/// <docs>True to invert the Controls when Orbiting around the world X-Axis.</docs>
@@ -220,6 +226,11 @@ namespace MW.CameraUtils
 			}
 		}
 
+		void LateUpdate()
+		{
+			PlaceCamera();
+		}
+
 		Vector3 SmoothPositionVelocity;
 
 		void FixedUpdate()
@@ -231,15 +242,13 @@ namespace MW.CameraUtils
 				Vector3.SmoothDamp(Boom.position, TargetPosition, ref SmoothPositionVelocity, PositionalLagStrength),
 				Quaternion.Slerp(Boom.rotation, TargetRotation, RotationalLagStrength)
 			);
-
-			PlaceCamera();
 		}
 
 #if ENABLE_CUSTOM_PROJECTION
-	void OnPreCull()
-	{
-		ComputeProjection();
-	}
+		void OnPreCull()
+		{
+			ComputeProjection();
+		}
 #endif
 
 		void PlaceCamera()
@@ -247,59 +256,49 @@ namespace MW.CameraUtils
 			// Where the Spring Arm will point towards.
 			Vector3 ArmDirection;
 			Vector3 FinalPosition;
-			Quaternion FinalRotation = Quaternion.Euler(CameraRotation);
+			MRotator FinalRotation = CameraRotation;
 
-			if (!bInheritRotation)
+			// Invert Pitch because we are behind the Target.
+			MRotator Rotation = GimbalRotation;
+
+			if (bInheritPitch)
 			{
-				float VerticalOrbit = GimbalRotation.x;
-				float HorizontalOrbit = -GimbalRotation.y;
-
-				VerticalOrbit *= Mathf.Deg2Rad;
-				HorizontalOrbit *= Mathf.Deg2Rad;
-
-				// Convert Angles to Vectors.
-				SinCos(out float VerticalSine, out float VerticalCosine, VerticalOrbit);
-				SinCos(out float HorizontalSine, out float HorizontalCosine, HorizontalOrbit);
-				Vector3 Ground = new Vector3(VerticalSine, 0, VerticalCosine); // XZ.
-				Vector3 Up = new Vector3(0, HorizontalSine, HorizontalCosine); // XYZ.
-
-				// Ground's XZ and Up's Y will be used to define the direction of the Spring Arm.
-				ArmDirection = new Vector3(Ground.x, Up.y, Ground.z).normalized;
-
-				if (bDrawRotationalLines)
-				{
-					Debug.DrawLine(Target.position, Target.position + -Ground * Distance, Color.red);
-					Debug.DrawLine(Target.position, Target.position + -Up * Distance, Color.green);
-					Debug.DrawLine(Target.position, Target.position + -ArmDirection * Distance, Color.yellow);
-				}
+				Rotation.Pitch += Target.localEulerAngles.x;
 			}
-			else
+
+			if (bInheritYaw)
 			{
-				if (bInheritPitch && Physics.Raycast(Target.position + Vector3.up, Vector3.down, out RaycastHit Ground, 5f, OnlyCollideWith))
-				{
-					PitchDegrees = 90f - V2PYR(Ground.normal).x;
-				}
-				else
-				{
-					PitchDegrees = 0f;
-				}
+				Rotation.Yaw += Target.localEulerAngles.y;
+			}
 
-				// Rotates the Spring Arm around to face the Target's forward vector.
-				// Ignores the Target's Y-Axis, replacing it with the Yaw rotation,
-				// relative to the Target, after inheritance.
-				ArmDirection = Target.forward;
-				ArmDirection.y = Mathf.Sin((-GimbalRotationInherited.y - PitchDegrees) * Mathf.Deg2Rad);
-				ArmDirection.Normalize();
+			if (bInheritRoll)
+			{
+				CameraRotation.Roll = -Target.localEulerAngles.z;
+			}
 
-				FinalRotation = GetInheritedRotation();
+			Rotation.Pitch *= -1f;
+			ArmDirection = Rotation * MVector.Forward;
+
+			if (bDrawRotationalLines)
+			{
+				DebugArrow(Target.position, Target.position + -ArmDirection * (Distance + 1.5f), Color.yellow);
 			}
 
 			// If the Spring Arm will collider with something:
 			if (bRunCollisionChecks && RunCollisionsCheck(ref ArmDirection))
 				return;
 
+			if (IsZero(ArmDirection))
+			{
+				ArmDirection = bIsInheritingAnyRotation
+					? Target.forward * -1f
+					: Vector3.back;
+			}
+
 			// Make the Position and Rotation for Lag.
 			FinalPosition = GetTargetPosition() - (Distance * ArmDirection);
+			if (bShouldLookAtTarget)
+				FinalRotation = GetInheritedRotation();
 
 			SetPositionAndRotation(FinalPosition, FinalRotation);
 		}
@@ -319,8 +318,8 @@ namespace MW.CameraUtils
 			Ray FOV = new Ray(TP, -Direction);
 			bool bViewToTargetBlocked = Physics.Raycast(FOV, out RaycastHit Hit, Distance, OnlyCollideWith);
 
-			Quaternion Rotation = !bInheritRotation
-						? Quaternion.Euler(CameraRotation)
+			Quaternion Rotation = !bIsInheritingAnyRotation
+						? CameraRotation
 						: GetInheritedRotation();
 
 			CollisionLogic(Direction, TP, FOV, bViewToTargetBlocked, Hit, Rotation);
@@ -346,8 +345,8 @@ namespace MW.CameraUtils
 				// We're not even using the Advanced Collision Behaviour OR                                        // If we are using Advanced Collision, continue evaluating...
 				// We're not Inheriting Rotation OR                                                                // If we are using Advanced Collision, we *must* also be Inheriting Rotation, continue evaluating if so...
 				// The distance between the wall and the Target is greater than the Advanced Distance Threshold.   // If the wall is 'close enough' to the Target, finally use Advanced Collision.
-				if (PitchDegrees > 10f || (!bForceAdvancedBehaviour && !bUseAdvancedCollisionBehaviour ||
-					!bInheritRotation || Hit.distance > AdvancedCollisionActivationDistance))
+				if (!bForceAdvancedBehaviour && !bUseAdvancedCollisionBehaviour ||
+					!bIsInheritingAnyRotation || Hit.distance > AdvancedCollisionActivationDistance)
 				{
 					Vector3 Point = Hit.point - FOV.direction;
 					SetPositionAndRotation(Point, Rotation);
@@ -355,7 +354,7 @@ namespace MW.CameraUtils
 				// Fail-safe checks. Here we sort of redefine what Force Advanced Behaviour means...
 				// If the above fails, but we're still forcing the use of Advanced, we can still do it regardless if we're Inheriting Rotations.
 				// Otherwise, if we're not using Force, the Advanced Behaviour must use Inherit Rotation.
-				else if (bForceAdvancedBehaviour || bInheritRotation)
+				else if (bForceAdvancedBehaviour || bIsInheritingAnyRotation)
 				{
 					RunAdvancedCollision(TargetPosition, Hit, Rotation);
 				}
@@ -382,8 +381,8 @@ namespace MW.CameraUtils
 
 			if (bDrawAdvancedCollisionLines)
 			{
-				DebugArrow(transform.position, AdvancedForwardVector, Color.blue);
-				DebugArrow(transform.position, AdvancedRightVector, Color.red);
+				DebugArrow(Boom.position, AdvancedForwardVector, Color.blue);
+				DebugArrow(Boom.position, AdvancedRightVector, Color.red);
 			}
 
 			// Dynamically adjust the angle to be inversely proportional to the distance with the Wall and the Max Spring Arm Distance.
@@ -426,7 +425,7 @@ namespace MW.CameraUtils
 
 			// Look at TargetPos() while still maintaining the inherited Pitch rotation.
 			Boom.LookAt(TP);
-			Boom.localEulerAngles = new Vector3(CameraRotationInherited.x, Boom.localEulerAngles.y, Boom.localEulerAngles.z);
+			Boom.localEulerAngles = new Vector3(CameraRotationInherited.Yaw, Boom.localEulerAngles.y, Boom.localEulerAngles.z);
 
 			// Choose the Ray furthest away from Target.
 			SetPositionAndRotation(
@@ -466,9 +465,13 @@ namespace MW.CameraUtils
 		/// <summary>Gets the Inherited Rotation of the Target.</summary>
 		/// <decorations decor="protected virtual Quaternion"></decorations>
 		/// <returns>A Quaternion representing the Target's rotation, as well as this Spring Arm's rotation settings.</returns>
-		protected virtual Quaternion GetInheritedRotation()
+		protected virtual MRotator GetInheritedRotation()
 		{
-			return Quaternion.Euler(new Vector3(CameraRotationInherited.x + PitchDegrees * .5f, CameraRotationInherited.y + GetInheritedAxis(Target.localEulerAngles.y)));
+			float Pitch = bInheritPitch ? CameraRotationInherited.Yaw * .5f - GetInheritedAxis(Target.localEulerAngles.x) : 0f;
+			float Yaw = bInheritYaw ? CameraRotationInherited.Pitch + GetInheritedAxis(Target.localEulerAngles.y) : 0f;
+			float Roll = bInheritRoll ? CameraRotation.Roll + GetInheritedAxis(Target.localEulerAngles.z) : 0f;
+
+			return new MRotator(Pitch, Yaw, Roll);
 		}
 
 		float GetInheritedAxis(float AxisAngle)
@@ -506,25 +509,25 @@ namespace MW.CameraUtils
 
 				DetermineInverse(ref DeltaX, ref DeltaY);
 
-				if (!bInheritRotation)
+				if (!bIsInheritingAnyRotation)
 				{
-					GimbalRotation.x += DeltaX;
-					CameraRotation.y += DeltaX;
+					GimbalRotation.Yaw -= DeltaX;
+					CameraRotation.Pitch -= DeltaX;
 
-					if (GimbalRotation.y - DeltaY < MinMaxOrbitAngle.y && GimbalRotation.y - DeltaY >= MinMaxOrbitAngle.x)
+					if (GimbalRotation.Pitch - DeltaY < MinMaxOrbitAngle.y && GimbalRotation.Pitch - DeltaY >= MinMaxOrbitAngle.x)
 					{
-						GimbalRotation.y -= DeltaY;
-						CameraRotation.x -= DeltaY;
+						GimbalRotation.Pitch -= DeltaY;
+						CameraRotation.Yaw -= DeltaY;
 					}
 				}
 				else
 				{
-					CameraRotationInherited.x -= DeltaY;
-					CameraRotationInherited.y += DeltaX;
+					CameraRotationInherited.Yaw -= DeltaY;
+					CameraRotationInherited.Pitch += DeltaX;
 
-					if (GimbalRotationInherited.y - DeltaY < MinMaxOrbitAngle.y && GimbalRotationInherited.y - DeltaY >= MinMaxOrbitAngle.x)
+					if (GimbalRotationInherited.Pitch - DeltaY < MinMaxOrbitAngle.y && GimbalRotationInherited.Pitch - DeltaY >= MinMaxOrbitAngle.x)
 					{
-						GimbalRotationInherited.y -= DeltaY;
+						GimbalRotationInherited.Pitch -= DeltaY;
 					}
 				}
 
@@ -574,19 +577,19 @@ namespace MW.CameraUtils
 		/// <param name="Right">Out Right Vector.</param>
 		public void GetForwardRight(out Vector3 Forward, out Vector3 Right)
 		{
-			Forward = transform.forward;
-			Right = transform.right;
+			Forward = Boom.forward;
+			Right = Boom.right;
 
 #if false // Kept for Options.
 		bool bCheck = bIsAdvancedBehaviourEffective && bInheritRotation;
 
 		Forward = bCheck
-			? transform.forward
-			: transform.forward;
+			? Boom.forward
+			: Boom.forward;
 
 		Right = bCheck
-			? transform.right
-			: transform.right;
+			? Boom.right
+			: boom.right;
 #endif
 		}
 
@@ -609,7 +612,7 @@ namespace MW.CameraUtils
 			if (bNoClip)
 				NoClip();
 
-			Target.position = transform.position;
+			Target.position = Boom.position;
 		}
 
 #if ENABLE_CUSTOM_PROJECTION
@@ -661,7 +664,7 @@ namespace MW.CameraUtils
 			if (Boom && Target)
 				PlaceCamera();
 
-			GimbalRotation.y = Mathf.Clamp(GimbalRotation.y, -90f, 90f);
+			//GimbalRotation.y = Mathf.Clamp(GimbalRotation.y, -90f, 90f);
 
 			PositionalLagStrength = Mathf.Clamp(PositionalLagStrength, Vector3.kEpsilon, 1f);
 			RotationalLagStrength = Mathf.Clamp(RotationalLagStrength, Vector3.kEpsilon, 1f);
