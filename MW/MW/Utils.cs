@@ -509,6 +509,18 @@ namespace MW
 			return FAbs(F) < Tolerance;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsZero(MVector V, float Tolerance = MVector.kEpsilon)
+		{
+			return IsZero(V.X, Tolerance) && IsZero(V.Y, Tolerance) && IsZero(V.Z, Tolerance);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsZero(MRotator R, float Tolerance = MVector.kEpsilon)
+		{
+			return IsZero(R.Pitch, Tolerance) && IsZero(R.Yaw, Tolerance) && IsZero(R.Roll, Tolerance);
+		}
+
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
 		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>
 		/// <decorations decor="public static void"></decorations>
