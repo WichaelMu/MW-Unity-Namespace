@@ -125,6 +125,7 @@ namespace MW.CameraUtils
 		/// <remarks>Advanced Collision Behaviour will run, regardless of if Target is backed up against a wall of OnlyCollideWith.</remarks>
 		/// <decorations decor="[SerializeField] bool"></decorations>
 		[SerializeField] bool bForceAdvancedBehaviour;
+		[SerializeField, Min(0f)] float CollisionDistanceLeeway = 0f;
 		/// <summary>The Distance in which to activate Advanced Collision Behaviour.</summary>
 		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField] float AdvancedCollisionActivationDistance;
@@ -355,7 +356,7 @@ namespace MW.CameraUtils
 				if (!bForceAdvancedBehaviour && !bUseAdvancedCollisionBehaviour ||
 					!bIsInheritingAnyRotation || Hit.distance > AdvancedCollisionActivationDistance)
 				{
-					Vector3 Point = Hit.point - FOV.direction;
+					Vector3 Point = Hit.point - (CollisionDistanceLeeway * FOV.direction);
 					SetPositionAndRotation(Point, Rotation);
 				}
 				// Fail-safe checks. Here we sort of redefine what Force Advanced Behaviour means...
