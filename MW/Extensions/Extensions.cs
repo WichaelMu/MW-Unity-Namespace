@@ -42,6 +42,16 @@ namespace MW.Extensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float FDistance(this Vector3 V, Vector3 R) => (V - R).FMagnitude();
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Vector3 FClampMagnitude(this Vector3 V, float MaxMagnitude)
+		{
+			Vector3 Normalised = V.FNormalise();
+			if (Normalised.sqrMagnitude > Vector3.kEpsilon)
+				return Normalised * MaxMagnitude;
+
+			return V;
+		}
+
 		/// <summary>Converts a <see cref="Quaternion"/> to an MRotator.</summary>
 		/// <docs>Converts a Quaternion to an MRotator.</docs>
 		/// <decorations decor="|Extension| MRotator"></decorations>

@@ -3,11 +3,10 @@
 using UnityEngine;
 using MW.Console;
 using MW.Extensions;
-using static MW.Math.Mathematics;
 using static MW.Utils;
 using static MW.Debugger.Arrow;
 using static MW.Math.Magic.Fast;
-using UnityEngine.PlayerLoop;
+using MW.Debugger;
 
 namespace MW.CameraUtils
 {
@@ -19,7 +18,6 @@ namespace MW.CameraUtils
 	public class SpringArm : MonoBehaviour
 	{
 		[Header("Debug")]
-		[SerializeField] bool bDrawRotationalLines;
 		[SerializeField] bool bDrawAdvancedCollisionLines;
 
 		/// <summary>The <see cref="Transform"/> that will track <see cref="Boom"/>.</summary>
@@ -150,6 +148,7 @@ namespace MW.CameraUtils
 		/// <remarks>0 is standstill (infinite Lag). 1 is instant (no Lag).</remarks>
 		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField] float RotationalLagStrength = .2f;
+		[SerializeField] float MaxPositionalLagDistance = 0f;
 		Vector3 TargetPosition;
 		Quaternion TargetRotation;
 
@@ -226,21 +225,32 @@ namespace MW.CameraUtils
 			}
 		}
 
+		Vector3 SmoothPositionVelocity;
+
 		void LateUpdate()
 		{
 			PlaceCamera();
-		}
 
-		Vector3 SmoothPositionVelocity;
-
-		void FixedUpdate()
-		{
+			// Don't update positions if we're no-clipping.
 			if (bNoClip)
 				return;
 
+			Vector3 Position = Vector3.SmoothDamp(Boom.position, TargetPosition, ref SmoothPositionVelocity, PositionalLagStrength);
+			Quaternion Rotation = Quaternion.Slerp(Boom.rotation, TargetRotation, RotationalLagStrength);
+
+			if (MaxPositionalLagDistance > 0f)
+			{
+				Vector3 TargetPosition = GetTargetPosition();
+				Vector3 DisplacementFromTarget = Position - TargetPosition;
+				if (DisplacementFromTarget.FMagnitude() > MaxPositionalLagDistance)
+				{
+					Position = TargetPosition + DisplacementFromTarget.FClampMagnitude(MaxPositionalLagDistance);
+				}
+			}
+
 			Boom.SetPositionAndRotation(
-				Vector3.SmoothDamp(Boom.position, TargetPosition, ref SmoothPositionVelocity, PositionalLagStrength),
-				Quaternion.Slerp(Boom.rotation, TargetRotation, RotationalLagStrength)
+				Position,
+				Rotation
 			);
 		}
 
@@ -279,11 +289,6 @@ namespace MW.CameraUtils
 			Rotation.Pitch *= -1f;
 			ArmDirection = Rotation * MVector.Forward;
 
-			if (bDrawRotationalLines)
-			{
-				DebugArrow(Target.position, Target.position + -ArmDirection * (Distance + 1.5f), Color.yellow);
-			}
-
 			// If the Spring Arm will collider with something:
 			if (bRunCollisionChecks && RunCollisionsCheck(ref ArmDirection))
 				return;
@@ -295,8 +300,10 @@ namespace MW.CameraUtils
 					: Vector3.back;
 			}
 
+			Vector3 TargetPosition = GetTargetPosition();
+
 			// Make the Position and Rotation for Lag.
-			FinalPosition = GetTargetPosition() - (Distance * ArmDirection);
+			FinalPosition = TargetPosition - (Distance * ArmDirection);
 			if (bShouldLookAtTarget)
 				FinalRotation = GetInheritedRotation();
 
