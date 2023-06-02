@@ -150,7 +150,7 @@ namespace MW.CameraUtils
 		/// <decorations decor="[SerializeField] float"></decorations>
 		[SerializeField] float RotationalLagStrength = .2f;
 		[SerializeField] float MaxPositionalLagDistance = 0f;
-		Vector3 TargetPosition;
+		MVector TargetPosition;
 		Quaternion TargetRotation;
 
 #if ENABLE_CUSTOM_PROJECTION
@@ -265,8 +265,8 @@ namespace MW.CameraUtils
 		void PlaceCamera()
 		{
 			// Where the Spring Arm will point towards.
-			Vector3 ArmDirection;
-			Vector3 FinalPosition;
+			MVector ArmDirection;
+			MVector FinalPosition;
 			MRotator FinalRotation = CameraRotation;
 
 			// Invert Pitch because we are behind the Target.
@@ -301,7 +301,7 @@ namespace MW.CameraUtils
 					: Vector3.back;
 			}
 
-			Vector3 TargetPosition = GetTargetPosition();
+			MVector TargetPosition = GetTargetPosition();
 
 			// Make the Position and Rotation for Lag.
 			FinalPosition = TargetPosition - (Distance * ArmDirection);
@@ -315,7 +315,7 @@ namespace MW.CameraUtils
 		/// <decorations decor="protected bool"></decorations>
 		/// <param name="Direction">A reference to the desired Direction of the Spring Arm.</param>
 		/// <returns>True if a Collision with OnlyCollideWith was detected.</returns>
-		protected bool RunCollisionsCheck(ref Vector3 Direction)
+		protected bool RunCollisionsCheck(ref MVector Direction)
 		{
 #if ENABLE_CUSTOM_PROJECTION
 			if (bUseCustomProjection)
@@ -343,7 +343,7 @@ namespace MW.CameraUtils
 		/// <param name="bViewToTargetBlocked">True if the Spring Arm's view to Target was blocked.</param>
 		/// <param name="Hit">The RaycastHit information of the Collision.</param>
 		/// <param name="Rotation">The desired Rotation of the Spring Arm.</param>
-		protected virtual void CollisionLogic(Vector3 Direction, Vector3 TargetPosition, Ray FOV, bool bViewToTargetBlocked, RaycastHit Hit, Quaternion Rotation)
+		protected virtual void CollisionLogic(MVector Direction, MVector TargetPosition, Ray FOV, bool bViewToTargetBlocked, RaycastHit Hit, Quaternion Rotation)
 		{
 			if (bViewToTargetBlocked)
 			{
@@ -399,18 +399,18 @@ namespace MW.CameraUtils
 
 			// Make and Rotate L and R Vectors Rotated by the above Angle.
 			MVector TargetDirectionToCamera = (Hit.point.MV() - TP).Normalised;
-			Vector3 Right = TargetDirectionToCamera.RotateVector(-DeltaAngle, MVector.Up);
-			Vector3 Left = TargetDirectionToCamera.RotateVector(DeltaAngle, MVector.Up);
+			MVector Right = TargetDirectionToCamera.RotateVector(-DeltaAngle, MVector.Up);
+			MVector Left = TargetDirectionToCamera.RotateVector(DeltaAngle, MVector.Up);
 
 			Ray RR = new Ray(TP, Right);
 			Ray RL = new Ray(TP, Left);
 
 			// If the above Rays don't hit anything, set default positions for L and R at Distance units away from Target.
-			Vector3 PointRight = TP + Right * Distance;
-			Vector3 PointLeft = TP + Left * Distance;
+			MVector PointRight = TP + Distance * Right;
+			MVector PointLeft = TP + Distance * Left;
 
 			if (bDrawAdvancedCollisionLines)
-				DebugArrow(TP, (Vector3)TargetDirectionToCamera * Hit.distance, Color.yellow);
+				DebugArrow(TP, Hit.distance * TargetDirectionToCamera, Color.yellow);
 
 			bool bRHit = Physics.Raycast(RR, out RaycastHit RHit, Distance, OnlyCollideWith);
 			bool bLHit = Physics.Raycast(RL, out RaycastHit LHit, Distance, OnlyCollideWith);
@@ -420,7 +420,7 @@ namespace MW.CameraUtils
 				PointRight = RHit.point;
 
 				if (bDrawAdvancedCollisionLines)
-					DebugArrow(TP, Right * RHit.distance, Color.red);
+					DebugArrow(TP, RHit.distance * Right, Color.red);
 			}
 
 			if (bLHit)
@@ -428,7 +428,7 @@ namespace MW.CameraUtils
 				PointLeft = LHit.point;
 
 				if (bDrawAdvancedCollisionLines)
-					DebugArrow(TP, Left * LHit.distance, Color.green);
+					DebugArrow(TP, LHit.distance * Left, Color.green);
 			}
 
 			// Look at TargetPos() while still maintaining the inherited Pitch rotation.
@@ -449,7 +449,7 @@ namespace MW.CameraUtils
 		/// <decorations decor="protected void"></decorations>
 		/// <param name="FinalPosition"></param>
 		/// <param name="FinalRotation"></param>
-		protected void SetPositionAndRotation(Vector3 FinalPosition, Quaternion FinalRotation)
+		protected void SetPositionAndRotation(MVector FinalPosition, Quaternion FinalRotation)
 		{
 			if (!Application.isPlaying)
 			{
@@ -565,12 +565,13 @@ namespace MW.CameraUtils
 		{
 			if (PanDelta.sqrMagnitude > Vector2.kEpsilon)
 			{
-				float DeltaX = PanDelta.x * OrbitSensitivity * Time.deltaTime;
-				float DeltaY = PanDelta.y * OrbitSensitivity * Time.deltaTime;
+				float TimeIndependent = OrbitSensitivity * Time.deltaTime;
+				float DeltaX = PanDelta.x * TimeIndependent;
+				float DeltaY = PanDelta.y * TimeIndependent;
 
 				// Ensure 'Right' and 'Up' is relative to the Camera.
 				TargetOffset -= DeltaX * Time.deltaTime * Boom.right + DeltaY * Time.deltaTime * Boom.up;
-				TargetOffset = Vector3.ClampMagnitude(TargetOffset, MaxPanDistance);
+				TargetOffset = TargetOffset.FClampMagnitude(MaxPanDistance);
 			}
 			else
 			{
@@ -674,8 +675,8 @@ namespace MW.CameraUtils
 
 			//GimbalRotation.y = Mathf.Clamp(GimbalRotation.y, -90f, 90f);
 
-			PositionalLagStrength = Mathf.Clamp(PositionalLagStrength, Vector3.kEpsilon, 1f);
-			RotationalLagStrength = Mathf.Clamp(RotationalLagStrength, Vector3.kEpsilon, 1f);
+			Clamp(ref PositionalLagStrength, MVector.kEpsilon, 1f);
+			Clamp(ref RotationalLagStrength, MVector.kEpsilon, 1f);
 
 			AdvancedCollisionActivationDistance = Mathf.Clamp(AdvancedCollisionActivationDistance, MinMaxDistance.x, MinMaxDistance.y);
 		}
