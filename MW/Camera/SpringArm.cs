@@ -482,7 +482,7 @@ namespace MW.CameraUtils
 			return new MRotator(Pitch, Yaw, Roll);
 		}
 
-		float GetInheritedAxis(float AxisAngle)
+		static float GetInheritedAxis(float AxisAngle)
 		{
 			float TargetAxis = AxisAngle;
 			if (TargetAxis < 0f)
