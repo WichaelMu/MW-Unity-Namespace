@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static MW.Utils;
 using static MW.Math.Magic.Fast;
-using static MW.Debugger.Arrow;
+using static MW.Diagnostics.Arrow;
 
 namespace MW.Kinetic
 {

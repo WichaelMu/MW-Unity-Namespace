@@ -1,4 +1,4 @@
-﻿using MW.Debugger;
+﻿using MW.Diagnostics;
 using UnityEngine;
 
 namespace MW.Diagnostics

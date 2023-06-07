@@ -4,18 +4,17 @@ using UnityEngine;
 using MW.Console;
 using MW.Extensions;
 using static MW.Utils;
-using static MW.Debugger.Arrow;
+using static MW.Diagnostics.Arrow;
 using static MW.Math.Magic.Fast;
-using MW.Debugger;
 
 namespace MW.CameraUtils
 {
-	/// <summary>A Spring Arm Component that allows <see cref="Boom"/> to track a <see cref="Target"/>.</summary>
-	/// <docs>A Spring Arm Component that allows a Boom to track a Target.</docs>
-	/// <remarks>While commonly used as for Camera tracking, this can be used for any object that needs to track <see cref="Target"/>.</remarks>
-	/// <docremarks>While commonly used as for Camera tracking, this can be used for any object that needs to track a Target.</docremarks>
-	/// <decorations decor="public class : MonoBehaviour"></decorations>
-	public class SpringArm : MonoBehaviour
+    /// <summary>A Spring Arm Component that allows <see cref="Boom"/> to track a <see cref="Target"/>.</summary>
+    /// <docs>A Spring Arm Component that allows a Boom to track a Target.</docs>
+    /// <remarks>While commonly used as for Camera tracking, this can be used for any object that needs to track <see cref="Target"/>.</remarks>
+    /// <docremarks>While commonly used as for Camera tracking, this can be used for any object that needs to track a Target.</docremarks>
+    /// <decorations decor="public class : MonoBehaviour"></decorations>
+    public class SpringArm : MonoBehaviour
 	{
 		[Header("Debug")]
 		[SerializeField] bool bDrawAdvancedCollisionLines;
