@@ -316,8 +316,17 @@ namespace MW.Math
 		/// <param name="Sine">The Sine result over AngleInDegrees.</param>
 		/// <param name="Cosine">The Cosine result over AngleInDegrees.</param>
 		/// <param name="Angle">The angle in degrees.</param>
-		public static void SinCos(out float Sine, out float Cosine, float Angle)
+		/// <param name="bUseExactValue">True to use MathF.Sin and MathF.Cos for the exact SinCos values.</param>
+		[MethodImpl(MethodImplOptions.NoOptimization)]
+		public static void SinCos(out float Sine, out float Cosine, float Angle, bool bUseExactValue = false)
 		{
+			if (bUseExactValue)
+			{
+				Sine = Mathf.Sin(Angle);
+				Cosine = Mathf.Cos(Angle);
+				return;
+			}
+
 			float Quotient = (kInversePI * .5f) * Angle;
 			Quotient = (int)(Quotient + (Angle >= 0f ? .5f : -.5f));
 
@@ -327,12 +336,12 @@ namespace MW.Math
 			float Sign;
 			if (A > kHalfPI)
 			{
-				A = Mathf.PI - A;
+				A = kPI - A;
 				Sign = -1f;
 			}
 			else if (A < -kHalfPI)
 			{
-				A = -Mathf.PI - A;
+				A = -kPI - A;
 				Sign = -1f;
 			}
 			else
