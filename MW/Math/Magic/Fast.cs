@@ -54,7 +54,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">The number to take the inverse of.</param>
 		/// <param name="NewtonRaphsonIterations">The number of Newton Raphson iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
-		/// <returns>An approximation for calculating: 1 / N, within +-.001 of the real reciprocal with 5 Newton Raphson iterations.</returns>
+		/// <returns>An approximation for calculating: 1 / N, within +-.000008 of the real reciprocal with 5 Newton Raphson iterations.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe float FInverse(float N, int NewtonRaphsonIterations = 5)
 		{
@@ -143,7 +143,7 @@ namespace MW.Math.Magic
 		/// <docs>Faster version of Mathf.Atan().</docs>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="N">The ratio O/A.</param>
-		/// <returns>Inverse Tangent of N in radians, accurate to +-.01 radians.</returns>
+		/// <returns>Inverse Tangent of N in radians, accurate to +-.00136 radians.</returns>
 		public static float FArcTangent(float N)
 		{
 			float F = FAbs(N);
@@ -163,7 +163,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="Y">The Y component of a point.</param>
 		/// <param name="X">The X component of a point.</param>
-		/// <returns>Approximation of Atan2, accurate to +-.01 radians.</returns>
+		/// <returns>Approximation of Atan2, accurate to +-.00136 radians.</returns>
 		public static float FArcTangent2(float Y, float X)
 		{
 			if (Y == 0f && X == 0f)
