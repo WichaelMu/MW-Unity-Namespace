@@ -8,3 +8,7 @@ dotnet_diagnostic.CS1584.severity = suggestion
 
 # IDE0090: User 'new(...)'
 dotnet_diagnostic.IDE0090.severity = none
+
+# VSSpell001: Spell Check
+dotnet_diagnostic.VSSpell001.severity = none
+dotnet_diagnostic.VSSpell002.severity = none
