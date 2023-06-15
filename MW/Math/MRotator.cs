@@ -288,6 +288,14 @@ namespace MW
 			return new MVector(Pitch, Yaw, Roll);
 		}
 
+		/// <summary>Gets the direction this MRotator is facing when facing forward.</summary>
+		/// <param name="Forward">Forward orientation.</param>
+		/// <returns>An MVector direction representing this Rotation.</returns>
+		public MVector Direction(MVector Forward)
+		{
+			return this * Forward;
+		}
+
 		/// <summary>This MRotator % 360 on all components.</summary>
 		/// <decorations decor="public void"></decorations>
 		public void Wrap360()
@@ -349,6 +357,11 @@ namespace MW
 			return R;
 		}
 
+		/// <summary>Apply Rotations L and R in sequence.</summary>
+		/// <remarks>MRotator multiplications are not commutative. L * R != R * L.</remarks>
+		/// <param name="L">First rotation.</param>
+		/// <param name="R">Second rotation.</param>
+		/// <returns>An MRotator L rotated by R.</returns>
 		public static MRotator operator *(MRotator L, MRotator R)
 		{
 			Quaternion A = L.Quaternion();
@@ -395,7 +408,11 @@ namespace MW
 		/// <param name="Rotation">The rotation to convert to Quaternions.</param>
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 
-		public static MVector operator *(MRotator Rotation, MVector Point)
+		/// <summary>Rotate Vector by Rotation.</summary>
+		/// <param name="Rotation"></param>
+		/// <param name="Vector"></param>
+		/// <returns></returns>
+		public static MVector operator *(MRotator Rotation, MVector Vector)
 		{
 			Quaternion R = Rotation.Quaternion();
 
@@ -406,16 +423,20 @@ namespace MW
 			MVector V3 = new MVector(R.w) * V0;
 
 			MVector RetVal;
-			RetVal.X = (1f - (V1.Y + V1.Z)) * Point.X + (V2.X - V3.Z) * Point.Y + (V2.Y + V3.Y) * Point.Z;
-			RetVal.Y = (V2.X + V3.Z) * Point.X + (1f - (V1.X + V1.Z)) * Point.Y + (V2.Z - V3.X) * Point.Z;
-			RetVal.Z = (V2.Y - V3.Y) * Point.X + (V2.Z + V3.X) * Point.Y + (1f - (V1.X + V1.Y)) * Point.Z;
+			RetVal.X = (1f - (V1.Y + V1.Z)) * Vector.X + (V2.X - V3.Z) * Vector.Y + (V2.Y + V3.Y) * Vector.Z;
+			RetVal.Y = (V2.X + V3.Z) * Vector.X + (1f - (V1.X + V1.Z)) * Vector.Y + (V2.Z - V3.X) * Vector.Z;
+			RetVal.Z = (V2.Y - V3.Y) * Vector.X + (V2.Z + V3.X) * Vector.Y + (1f - (V1.X + V1.Y)) * Vector.Z;
 
 			return RetVal;
 		}
 
-		public static Vector3 operator *(MRotator Rotation, Vector3 Point)
+		/// <summary>Rotate Vector by Rotation.</summary>
+		/// <param name="Rotation"></param>
+		/// <param name="Vector"></param>
+		/// <returns></returns>
+		public static Vector3 operator *(MRotator Rotation, Vector3 Vector)
 		{
-			return Rotation * Point.MV();
+			return Rotation * Vector.MV();
 		}
 
 		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
