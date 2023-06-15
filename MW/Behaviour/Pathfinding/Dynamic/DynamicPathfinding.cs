@@ -79,8 +79,6 @@ namespace MW.Pathfinding
 			if (FrameCount % FramesBetweenUpdate != 0)
 				return;
 
-			// ...
-
 			if (AsyncOperation == null)
 			{
 				AsyncOperation = AsyncDynamicNodeReconnect();
@@ -95,7 +93,7 @@ namespace MW.Pathfinding
 		/// <decorations decor="public void"></decorations>
 		public void PlotPoints()
 		{
-			Nodes = new MArray<Node>();
+			Nodes.Flush();
 
 			float PPU = 1f / PointsPerUnit;
 			int i = 0;
@@ -197,9 +195,7 @@ namespace MW.Pathfinding
 			while (N < Nodes.Num)
 			{
 				for (int k = 0; k < NodesPerUpdate && N < Nodes.Num; ++k, ++N)
-				{
 					UpdateNode(N);
-				}
 
 				yield return null;
 			}
@@ -326,6 +322,7 @@ namespace MW.Pathfinding
 			for (int i = 0; i < Nodes.Num; ++i)
 			{
 				Node N = Nodes[i];
+
 				if ((GizmoOptions & EDynamicPathfindingGizmosOptions.CollisionOnly) == EDynamicPathfindingGizmosOptions.CollisionOnly && !N.bIsTraversable)
 				{
 					Gizmos.color = Color.red;
