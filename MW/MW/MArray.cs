@@ -116,6 +116,17 @@ namespace MW
 			return Num;
 		}
 
+		public static void Copy(MArray<T> Destination, MArray<T> Source, int Start, int Num)
+		{
+			if (CheckNull(Destination))
+				Destination = new MArray<T>();
+
+			Utils.Clamp(ref Num, 1, Source.Num - 1);
+
+			if (Num > 0)
+				Destination.Push(Source.Items.GetRange(Start, Num).ToArray());
+		}
+
 		/// <summary>Any element.</summary>
 		/// <decorations decor="public T"></decorations>
 		/// <returns>Any random element.</returns>
