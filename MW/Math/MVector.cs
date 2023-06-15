@@ -224,15 +224,21 @@ namespace MW
 			return Dot * Normal / NormalDot;
 		}
 
-		public static MVector Parse(string In)
+		static MVector Parse(string[] In)
 		{
-			string[] Split = In.Split(' ');
 			MVector RetVal = NaN;
 			int Axis = 0;
-			foreach (string S in Split)
+			foreach (string S in In)
 				if (float.TryParse(S, out float Component))
 					RetVal[Axis++] = Component;
 			return RetVal;
+
+		}
+
+		public static MVector Parse(string In)
+		{
+			string[] Split = In.Split(' ');
+			return Parse(Split);
 		}
 
 		public static bool TryParse(string In, out MVector V)
@@ -241,7 +247,7 @@ namespace MW
 
 			if (Split.Length > 5 && Split[0][0] == 'X' && Split[2][0] == 'Y' && Split[4][0] == 'Z')
 			{
-				V = Parse(In);
+				V = Parse(Split);
 				return !ContainsNaN(V);
 			}
 
