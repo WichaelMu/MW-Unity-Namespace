@@ -1,5 +1,6 @@
 
-#if !_DEBUG
+#include "MMacros.h"
+#if WITH_TIMER
 #include <iostream>
 #include "Timer.h"
 #endif
@@ -15,7 +16,7 @@
 
 int main()
 {
-#if !_DEBUG
+#if WITH_TIMER
 	PerformanceTimer t;
 	t.StartTime();
 #endif
@@ -23,7 +24,7 @@ int main()
 	std::vector<MW> all_mw = Reader::OpenFile();
 	Writer::Write(all_mw);
 
-#if !_DEBUG
+#if WITH_TIMER
 	t.PrintTime("\nFiles Generated in:");
 	std::cin.get();
 #endif

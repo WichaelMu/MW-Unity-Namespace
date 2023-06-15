@@ -1,5 +1,5 @@
 
-#if !_DEBUG
+#if WITH_TIMER
 #include <iostream>
 #include <string>
 #include <chrono>

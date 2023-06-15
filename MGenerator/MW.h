@@ -48,7 +48,7 @@ struct MW
 		return false;
 	}
 
-#if _DEBUG && PRINT_DEBUG_MSGS
+#if PRINT_DEBUG_MSGS
 #define VECTOR_SIZE(v) v.size()
 
 	void Print()

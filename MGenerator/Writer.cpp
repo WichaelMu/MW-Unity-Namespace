@@ -134,7 +134,7 @@ void Writer::Write(const VT(MW)& all_mw)
 
 			html_file << HTML_HEADER(n.mw_namespace) << HTML_HOLDING_DIV;
 
-#if BUILD || _DEBUG
+#if BUILD
 			if (html_file.fail())
 			{
 				std::cout << "Failed to create HTML file at " << HTML_PATH << ". Maybe permissions?\n";
@@ -148,7 +148,7 @@ void Writer::Write(const VT(MW)& all_mw)
 				std::cout << n.mw_namespace << ".html" << " created.\n";
 			}
 #endif // WRITE_CREATION_MESSAGES
-#endif // BUILD || _DEBUG
+#endif // BUILD
 
 			html_file.close();
 		}

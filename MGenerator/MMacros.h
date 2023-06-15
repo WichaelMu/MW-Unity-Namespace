@@ -24,3 +24,5 @@
 #define WRITE_DEBUG_LINES 0
 /* Write the class and MEMBER if it has no decorations. */
 #define WRITE_NO_DECORATIONS 1
+/* Time the creation of all Documentation files made by MGenerator. */
+#define WITH_TIMER 0
