@@ -537,7 +537,7 @@ namespace MW.Console
 			WriteToOutput("");
 		}
 
-		[MethodImpl (MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		bool IsAnyFloatStructs(Type T) => T == typeof(MVector) || T == typeof(Vector3) || T == typeof(MRotator);
 
 		protected virtual string GetPersistentOutput()
@@ -611,7 +611,7 @@ namespace MW.Console
 
 		void ScrollToBottomOutput()
 		{
-			ScrollOutputLog = new Vector2(0, Screen.height * (1f - ConsoleRatio));
+			ScrollOutputLog = new Vector2(0, GetOutputLogHeight(out _));
 		}
 
 		protected virtual void Update()
@@ -673,12 +673,19 @@ namespace MW.Console
 
 			if (Funcs.Count > 0)
 			{
+				const float kPaddingTop        = 5f;
+				const float kPaddingRight      = 30f;
+				const float kPaddingBottom     = 7.5f;
+				const float kPaddingLeft       = 5f;
+				const float kHeightToFuncRatio = 20f;
+				const float kPaddingRightExt   = 100f;
+
 				float FuncsHeight = Screen.height * ConsoleRatio;
 
-				GUI.Box(new Rect(0, Y, Screen.width, FuncsHeight), "");
-				Rect ExecList = new Rect(0, 0, Screen.width - 30, 20 * Funcs.Count);
+				GUI.Box(new Rect(0, Y, Screen.width, FuncsHeight), "");                                               // Background for Exec List.
+				Rect ExecList = new Rect(0, 0, Screen.width - kPaddingRight, kHeightToFuncRatio * Funcs.Count);   // Rect for Exec List Text.
 
-				Scroll = GUI.BeginScrollView(new Rect(0, Y + 5, Screen.width, FuncsHeight), Scroll, ExecList);
+				Scroll = GUI.BeginScrollView(new Rect(0, Y + kPaddingTop, Screen.width, FuncsHeight - kPaddingBottom), Scroll, ExecList); // Bounding Rect for entire Exec List.
 
 				int i = 0;
 #pragma warning disable UNT0018 // System.Reflection features in performance critical messages. MethodInfo is already cached in Funcs by Awake().
@@ -708,7 +715,7 @@ namespace MW.Console
 
 					string Text = $"{Func.Value.Method.Name} ({ParamsBuilder.ToString().TrimEnd(',', ' ')}) - {Func.Value.Exec.Description}";
 
-					Rect TextRect = new Rect(5, 20 * i++, ExecList.width - 100, kConsoleFontHeight);
+					Rect TextRect = new Rect(kPaddingLeft, kHeightToFuncRatio * i++, ExecList.width - kPaddingRightExt, kConsoleFontHeight);
 
 
 					GUI.Label(TextRect, Text);
@@ -723,13 +730,13 @@ namespace MW.Console
 				float OutputScrollHeight = OutputLogHeight - 33;
 
 				GUI.Box(new Rect(0, Y + kConsoleFontHeight, Screen.width, OutputLogHeight), "");
-				Rect OutputLogList = new Rect(0, 0, Screen.width - 30, GetOutputLogHeight(out string[] Output));
-				ScrollOutputLog = GUI.BeginScrollView(new Rect(0, Y + 25, Screen.width, OutputScrollHeight), ScrollOutputLog, OutputLogList);
+				Rect OutputLogList = new Rect(0, 0, Screen.width - kPaddingRight, GetOutputLogHeight(out string[] Output));
+				ScrollOutputLog = GUI.BeginScrollView(new Rect(0, Y + kHeightToFuncRatio + kPaddingTop, Screen.width, OutputScrollHeight), ScrollOutputLog, OutputLogList);
 
 				i = 0;
 				for (; i < Output.Length; i++)
 				{
-					Rect OutputTextRect = new Rect(5, 20 * i, OutputLogList.width - 100, kConsoleFontHeight);
+					Rect OutputTextRect = new Rect(kPaddingLeft, kHeightToFuncRatio * i, OutputLogList.width - kPaddingRightExt, kConsoleFontHeight);
 					string StringValue = Output[i];
 					string[] ColourSeparator = StringValue.Split('\\');
 
@@ -745,7 +752,7 @@ namespace MW.Console
 					}
 				}
 
-				Rect PersistentRect = new Rect(5, 20 * (i - 1), OutputLogList.width - 100, kConsoleFontHeight);
+				Rect PersistentRect = new Rect(kPaddingLeft, kHeightToFuncRatio * (i - 1), OutputLogList.width - kPaddingRightExt, kConsoleFontHeight);
 				GUI.contentColor = MConsoleColourLibrary.Green;
 				GUI.Label(PersistentRect, GetPersistentOutput());
 
