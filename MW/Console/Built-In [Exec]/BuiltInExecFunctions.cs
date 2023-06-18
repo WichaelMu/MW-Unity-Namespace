@@ -1,4 +1,5 @@
-﻿using static MW.Utils;
+﻿using System.Linq;
+using static MW.Utils;
 using MW.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -171,6 +172,38 @@ namespace MW.Console
 		{
 			Animator.SetTrigger(Trigger);
 		}
+
+		#endregion
+
+		#region Debugging
+
+		[BuiltInExec("Reports the position of T.")]
+		public static Vector3 ReportPos(Transform T) => T.position;
+		[BuiltInExec("Reports the rotation of T.")]
+		public static Vector3 ReportRot(Transform T) => T.localEulerAngles;
+
+		[BuiltInExec("Reports the position of Ts.")]
+		public static Vector3[] ReportPosMulti(Transform[] T) => T.Select(R => R.position).ToArray();
+		[BuiltInExec("Reports the position of Ts.")]
+		public static Vector3[] ReportRotMulti(Transform[] T) => T.Select(R => R.localEulerAngles).ToArray();
+
+		[BuiltInExec("Draws a line from A to B")]
+		public static void DrawLine(MVector A, MVector B, float Duration)
+		{
+			Arrow.DebugArrow(A, A.Distance(B) * (A > B), Duration: Duration);
+		}
+
+		[BuiltInExec("Attaches the In-Game Object Diagnostics Component to G.")]
+		public static void AttachDiagnostics(GameObject G) => G.AddComponent<InGameObjectDiagnostics>();
+		[BuiltInExec("Attaches the In-Game Object Diagnostics Component to all Gs.")]
+		public static void AttachDiagnosticsMulti(GameObject[] G)
+		{
+			foreach (GameObject O in G)
+				O.AddComponent<InGameObjectDiagnostics>();
+		}
+
+		[BuiltInExec("MEGALUL")]
+		public static MVector GetT(MVector V) => V;
 
 		#endregion
 	}
