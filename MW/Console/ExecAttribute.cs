@@ -58,6 +58,7 @@ namespace MW.Console
 		public ExecAttribute(string Desc, bool bOnAwake, params object[] Params) : this(Desc) { bExecOnAwake = bOnAwake; ExecParams = Params; }
 	}
 
+	[AttributeUsage(AttributeTargets.Method)]
 	internal class BuiltInExecAttribute : ExecAttribute
 	{
 		internal BuiltInExecAttribute(string Desc) : base(Desc) { bIsBuiltIn = true; }
