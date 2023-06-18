@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: Colour
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -187,34 +185,35 @@ namespace MW.Console
 			Type DeclaringType = Method.DeclaringType;
 
 			ParameterInfo[] MethodParams = Method.GetParameters();
-			int RawParamsArgC = RawParams.Length;
+			int ParamsLength = MethodParams.Length;
+			int ParamsIgnoringFloatStruct = RawParams.Length;
 
 			bool bContainsArray = false;
 			foreach (ParameterInfo Param in MethodParams)
 			{
 				Type ParamType = Param.ParameterType;
-				if (ParamType.IsArray || ParamType == typeof(MVector) || ParamType == typeof(Vector3) || ParamType == typeof(MRotator))
-				{
-					bContainsArray = true;
-					break;
-				}
+				bContainsArray |= ParamType.IsArray;
+
+				// Treat Float Structs (MVector, MRotator, Vector3) as one parameter.
+				if (IsAnyFloatStructs(ParamType))
+					ParamsIgnoringFloatStruct -= 2;
 			}
 
-			if (!bContainsArray && MethodParams.Length != RawParamsArgC)
+			if (!bContainsArray && ParamsIgnoringFloatStruct != ParamsLength)
 			{
-				WriteToOutput($"-- Parameter Mismatch -- Exec: '{MethodName}' requires {MethodParams.Length} parameter{(MethodParams.Length == 1 ? "" : "s")}, " +
-					$"but {RawParamsArgC} {(RawParamsArgC == 1 ? "was" : "were")} given.", MConsoleColourLibrary.Yellow);
+				WriteToOutput($"-- Parameter Mismatch -- Exec: '{MethodName}' requires {ParamsLength} parameter{(ParamsLength == 1 ? "" : "s")}, " +
+					$"but {ParamsIgnoringFloatStruct} {(ParamsIgnoringFloatStruct == 1 ? "was" : "were")} given.", MConsoleColourLibrary.Yellow);
 				return RetVal;
 			}
 
-			object[] ExecParameters = new object[MethodParams.Length];
+			object[] ExecParameters = new object[ParamsLength];
 
 			// Convert to correct Parameter types declared by the Exec function.
-			for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParamsArgC; ++ExecParamIndex)
+			for (int RawParamIndex = 0, ExecParamIndex = 0; RawParamIndex < RawParams.Length; ++ExecParamIndex)
 			{
-				if (RawParamIndex >= MethodParams.Length)
+				if (ExecParamIndex >= ParamsLength)
 				{
-					WriteToOutput($"You have provided too many parameters. Check you Exec invocation call and try again.", MConsoleColourLibrary.Red);
+					WriteToOutput($"You have provided too many parameters. Check your Exec invocation call and try again.", MConsoleColourLibrary.Red);
 					return RetVal;
 				}
 
@@ -228,11 +227,18 @@ namespace MW.Console
 			StrippedArray.PullAll(kArrayTermination);
 			ExecParameters = StrippedArray.TArray();
 
+			Type ReturnType = Method.ReturnType;
+			bool bHasReturnType = ReturnType != typeof(void);
+			StringBuilder ExecReturns = new StringBuilder();
+
 			try
 			{
-				if (Func.Method.IsStatic)
+				if (Method.IsStatic)
 				{
 					RetVal = Method.Invoke(null, ExecParameters);
+
+					if (bHasReturnType && bHasReturnType)
+						ExecReturns.Append($"{MethodName} returned: {ParseReturnValue(RetVal, ReturnType)}\n");
 				}
 				else
 				{
@@ -249,8 +255,11 @@ namespace MW.Console
 
 							if (GetTargetFromString(Target, out GameObject TargetObject))
 							{
-								RetVal = Func.Method.Invoke(TargetObject.GetComponent(DeclaringType), ExecParameters);
+								RetVal = Method.Invoke(TargetObject.GetComponent(DeclaringType), ExecParameters);
 								ExecTargets.Append($"'{Target}' ");
+
+								if (RetVal != null && bHasReturnType)
+									ExecReturns.Append($"{Target} returned: {ParseReturnValue(RetVal, ReturnType)}\n");
 							}
 						}
 
@@ -268,8 +277,11 @@ namespace MW.Console
 						for (int i = 0; i < Length; ++i)
 						{
 							UObject ObjectOfType = ObjectTargets[i];
-							ExecuteOnTarget(ObjectOfType, Method, DeclaringType, ExecParameters);
+							RetVal = ExecuteOnTarget(ObjectOfType, Method, DeclaringType, ExecParameters);
 							AllObjectsOfType.Append($"'{ObjectOfType.name}' ");
+
+							if (RetVal != null && bHasReturnType)
+								ExecReturns.Append($"{ObjectOfType.name} returned: {ParseReturnValue(RetVal, ReturnType)}\n");
 						}
 
 						WriteToOutput(AllObjectsOfType);
@@ -295,12 +307,15 @@ namespace MW.Console
 				WriteToOutput($"Failed to execute {MethodName} ({ErrorBuilder}) - {E.Message}", MConsoleColourLibrary.Red);
 			}
 
+			if (bHasReturnType && ExecReturns.Length > 0)
+				WriteToOutput(ExecReturns, bWithTrailingNewLine: false);
+
 			return RetVal;
 		}
 
-		static void ExecuteOnTarget(UObject ObjectTarget, MethodInfo Method, Type DeclaringType, object[] ExecParameters)
+		static object ExecuteOnTarget(UObject ObjectTarget, MethodInfo Method, Type DeclaringType, object[] ExecParameters)
 		{
-			Method.Invoke(ObjectTarget.Cast(DeclaringType), ExecParameters);
+			return Method.Invoke(ObjectTarget.Cast(DeclaringType), ExecParameters);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -442,18 +457,36 @@ namespace MW.Console
 			return false;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected virtual void WriteToOutput(string Output)
+		object ParseReturnValue(object RetVal, Type RetType)
 		{
-			OutputLog.Append(Output).Append('\n');
+			if (RetType.IsArray && !IsAnyFloatStructs(RetType))
+			{
+				StringBuilder RetValFormatted = MConsoleArrayParser.ConvertArrayReturnType(RetVal, RetType);
+
+				StringBuilder ArrayFormatted = new StringBuilder();
+				ArrayFormatted.Append("{ ");
+				ArrayFormatted.Append(RetValFormatted);
+				ArrayFormatted.Append(" }");
+
+				return ArrayFormatted.ToString();
+			}
+
+			return RetVal;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected virtual void WriteToOutput(string Output, bool bWithTrailingNewLine = true)
+		{
+			OutputLog.Append(Output);
+			if (bWithTrailingNewLine)
+				OutputLog.Append('\n');
 			ScrollToBottomOutput();
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected virtual void WriteToOutput(StringBuilder Output)
+		protected virtual void WriteToOutput(StringBuilder Output, bool bWithTrailingNewLine = true)
 		{
-			OutputLog.Append(Output).Append('\n');
-			ScrollToBottomOutput();
+			WriteToOutput(Output.ToString(), bWithTrailingNewLine);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -503,6 +536,9 @@ namespace MW.Console
 			WriteToOutput($"\tCustom parameters can be handled by overriding certain functions, such as {nameof(HandleCustomParameter)} for function parameters or {nameof(HandleCustomArrayType)} for arrays.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput("");
 		}
+
+		[MethodImpl (MethodImplOptions.AggressiveInlining)]
+		bool IsAnyFloatStructs(Type T) => T == typeof(MVector) || T == typeof(Vector3) || T == typeof(MRotator);
 
 		protected virtual string GetPersistentOutput()
 			=> $"FPS: {Utils.FPS():D4} | Delta Time: {Time.deltaTime:F3} | Exec __HELP__ for Help |";
@@ -600,7 +636,7 @@ namespace MW.Console
 			if (t >= kHelpTextDisplayDelay && !bHelpMessageHasBeenShown)
 			{
 				bHelpMessageHasBeenShown = true;
-				WriteHelpMessage();
+				WriteToOutput("Run __HELP__ to see help.", MConsoleColourLibrary.Purple);
 			}
 
 			if (Event.current.Equals(Event.KeyboardEvent("Return")))
@@ -745,7 +781,7 @@ namespace MW.Console
 		static Color bla = Colour.ColourHex("#444444");
 		static Color whi = Colour.ColourHex("#FFFFFF");
 
-		static Color bti = Colour.ColourHex("#44FF44");
+		static Color bti = Colour.ColourHex("#C2FFA1");
 
 		internal static Color Red => red;
 		internal static Color Yellow => yel;

@@ -67,7 +67,7 @@ public class MyCustomClass : MonoBehaviour
 
 Attach ` InGameDebugConsole ` to a GameObject in your game's hierarchy.
 
-Note that any method that can be executed and called by MConsole must be marked public and be marked with the ` Exec ` attribute. MConsole cannot access the return values of functions.
+Note that any method that can be executed and called by MConsole must be marked public and be marked with the ` Exec ` attribute. MConsole can print the return values of functions, but cannot directly pass/pipe them into other functions.
 
 <b>
 <span style="color:red">

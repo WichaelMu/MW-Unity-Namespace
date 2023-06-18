@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Text;
 using MW.Extensions;
 using UnityEngine;
 using UE = UnityEngine;
@@ -52,7 +54,7 @@ namespace MW.Console
 			{
 				bSuccessfulConversion = Types.Settings.Console.HandleCustomArrayType(ref TargetObject, ElementType, Elements);
 
-				if (TargetObject == null)
+				if (!bSuccessfulConversion || TargetObject == null)
 					Types.ThrowError($"The type: '{ElementType.Name}' cannot be parsed into an Array.");
 			}
 
@@ -65,6 +67,22 @@ namespace MW.Console
 			foreach (object Element in Elements)
 				Array.Push(Element.Cast<T>());
 			return Array.TArray();
+		}
+
+		internal static StringBuilder ConvertArrayReturnType(object RetVal, Type RetType)
+		{
+			IEnumerable Array = RetVal.Cast<IEnumerable>();
+
+			StringBuilder ArrayBuilder = new StringBuilder();
+			foreach (object Element in Array)
+			{
+				ArrayBuilder.Append(Element);
+				ArrayBuilder.Append(", ");
+			}
+
+			ArrayBuilder.Remove(ArrayBuilder.Length - 2, 2);
+
+			return ArrayBuilder;
 		}
 	}
 }
