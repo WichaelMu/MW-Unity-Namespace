@@ -6,25 +6,32 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using MW.Extensions;
 using MW.Conversion;
+#if RELEASE
 using UnityEngine;
 using UE = UnityEngine;
 using UObject = UnityEngine.Object;
+#endif // STANDALONE
 using MW.Diagnostics;
 
 namespace MW.Console
 {
 	/// <summary>A Console Debugger for debugging games during runtime.</summary>
 	/// <decorations decor="public abstract class : MonoBehaviour"></decorations>
-	public abstract class MConsole : MonoBehaviour
+	public abstract class MConsole
+#if RELEASE
+		: MonoBehaviour
+#endif // RELEASE
 	{
 		/// <summary>The <see cref="Type"/>to get the <see cref="Assembly"/> of the Unity Game where <see cref="ExecAttribute"/>s are defined.</summary>
 		/// <docs>The Type to get the Assembly of the Unity Game where ExecAttributes are defined.</docs>
 		/// <decorations decor="public abstract Type[]"></decorations>
 		public abstract Type[] ExecTypes { get; }
+#if RELEASE
 		/// <summary>The <see cref="KeyCode"/> to show <see cref="OnGUI"/>.</summary>
 		/// <docs>The KeyCode to show the Console GUI.</docs>
 		/// <decorations decor="public virtual KeyCode"></decorations>
 		public virtual KeyCode ShowConsoleKey { get; set; } = KeyCode.BackQuote;
+#endif
 
 		/// <summary>Exec attributes and their reflected functions.</summary>
 		/// <decorations decor="protected Dictionary&lt; string, MethodExec&lt; MethodInfo, ExecAttribute &gt;&gt;"></decorations>
@@ -61,7 +68,9 @@ namespace MW.Console
 			Settings.GameObjectByNameIdentifier = kGameObjectByNameIdentifier;
 			Settings.ArrayDeclaration = kArrayDeclaration;
 			Settings.ArrayTermination = kArrayTermination;
+#if RELEASE
 			Settings.GetTargetFromString = GetTargetFromString;
+#endif // RELEASE
 			Settings.ThrowError = WriteToOutput;
 			Settings.GetCustomParameterType = GetCustomParameterType;
 			Settings.Console = this;
@@ -242,6 +251,7 @@ namespace MW.Console
 				}
 				else
 				{
+#if RELEASE
 					// If we have targets, invoke MethodName on their respective components.
 					if (Targets != null && Targets.Length != 0)
 					{
@@ -286,9 +296,13 @@ namespace MW.Console
 
 						WriteToOutput(AllObjectsOfType);
 					}
+#else
+					WriteToOutput("You are running a STANDALONE build of MW. You can only [Exec] Static Methods.");
+#endif // RELEASE
 				}
-
+#if RELEASE
 				ScrollOutputLog.y = GetOutputLogHeight(out _);
+#endif
 			}
 			catch (Exception E)
 			{
@@ -313,6 +327,7 @@ namespace MW.Console
 			return RetVal;
 		}
 
+#if RELEASE
 		static object ExecuteOnTarget(UObject ObjectTarget, MethodInfo Method, Type DeclaringType, object[] ExecParameters)
 		{
 			return Method.Invoke(ObjectTarget.Cast(DeclaringType), ExecParameters);
@@ -341,6 +356,7 @@ namespace MW.Console
 
 			return TargetObject;
 		}
+#endif // RELEASE
 
 		bool GetCustomParameterType(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
@@ -357,11 +373,14 @@ namespace MW.Console
 			}
 			else
 			{
+#if RELEASE
 				if (typeof(MonoBehaviour).IsAssignableFrom(ExecParameterType) || typeof(UE.Behaviour).IsAssignableFrom(ExecParameterType)) // Components.
 				{
 					return SupportedTypes.MonoBehaviourOrComponents(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 				}
-				else if (ExecParameterType.IsPrimitive) // Any other primitive.
+				else 
+#endif // RELEASE
+				if (ExecParameterType.IsPrimitive) // Any other primitive.
 				{
 					return SupportedTypes.Primitive(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 				}
@@ -477,10 +496,22 @@ namespace MW.Console
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected virtual void WriteToOutput(string Output, bool bWithTrailingNewLine = true)
 		{
+#if RELEASE
 			OutputLog.Append(Output);
 			if (bWithTrailingNewLine)
 				OutputLog.Append('\n');
 			ScrollToBottomOutput();
+#else
+			if (bWithTrailingNewLine)
+			{
+				System.Console.WriteLine(Output);
+			}
+			else
+			{
+
+				System.Console.Write(Output);
+			}
+#endif // RELEASE
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -490,17 +521,40 @@ namespace MW.Console
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected void WriteToOutput(string Output, MVector Colour)
+		protected void WriteToOutput(string Output,
+#if RELEASE
+			MVector Colour
+#else
+			ConsoleColor Colour
+#endif // RELEASE
+			)
 		{
+#if RELEASE
 			OutputLog.Append(Colour).Append('\\');
 			WriteToOutput(Output);
+#else
+			System.Console.ForegroundColor = Colour;
+			System.Console.WriteLine(Output);
+			System.Console.ForegroundColor = MConsoleColourLibrary.White;
+#endif // RELEASE
+
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		protected void WriteToOutput(StringBuilder Output, MVector Colour)
+		protected void WriteToOutput(StringBuilder Output,
+#if RELEASE
+			MVector Colour
+#else
+			ConsoleColor Colour
+#endif // RELEASE
+			)
 		{
+#if RELEASE
 			OutputLog.Append(Colour).Append('\\');
 			WriteToOutput(Output);
+#else
+			WriteToOutput(Output.ToString(), Colour);
+#endif // RELEASE
 		}
 
 		const float kConsoleFontHeight = 20f;
@@ -528,8 +582,10 @@ namespace MW.Console
 			WriteToOutput("");
 			WriteToOutput($"\tThere are also a few functions that are 'Internal'.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.LimeGreen);
+#if RELEASE
 			WriteToOutput($"\t__SET_RATIO__ - Sets the ratio for the Console. It accepts values between .15 to .85 as a percentage of your screen's height. Default is {kDefaultConsoleRatio}.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.LimeGreen);
+#endif // RELEASE
 			WriteToOutput($"\t__HELP__, ?, -h, and --help - Shows this help message.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput("");
 			WriteToOutput($"\tWhen making a game, you will eventually need to make your own types and aren't natively supported by {nameof(MConsole)}.", MConsoleColourLibrary.LimeGreen);
@@ -538,10 +594,16 @@ namespace MW.Console
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		bool IsAnyFloatStructs(Type T) => T == typeof(MVector) || T == typeof(Vector3) || T == typeof(MRotator);
+		bool IsAnyFloatStructs(Type T) => T == typeof(MVector)
+#if RELEASE
+			|| T == typeof(Vector3) 
+#endif // RELEASE
+			|| T == typeof(MRotator);
 
+#if RELEASE
 		protected virtual string GetPersistentOutput()
 			=> $"FPS: {Utils.FPS():D4} | Delta Time: {Time.deltaTime:F3} | Exec __HELP__ for Help |";
+#endif
 
 		bool CheckInternallyDefinedCommands(string Command, object[] Parameters)
 		{
@@ -551,6 +613,7 @@ namespace MW.Console
 					OutputLog.Clear();
 					WriteDefaultMessage();
 					break;
+#if RELEASE
 				case "__SET_RATIO__":
 					if (Parameters != null && Parameters.Length != 0)
 					{
@@ -573,6 +636,7 @@ namespace MW.Console
 				case "__TOGGLE_BUILTIN__":
 					bShowBuiltIn = !bShowBuiltIn;
 					break;
+#endif // RELEASE
 				case "__HELP__":
 				case "?":
 				case "-h":
@@ -600,6 +664,8 @@ namespace MW.Console
 				WriteToOutput(SimilarExecs, MConsoleColourLibrary.Purple);
 			}
 		}
+
+#if RELEASE
 
 		const float kDefaultConsoleRatio = .6f;
 		float ConsoleRatio = kDefaultConsoleRatio;
@@ -765,20 +831,36 @@ namespace MW.Console
 			RawInput = GUI.TextField(new Rect(2.5f, Y, Screen.width, kConsoleFontHeight), RawInput);
 			GUI.FocusControl("Exec Text Field");
 		}
+#endif // RELEASE
 	}
 
 	internal class MConsoleErrorHander
 	{
 		internal static void NotifyDuplicateFunction(Type ExistingType, Type DuplicateType, MethodInfo DuplicateMethod)
 		{
-			Log.Colourise($"An [Exec] Function named: '{DuplicateMethod.Name}' already exists! '{nameof(MConsole)} does not support method overloading. " +
+#if RELEASE
+			Log.Colourise
+#else
+			WriteStandalone
+#endif // RELEASE
+				($"An [Exec] Function named: '{DuplicateMethod.Name}' already exists! '{nameof(MConsole)} does not support method overloading. " +
 				$"Or, you may be trying to add assemblies with duplicate function names into {nameof(MConsole.ExecTypes)}\n\t" +
 				$"First appearance: {ExistingType.Namespace} {ExistingType.Name}. Duplicate definition: {DuplicateType.Namespace} {DuplicateType.Name}.", MConsoleColourLibrary.Red);
 		}
+
+#if STANDALONE
+		static void WriteStandalone(string String, ConsoleColor Colour)
+		{
+			System.Console.ForegroundColor = Colour;
+			System.Console.WriteLine(String);
+			System.Console.ForegroundColor = MConsoleColourLibrary.White;
+		}
+#endif // STANDALONE
 	}
 
 	internal class MConsoleColourLibrary
 	{
+#if RELEASE
 		static Color red = Colour.ColourHex("#FF4444");
 		static Color yel = Colour.ColourHex("#FFD344");
 		static Color gre = Colour.ColourHex("#95FF44");
@@ -800,5 +882,15 @@ namespace MW.Console
 		internal static Color White => whi;
 
 		internal static Color BuiltIn = bti;
+#else
+		internal static ConsoleColor Red = ConsoleColor.Red;
+		internal static ConsoleColor Yellow = ConsoleColor.Yellow;
+		internal static ConsoleColor Green = ConsoleColor.DarkGreen;
+		internal static ConsoleColor LimeGreen = ConsoleColor.Green;
+		internal static ConsoleColor Purple = ConsoleColor.Magenta;
+
+		internal static ConsoleColor Black = ConsoleColor.Black;
+		internal static ConsoleColor White = ConsoleColor.White;
+#endif // RELEASE
 	}
 }

@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using MW.Extensions;
 using MV = MW.MVector;
 using MR = MW.MRotator;
+#if RELEASE
 using UnityEngine;
 using V3 = UnityEngine.Vector3;
+#endif
 
 namespace MW.Console
 {
 	internal delegate bool SupportedExecTypeFunction(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType);
+#if RELEASE
 	delegate GameObject FindTargetFunction(string Target);
-	delegate void ErrorFunction(string ErrorMessage, MV Colour);
+#endif // RELEASE
+	delegate void ErrorFunction(string ErrorMessage,
+#if RELEASE
+		MV Colour
+#else
+		ConsoleColor Colour
+#endif // RELEASE
+		);
 
 	struct MConsoleSettings
 	{
@@ -19,7 +29,9 @@ namespace MW.Console
 		public char ArrayDeclaration;
 		public char ArrayTermination;
 
+#if RELEASE
 		public FindTargetFunction GetTargetFromString;
+#endif // RELEASE
 		public ErrorFunction ThrowError;
 		public SupportedExecTypeFunction GetCustomParameterType;
 
@@ -54,10 +66,12 @@ namespace MW.Console
 		void MapSupportedTypes()
 		{
 			SupportedTypes.Add(typeof(MV), MVector);
-			SupportedTypes.Add(typeof(V3), Vector3);
 			SupportedTypes.Add(typeof(MR), MRotator);
+#if RELEASE
+			SupportedTypes.Add(typeof(V3), Vector3);
 			SupportedTypes.Add(typeof(GameObject), GameObjectOrTransform);
 			SupportedTypes.Add(typeof(Transform), GameObjectOrTransform);
+#endif // RELEASE
 			SupportedTypes.Add(typeof(string), String);
 		}
 
@@ -83,7 +97,7 @@ namespace MW.Console
 			++ParamIndex;
 			return true;
 		}
-
+#if RELEASE
 		internal bool Vector3(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			if (ParamIndex + 2 < RawParams.Length)
@@ -104,6 +118,7 @@ namespace MW.Console
 			++ParamIndex;
 			return true;
 		}
+#endif // RELEASE
 
 		internal bool MRotator(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
@@ -125,7 +140,7 @@ namespace MW.Console
 			++ParamIndex;
 			return true;
 		}
-
+#if RELEASE
 		internal bool GameObjectOrTransform(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			string StringValue = RawParams[ParamIndex].Cast<string>();
@@ -193,6 +208,7 @@ namespace MW.Console
 			++ParamIndex;
 			return true;
 		}
+#endif // RELEASE
 
 		internal bool String(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
