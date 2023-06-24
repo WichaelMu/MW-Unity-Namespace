@@ -10,7 +10,7 @@
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsTestProject>True</IsTestProject>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;Standalone</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,6 +18,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;MICROSOFT_TESTING</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Standalone|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE;MICROSOFT_TESTING</DefineConstants>
   </PropertyGroup>
 

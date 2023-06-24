@@ -1,5 +1,31 @@
 @ECHO off
 
+>NUL WHERE msbuild
+IF %ERRORLEVEL% NEQ 0 (
+	ECHO The command 'msbuild' is unrecognised. Install and/or add 'msbuild' to your system environment.
+	PAUSE
+	EXIT \b 1
+)
+
+@SET VS_BUILDCONFIGURATION=%1
+
+IF %VS_BUILDCONFIGURATION%==Standalone (
+	ECHO You do not need to run %0 in a Standalone Configuration.
+	PAUSE
+	EXIT \b 0
+)
+
+IF %VS_BUILDCONFIGURATION%X==X (
+	@ECHO GET FUCKED 
+	@SET VS_BUILD_CONFIGURATION=Release
+)
+
+IF %VS_BUILDCONFIGURATION% NEQ Release (
+	ECHO Unrecognised Build Configuration. Valid values are 'Release' and 'Standalone'.
+	PAUSE
+	EXIT \b 1
+)
+
 REM Check Prerequisite binaries
 @SET UNITYENGINE=../Extensions/UnityEngine.dll
 @SET UNITYEDITOR=../Extensions/UnityEditor.dll
@@ -41,6 +67,6 @@ REM Build MWEditor
 
 @ECHO MW Project Initialised! Building MW...
 
-dotnet msbuild ../MW.sln %BUILD_CONFIGURATION%
+@dotnet build ../MW.csproj %BUILD_CONFIGURATION%
 
 @ECHO -- Initialised MW --

@@ -11,9 +11,8 @@
 		<DocumentationFile></DocumentationFile>
 		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<BaseIntermediateOutputPath>MW\Output\Intermediate</BaseIntermediateOutputPath>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-		<Configurations>Debug;Release</Configurations>
+		<Configurations>Debug;Release;Standalone</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,6 +25,12 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Optimize>true</Optimize>
 		<NoWarn>1701;1702;0649</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Standalone|AnyCPU'">
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <Optimize>true</Optimize>
+	  <NoWarn>1701;1702;0649</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -87,7 +92,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="@cd Scripts&#xD;&#xA;@call PostBuildEvent" />
+		<Exec Command="@cd Scripts&#xD;&#xA;@call PostBuildEvent $(ConfigurationName)" />
 	</Target>
 
 </Project>
