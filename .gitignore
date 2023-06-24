@@ -369,3 +369,6 @@ MSandpit/UserSettings/*
 MSandpit/ProjectSettings/*
 MSandpit/.vsconfig
 MSandpit/Assembly-CSharp.csproj
+
+# Intermediate Files
+*/Output/*
