@@ -1,7 +1,9 @@
-﻿using UnityEngine;
-using static MW.Utils;
+﻿using static MW.Utils;
 using static MW.Math.Magic.Fast;
+#if RELEASE
 using static MW.Diagnostics.Arrow;
+using UnityEngine;
+#endif // RELEASE
 
 namespace MW.Kinetic
 {
@@ -13,6 +15,7 @@ namespace MW.Kinetic
 		/// <decorations decor="public const int"></decorations>
 		public const int kVelocityRatio = 50;
 
+#if RELEASE
 		/// <summary>If the distance between From and To is &lt;= Tolerance.</summary>
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="From">The reference Vector3 to compare.</param>
@@ -73,6 +76,7 @@ namespace MW.Kinetic
 			Rigidbody.velocity = _Self.up * Velocity * Time.deltaTime;
 			Rigidbody.MoveRotation(Quaternion.RotateTowards(_Self.rotation, Quaternion.LookRotation(Target - _Self.position, -_Self.forward), MaxDegreesDeltaPerFrame));
 		}
+#endif // RELEASE
 
 		/// <summary>Calculates a launch velocity towards a target at a given speed.</summary>
 		/// <decorations decor="public static bool"></decorations>
@@ -84,7 +88,11 @@ namespace MW.Kinetic
 		/// <param name="bIs3D">True if using 3D physics.</param>
 		/// <param name="bDrawDebug">True to draw debug lines of the arc.</param>
 		/// <returns>True if a solution to hit Target from Origin at LaunchSpeed exists.</returns>
-		public static bool LaunchTowards(out MVector LaunchVelocity, Vector3 Origin, Vector3 Target, float LaunchSpeed, bool bFavourHighArc, bool bIs3D = true, bool bDrawDebug = false)
+		public static bool LaunchTowards(out MVector LaunchVelocity, MVector Origin, MVector Target, float LaunchSpeed, bool bFavourHighArc, bool bIs3D = true
+#if RELEASE
+			, bool bDrawDebug = false
+#endif // RELEASE
+			)
 		{
 			MVector RelativeTargetPosition = Target - Origin;
 			MVector DirectionToTargetIgnoringAltitude = RelativeTargetPosition.XZ.Normalised;
@@ -94,7 +102,11 @@ namespace MW.Kinetic
 
 			float LaunchSpeedSquared = LaunchSpeed * LaunchSpeed;
 
-			float Gravity = -F_GetGravity(bIs3D);
+			float Gravity = -F_GetGravity(
+#if RELEASE
+				bIs3D
+#endif // RELEASE
+				);
 			float Radicand = (LaunchSpeedSquared * LaunchSpeedSquared) - Gravity * ((Gravity * (DisplacementToTargetIgnoringAltitude * DisplacementToTargetIgnoringAltitude)) + (2f * YDisplacement * LaunchSpeedSquared));
 			if (Radicand < 0f)
 			{
@@ -118,12 +130,12 @@ namespace MW.Kinetic
 			float DisplacementArcPreference = bFavourHighArc ? Min(ADisplacement, BDisplacement) : Max(ADisplacement, BDisplacement);
 			float Sign = bFavourHighArc
 				? (ADisplacement < BDisplacement)
-					? Mathf.Sign(Solution1)
-					: Mathf.Sign(Solution2)
+					? FMath.Sign(Solution1)
+					: FMath.Sign(Solution2)
 
 				: (ADisplacement > BDisplacement)
-					? Mathf.Sign(Solution1)
-					: Mathf.Sign(Solution2)
+					? FMath.Sign(Solution1)
+					: FMath.Sign(Solution2)
 			;
 
 			float PreferenceMagnitude = FSqrt(DisplacementArcPreference);
@@ -131,6 +143,7 @@ namespace MW.Kinetic
 
 			LaunchVelocity = (PreferenceMagnitude * DirectionToTargetIgnoringAltitude) + (LaunchHeight * Sign * MVector.Up);
 
+#if RELEASE
 			if (bDrawDebug)
 			{
 				const float kResolution = .033333f;
@@ -145,6 +158,7 @@ namespace MW.Kinetic
 					DebugOrigin = DebugDestination;
 				}
 			}
+#endif // RELEASE
 
 			return true;
 		}
@@ -160,9 +174,21 @@ namespace MW.Kinetic
 		/// <param name="bLaunchRegardless">True to ignore the height limitation and compute a velocity anyway.</param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
-		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, out float Time, bool b3DGravity = true, bool bLaunchRegardless = false)
+		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, out float Time,
+#if RELEASE
+			bool b3DGravity = true, 
+#endif // RELEASE
+			bool bLaunchRegardless = false)
 		{
-			return LaunchTowards(Origin, Target, TargetHeight, F_GetGravity(b3DGravity), out Time, bLaunchRegardless, b3DGravity);
+			return LaunchTowards(Origin, Target, TargetHeight, F_GetGravity(
+#if RELEASE
+				b3DGravity
+#endif // RELEASE
+				), out Time, bLaunchRegardless
+#if RELEASE
+				, b3DGravity
+#endif // RELEASE
+				);
 		}
 
 		/// <summary>Computes a velocity to launch a Rigidbody from Origin to Target achieving a TargetHeight.</summary>
@@ -177,7 +203,11 @@ namespace MW.Kinetic
 		/// <param name="b3DGravity">True if using 3D Physics.</param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
-		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, out float Time, bool bLaunchRegardless, bool b3DGravity = true)
+		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, out float Time, bool bLaunchRegardless
+#if RELEASE
+			, bool b3DGravity = true
+#endif // RELEASE
+			)
 		{
 			float DeltaY = Target.Y - Origin.Y;
 
@@ -197,11 +227,17 @@ namespace MW.Kinetic
 			MVector DeltaXZ = new MVector(Target.X - Origin.X, 0f, Target.Z - Origin.Z);
 			float InverseGravity = 1f * FInverse(GravityMagnitude);
 
-			MVector VY = ComputeJumpVelocity(MVector.Up, TargetHeight, b3DGravity);
+			MVector VY = ComputeJumpVelocity(MVector.Up, TargetHeight,
+#if RELEASE
+				b3DGravity
+#else
+				F_GetGravity()
+#endif // RELEASE
+				);
 			Time = (FSqrt(-2f * TargetHeight * InverseGravity) + FSqrt(2 * (DeltaY - TargetHeight) * InverseGravity));
 			MVector VXZ = FInverse(Time) * DeltaXZ;
 
-			MVector LaunchVelocity = -Mathf.Sign(GravityMagnitude) * VY + VXZ;
+			MVector LaunchVelocity = -FMath.Sign(GravityMagnitude) * VY + VXZ;
 
 			return LaunchVelocity;
 		}
@@ -220,10 +256,22 @@ namespace MW.Kinetic
 		/// <param name="b3DGravity">True if using 3D Physics.</param>
 		/// <docreturns>The velocity required to launch a projectile from Origin to Target, or MVector.NaN if impossible.</docreturns>
 		/// <returns>The velocity required to launch a projectile from Origin to Target, or <see cref="MVector.NaN"/> if impossible.</returns>
-		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, out float Time, out MVector[] Arc, int ArcResolution = 30, bool bLaunchRegardless = false, bool b3DGravity = true)
+		public static MVector LaunchTowards(MVector Origin, MVector Target, float TargetHeight, float GravityMagnitude, out float Time, out MVector[] Arc, int ArcResolution = 30, bool bLaunchRegardless = false
+#if RELEASE
+			, bool b3DGravity = true
+#endif // RELEASE
+			)
 		{
-			MVector LaunchVelocity = LaunchTowards(Origin, Target, TargetHeight, GravityMagnitude, out Time, b3DGravity, bLaunchRegardless);
-			Arc = GetArc(LaunchVelocity, Time, ArcResolution, b3DGravity);
+			MVector LaunchVelocity = LaunchTowards(Origin, Target, TargetHeight, GravityMagnitude, out Time,
+#if RELEASE
+				b3DGravity, 
+#endif // RELEASE
+				bLaunchRegardless);
+			Arc = GetArc(LaunchVelocity, Time, ArcResolution
+#if RELEASE
+				, b3DGravity
+#endif // RELEASE
+				);
 
 			return LaunchVelocity;
 		}
@@ -235,7 +283,11 @@ namespace MW.Kinetic
 		/// <param name="ArcResolution">The number of points for the Arc.</param>
 		/// <param name="bIs3D">True if using 3D Physics.</param>
 		/// <returns>The trajectory of a projectile travelling at LaunchVelocity will travel through.</returns>
-		public static MVector[] GetArc(MVector LaunchVelocity, float Time, int ArcResolution = 30, bool bIs3D = true)
+		public static MVector[] GetArc(MVector LaunchVelocity, float Time, int ArcResolution = 30
+#if RELEASE
+			, bool bIs3D = true
+#endif // RELEASE
+			)
 		{
 			if (ArcResolution <= 0)
 				throw new System.ArgumentException($"{nameof(ArcResolution)} must be greater than zero!");
@@ -251,7 +303,11 @@ namespace MW.Kinetic
 			{
 				float Simulation = i * InverseResolutionTime;
 
-				MVector Arc = Simulation * LaunchVelocity + V_GetGravity(bIs3D) * Simulation * Simulation * .5f;
+				MVector Arc = Simulation * LaunchVelocity + Simulation * Simulation * .5f * V_GetGravity(
+#if RELEASE
+					bIs3D
+#endif // RELEASE
+					);
 
 				RetVal[i] = Arc;
 			}
@@ -259,6 +315,7 @@ namespace MW.Kinetic
 			return RetVal;
 		}
 
+#if RELEASE
 		/// <summary>The Arc of a Projectile travelling through the world.</summary>
 		/// <decorations decor="public static MArray&lt;ProjectileArcTracer&gt;"></decorations>
 		/// <param name="Physics">The Rigidbody associated with a Projectile.</param>
@@ -297,6 +354,7 @@ namespace MW.Kinetic
 
 			return RetVal;
 		}
+#endif // RELEASE
 
 		/// <summary>The Arc of a Projectile travelling through the world.</summary>
 		/// <decorations decor="public static MArray&lt;ProjectileArcTracer&gt;"></decorations>
@@ -307,7 +365,11 @@ namespace MW.Kinetic
 		/// <param name="bDrawDebug">True to draw debug lines of the Projectile's trajectory.</param>
 		/// <param name="MaxSimulationTime">The maximum time-step for the trajectory simulation.</param>
 		/// <returns>An array of this Projectile's Position and velocity at the given Time.</returns>
-		public static MArray<ProjectileArcTracer> GetProjectileArc(MVector Velocity, Vector3 StartPosition, float Gravity, int Resolution = 30, bool bDrawDebug = false, float MaxSimulationTime = 100f)
+		public static MArray<ProjectileArcTracer> GetProjectileArc(MVector Velocity, MVector StartPosition, float Gravity, int Resolution = 30,
+#if RELEASE
+			bool bDrawDebug = false, 
+#endif // RELEASE
+			float MaxSimulationTime = 100f)
 		{
 			float SubstepDeltaTime = 1f * FInverse(Resolution);
 			MVector End = StartPosition;
@@ -327,15 +389,18 @@ namespace MW.Kinetic
 				RetVal.Push(new ProjectileArcTracer(End, Velocity, Time));
 			}
 
+#if RELEASE
 			if (bDrawDebug)
 			{
 				for (int i = 0; i < RetVal.Num - 1; ++i)
 					Debug.DrawLine(RetVal[i].Position, RetVal[i + 1].Position, Color.Lerp(Color.green, Color.red, 0.06667f * RetVal[i].Velocity.Magnitude), 5f);
 			}
+#endif // RELEASE
 
 			return RetVal;
 		}
 
+#if RELEASE
 		/// <summary>The Arc of a Projectile travelling through the world.</summary>
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Physics">The Rigidbody associated with a Projectile.</param>
@@ -447,9 +512,15 @@ namespace MW.Kinetic
 
 			return Collisions.Num != 0;
 		}
+#endif // RELEASE
 
+#if RELEASE
 		static float F_GetGravity(bool bIs3D) => bIs3D ? Physics.gravity.y : Physics2D.gravity.y;
 		static Vector3 V_GetGravity(bool bIs3D) => bIs3D ? Physics.gravity : Physics2D.gravity;
+#else
+		static float F_GetGravity() => 9.81f;
+		static MVector V_GetGravity() => F_GetGravity() * MVector.Up;
+#endif // RELEASE
 
 		/// <summary>The G Force experienced by a GameObject between two positions over DeltaTime, under the pull of Gravity.</summary>
 		/// <decorations decor="public static MVector"></decorations>
@@ -480,6 +551,7 @@ namespace MW.Kinetic
 			return V_GForce(LastPosition, ThisPosition, DeltaTime, Gravity).Magnitude;
 		}
 
+#if RELEASE
 		/// <summary>Compute the required velocity to jump at TargetHeight.</summary>
 		/// <decorations decor="public static MVector"></decorations>
 		/// <param name="Up">Normalised direction of jumping.</param>
@@ -490,6 +562,7 @@ namespace MW.Kinetic
 		{
 			return ComputeJumpVelocity(Up, TargetHeight, F_GetGravity(b3DGravity));
 		}
+#endif // RELEASE
 
 		/// <summary>Compute the required velocity to jump at TargetHeight.</summary>
 		/// <decorations decor="public static MVector"></decorations>
@@ -530,6 +603,7 @@ namespace MW.Kinetic
 		}
 	}
 
+#if RELEASE
 	/// <summary>Projectile trajectory impacts information.</summary>
 	/// <decorations decor="public struct"></decorations>
 	public struct ProjectileArcCollision
@@ -553,4 +627,5 @@ namespace MW.Kinetic
 
 		public override int GetHashCode() => Collider.GetHashCode();
 	}
+#endif // RELEASE
 }

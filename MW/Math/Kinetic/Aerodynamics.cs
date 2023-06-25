@@ -1,5 +1,7 @@
-﻿using MW.Math;
+﻿#if RELEASE
+using MW.Math;
 using UnityEngine;
+#endif // RELEASE
 
 namespace MW.Kinetic
 {
@@ -7,6 +9,7 @@ namespace MW.Kinetic
 	/// <decorations decor="public static class"></decorations>
 	public static class Aerodynamics
 	{
+#if RELEASE
 		/// <summary>The direction of natural air resistance.</summary>
 		/// <decorations decor="public static Vector3"></decorations>
 		/// <param name="Self">The Rigidbody to apply air resistance to.</param>
@@ -15,6 +18,7 @@ namespace MW.Kinetic
 			float Speed = Mathematics.Speed(Self);
 			return -(.5f * Speed * Speed * Self.drag * Self.velocity.normalized);
 		}
+#endif // RELEASE
 
 		/// <summary>The scale of lift applied to a wing with WingArea travelling at Velocity through a fluid at Density with LiftCoefficient.</summary>
 		/// <decorations decor="public static float"></decorations>

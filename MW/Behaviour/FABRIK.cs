@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MW.CameraUtils;
@@ -517,3 +518,4 @@ namespace MW.Behaviour
 		public Vector3[] GetJointPositions() => KneeOrToe.Select(KT => KT.position).ToArray();
 	}
 }
+#endif // RELEASE

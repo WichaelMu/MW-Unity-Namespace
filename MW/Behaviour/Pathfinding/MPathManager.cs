@@ -1,4 +1,5 @@
-﻿using MW.Diagnostics;
+﻿#if RELEASE
+using MW.Diagnostics;
 using UnityEngine;
 
 namespace MW.Pathfinding
@@ -104,3 +105,4 @@ namespace MW.Pathfinding
 		public enum EStatus { Paused, Running }
 	}
 }
+#endif // RELEASE

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using System.Collections;
 using MW.Kinetic;
 using MW.Math;
@@ -245,3 +246,4 @@ namespace MW.Behaviour
 		#endregion
 	}
 }
+#endif // RELEASE

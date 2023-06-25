@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if RELEASE
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using static MW.Math.Magic.Fast;
 
@@ -74,3 +75,4 @@ namespace MW.Extensions
 		public static MVector MV(this Vector3 V) => new MVector(V.x, V.y, V.z);
 	}
 }
+#endif // RELEASE

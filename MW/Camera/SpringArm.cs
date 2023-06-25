@@ -1,4 +1,5 @@
-﻿//#define ENABLE_CUSTOM_PROJECTION
+﻿#if RELEASE
+//#define ENABLE_CUSTOM_PROJECTION
 
 using UnityEngine;
 using MW.Console;
@@ -689,3 +690,4 @@ namespace MW.CameraUtils
 		}
 	}
 }
+#endif // RELEASE

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+#if RELEASE
 using UnityEngine;
+#endif // RELEASE
 
 namespace MW.Extensions
 {
@@ -41,6 +43,7 @@ namespace MW.Extensions
 				  : (T)Convert.ChangeType(O, typeof(T));
 		}
 
+#if RELEASE
 		/// <summary>Cast a GameObject to T if it is attached, implemented, or derived.</summary>
 		/// <typeparam name="T">The Unity Component, Interface, or Type.</typeparam>
 		/// <decorations decor="public static T"></decorations>
@@ -55,6 +58,7 @@ namespace MW.Extensions
 
 			return O.Cast<T>();
 		}
+#endif // RELEASE
 
 		/// <summary>Check if O implements interface I.</summary>
 		/// <typeparam name="I">The interface to cast O to.</typeparam>

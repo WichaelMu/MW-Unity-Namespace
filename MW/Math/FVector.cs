@@ -1,4 +1,5 @@
-﻿using static MW.Utils;
+﻿#if RELEASE
+using static MW.Utils;
 using static MW.Math.Magic.Fast;
 using MW.Extensions;
 using UnityEngine;
@@ -176,3 +177,4 @@ namespace MW
 		#endregion
 	}
 }
+#endif // RELEASE

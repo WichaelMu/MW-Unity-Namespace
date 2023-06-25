@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if RELEASE
+using System.Collections;
 using MW.Audio;
 using TMPro;
 using UnityEngine;
@@ -118,3 +119,4 @@ namespace MW.HUD.UI
 		}
 	}
 }
+#endif // RELEASE

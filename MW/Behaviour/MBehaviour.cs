@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if RELEASE
+using UnityEngine;
 
 namespace MW.Behaviour
 {
@@ -143,3 +144,4 @@ namespace MW.Behaviour
 		}
 	}
 }
+#endif // RELEASE

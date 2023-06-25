@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#if RELEASE
+using System.Linq;
 using static MW.Utils;
 using MW.Diagnostics;
 using UnityEngine;
@@ -208,3 +209,4 @@ namespace MW.Console
 		#endregion
 	}
 }
+#endif // RELEASE

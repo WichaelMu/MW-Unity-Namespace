@@ -1,4 +1,5 @@
-﻿namespace MW
+﻿#if RELEASE
+namespace MW
 {
 	/// <summary>Orientations for specific faces.</summary>
 	/// <decorations decor="public enum"></decorations>
@@ -18,3 +19,4 @@
 		Down
 	}
 }
+#endif // RELEASE

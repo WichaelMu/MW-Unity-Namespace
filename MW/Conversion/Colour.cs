@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if RELEASE
+using UnityEngine;
 
 namespace MW.Conversion
 {
@@ -12,7 +13,7 @@ namespace MW.Conversion
 		/// <param name="Colour">The RGB/XYZ channel values, respectively.</param>
 		public static Color Colour255(Vector3 Colour)
 		{
-			Colour *= Utils.k1To255RGB;
+			Colour *= FMath.k1To255RGB;
 
 			for (int i = 0; i < 3; i++)
 				Colour[i] = Mathf.Clamp(Colour[i], 0, 255);
@@ -27,9 +28,9 @@ namespace MW.Conversion
 		/// <param name="B">The blue value.</param>
 		public static Color Colour255(int R, int G, int B)
 		{
-			float r = R * Utils.k1To255RGB;
-			float g = G * Utils.k1To255RGB;
-			float b = B * Utils.k1To255RGB;
+			float r = R * FMath.k1To255RGB;
+			float g = G * FMath.k1To255RGB;
+			float b = B * FMath.k1To255RGB;
 
 			return new Color(r, g, b);
 		}
@@ -42,9 +43,9 @@ namespace MW.Conversion
 		public static Color Colour255(float R, float G, float B)
 		{
 
-			R *= Utils.k1To255RGB;
-			G *= Utils.k1To255RGB;
-			B *= Utils.k1To255RGB;
+			R *= FMath.k1To255RGB;
+			G *= FMath.k1To255RGB;
+			B *= FMath.k1To255RGB;
 
 			return new Color(R, G, B);
 		}
@@ -54,7 +55,7 @@ namespace MW.Conversion
 		/// <param name="ColourWithAlpha">The RGBA/XYZW channel values, respectively.</param>
 		public static Color Colour255(Vector4 ColourWithAlpha)
 		{
-			ColourWithAlpha *= Utils.k1To255RGB;
+			ColourWithAlpha *= FMath.k1To255RGB;
 
 			for (int i = 0; i < 4; i++)
 				ColourWithAlpha[i] = Mathf.Clamp(ColourWithAlpha[i], 0, 255);
@@ -71,10 +72,10 @@ namespace MW.Conversion
 		public static Color Colour255(int R, int G, int B, int A)
 		{
 
-			float r = R * Utils.k1To255RGB;
-			float g = G * Utils.k1To255RGB;
-			float b = B * Utils.k1To255RGB;
-			float a = A * Utils.k1To255RGB;
+			float r = R * FMath.k1To255RGB;
+			float g = G * FMath.k1To255RGB;
+			float b = B * FMath.k1To255RGB;
+			float a = A * FMath.k1To255RGB;
 
 			return new Color(r, g, b, a);
 		}
@@ -88,10 +89,10 @@ namespace MW.Conversion
 		public static Color Colour255(float R, float G, float B, float A)
 		{
 
-			R *= Utils.k1To255RGB;
-			G *= Utils.k1To255RGB;
-			B *= Utils.k1To255RGB;
-			A *= Utils.k1To255RGB;
+			R *= FMath.k1To255RGB;
+			G *= FMath.k1To255RGB;
+			B *= FMath.k1To255RGB;
+			A *= FMath.k1To255RGB;
 
 			return new Color(R, G, B, A);
 		}
@@ -211,7 +212,7 @@ namespace MW.Conversion
 		/// <returns>An MVector where X = R, Y = G, and Z = B in 255 RGB format.</returns>
 		public static MVector Get255RGB(Color Colour)
 		{
-			return new MVector(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB);
+			return new MVector(Colour.r / FMath.k1To255RGB, Colour.g / FMath.k1To255RGB, Colour.b / FMath.k1To255RGB);
 		}
 
 		/// <summary>Converts a Colour to its RGBA values as a Vector4.</summary>
@@ -220,7 +221,7 @@ namespace MW.Conversion
 		/// <returns>A Vector4 where x = R, y = G, z = B, and w = A in 255 RGBA format.</returns>
 		public static Vector4 Get255RGBA(Color Colour)
 		{
-			return new Vector4(Colour.r / Utils.k1To255RGB, Colour.g / Utils.k1To255RGB, Colour.b / Utils.k1To255RGB, Colour.a / Utils.k1To255RGB);
+			return new Vector4(Colour.r / FMath.k1To255RGB, Colour.g / FMath.k1To255RGB, Colour.b / FMath.k1To255RGB, Colour.a / FMath.k1To255RGB);
 		}
 
 		/// <summary>Converts RGB bytes to a Hex string.</summary>
@@ -241,3 +242,4 @@ namespace MW.Conversion
 		}
 	}
 }
+#endif // RELEASE

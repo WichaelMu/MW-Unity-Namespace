@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if RELEASE
+using System.Collections;
 using UnityEngine;
 using MW.Extensions;
 
@@ -364,3 +365,4 @@ namespace MW.Pathfinding
 		RaycastAndBounds = Raycast | Bounds
 	}
 }
+#endif // RELEASE

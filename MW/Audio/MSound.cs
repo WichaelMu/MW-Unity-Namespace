@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using UnityEngine;
 
 namespace MW.Audio
@@ -41,3 +42,4 @@ namespace MW.Audio
 		public AudioSource AudioSourceComponent;
 	}
 }
+#endif // RELEASE

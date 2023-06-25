@@ -1,4 +1,5 @@
-﻿using MW.Math.Magic;
+﻿#if RELEASE
+using MW.Math.Magic;
 using UnityEngine;
 
 namespace MW.Audio
@@ -215,3 +216,4 @@ namespace MW.Audio
 		}
 	}
 }
+#endif // RELEASE

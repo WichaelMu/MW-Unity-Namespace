@@ -3,8 +3,10 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using MW.Extensions;
+#if RELEASE
 using UnityEngine;
 using UE = UnityEngine;
+#endif // RELEASE
 
 namespace MW.Console
 {
@@ -18,14 +20,17 @@ namespace MW.Console
 			{
 				TargetObject = Make<MVector>(Elements);
 			}
+#if RELEASE
 			else if (ElementType == typeof(Vector3))
 			{
 				TargetObject = Make<Vector3>(Elements);
 			}
+#endif // RELEASE
 			else if (ElementType == typeof(MRotator))
 			{
 				TargetObject = Make<MRotator>(Elements);
 			}
+#if RELEASE
 			else if (ElementType == typeof(GameObject))
 			{
 				TargetObject = Make<GameObject>(Elements);
@@ -42,6 +47,7 @@ namespace MW.Console
 			{
 				TargetObject = Make<UE.Behaviour>(Elements);
 			}
+#endif // RELEASE
 			else if (ElementType == typeof(string))
 			{
 				TargetObject = Make<string>(Elements);

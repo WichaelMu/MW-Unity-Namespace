@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿#if RELEASE
 using MW.Extensions;
 using MW.Math;
+using UnityEngine;
 
 namespace MW.HUD.Line
 {
@@ -77,7 +78,7 @@ namespace MW.HUD.Line
 			LineRenderer.positionCount = NumberOfSegments + 1;
 			LineRenderer.useWorldSpace = bUseWorldSpace;
 
-			float DeltaTheta = Utils.k2PI / NumberOfSegments;
+			float DeltaTheta = FMath.k2PI / NumberOfSegments;
 			float Theta = 0f;
 
 			for (int i = 0; i < NumberOfSegments + 1; i++)
@@ -110,7 +111,7 @@ namespace MW.HUD.Line
 			LineRenderer.positionCount = NumberOfSegments + 1;
 			LineRenderer.useWorldSpace = bUseWorldSpace;
 
-			float DeltaTheta = Utils.k2PI / NumberOfSegments;
+			float DeltaTheta = FMath.k2PI / NumberOfSegments;
 			float Theta = 0f;
 
 			for (int i = 0; i < NumberOfSegments + 1; i++)
@@ -125,3 +126,4 @@ namespace MW.HUD.Line
 		}
 	}
 }
+#endif // RELEASE

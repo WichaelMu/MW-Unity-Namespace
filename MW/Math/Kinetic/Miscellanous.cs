@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if RELEASE
+using UnityEngine;
 
 namespace MW.Kinetic
 {
@@ -49,3 +50,4 @@ namespace MW.Kinetic
 		}
 	}
 }
+#endif // RELEASE

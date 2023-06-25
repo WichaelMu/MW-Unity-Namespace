@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using System.Collections.Generic;
 using MW.Diagnostics;
 using UnityEngine;
@@ -255,3 +256,4 @@ namespace MW.Audio
 		internal static bool IsPlaying(MSound S) => S.AudioSourceComponent.isPlaying;
 	}
 }
+#endif // RELEASE

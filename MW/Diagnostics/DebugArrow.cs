@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if RELEASE
+using UnityEngine;
 
 namespace MW.Diagnostics
 {
@@ -131,3 +132,4 @@ namespace MW.Diagnostics
 		#endregion
 	}
 }
+#endif // RELEASE

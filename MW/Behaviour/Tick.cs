@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using System.Collections;
 using MW.Diagnostics;
 using MW.Easing;
@@ -126,3 +127,4 @@ namespace MW.Behaviour
 		}
 	}
 }
+#endif // RELEASE

@@ -133,10 +133,10 @@ namespace MW.Math.Magic
 		public static float FArcCosine(float Angle)
 		{
 			float A = FAbs(Angle);
-			float ACos = ((-.0206452f * A + .0764532f) * A + -.21271f) * A + kHalfPI;
+			float ACos = ((-.0206452f * A + .0764532f) * A + -.21271f) * A + FMath.kHalfPI;
 			ACos *= FSqrt(1f - A);
 
-			return Angle > 0f ? ACos : kPI - ACos;
+			return Angle > 0f ? ACos : FMath.kPI - ACos;
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Mathf.Atan(float)"/>.</summary>
@@ -154,7 +154,7 @@ namespace MW.Math.Magic
 			P = 1f + P * TT;
 			P *= T;
 
-			float R = F < 1f ? P : kHalfPI - P;
+			float R = F < 1f ? P : FMath.kHalfPI - P;
 			return N < 0f ? -R : R;
 		}
 
@@ -171,13 +171,13 @@ namespace MW.Math.Magic
 			if (Y == 0f && X > 0f)
 				return 0f;
 			if (Y == 0f && X < 0f)
-				return kPI;
+				return FMath.kPI;
 			if (Y > 0f && X == 0f)
-				return kHalfPI;
+				return FMath.kHalfPI;
 			if (Y < 0f && X == 0f)
-				return -kHalfPI;
+				return -FMath.kHalfPI;
 			if (X.IsIllegalFloat() || Y.IsIllegalFloat())
-				return float.NaN;
+				return FMath.NaN;
 
 			float YX = Y * FInverse(X);
 			float XY = X * FInverse(Y);
@@ -189,17 +189,17 @@ namespace MW.Math.Magic
 				? Y >= 0f
 					? Y < X
 						? TYX
-						: kHalfPI - TPXY
+						: FMath.kHalfPI - TPXY
 					: -Y < X
 						? TYX
-						: -kHalfPI - TPXY
+						: -FMath.kHalfPI - TPXY
 				: Y >= 0f
 					? Y < -X
-						? TYX + kPI
-						: kHalfPI - TPXY
+						? TYX + FMath.kPI
+						: FMath.kHalfPI - TPXY
 					: -Y < -X
-						? TYX - kPI
-						: -kHalfPI - TPXY;
+						? TYX - FMath.kPI
+						: -FMath.kHalfPI - TPXY;
 		}
 
 		/// <summary>Faster version of <see cref="UnityEngine.Vector3.Angle(UnityEngine.Vector3, UnityEngine.Vector3)"/>.</summary>

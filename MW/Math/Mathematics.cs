@@ -1,12 +1,13 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using MW.Diagnostics;
+﻿using System.Runtime.CompilerServices;
 using MW.Easing;
 using MW.Kinetic;
+using static MW.Math.Magic.Fast;
+using static MW.FMath;
+#if RELEASE
+using System;
 using MW.Extensions;
 using UnityEngine;
-using static MW.Math.Magic.Fast;
-using static MW.Utils;
+#endif // RELEASE
 
 namespace MW.Math
 {
@@ -20,27 +21,30 @@ namespace MW.Math
 		/// <param name="CurrentSpeed">The current speed of the acceleration.</param>
 		/// <param name="RateOfAcceleration">The rate to accelerate towards to terminal from current speed.</param>
 		/// <param name="Terminal">The maximum speed.</param>
+		/// <param name="DeltaTime">Delta time between two Speed calculations.</param>
 		/// <returns>The acceleration value using EEquation, using the current speed and rate of acceleration towards terminal over Time.deltaTime.</returns>
-		public static float Acceleration(EEquation Equation, float CurrentSpeed, float RateOfAcceleration, float Terminal)
+		public static float Acceleration(EEquation Equation, float CurrentSpeed, float RateOfAcceleration, float Terminal, float DeltaTime)
 		{
 			Terminal *= Kinematics.kVelocityRatio;
 
 			if (RateOfAcceleration == 0)
-				Log.E(nameof(RateOfAcceleration) + " cannot be zero");
+				Diagnostics.Log.E(nameof(RateOfAcceleration) + " cannot be zero");
 
-			return Mathf.Clamp(Mathf.Lerp(CurrentSpeed / Time.deltaTime, Terminal, Interpolate.Ease(Equation, 0, 1, RateOfAcceleration)), 0, Terminal);
+			return Clamp(Lerp(CurrentSpeed / DeltaTime, Terminal, Interpolate.Ease(Equation, 0, 1, RateOfAcceleration)), 0, Terminal);
 		}
 
 		/// <summary>The rate of deceleration.</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="CurrentSpeed"></param>
 		/// <param name="TargetVelocity"></param>
+		/// <param name="DeltaTime"></param>
 		/// <returns></returns>
-		public static float Deceleration(float CurrentSpeed, float TargetVelocity = 0)
+		public static float Deceleration(float CurrentSpeed, float DeltaTime, float TargetVelocity = 0)
 		{
-			return -((TargetVelocity - CurrentSpeed) / Time.deltaTime);
+			return -((TargetVelocity - CurrentSpeed) / DeltaTime);
 		}
 
+#if RELEASE
 		static float fAR = 0;
 
 		/// <decorations decor="[Obsolete] public static float"></decorations>
@@ -55,6 +59,7 @@ namespace MW.Math
 			fAR = a;
 			return fAccelerationRate;
 		}
+#endif // RELEASE
 
 		/// <summary>The rate of acceleration in m/s^2.</summary>
 		/// <decorations decor="public static float"></decorations>
@@ -69,6 +74,7 @@ namespace MW.Math
 			return DeltaPos / DeltaTime;
 		}
 
+#if RELEASE
 		/// <summary>Converts a <see cref="Rigidbody"/>'s speed from metres per second to <see cref="EUnit"/>.</summary>
 		/// <docs>Converts a Rigidbody's speed from metres per second to UUnit.</docs>
 		/// <decorations decor="public static float"></decorations>
@@ -116,7 +122,7 @@ namespace MW.Math
 			//  At a velocity of 950, the cannon travels at ~633 m/s.
 			//  ~2279 kmph.
 
-			float fSecondsPerKM = 1000 / (Projectile.velocity.magnitude * Utils.kTwoThirds);
+			float fSecondsPerKM = 1000 / (Projectile.velocity.magnitude * FMath.kTwoThirds);
 
 			//  Distance between the RSelf and RBTarget in thousands.
 			float fDistanceBetweenPlayer = Vector3.Distance(Projectile.position, Target.position) * .001f;
@@ -125,6 +131,7 @@ namespace MW.Math
 
 			return vForwardPrediction;
 		}
+#endif // RELEASE
 
 		/// <summary>Predicts the path of a target's movement for a projectile to be launched.</summary>
 		/// <decorations decor="public static MVector"></decorations>
@@ -238,12 +245,13 @@ namespace MW.Math
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNormalised(MVector Vector) => FAbs(1f - Vector.SqrMagnitude) < .01f;
 
+#if RELEASE
 		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Z-Axis. (For 3D space)</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="Direction">The direction to calculate an angle towards.</param>
 		public static float AngleFromVector3D(Vector3 Direction)
 		{
-			return Mathf.Atan2(Direction.x, Direction.z) * Mathf.Rad2Deg;
+			return FMath.ArcTan2(Direction.x, Direction.z) * FMath.R2D;
 		}
 
 		/// <summary>The angle in degrees pointing towards Direction using the X-Axis and Y-Axis. (For 2D space)</summary>
@@ -251,7 +259,7 @@ namespace MW.Math
 		/// <param name="Direction">The direction to calculate an angle towards.</param>
 		public static float AngleFromVector2D(Vector3 Direction)
 		{
-			return -Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
+			return -FMath.ArcTan2(Direction.x, Direction.y) * FMath.R2D;
 		}
 
 		[Obsolete($"Use {nameof(MVector.RotateVector)} instead!")]
@@ -259,9 +267,9 @@ namespace MW.Math
 		{
 			return ForwardDirection switch
 			{
-				EDirection.Forward => new MVector(Mathf.Sin(Degrees * Mathf.Deg2Rad), 0, Mathf.Cos(Degrees * Mathf.Deg2Rad)),
-				EDirection.Right => new MVector(Mathf.Cos(-Degrees * Mathf.Deg2Rad), 0, Mathf.Sin(-Degrees * Mathf.Deg2Rad)),
-				EDirection.Up => new MVector(Mathf.Sin(-Degrees * Mathf.Deg2Rad), Mathf.Cos(-Degrees * Mathf.Deg2Rad), 0),
+				EDirection.Forward => new MVector(FMath.Sine(Degrees * FMath.D2R), 0, FMath.Cos(Degrees * FMath.D2R)),
+				EDirection.Right => new MVector(FMath.Cos(-Degrees * FMath.D2R), 0, FMath.Sine(-Degrees * FMath.D2R)),
+				EDirection.Up => new MVector(FMath.Sine(-Degrees * FMath.D2R), FMath.Cos(-Degrees * FMath.D2R), 0),
 
 				EDirection.Back => -VectorFromAngle(Degrees, EDirection.Forward),
 				EDirection.Left => -VectorFromAngle(Degrees, EDirection.Right),
@@ -307,8 +315,9 @@ namespace MW.Math
 				z = 0
 			};
 
-			return EulerRadians * Mathf.Rad2Deg;
+			return EulerRadians * FMath.R2D;
 		}
+#endif // RELEASE
 
 		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>
 		/// <remarks>Out Sine and Cosine are accurate to 2.4E-5 of the real sine and cosine of Angle.</remarks>
@@ -322,8 +331,8 @@ namespace MW.Math
 		{
 			if (bUseExactValue)
 			{
-				Sine = Mathf.Sin(Angle);
-				Cosine = Mathf.Cos(Angle);
+				Sine = FMath.Sine(Angle);
+				Cosine = Cos(Angle);
 				return;
 			}
 
@@ -364,6 +373,7 @@ namespace MW.Math
 				Cosine -= 2f;
 		}
 
+#if RELEASE
 		/// <summary>Calculates the Square Distance between two Vector3s.</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="L"></param>
@@ -387,6 +397,7 @@ namespace MW.Math
 		/// <returns>The distance between L and R.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Distance(Vector3 L, Vector3 R) => FSqrt(SqrDistance(L, R));
+#endif // RELEASE
 
 		/// <summary>The distance over the circumference of a circle given two points and radius.</summary>
 		/// <decorations decor="public static float"></decorations>

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+#if RELEASE
 using MW.Conversion;
+#endif // RELEASE
 using MW.Math;
 using MW.Extensions;
+#if RELEASE
 using UnityEngine;
+#endif // RELEASE
 using static MW.Math.Magic.Fast;
 
 namespace MW
@@ -16,7 +20,7 @@ namespace MW
 	{
 		/// <summary>Vector floating-point precision.</summary>
 		/// <decorations decors="public const float"></decorations>
-		public const float kEpsilon = 1E-05f;
+		public const float kEpsilon = FMath.kEpsilon;
 
 		public float X, Y, Z;
 
@@ -56,6 +60,7 @@ namespace MW
 			this.Z = Z;
 		}
 
+#if RELEASE
 		/// <summary>Construct an MVector with respect to a <see cref="Vector3"/>.</summary>
 		/// <docs>Construct an MVector with respect to a Vector3.</docs>
 		/// <param name="xyz">The Vector3's Components to set this MVector.</param>
@@ -67,6 +72,7 @@ namespace MW
 		/// <param name="xy">The Vector2's Components to set this MVector.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public MVector(Vector2 xy) : this(xy.x, xy.y) { }
+#endif // RELEASE
 
 		public float this[int i]
 		{
@@ -132,6 +138,7 @@ namespace MW
 		/// <decorations decor="public static readonly MVector"></decorations>
 		public static readonly MVector NaN = nan;
 
+#if RELEASE
 		/// <summary>Converts an MVector to a Vector3.</summary>
 		/// <decorations decors="public static Vector3"></decorations>
 		/// <param name="M">The MVector to convert.</param>
@@ -142,6 +149,7 @@ namespace MW
 		/// <param name="V">The Vector3 to convert.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector MV(Vector3 V) => new MVector(V.x, V.y, V.z);
+#endif // RELEASE
 
 		/// <summary>Normalises V.</summary>
 		/// <decorations decors="public static MVector"></decorations>
@@ -163,12 +171,14 @@ namespace MW
 		/// <param name="Right"></param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Parallel(MVector Left, MVector Right) => Mathematics.Parallel(Left, Right);
+#if RELEASE
 		/// <summary>A normalised MVector at Degrees, relative to Forward.</summary>
 		/// <decorations decors="public static MVector"></decorations>
 		/// <param name="Degrees">The angle offset.</param>
 		/// <param name="Forward">The forward direction.</param>
 		[Obsolete($"Use {nameof(RotateVector)} instead!")]
 		public static MVector MVectorFromAngle(float Degrees, EDirection Forward) => Mathematics.VectorFromAngle(Degrees, Forward);
+#endif // RELEASE
 		/// <summary>The angle between two vectors in degrees.</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="L"></param>
@@ -287,8 +297,8 @@ namespace MW
 		/// <summary>The magnitude of this MVector.</summary>
 		/// <decorations decors="public float"></decorations>
 		public float Magnitude { get => FSqrt(SqrMagnitude); set => SetMagnitude(value); }
-		/// <summary>The <see cref="Mathf.Abs(float)"/> of this MVector's components.</summary>
-		/// <docs>The Mathf.Abs(float) of this MVector's components.</docs>
+		/// <summary>The <see cref="FMath.Abs(float)"/> of this MVector's components.</summary>
+		/// <docs>The FMath.Abs(float) of this MVector's components.</docs>
 		/// <decorations decors="public MVector"></decorations>
 		public MVector Abs { get => new MVector(FAbs(X), FAbs(Y), FAbs(Z)); }
 		/// <summary>The normalised version of this MVector.</summary>
@@ -352,7 +362,7 @@ namespace MW
 
 			Axis = -Axis;
 
-			Mathematics.SinCos(out float S, out float C, AngleDegrees * Mathf.Deg2Rad);
+			Mathematics.SinCos(out float S, out float C, AngleDegrees * FMath.D2R);
 
 			float XX = Axis.X * Axis.X;
 			float YY = Axis.Y * Axis.Y;
@@ -388,7 +398,7 @@ namespace MW
 			R.Yaw = FArcTangent2(X, Z);
 			R.Roll = 0;
 
-			return R * Mathf.Rad2Deg;
+			return R * FMath.R2D;
 		}
 
 		/// <summary>The direction and length of this MVector.</summary>
@@ -533,6 +543,7 @@ namespace MW
 		/// <returns>(MVector Left, MVector Right) => new MVector(Left.X + Right.X, Left.Y + Right.Y, Left.Z + Right.Z)</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator +(MVector Left, MVector Right) => new MVector(Left.X + Right.X, Left.Y + Right.Y, Left.Z + Right.Z);
+#if RELEASE
 		/// <summary>Adds a Vector3 to an MVector.</summary>
 		/// <decorations decors="public static MVector operator+"></decorations>
 		/// <param name="Left">The MVector.</param>
@@ -547,6 +558,7 @@ namespace MW
 		/// <returns>(Vector3 Left, MVector Right) => (MVector)Left + Right</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static MVector operator +(Vector3 Left, MVector Right) => (MVector)Left + Right;
+#endif // RELEASE
 		/// <summary>Subtracts two MVectors.</summary>
 		/// <decorations decors="public static MVector operator-"></decorations>
 		/// <param name="Left">Left-side MVector.</param>
@@ -715,6 +727,7 @@ namespace MW
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator false(MVector M) => M == NaN || M == Zero || M.SqrMagnitude < kEpsilon || ComponentsCheckNaNInf(M);
 
+#if RELEASE
 		/// <summary>Automatic conversion from an MVector to a Vector3.</summary>
 		/// <decorations decors="public static implicit operator Vector3"></decorations>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -742,6 +755,7 @@ namespace MW
 		/// <summary>The MVector representation of a Colour ranged from 0 - 255 RGB/XYZ.</summary>
 		/// <decorations decor="public static implicit operator MVector"></decorations>
 		public static implicit operator MVector(Color C) => Colour.Get255RGB(C);
+#endif // RELEASE
 
 		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
 		/// <decorations decors="public override int"></decorations>

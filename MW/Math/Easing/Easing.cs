@@ -1,5 +1,5 @@
-﻿using MW.Math.Magic;
-using UnityEngine;
+﻿using MW.Diagnostics;
+using MW.Math.Magic;
 
 namespace MW.Easing
 {
@@ -20,7 +20,7 @@ namespace MW.Easing
 		/// <returns></returns>
 		public static float Linear(float Start, float End, float Duration)
 		{
-			return Mathf.Lerp(Start, End, Duration);
+			return FMath.Lerp(Start, End, Duration);
 		}
 
 		/// <summary></summary>
@@ -31,8 +31,8 @@ namespace MW.Easing
 		/// <returns></returns>
 		public static float Spring(float Start, float End, float Duration)
 		{
-			Duration = Mathf.Clamp01(Duration);
-			Duration = (Mathf.Sin(Duration * Mathf.PI * (0.2f + 2.5f * Duration * Duration * Duration)) * Mathf.Pow(1f - Duration, 2.2f) + Duration) * (1f + 1.2f * (1f - Duration));
+			Duration = FMath.Clamp(Duration, 0f, 1f);
+			Duration = (FMath.Sine(Duration * FMath.kPI * (0.2f + 2.5f * Duration * Duration * Duration)) * FMath.Power(1f - Duration, 2.2f) + Duration) * (1f + 1.2f * (1f - Duration));
 			return Start + (End - Start) * Duration;
 		}
 
@@ -204,7 +204,7 @@ namespace MW.Easing
 		public static float EaseInSine(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return -End * Mathf.Cos(Duration * (Mathf.PI * 0.5f)) + End + Start;
+			return -End * FMath.Cos(Duration * (FMath.kPI * 0.5f)) + End + Start;
 		}
 
 		/// <summary></summary>
@@ -216,7 +216,7 @@ namespace MW.Easing
 		public static float EaseOutSine(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return End * Mathf.Sin(Duration * (Mathf.PI * 0.5f)) + Start;
+			return End * FMath.Sine(Duration * (FMath.kPI * 0.5f)) + Start;
 		}
 
 		/// <summary></summary>
@@ -228,7 +228,7 @@ namespace MW.Easing
 		public static float EaseInOutSine(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return -End * 0.5f * (Mathf.Cos(Mathf.PI * Duration) - 1) + Start;
+			return -End * 0.5f * (FMath.Cos(FMath.kPI * Duration) - 1) + Start;
 		}
 
 		/// <summary></summary>
@@ -240,7 +240,7 @@ namespace MW.Easing
 		public static float EaseInExpo(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return End * Mathf.Pow(2, 10 * (Duration - 1)) + Start;
+			return End * FMath.Power(2, 10 * (Duration - 1)) + Start;
 		}
 
 		/// <summary></summary>
@@ -252,7 +252,7 @@ namespace MW.Easing
 		public static float EaseOutExpo(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return End * (-Mathf.Pow(2, -10 * Duration) + 1) + Start;
+			return End * (-FMath.Power(2, -10 * Duration) + 1) + Start;
 		}
 
 		/// <summary></summary>
@@ -265,9 +265,9 @@ namespace MW.Easing
 		{
 			Duration /= .5f;
 			End -= Start;
-			if (Duration < 1) return End * 0.5f * Mathf.Pow(2, 10 * (Duration - 1)) + Start;
+			if (Duration < 1) return End * 0.5f * FMath.Power(2, 10 * (Duration - 1)) + Start;
 			Duration--;
-			return End * 0.5f * (-Mathf.Pow(2, -10 * Duration) + 2) + Start;
+			return End * 0.5f * (-FMath.Power(2, -10 * Duration) + 2) + Start;
 		}
 
 		/// <summary></summary>
@@ -436,17 +436,17 @@ namespace MW.Easing
 
 			if ((Duration /= d) == 1) return Start + End;
 
-			if (a == 0f || a < Mathf.Abs(End))
+			if (a == 0f || a < FMath.Abs(End))
 			{
 				a = End;
 				s = p / 4;
 			}
 			else
 			{
-				s = p / (2 * Mathf.PI) * Mathf.Asin(End / a);
+				s = p / (2 * FMath.kPI) * FMath.ArcSine(End / a);
 			}
 
-			return -(a * Mathf.Pow(2, 10 * (Duration -= 1)) * Mathf.Sin((Duration * d - s) * (2 * Mathf.PI) / p)) + Start;
+			return -(a * FMath.Power(2, 10 * (Duration -= 1)) * FMath.Sine((Duration * d - s) * (2 * FMath.kPI) / p)) + Start;
 		}
 
 		/// <summary></summary>
@@ -468,17 +468,17 @@ namespace MW.Easing
 
 			if ((Duration /= d) == 1) return Start + End;
 
-			if (a == 0f || a < Mathf.Abs(End))
+			if (a == 0f || a < FMath.Abs(End))
 			{
 				a = End;
 				s = p * 0.25f;
 			}
 			else
 			{
-				s = p / (2 * Mathf.PI) * Mathf.Asin(End / a);
+				s = p / (2 * FMath.kPI) * FMath.ArcSine(End / a);
 			}
 
-			return a * Mathf.Pow(2, -10 * Duration) * Mathf.Sin((Duration * d - s) * (2 * Mathf.PI) / p) + End + Start;
+			return a * FMath.Power(2, -10 * Duration) * FMath.Sine((Duration * d - s) * (2 * FMath.kPI) / p) + End + Start;
 		}
 
 		/// <summary></summary>
@@ -500,18 +500,18 @@ namespace MW.Easing
 
 			if ((Duration /= d * 0.5f) == 2) return Start + End;
 
-			if (a == 0f || a < Mathf.Abs(End))
+			if (a == 0f || a < FMath.Abs(End))
 			{
 				a = End;
 				s = p / 4;
 			}
 			else
 			{
-				s = p / (2 * Mathf.PI) * Mathf.Asin(End / a);
+				s = p / (2 * FMath.kPI) * FMath.ArcSine(End / a);
 			}
 
-			if (Duration < 1) return -0.5f * (a * Mathf.Pow(2, 10 * (Duration -= 1)) * Mathf.Sin((Duration * d - s) * (2 * Mathf.PI) / p)) + Start;
-			return a * Mathf.Pow(2, -10 * (Duration -= 1)) * Mathf.Sin((Duration * d - s) * (2 * Mathf.PI) / p) * 0.5f + End + Start;
+			if (Duration < 1) return -0.5f * (a * FMath.Power(2, 10 * (Duration -= 1)) * FMath.Sine((Duration * d - s) * (2 * FMath.kPI) / p)) + Start;
+			return a * FMath.Power(2, -10 * (Duration -= 1)) * FMath.Sine((Duration * d - s) * (2 * FMath.kPI) / p) * 0.5f + End + Start;
 		}
 
 		// Derivatives.
@@ -714,7 +714,7 @@ namespace MW.Easing
 		/// <returns></returns>
 		public static float EaseInSineD(float Start, float End, float Duration)
 		{
-			return (End - Start) * 0.5f * Mathf.PI * Mathf.Sin(0.5f * Mathf.PI * Duration);
+			return (End - Start) * 0.5f * FMath.kPI * FMath.Sine(0.5f * FMath.kPI * Duration);
 		}
 
 		/// <summary></summary>
@@ -726,7 +726,7 @@ namespace MW.Easing
 		public static float EaseOutSineD(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return Mathf.PI * 0.5f * End * Mathf.Cos(Duration * (Mathf.PI * 0.5f));
+			return FMath.kPI * 0.5f * End * FMath.Cos(Duration * (FMath.kPI * 0.5f));
 		}
 
 		/// <summary></summary>
@@ -738,7 +738,7 @@ namespace MW.Easing
 		public static float EaseInOutSineD(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return End * 0.5f * Mathf.PI * Mathf.Sin(Mathf.PI * Duration);
+			return End * 0.5f * FMath.kPI * FMath.Sine(FMath.kPI * Duration);
 		}
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
@@ -748,7 +748,7 @@ namespace MW.Easing
 		/// <returns></returns>
 		public static float EaseInExpoD(float Start, float End, float Duration)
 		{
-			return 10f * kNaturalLogOf2 * (End - Start) * Mathf.Pow(2f, 10f * (Duration - 1));
+			return 10f * kNaturalLogOf2 * (End - Start) * FMath.Power(2f, 10f * (Duration - 1));
 		}
 
 		/// <summary></summary>
@@ -760,7 +760,7 @@ namespace MW.Easing
 		public static float EaseOutExpoD(float Start, float End, float Duration)
 		{
 			End -= Start;
-			return 5f * kNaturalLogOf2 * End * Mathf.Pow(2f, 1f - 10f * Duration);
+			return 5f * kNaturalLogOf2 * End * FMath.Power(2f, 1f - 10f * Duration);
 		}
 
 		/// <summary></summary>
@@ -776,12 +776,12 @@ namespace MW.Easing
 
 			if (Duration < 1)
 			{
-				return 5f * kNaturalLogOf2 * End * Mathf.Pow(2f, 10f * (Duration - 1));
+				return 5f * kNaturalLogOf2 * End * FMath.Power(2f, 10f * (Duration - 1));
 			}
 
 			Duration--;
 
-			return 5f * kNaturalLogOf2 * End / Mathf.Pow(2f, 10f * Duration);
+			return 5f * kNaturalLogOf2 * End / FMath.Power(2f, 10f * Duration);
 		}
 
 		/// <summary></summary>
@@ -973,19 +973,19 @@ namespace MW.Easing
 			float s;
 			float a = 0;
 
-			if (a == 0f || a < Mathf.Abs(End))
+			if (a == 0f || a < FMath.Abs(End))
 			{
 				a = End;
 				s = p * 0.25f;
 			}
 			else
 			{
-				s = p / (2 * Mathf.PI) * Mathf.Asin(End / a);
+				s = p / (2 * FMath.kPI) * FMath.ArcSine(End / a);
 			}
 
-			return a * Mathf.PI * d * Mathf.Pow(2f, 1f - 10f * Duration) *
-			    Mathf.Cos(2f * Mathf.PI * (d * Duration - s) / p) / p - 5f * kNaturalLogOf2 * a *
-			    Mathf.Pow(2f, 1f - 10f * Duration) * Mathf.Sin(2f * Mathf.PI * (d * Duration - s) / p);
+			return a * FMath.kPI * d * FMath.Power(2f, 1f - 10f * Duration) *
+			    FMath.Cos(2f * FMath.kPI * (d * Duration - s) / p) / p - 5f * kNaturalLogOf2 * a *
+			    FMath.Power(2f, 1f - 10f * Duration) * FMath.Sine(2f * FMath.kPI * (d * Duration - s) / p);
 		}
 
 		/// <summary></summary>
@@ -1003,28 +1003,28 @@ namespace MW.Easing
 			float s;
 			float a = 0;
 
-			if (a == 0f || a < Mathf.Abs(End))
+			if (a == 0f || a < FMath.Abs(End))
 			{
 				a = End;
 				s = p / 4;
 			}
 			else
 			{
-				s = p / (2 * Mathf.PI) * Mathf.Asin(End / a);
+				s = p / (2 * FMath.kPI) * FMath.ArcSine(End / a);
 			}
 
 			if (Duration < 1)
 			{
 				Duration -= 1;
 
-				return -5f * kNaturalLogOf2 * a * Mathf.Pow(2f, 10f * Duration) * Mathf.Sin(2 * Mathf.PI * (d * Duration - 2f) / p) -
-				    a * Mathf.PI * d * Mathf.Pow(2f, 10f * Duration) * Mathf.Cos(2 * Mathf.PI * (d * Duration - s) / p) / p;
+				return -5f * kNaturalLogOf2 * a * FMath.Power(2f, 10f * Duration) * FMath.Sine(2 * FMath.kPI * (d * Duration - 2f) / p) -
+				    a * FMath.kPI * d * FMath.Power(2f, 10f * Duration) * FMath.Cos(2 * FMath.kPI * (d * Duration - s) / p) / p;
 			}
 
 			Duration -= 1;
 
-			return a * Mathf.PI * d * Mathf.Cos(2f * Mathf.PI * (d * Duration - s) / p) / (p * Mathf.Pow(2f, 10f * Duration)) -
-			    5f * kNaturalLogOf2 * a * Mathf.Sin(2f * Mathf.PI * (d * Duration - s) / p) / Mathf.Pow(2f, 10f * Duration);
+			return a * FMath.kPI * d * FMath.Cos(2f * FMath.kPI * (d * Duration - s) / p) / (p * FMath.Power(2f, 10f * Duration)) -
+			    5f * kNaturalLogOf2 * a * FMath.Sine(2f * FMath.kPI * (d * Duration - s) / p) / FMath.Power(2f, 10f * Duration);
 		}
 
 		/// <summary></summary>
@@ -1035,14 +1035,14 @@ namespace MW.Easing
 		/// <returns></returns>
 		public static float SpringD(float Start, float End, float Duration)
 		{
-			Duration = Mathf.Clamp01(Duration);
+			Duration = FMath.Clamp(Duration, 0f, 1f);
 			End -= Start;
 
-			return End * (6f * (1f - Duration) / 5f + 1f) * (-2.2f * Mathf.Pow(1f - Duration, 1.2f) *
-			    Mathf.Sin(Mathf.PI * Duration * (2.5f * Duration * Duration * Duration + 0.2f)) + Mathf.Pow(1f - Duration, 2.2f) *
-			    (Mathf.PI * (2.5f * Duration * Duration * Duration + 0.2f) + 7.5f * Mathf.PI * Duration * Duration * Duration) *
-			    Mathf.Cos(Mathf.PI * Duration * (2.5f * Duration * Duration * Duration + 0.2f)) + 1f) -
-			    6f * End * (Mathf.Pow(1 - Duration, 2.2f) * Mathf.Sin(Mathf.PI * Duration * (2.5f * Duration * Duration * Duration + 0.2f)) + Duration
+			return End * (6f * (1f - Duration) / 5f + 1f) * (-2.2f * FMath.Power(1f - Duration, 1.2f) *
+			    FMath.Sine(FMath.kPI * Duration * (2.5f * Duration * Duration * Duration + 0.2f)) + FMath.Power(1f - Duration, 2.2f) *
+			    (FMath.kPI * (2.5f * Duration * Duration * Duration + 0.2f) + 7.5f * FMath.kPI * Duration * Duration * Duration) *
+			    FMath.Cos(FMath.kPI * Duration * (2.5f * Duration * Duration * Duration + 0.2f)) + 1f) -
+			    6f * End * (FMath.Power(1 - Duration, 2.2f) * FMath.Sine(FMath.kPI * Duration * (2.5f * Duration * Duration * Duration + 0.2f)) + Duration
 			    / 5f);
 
 		}
@@ -1203,7 +1203,7 @@ namespace MW.Easing
 				case EEquation.EaseInOutElastic:
 					return EaseInOutElastic(Start, End, Alpha);
 				default:
-					Debug.LogWarning("Could not convert Easing.EEquation.\nReturning Easing.Linear instead.");
+					Log.W("Could not convert Easing.EEquation.\nReturning Easing.Linear instead.");
 					return Linear(Start, End, Alpha);
 			}
 		}

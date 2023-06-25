@@ -3,8 +3,11 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using static MW.Math.Mathematics;
 using static MW.Math.Magic.Fast;
+using static MW.FMath;
+#if RELEASE
 using MW.Extensions;
 using UnityEngine;
+#endif // RELEASE
 
 namespace MW
 {
@@ -14,40 +17,7 @@ namespace MW
 	/// <decorations decor="public static class"></decorations>
 	public static class Utils
 	{
-		/// <summary>Shorthand for writing / 3.</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kOneThird = .3333333333333333333333333333333333f;
-		/// <summary>Shorthand for writing / 1.5.</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kTwoThirds = .6666666666666666666666666666666666f;
-		/// <summary>The golden ratio.</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kPhi = 1.6180339887498948482045868343656381f;
-		/// <summary>Euler's number. (e)</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kE = 2.71828182845904523536f;
-		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(2).</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kSqrt2 = 1.4142135623730950488016887242097f;
-		/// <summary>Shorthand for writing UnityEngine.Mathf.Sqrt(3).</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kSqrt3 = 1.7320508075688772935274463415059f;
-		/// <summary>PI</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kPI = 3.1415926535897932384626433832795f;
-		/// <summary>Shorthand for writing 1 / Mathf.PI.</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kInversePI = .31830988618379067153776752674503f;
-		/// <summary>Shorthand for writing Mathf.PI * kHalf.</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float kHalfPI = 1.5707963267948966192313216916398f;
-		/// <summary>Shorthand for writing Mathf.PI * 2f</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float k2PI = 6.283185307179586476925286766559f;
-		/// <summary>The conversion from 0-1 to 0-255.</summary>
-		/// <decorations decor="public const float"></decorations>
-		public const float k1To255RGB = 0.0039215686274509803921568627451F;
-
+#if RELEASE
 		[Obsolete("This method has been deprecated due to limitations with EDirection. Use InFOV(Vector3, Vector3, Vector3, float) instead!")]
 		public static bool InFOV(EDirection Face, Transform Self, Transform Target, float SearchAngle)
 		{
@@ -137,6 +107,7 @@ namespace MW
 		{
 			return !Physics.Linecast(Self, To);
 		}
+#endif // RELEASE
 
 		///<summary>The Value rounded to DecimalPlaces.</summary>
 		/// <decorations decor="public static float"></decorations>
@@ -146,11 +117,11 @@ namespace MW
 		{
 			if (DecimalPlaces == 0)
 			{
-				return Mathf.RoundToInt(Value);
+				return RoundInt(Value);
 			}
 
-			float fFactor = Mathf.Pow(10, DecimalPlaces);
-			return Mathf.Round(Value * fFactor) / fFactor;
+			float fFactor = Power(10, DecimalPlaces);
+			return Round(Value * fFactor) / fFactor;
 		}
 
 		/// <summary>Flip-Flops bBool.</summary>
@@ -197,6 +168,7 @@ namespace MW
 			return From + Limit > Value && Value > From - Limit;
 		}
 
+#if RELEASE
 		/// <summary>The largest Vector3 between L and R, according to <see cref="Vector3.sqrMagnitude"/>.</summary>
 		/// <docs>The largest Vector3 between L and R, according to Vector3.sqrMagnitude.</docs>
 		/// <decorations decor="public static Vector3"></decorations>
@@ -218,6 +190,7 @@ namespace MW
 		{
 			return L.sqrMagnitude > R.sqrMagnitude ? R : L;
 		}
+#endif // RELEASE
 
 		static int[] fib_dp;
 
@@ -243,9 +216,9 @@ namespace MW
 		/// <param name="Resolution">The number of points to generate.</param>
 		/// <param name="GoldenRatioModifier">Adjusts the golden ratio.</param>
 		/// <returns>The Vector3[] points for the sphere.</returns>
-		public static Vector3[] GenerateEqualSphere(int Resolution, float GoldenRatioModifier)
+		public static MVector[] GenerateEqualSphere(int Resolution, float GoldenRatioModifier)
 		{
-			Vector3[] vDirections = new Vector3[Resolution];
+			MVector[] vDirections = new MVector[Resolution];
 
 			float fPhi = 1 + FSqrt(GoldenRatioModifier) * .5f;
 			float fInc = k2PI * fPhi;
@@ -263,7 +236,7 @@ namespace MW
 				float Y = InclineSine * AzimuthSine;
 				float Z = InclineCosine;
 
-				vDirections[i] = new Vector3(X, Y, Z);
+				vDirections[i] = new MVector(X, Y, Z);
 			}
 
 			return vDirections;
@@ -276,31 +249,31 @@ namespace MW
 		/// <param name="Resolution">The number of points for the bridge.</param>
 		/// <param name="Height">The maximum height of the bridge.</param>
 		/// <returns>The Vector3[] points for the bridge.</returns>
-		public static Vector3[] Bridge(Vector3 Origin, Vector3 Target, int Resolution, float Height)
+		public static MVector[] Bridge(MVector Origin, MVector Target, int Resolution, float Height)
 		{
-			Vector3[] Points = new Vector3[Resolution];
+			MVector[] Points = new MVector[Resolution];
 
-			Vector3 DirectionToTarget = (Target - Origin).normalized;
+			MVector DirectionToTarget = (Target - Origin).Normalised;
 
 			float Theta = 0f;
 			float HorizontalIncrement = k2PI * FInverse(Resolution);
 			float ResolutionToDistance = Resolution * .5f - 1;
-			float DistanceIncrement = (Target - Origin).FMagnitude() * FInverse(ResolutionToDistance);
+			float DistanceIncrement = (Target - Origin).Magnitude * FInverse(ResolutionToDistance);
 
 			int k = 0;
 
 			for (float i = 0; i < Resolution; i += DistanceIncrement)
 			{
-				float Y = Mathf.Sin(Theta);
+				float Y = Sine(Theta);
 
 				if (Y < 0)
 					break;
 
-				Vector3 point = new Vector3
+				MVector point = new MVector
 				{
-					x = DirectionToTarget.x * i,
-					y = Y * Height,
-					z = DirectionToTarget.z * i
+					X = DirectionToTarget.X * i,
+					Y = Y * Height,
+					Z = DirectionToTarget.Z * i
 				};
 
 				Points[k] = point;
@@ -521,6 +494,7 @@ namespace MW
 			return IsZero(R.Pitch, Tolerance) && IsZero(R.Yaw, Tolerance) && IsZero(R.Roll, Tolerance);
 		}
 
+#if RELEASE
 		/// <summary>Locks or unlocks the Cursor and optionally hide it.</summary>
 		/// <remarks>Unlocking the cursor will always enable the Cursor's visibility.</remarks>
 		/// <decorations decor="public static void"></decorations>
@@ -637,6 +611,7 @@ namespace MW
 
 			Function.Invoke();
 		}
+#endif // RELEASE
 
 		/// <summary>Compares two strings for similarity.</summary>
 		/// <decorations decor="public static float"></decorations>

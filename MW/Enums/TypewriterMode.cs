@@ -1,4 +1,5 @@
-﻿
+﻿#if RELEASE
+
 namespace MW.HUD
 {
 	/// <summary>Writing styles for the various Typewriter methods.</summary>
@@ -11,3 +12,4 @@ namespace MW.HUD
 		Clear
 	}
 }
+#endif // RELEASE

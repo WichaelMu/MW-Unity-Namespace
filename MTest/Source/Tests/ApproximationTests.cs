@@ -52,7 +52,7 @@ namespace MTest
 		[TestMethod]
 		public void IntegralTests()
 		{
-			FloatToleranceCheck(177.94934906f, FIntegral(0, Utils.kPI, F => MathF.Pow(6.33f, F)), "Fast Integral", .04f);
+			FloatToleranceCheck(177.94934906f, FIntegral(0, FMath.kPI, F => MathF.Pow(6.33f, F)), "Fast Integral", .04f);
 		}
 
 		[TestMethod]

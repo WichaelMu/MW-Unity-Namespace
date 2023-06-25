@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using MW.Easing;
-using MW.Extensions;
-using UnityEditor;
-using UnityEngine;
 
 namespace MW.Diagnostics
 {

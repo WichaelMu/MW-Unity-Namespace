@@ -1,10 +1,11 @@
 ﻿using System;
-using MW.Diagnostics;
-using MW.Extensions;
 using MW.Math;
 using static MW.Math.Magic.Fast;
+#if RELEASE
+using MW.Extensions;
 using UnityEngine;
-using static MW.Utils;
+#endif // RELEASE
+using static MW.FMath;
 
 namespace MW
 {
@@ -47,6 +48,7 @@ namespace MW
 		/// <param name="PYR">An MVector where X = Pitch, Y = Yaw, and Z = Roll.</param>
 		public MRotator(MVector PYR) : this(PYR.X, PYR.Y, PYR.Z) { }
 
+#if RELEASE
 		/// <summary>Makes an MRotator with a Quaternion.</summary>
 		/// <param name="Quaternion">The Quaternion defining the Pitch, Yaw, and Roll.</param>
 		public MRotator(Quaternion Quaternion)
@@ -122,7 +124,7 @@ namespace MW
 			float AbsY = FAbs(Y);
 			if (AbsY <= 1e-8f)
 			{
-				Log.E("The Absolute value of Y is <= 1E-08F. Input Y: ", Y);
+				Diagnostics.Log.E("The Absolute value of Y is <= 1E-08F. Input Y: ", Y);
 				return 0f;
 			}
 
@@ -206,6 +208,7 @@ namespace MW
 				return Q.MakeRotator();
 			}
 		}
+#endif // RELEASE
 
 		/// <summary>Adds a rotation to the respective rotation component.</summary>
 		/// <decorations decor="public MRotator"></decorations>
@@ -262,6 +265,7 @@ namespace MW
 			return new MRotator(P, Y, R);
 		}
 
+#if RELEASE
 		/// <summary>Interpolates between two MRotators.</summary>
 		/// <decorations decor="public static MRotator"></decorations>
 		/// <param name="From">The beginning rotation.</param>
@@ -279,6 +283,7 @@ namespace MW
 
 			return new MRotator(P, Y, R);
 		}
+#endif // RELEASE
 
 		/// <summary>An <see cref="MW.MVector"/> where X = Pitch, Y = Yaw, Z = Roll.</summary>
 		/// <docs>An MVector where X = Pitch, Y = Yaw, Z = Roll.</docs>
@@ -288,6 +293,7 @@ namespace MW
 			return new MVector(Pitch, Yaw, Roll);
 		}
 
+#if RELEASE
 		/// <summary>Gets the direction this MRotator is facing when facing forward.</summary>
 		/// <param name="Forward">Forward orientation.</param>
 		/// <returns>An MVector direction representing this Rotation.</returns>
@@ -295,6 +301,7 @@ namespace MW
 		{
 			return this * Forward;
 		}
+#endif // RELEASE
 
 		/// <summary>This MRotator % 360 on all components.</summary>
 		/// <decorations decor="public void"></decorations>
@@ -357,6 +364,7 @@ namespace MW
 			return R;
 		}
 
+#if RELEASE
 		/// <summary>Apply Rotations L and R in sequence.</summary>
 		/// <remarks>MRotator multiplications are not commutative. L * R != R * L.</remarks>
 		/// <param name="L">First rotation.</param>
@@ -376,6 +384,7 @@ namespace MW
 
 			return new MRotator(RetVal);
 		}
+#endif // RELEASE
 
 		/// <summary>Compares two MRotators for equality.</summary>
 		/// <decorations decor="public static bool operator=="></decorations>
@@ -402,6 +411,7 @@ namespace MW
 		public override bool Equals(object O) => O is MVector V && Equals(V);
 		public bool Equals(MRotator R) => this == R || FAbs(R.Pitch - Pitch + R.Yaw - Yaw + R.Roll - Roll) < 4f * kEpsilon;
 
+#if RELEASE
 		/// <summary>Converts Pitch, Yaw, Roll into its corresponding <see cref="UnityEngine.Quaternion"/>.</summary>
 		/// <docs>Converts Pitch, Yaw, Roll into its corresponding Quaternion.</docs>
 		/// <decorations decor="public static implicit operator Quaternion"></decorations>
@@ -438,6 +448,7 @@ namespace MW
 		{
 			return Rotation * Vector.MV();
 		}
+#endif // RELEASE
 
 		/// <summary>Hash code for use in Maps, Sets, MArrays, etc.</summary>
 		/// <decorations decors="public override int"></decorations>

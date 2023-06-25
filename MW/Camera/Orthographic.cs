@@ -1,4 +1,5 @@
-﻿using MW.IO;
+﻿#if RELEASE
+using MW.IO;
 using UnityEngine;
 
 namespace MW.CameraUtils
@@ -86,3 +87,4 @@ namespace MW.CameraUtils
 		}
 	}
 }
+#endif // RELEASE

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -74,3 +75,4 @@ namespace MW.Behaviour
 		public static implicit operator bool(SweepInteraction SI) => SI != null;
 	}
 }
+#endif // RELEASE

@@ -1,4 +1,5 @@
-﻿using MW.Diagnostics;
+﻿#if RELEASE
+using MW.Diagnostics;
 using UnityEngine;
 
 namespace MW.Behaviour
@@ -59,3 +60,4 @@ namespace MW.Behaviour
 		}
 	}
 }
+#endif // RELEASE

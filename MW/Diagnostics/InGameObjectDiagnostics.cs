@@ -1,4 +1,4 @@
-﻿using MW.Diagnostics;
+﻿#if RELEASE
 using UnityEngine;
 
 namespace MW.Diagnostics
@@ -36,3 +36,4 @@ namespace MW.Diagnostics
 		BelowLeft, BelowRight
 	}
 }
+#endif // RELEASE

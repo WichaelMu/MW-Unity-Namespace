@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if RELEASE
+using System.Runtime.CompilerServices;
 using MW.Kinetic;
 using UnityEngine;
 
@@ -97,3 +98,4 @@ namespace MW.Extensions
 		}
 	}
 }
+#endif // RELEASE

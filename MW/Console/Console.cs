@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+#if RELEASE
 using MW.Extensions;
 using MW.Conversion;
-#if RELEASE
 using UnityEngine;
 using UE = UnityEngine;
 using UObject = UnityEngine.Object;
@@ -54,9 +54,9 @@ namespace MW.Console
 		protected const char kArrayTermination = '}';
 
 		StringBuilder OutputLog;
-
+#if RELEASE
 		bool bShowBuiltIn = true;
-
+#endif // RELEASE
 		MConsoleSupportedTypes SupportedTypes;
 
 		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
@@ -84,7 +84,9 @@ namespace MW.Console
 			BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
 
 			MArray<Type> Types = new MArray<Type>(ExecTypes);
+#if RELEASE
 			Types.Push(typeof(BuiltInExecFunctions));
+#endif // RELEASE
 
 			foreach (Type T in Types)
 			{
@@ -456,7 +458,6 @@ namespace MW.Console
 		/// All primitive types.&lt;br&gt;&lt;br&gt;
 		/// &lt;span style="color:red;"&gt;Do not call the base method if you are overriding.&lt;/span&gt;
 		/// </docremarks>
-
 		/// <param name="TargetObject">The fully parsed single-dimensional array of the custom type parameter.</param>
 		/// <param name="ElementType">The array's element type.</param>
 		/// <param name="Elements">The elements of the array as objects. These need to be cast into ElementType.</param>
@@ -508,7 +509,6 @@ namespace MW.Console
 			}
 			else
 			{
-
 				System.Console.Write(Output);
 			}
 #endif // RELEASE

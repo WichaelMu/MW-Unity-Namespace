@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if RELEASE
+using UnityEngine;
 using static MW.Math.Magic.Fast;
 
 namespace MW.Pathfinding
@@ -43,3 +44,4 @@ namespace MW.Pathfinding
 		}
 	}
 }
+#endif // RELEASE

@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+#if RELEASE
 using UnityEngine;
+#endif // RELEASE
 
 namespace MW.Diagnostics
 {
@@ -29,9 +32,12 @@ namespace MW.Diagnostics
 			StringBuilder SB = new StringBuilder();
 			foreach (object arg in Args)
 				SB.Append(arg.ToString()).Append(' ');
-
+#if RELEASE
 			Debug.Log(SB.ToString());
-		}
+#else
+			System.Console.WriteLine(SB.ToString());
+#endif // RELEASE
+        }
 
 		/// <summary><see cref="Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
 		/// <docs>Debug.LogError(object) every object with object.ToString().</docs>
@@ -43,7 +49,14 @@ namespace MW.Diagnostics
 			foreach (object Arg in Args)
 				SB.Append(Arg.ToString()).Append(' ');
 
+#if RELEASE
 			Debug.LogError(SB.ToString());
+#else
+			ConsoleColor Default = System.Console.ForegroundColor;
+			System.Console.ForegroundColor = ConsoleColor.Yellow;
+			System.Console.WriteLine(SB.ToString());
+			System.Console.ForegroundColor = Default;
+#endif // RELEASE
 		}
 
 		/// <summary><see cref="Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
@@ -56,7 +69,14 @@ namespace MW.Diagnostics
 			foreach (object Arg in Args)
 				SB.Append(Arg.ToString()).Append(' ');
 
+#if RELEASE
 			Debug.LogWarning(SB.ToString());
+#else
+			ConsoleColor Default = System.Console.ForegroundColor;
+			System.Console.ForegroundColor= Default;
+			System.Console.WriteLine(SB.ToString());
+			System.Console.ForegroundColor = Default;
+#endif // RELEASE
 		}
 
 		/// <summary>Prints Content to the Console with Verbosity.</summary>
@@ -82,6 +102,7 @@ namespace MW.Diagnostics
 			}
 		}
 
+#if RELEASE
 		/// <summary>Prints Content to the Console with Colour and Verbosity.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Content">The string to colour and print to the console.</param>
@@ -98,5 +119,6 @@ namespace MW.Diagnostics
 
 			Auto(SB.ToString(), Verbosity);
 		}
+#endif // RELEASE
 	}
 }

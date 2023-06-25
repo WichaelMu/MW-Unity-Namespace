@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -144,3 +145,4 @@ namespace MW.Audio
 		SR_96K
 	}
 }
+#endif // RELEASE
