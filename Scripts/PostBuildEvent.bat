@@ -22,4 +22,4 @@ if %BUILDCONFIGURATION% == Standalone (
 
 @CD ..
 @CD Scripts
-@CALL CopyMWToSandpit
+@CALL CopyMWToSandbox

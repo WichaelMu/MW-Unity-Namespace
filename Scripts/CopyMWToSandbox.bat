@@ -2,11 +2,11 @@
 
 @ECHO off
 
-REM Location of 'Sandpit' - A Unity Environment for testing MW.
-@SET DESTINATION=..\MSandpit\Assets\MW
+REM Location of 'Sandbox' - A Unity Environment for testing MW.
+@SET DESTINATION=..\MSandbox\Assets\MW
 
 IF NOT EXIST %DESTINATION% (
-	ECHO No Sandpit Unity Environment Found!
+	ECHO No Sandbox Unity Environment Found!
 	EXIT \b 1
 )
 

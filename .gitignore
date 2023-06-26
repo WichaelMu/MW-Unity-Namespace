@@ -356,19 +356,19 @@ MigrationBackup/
 # MW Specific Ignores
 Extensions/*
 
-# MW Sandpit Ignores
-MSandpit/Assets/MScripts/*.cs
-MSandpit/Assets/MW/*.dll
-MSandpit/Assets/MW/*.xml
-MSandpit/Assets/Scenes/*
-MSandpit/Library/*
-MSandpit/Logs/*
-MSandpit/obj/*
-MSandpit/Temp/*
-MSandpit/UserSettings/*
-MSandpit/ProjectSettings/*
-MSandpit/.vsconfig
-MSandpit/Assembly-CSharp.csproj
+# MW Sandbox Ignores
+MSandbox/Assets/MScripts/*.cs
+MSandbox/Assets/MW/*.dll
+MSandbox/Assets/MW/*.xml
+MSandbox/Assets/Scenes/*
+MSandbox/Library/*
+MSandbox/Logs/*
+MSandbox/obj/*
+MSandbox/Temp/*
+MSandbox/UserSettings/*
+MSandbox/ProjectSettings/*
+MSandbox/.vsconfig
+MSandbox/Assembly-CSharp.csproj
 
 # Intermediate Files
 */Output/*
