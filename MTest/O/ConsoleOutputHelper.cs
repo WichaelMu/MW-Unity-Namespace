@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿#if false
+using System.Text;
 using MW;
 using UnityEngine;
 
@@ -134,3 +135,4 @@ namespace MTest.Output
 		Error
 	}
 }
+#endif
