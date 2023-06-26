@@ -1,5 +1,6 @@
 @ECHO off
 
+REM Check for required binaries to compile MW.
 >NUL WHERE msbuild
 IF %ERRORLEVEL% NEQ 0 (
 	ECHO The command 'msbuild' is unrecognised. Install and/or add 'msbuild' to your system environment.
@@ -7,16 +8,23 @@ IF %ERRORLEVEL% NEQ 0 (
 	EXIT \b 1
 )
 
+>NUL WHERE dotnet
+if %ERRORLEVEL% NEQ 0 (
+	ECHO The command 'dotnet' is unrecognised. Install and/or add 'dotnet' to your system environment.
+	PAUSE
+	EXIT \b 1
+)
+
 @SET VS_BUILDCONFIGURATION=%1
+
+IF %VS_BUILDCONFIGURATION%X==X (
+	@SET VS_BUILDCONFIGURATION=Release
+)
 
 IF %VS_BUILDCONFIGURATION%==Standalone (
 	ECHO You do not need to run %0 in a Standalone Configuration.
 	PAUSE
 	EXIT \b 0
-)
-
-IF %VS_BUILDCONFIGURATION%X==X (
-	@SET VS_BUILD_CONFIGURATION=Release
 )
 
 IF %VS_BUILDCONFIGURATION% NEQ Release (
@@ -49,7 +57,7 @@ IF NOT EXIST %TMPRO% (
 	EXIT \b 1
 )
 
-@SET BUILD_CONFIGURATION=/p:Configuration=Release
+@SET BUILD_CONFIGURATION=/p:Configuration=%VS_BUILDCONFIGURATION%
 
 REM Build MGenerator and Remove Unnecessary Residue
 @ECHO Building MGenerator
@@ -58,11 +66,11 @@ REM Build MGenerator and Remove Unnecessary Residue
 
 REM Build MTest
 @ECHO Building MTest
->NUL dotnet msbuild ../MTest/MTest.csproj %BUILD_CONFIGURATION%
+>NUL dotnet build ../MTest/MTest.csproj %BUILD_CONFIGURATION%
 
 REM Build MWEditor
 @ECHO Building MWEditor
->NUL dotnet msbuild ../MWEditor/MWEditor.csproj %BUILD_CONFIGURATION%
+>NUL dotnet build ../MWEditor/MWEditor.csproj %BUILD_CONFIGURATION%
 
 @ECHO MW Project Initialised! Building MW...
 
