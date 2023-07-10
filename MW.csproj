@@ -38,6 +38,7 @@
 		<Compile Remove="Extensions\**" />
 		<Compile Remove="MEditor\**" />
 		<Compile Remove="MGenerator\**" />
+		<Compile Remove="MSandbox\**" />
 		<Compile Remove="MSandpit\**" />
 		<Compile Remove="MTest\**" />
 		<Compile Remove="MWEditor\**" />
@@ -48,6 +49,7 @@
 		<EmbeddedResource Remove="Extensions\**" />
 		<EmbeddedResource Remove="MEditor\**" />
 		<EmbeddedResource Remove="MGenerator\**" />
+		<EmbeddedResource Remove="MSandbox\**" />
 		<EmbeddedResource Remove="MSandpit\**" />
 		<EmbeddedResource Remove="MTest\**" />
 		<EmbeddedResource Remove="MWEditor\**" />
@@ -58,6 +60,7 @@
 		<None Remove="Extensions\**" />
 		<None Remove="MEditor\**" />
 		<None Remove="MGenerator\**" />
+		<None Remove="MSandbox\**" />
 		<None Remove="MSandpit\**" />
 		<None Remove="MTest\**" />
 		<None Remove="MWEditor\**" />
