@@ -158,6 +158,7 @@ namespace MW.Math
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Number">The number to check.</param>
 		/// <returns>Number &amp; (Number - 1) == 0.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsPowerOfTwo(int Number) => (Number & (Number - 1)) == 0;
 
 		/// <summary>The greatest common divisor of A and B.</summary>

@@ -61,17 +61,26 @@ namespace MW
 		/// <decorations decor="public const float"></decorations>
 		public const float kTwoThirds = .6666666666666666666666666666666666F;
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsPowerOfTwo(float F) => Mathematics.IsPowerOfTwo((int)F);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Sine(float F) => F.IsIllegalFloat() ? float.NaN : (float)__CS_MATH__.Sin(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Cos(float F) => F.IsIllegalFloat() ? float.NaN : (float)__CS_MATH__.Cos(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Tan(float F) => F.IsIllegalFloat() ? float.NaN : (float)__CS_MATH__.Tan(F);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcSine(float F) => FArcSine(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcCos(float F) => FArcCosine(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcTan(float F) => FArcTangent(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcTan2(float Y, float X) => FArcTangent2(Y, X);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Sqrt(float F, bool bWithAccuracy = false, int NewtonIterations = 3)
 		{
 			if (bWithAccuracy)
@@ -79,6 +88,7 @@ namespace MW
 			return FSqrt(F, NewtonIterations);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float InvSqrt(float F, bool bWithAccuracy = false, int NewtonIterations = 3)
 		{
 			if (bWithAccuracy)
@@ -86,22 +96,37 @@ namespace MW
 			return FInverseSqrt(F, NewtonIterations);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static sbyte Abs(sbyte B) => (sbyte)(B < 0 ? -B : B);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static short Abs(short S) => (short)(S < 0 ? -S : S);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Abs(int I) => I < 0 ? -I : I;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Abs(float F) => F < 0f ? -F : F;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static double Abs(double D) => D < .0 ? -D : D;
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static sbyte Min(sbyte A, sbyte B) => A < B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static short Min(short A, short B) => A < B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Min(int A, int B) => A < B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Min(float A, float B) => A < B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static double Min(double A, double B) => A < B ? A : B;
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static sbyte Max(sbyte A, sbyte B) => A > B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static short Max(short A, short B) => A > B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Max(int A, int B) => A > B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Max(float A, float B) => A > B ? A : B;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static double Max(double A, double B) => A > B ? A : B;
 
 		public static sbyte Min(params sbyte[] Params)
@@ -214,24 +239,39 @@ namespace MW
 			return RetVal;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Power(float F, float P) => (float)__CS_MATH__.Pow(F, P);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Exp(float F) => (float)__CS_MATH__.Exp(F);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Log(float F) => (float)__CS_MATH__.Log(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Log10(float F) => (float)__CS_MATH__.Log10(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Log(float F, float Base) => (float)__CS_MATH__.Log(F, Base);
 
 		public static float Ceiling(float F) => (float)__CS_MATH__.Ceiling(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int CeilingInt(float F) => (int)Ceiling(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Floor(float F) => (float)__CS_MATH__.Floor(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int FloorInt(float F) => (int)Floor(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Round(float F) => (float)__CS_MATH__.Round(F);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int RoundInt(float F) => (int)__CS_MATH__.Round(F);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(sbyte B) => B >= 0 ? 1 : -1;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(short S) => S >= 0 ? 1 : -1;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(int I) => I >= 0 ? 1 : -1;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(float F) => F >= 0f ? 1 : -1;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(double D) => D >= 0 ? 1 : -1;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -274,6 +314,7 @@ namespace MW
 			D = Clamp(D, Min, Max);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static sbyte Clamp(sbyte I, sbyte Min, sbyte Max)
 		{
 			if (I < Min)
@@ -288,6 +329,7 @@ namespace MW
 			return I;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static short Clamp(short I, short Min, short Max)
 		{
 			if (I < Min)
@@ -302,6 +344,7 @@ namespace MW
 			return I;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Clamp(int I, int Min, int Max)
 		{
 			if (I < Min)
@@ -316,6 +359,7 @@ namespace MW
 			return I;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Clamp(float I, float Min, float Max)
 		{
 			if (I < Min)
@@ -330,6 +374,7 @@ namespace MW
 			return I;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static double Clamp(double I, double Min, double Max)
 		{
 			if (I < Min)
@@ -344,18 +389,22 @@ namespace MW
 			return I;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float DeltaAngle(float Now, float Target)
 		{
 			float RetVal = Mathematics.Wrap(Target - Now, 0f, 360f);
 			return RetVal > 180f ? RetVal - 360f : RetVal;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Lerp(float A, float B, float Alpha) => A + (B - A) * Alpha;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float LerpAngle(float A, float B, float Alpha)
 		{
 			return A + DeltaAngle(A, B) * Clamp(Alpha, 0f, 1f);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float InvLerp(float A, float B, float F)
 		{
 			if (!IsApproxEqual(A, B))
@@ -364,6 +413,7 @@ namespace MW
 		}
 
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Approach(float Now, float Target, float MaximumDelta)
 		{
 			if (Abs(Target - Now) <= MaximumDelta)
@@ -371,6 +421,7 @@ namespace MW
 			return Now + Sign(Target - Now) * MaximumDelta;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ApproachAngle(float Now, float Target, float MaximumDelta)
 		{
 			float Delta = DeltaAngle(Now, Target);
@@ -381,6 +432,7 @@ namespace MW
 			return Approach(Now, Target, MaximumDelta);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Smooth(float From, float To, float Alpha)
 		{
 			Clamp(ref Alpha, 0f, 1f);
@@ -388,11 +440,13 @@ namespace MW
 			return To * Alpha + From * (1f - Alpha);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsApproxEqual(float A, float B, float Tolerance = kEpsilon)
 		{
 			return Abs(A - B) <= Tolerance;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsApproxEqual(MVector A, MVector B, float Tolerance = kEpsilon)
 		{
 			return IsApproxEqual(A.SqrMagnitude, B.SqrMagnitude, Tolerance);
@@ -439,11 +493,14 @@ namespace MW
 			return Magnitude - Abs(F - Magnitude);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float PreviousMultiple(float F, float Multiple) => F - (F % Multiple);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float NextMultiple(float F, float Multiple)
 			=> F + (Multiple - (F % Multiple));
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ClosestMultiple(float F, float Multiple)
 		{
 			float Mod = F % Multiple;
