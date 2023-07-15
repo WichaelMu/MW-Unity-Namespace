@@ -2,6 +2,8 @@
 using System.Text;
 #if RELEASE
 using UnityEngine;
+#else
+using MW.IO;
 #endif // RELEASE
 
 namespace MW.Diagnostics
@@ -23,8 +25,8 @@ namespace MW.Diagnostics
 	/// <decorations decor="public class"></decorations>
 	public class Log
 	{
-		/// <summary><see cref="Debug.Log(object)"/> every object with <see cref="object.ToString()"/>.</summary>
-		/// <docs>Debug.Log(object) every object with object.ToString().</docs>
+		/// <summary>Prints every object with <see cref="object.ToString()"/> to the console as output.</summary>
+		/// <docs>Prints every object with object.ToString() to the console as output.</docs>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Args">The list of objects to log separated by a space.</param>
 		public static void P(params object[] Args)
@@ -35,12 +37,12 @@ namespace MW.Diagnostics
 #if RELEASE
 			Debug.Log(SB.ToString());
 #else
-			System.Console.WriteLine(SB.ToString());
+			O.Print(SB.ToString());
 #endif // RELEASE
         }
 
-		/// <summary><see cref="Debug.LogError(object)"/> every object with <see cref="object.ToString()"/>.</summary>
-		/// <docs>Debug.LogError(object) every object with object.ToString().</docs>
+		/// <summary>Prints every object with <see cref="object.ToString()"/> to the console as output.</summary>
+		/// <docs>Prints every object with object.ToString() to the console as output.</docs>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Args">The list of objects to log separated by a space.</param>
 		public static void E(params object[] Args)
@@ -52,15 +54,12 @@ namespace MW.Diagnostics
 #if RELEASE
 			Debug.LogError(SB.ToString());
 #else
-			ConsoleColor Default = System.Console.ForegroundColor;
-			System.Console.ForegroundColor = ConsoleColor.Yellow;
-			System.Console.WriteLine(SB.ToString());
-			System.Console.ForegroundColor = Default;
+			O.Print(SB.ToString(), ConsoleColor.Red, ConsoleColor.Black);
 #endif // RELEASE
 		}
 
-		/// <summary><see cref="Debug.LogWarning(object)"/> every object with <see cref="object.ToString()"/>.</summary>
-		/// <docs>Debug.LogWarning(object) every object with object.ToString().</docs>
+		/// <summary>Prints every object with <see cref="object.ToString()"/> to the console as output.</summary>
+		/// <docs>Prints every object with object.ToString() to the console as output.</docs>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="Args">The list of objects to log separated by a space.</param>
 		public static void W(params object[] Args)
@@ -72,10 +71,7 @@ namespace MW.Diagnostics
 #if RELEASE
 			Debug.LogWarning(SB.ToString());
 #else
-			ConsoleColor Default = System.Console.ForegroundColor;
-			System.Console.ForegroundColor= Default;
-			System.Console.WriteLine(SB.ToString());
-			System.Console.ForegroundColor = Default;
+			O.Print(SB.ToString(), ConsoleColor.Yellow, ConsoleColor.Black);
 #endif // RELEASE
 		}
 

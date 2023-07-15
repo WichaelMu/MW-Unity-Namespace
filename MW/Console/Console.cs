@@ -865,24 +865,11 @@ namespace MW.Console
 	{
 		internal static void NotifyDuplicateFunction(Type ExistingType, Type DuplicateType, MethodInfo DuplicateMethod)
 		{
-#if RELEASE
-			Log.Colourise
-#else
-			WriteStandalone
-#endif // RELEASE
+			Diagnostics.Log.E
 				($"An [Exec] Function named: '{DuplicateMethod.Name}' already exists! '{nameof(MConsole)} does not support method overloading. " +
 				$"Or, you may be trying to add assemblies with duplicate function names into {nameof(MConsole.ExecTypes)}\n\t" +
-				$"First appearance: {ExistingType.Namespace} {ExistingType.Name}. Duplicate definition: {DuplicateType.Namespace} {DuplicateType.Name}.", MConsoleColourLibrary.Red);
+				$"First appearance: {ExistingType.Namespace} {ExistingType.Name}. Duplicate definition: {DuplicateType.Namespace} {DuplicateType.Name}.");
 		}
-
-#if STANDALONE
-		static void WriteStandalone(string String, ConsoleColor Colour)
-		{
-			System.Console.ForegroundColor = Colour;
-			System.Console.WriteLine(String);
-			System.Console.ForegroundColor = MConsoleColourLibrary.White;
-		}
-#endif // STANDALONE
 	}
 
 	internal class MConsoleColourLibrary
