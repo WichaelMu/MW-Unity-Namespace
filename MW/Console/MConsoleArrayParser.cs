@@ -54,7 +54,8 @@ namespace MW.Console
 			}
 			else if (ElementType.IsPrimitive)
 			{
-				TargetObject = Elements.TArray();
+				if (!MConsoleArrayPrimitiveTranslator.Get().Translate(Elements, ref TargetObject, ElementType))
+					Diagnostics.Log.W("Unable to convert to {ElementType}[]");
 			}
 			else
 			{
@@ -75,7 +76,7 @@ namespace MW.Console
 			return Array.TArray();
 		}
 
-		internal static StringBuilder ConvertArrayReturnType(object RetVal, Type RetType)
+		internal static StringBuilder ConvertArrayReturnType(object RetVal)
 		{
 			IEnumerable Array = RetVal.Cast<IEnumerable>();
 

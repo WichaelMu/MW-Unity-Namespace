@@ -221,7 +221,7 @@ namespace MW.Console
 		internal bool Primitive(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			MConsole.HandlePrimitiveParameter(ref TargetObject, RawParams[ParamIndex], ExecParameterType);
-
+			
 			++ParamIndex;
 			return true;
 		}
@@ -249,6 +249,61 @@ namespace MW.Console
 
 			++ParamIndex;
 			return MConsoleArrayParser.Convert(this, ref TargetObject, ElementType, Array);
+		}
+	}
+
+	internal class MConsoleArrayPrimitiveTranslator
+	{
+		static MConsoleArrayPrimitiveTranslator Instance;
+		delegate void PrimitiveTranslationFunc(object[] Elements, ref object TargetObject);
+		static Dictionary<Type, PrimitiveTranslationFunc> PrimitiveTranslation;
+
+		MConsoleArrayPrimitiveTranslator()
+		{
+			PrimitiveTranslation = new Dictionary<Type, PrimitiveTranslationFunc>
+			{
+				{ typeof(bool), Translate<bool> },
+				{ typeof(byte), Translate<byte> },
+				{ typeof(sbyte), Translate<sbyte> },
+				{ typeof(short), Translate<short> },
+				{ typeof(ushort), Translate<ushort> },
+				{ typeof(int), Translate<int> },
+				{ typeof(long), Translate<long> },
+				{ typeof(ulong), Translate<ulong> },
+				{ typeof(IntPtr), Translate<IntPtr> },
+				{ typeof(UIntPtr), Translate<UIntPtr> },
+				{ typeof(char), Translate<char> },
+				{ typeof(double), Translate<double> },
+				{ typeof(float), Translate<float> }
+			};
+
+			Instance = this;
+		}
+
+		internal static MConsoleArrayPrimitiveTranslator Get()
+		{
+			Instance ??= new MConsoleArrayPrimitiveTranslator();
+			return Instance;
+		}
+
+		internal bool Translate(object[] Elements, ref object TargetObject, Type ElementType)
+		{
+			if (PrimitiveTranslation.ContainsKey(ElementType))
+			{
+				PrimitiveTranslation[ElementType](Elements, ref TargetObject);
+				return true;
+			}
+
+			return false;
+		}
+
+		void Translate<T>(object[] Elements, ref object TargetObject)
+		{
+			MArray<T> Translation = new MArray<T>();
+			foreach (object Element in Elements)
+				Translation.Push(Element.Cast<T>());
+
+			TargetObject = Translation.TArray();
 		}
 	}
 }
