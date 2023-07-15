@@ -32,6 +32,7 @@ namespace MW.Console
 		public object[] ExecParams;
 
 		internal bool bIsBuiltIn;
+		internal bool bIsStandalone;
 
 		/// <summary>Default Exec.</summary>
 		public ExecAttribute() { Description = string.Empty; GameObjectTargetsByName = Array.Empty<string>(); }
@@ -62,6 +63,11 @@ namespace MW.Console
 	internal class BuiltInExecAttribute : ExecAttribute
 	{
 		internal BuiltInExecAttribute(string Desc) : base(Desc) { bIsBuiltIn = true; }
+	}
+
+	internal class StandaloneExec : ExecAttribute
+	{
+		internal StandaloneExec() : base() { bIsStandalone = true; }
 	}
 
 	public struct MethodExec<T1, T2>

@@ -10,8 +10,8 @@ using MW.Conversion;
 using UnityEngine;
 using UE = UnityEngine;
 using UObject = UnityEngine.Object;
-#endif // STANDALONE
 using MW.Diagnostics;
+#endif // STANDALONE
 
 namespace MW.Console
 {
@@ -59,9 +59,13 @@ namespace MW.Console
 #endif // RELEASE
 		MConsoleSupportedTypes SupportedTypes;
 
+#if RELEASE
 		/// <summary>Finds and constructs the Console and its ExecAttributes.</summary>
 		/// <decorations decor="public virtual void"></decorations>
 		public virtual void Awake()
+#else
+		public MConsole()
+#endif // RELEASE
 		{
 			MConsoleSettings Settings;
 			Settings.TargetGameObjectIdentifier = kTargetGameObjectIdentifier;
@@ -86,7 +90,9 @@ namespace MW.Console
 			MArray<Type> Types = new MArray<Type>(ExecTypes);
 #if RELEASE
 			Types.Push(typeof(BuiltInExecFunctions));
-#endif // RELEASE
+#elif STANDALONE
+			Types.Push(typeof(MConsole));
+#endif
 
 			foreach (Type T in Types)
 			{
@@ -99,6 +105,11 @@ namespace MW.Console
 
 					if (Command == null)
 						continue;
+
+#if RELEASE
+					if (Command.bIsStandalone)
+						continue;
+#endif
 
 					if (Funcs.TryGetValue(Method.Name, out MethodExec<MethodInfo, ExecAttribute> MethodExec))
 					{
@@ -159,6 +170,20 @@ namespace MW.Console
 
 			RawInput = "";
 		}
+
+#if STANDALONE
+		/// <summary>Executes <paramref name="Args"/>[0] as if it were being run in a CLI environment.</summary>
+		/// <param name="Args">Exec arguments. Arg[0] is the function name. Any subsequent arguments will be passed in as parameters.</param>
+		/// <returns></returns>
+		public object Exec(string[] Args)
+		{
+			string First = Args[0];
+			MArray<string> Params = new MArray<string>(Args);
+			Params.Pull(First);
+
+			return Exec(Array.Empty<string>(), Args[0], Params);
+		}
+#endif // STANDALONE
 
 		/// <summary>Executes <paramref name="MethodName"/> with <paramref name="RawParams"/>.</summary>
 		/// <docs>Executes MethodName with RawParams on Targets (if any).</docs>
@@ -248,7 +273,7 @@ namespace MW.Console
 				{
 					RetVal = Method.Invoke(null, ExecParameters);
 
-					if (bHasReturnType && bHasReturnType)
+					if (bHasReturnType)
 						ExecReturns.Append($"{MethodName} returned: {ParseReturnValue(RetVal, ReturnType)}\n");
 				}
 				else
@@ -481,7 +506,7 @@ namespace MW.Console
 		{
 			if (RetType.IsArray && !IsAnyFloatStructs(RetType))
 			{
-				StringBuilder RetValFormatted = MConsoleArrayParser.ConvertArrayReturnType(RetVal, RetType);
+				StringBuilder RetValFormatted = MConsoleArrayParser.ConvertArrayReturnType(RetVal);
 
 				StringBuilder ArrayFormatted = new StringBuilder();
 				ArrayFormatted.Append("{ ");
@@ -576,7 +601,9 @@ namespace MW.Console
 			WriteToOutput("-- Help --", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t{nameof(MConsole)} is a developer tool for debugging and arbitrary code execution during runtime.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\tAbove are a list of [Exec] functions that you can execute at will, with most supported parameter types in Unity and the MW Namespace.", MConsoleColourLibrary.LimeGreen);
+#if RELEASE
 			WriteToOutput($"\tSome [Exec] functions are 'Built-In' and can be hidden by executing '__TOGGLE_BUILTIN__' in the text area.", MConsoleColourLibrary.LimeGreen);
+#endif // RELEASE
 			WriteToOutput($"\tTo add your own functions here, simply add 'using MW.Console;' and mark your methods and functions with the [Exec] attribute.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t\tOnly public, static, and instance functions are included. Private [Exec] functions are ignored.", MConsoleColourLibrary.Yellow);
 			WriteToOutput("");
