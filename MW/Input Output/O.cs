@@ -1,4 +1,5 @@
-﻿#if STANDALONE
+﻿using System.Runtime.CompilerServices;
+#if STANDALONE
 using System;
 using CSConsole = System.Console;
 #endif // STANDALONE
@@ -14,6 +15,7 @@ namespace MW.IO
 		/// <docs>Identical to Log.P(object[]).</docs>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="args">The list of objects to log separated by a space.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Out(params object[] args)
 		{
 			Log.P(args);
