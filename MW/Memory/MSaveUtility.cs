@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace MW.SubSystems.GameData
+namespace MW.Memory
 {
 	/// <summary>Utility to convert generics to their byte data and vice-versa.</summary>
 	/// <decorations decor="public static class"></decorations>

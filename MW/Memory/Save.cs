@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MW.SubSystems.GameData
+namespace MW.Memory
 {
 	/// <summary>A generic game saving sub-system.</summary>
 	/// <decorations decor="public static class"></decorations>
