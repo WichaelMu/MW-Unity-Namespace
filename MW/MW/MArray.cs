@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MW
@@ -72,8 +73,7 @@ namespace MW
 		public void PushUnique(params T[] Items)
 		{
 			foreach (T T in Items)
-				if (!Contains(T))
-					Push(T);
+				PushUnique(T);
 		}
 
 		/// <summary>Removes the most recent push of Item.</summary>
@@ -86,16 +86,12 @@ namespace MW
 			if (!Contains(Item))
 				return kInvalid;
 
-			Items.RemoveAt(HashMap[Item].Pop());
+			int NewNum = PullWithoutRemap(Item);
 
-			if (HashMap[Item].Count == 0)
-			{
-				HashMap.Remove(Item);
-			}
+			if (NewNum != kInvalid)
+				Remap();
 
-			Remap();
-
-			return Num;
+			return NewNum;
 		}
 
 		/// <summary>Removes all occurrences of Item.</summary>
@@ -111,7 +107,21 @@ namespace MW
 			AccessedData Data = Access(Item);
 			int Occurences = Data.Occurrences;
 			for (int i = 0; i < Occurences; ++i)
-				Pull(Item);
+				PullWithoutRemap(Item);
+
+			Remap();
+
+			return Num;
+		}
+
+		int PullWithoutRemap(T Item)
+		{
+			Items.RemoveAt(HashMap[Item].Pop());
+
+			if (HashMap[Item].Count == 0)
+			{
+				HashMap.Remove(Item);
+			}
 
 			return Num;
 		}
@@ -163,6 +173,7 @@ namespace MW
 
 		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the front of the queue.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T First()
 		{
 			return Items[0];
@@ -191,6 +202,7 @@ namespace MW
 
 		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the top of the stack.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T Top()
 		{
 			return Items[Num - 1];
@@ -211,18 +223,16 @@ namespace MW
 		/// <decorations decor="public bool"></decorations>
 		/// <param name="Index">The Index to check for range.</param>
 		/// <returns>If this MArray is not empty Index is greater than or equal to zero and less than the number of elements.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool InRange(int Index)
 		{
-			bool bInRange = !IsEmpty() && Index >= 0 && Index < Num;
-
-			//if (!bInRange) throw new IndexOutOfRangeException("Index check failed. (Index >= 0 && Index < Num) == false with an index of " + Index);
-
-			return bInRange;
+			return !IsEmpty() && Index >= 0 && Index < Num;
 		}
 
 		/// <decorations decor="public bool"></decorations>
 		/// <param name="Item">Item to check for existence.</param>
 		/// <returns>Whether the HashCode of Item exists within the internal HashMap.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Contains(T Item)
 		{
 			return HashMap.ContainsKey(Item);
@@ -230,6 +240,7 @@ namespace MW
 
 		/// <summary>Clears this MArray.</summary>
 		/// <decorations decor="public void"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Flush()
 		{
 			Items.Clear();
@@ -239,6 +250,7 @@ namespace MW
 		/// <decorations decor="public bool"></decorations>
 		/// <docreturns>If this MArray is considered empty; Num == 0.</docreturns>
 		/// <returns><see langword="true"/> <see langword="if"/> (<see cref="Num"/> == 0).</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool IsEmpty() => Num == 0;
 
 		/// <decorations decor="public T"></decorations>
