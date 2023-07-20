@@ -54,9 +54,7 @@ namespace MW.Console
 		protected const char kArrayTermination = '}';
 
 		StringBuilder OutputLog;
-#if RELEASE
 		bool bShowBuiltIn = true;
-#endif // RELEASE
 		MConsoleSupportedTypes SupportedTypes;
 
 #if RELEASE
@@ -405,7 +403,7 @@ namespace MW.Console
 				{
 					return SupportedTypes.MonoBehaviourOrComponents(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 				}
-				else 
+				else
 #endif // RELEASE
 				if (ExecParameterType.IsPrimitive) // Any other primitive.
 				{
@@ -600,19 +598,22 @@ namespace MW.Console
 		{
 			WriteToOutput("-- Help --", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t{nameof(MConsole)} is a developer tool for debugging and arbitrary code execution during runtime.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\tAbove are a list of [Exec] functions that you can execute at will, with most supported parameter types in Unity and the MW Namespace.", MConsoleColourLibrary.LimeGreen);
 #if RELEASE
+			WriteToOutput($"\tAbove are a list of [Exec] functions that you can execute at will, with most supported parameter types in Unity and the MW Namespace.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\tSome [Exec] functions are 'Built-In' and can be hidden by executing '__TOGGLE_BUILTIN__' in the text area.", MConsoleColourLibrary.LimeGreen);
 #endif // RELEASE
-			WriteToOutput($"\tTo add your own functions here, simply add 'using MW.Console;' and mark your methods and functions with the [Exec] attribute.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tTo add your own functions, simply add 'using MW.Console;' and mark your methods and functions with the [Exec] attribute.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t\tOnly public, static, and instance functions are included. Private [Exec] functions are ignored.", MConsoleColourLibrary.Yellow);
 			WriteToOutput("");
 			WriteToOutput($"\tThere are also a few functions that are 'Internal'.", MConsoleColourLibrary.LimeGreen);
+#if STANDALONE
+			WriteToOutput($"\t__LIST__ - Prints the list of functions supported by Exec.", MConsoleColourLibrary.LimeGreen);
+#endif // STANDALONE
 			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.LimeGreen);
 #if RELEASE
 			WriteToOutput($"\t__SET_RATIO__ - Sets the ratio for the Console. It accepts values between .15 to .85 as a percentage of your screen's height. Default is {kDefaultConsoleRatio}.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.LimeGreen);
 #endif // RELEASE
+			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t__HELP__, ?, -h, and --help - Shows this help message.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput("");
 			WriteToOutput($"\tWhen making a game, you will eventually need to make your own types and aren't natively supported by {nameof(MConsole)}.", MConsoleColourLibrary.LimeGreen);
@@ -623,7 +624,7 @@ namespace MW.Console
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		bool IsAnyFloatStructs(Type T) => T == typeof(MVector)
 #if RELEASE
-			|| T == typeof(Vector3) 
+			|| T == typeof(Vector3)
 #endif // RELEASE
 			|| T == typeof(MRotator);
 
@@ -660,10 +661,16 @@ namespace MW.Console
 						ConsoleRatio = kDefaultConsoleRatio;
 					}
 					break;
+#endif // RELEASE
 				case "__TOGGLE_BUILTIN__":
 					bShowBuiltIn = !bShowBuiltIn;
+					WriteToOutput($"Built-In [Exec] Functions shown: {bShowBuiltIn}", MConsoleColourLibrary.Purple);
 					break;
-#endif // RELEASE
+#if STANDALONE
+				case "__LIST__":
+					PrintExecFunctions();
+					break;
+#endif // STANDALONE
 				case "__HELP__":
 				case "?":
 				case "-h":
@@ -691,6 +698,35 @@ namespace MW.Console
 				WriteToOutput(SimilarExecs, MConsoleColourLibrary.Purple);
 			}
 		}
+
+#if STANDALONE
+		void PrintExecFunctions()
+		{
+			foreach (KeyValuePair<string, MethodExec<MethodInfo, ExecAttribute>> Func in Funcs)
+			{
+				ExecAttribute Exec = Func.Value.Exec;
+				if (Exec.bHideInConsole)
+					continue;
+
+				ConsoleColor OutputColour = MConsoleColourLibrary.White;
+
+				if (Exec.bIsBuiltIn && bShowBuiltIn)
+					OutputColour = MConsoleColourLibrary.Purple;
+
+				string Params = BuildMethodParameterList(Func.Value);
+				string ExecDescription = Exec.Description;
+
+				if (!string.IsNullOrEmpty(ExecDescription))
+				{
+					WriteToOutput($"{Func.Value.Method.Name} ({Params.TrimEnd(',', ' ')}) - {ExecDescription}", OutputColour);
+				}
+				else
+				{
+					WriteToOutput($"{Func.Value.Method.Name} ({Params.TrimEnd(',', ' ')})", OutputColour);
+				}
+			}
+		}
+#endif // STANDALONE
 
 #if RELEASE
 
@@ -766,12 +802,12 @@ namespace MW.Console
 
 			if (Funcs.Count > 0)
 			{
-				const float kPaddingTop        = 5f;
-				const float kPaddingRight      = 30f;
-				const float kPaddingBottom     = 7.5f;
-				const float kPaddingLeft       = 5f;
+				const float kPaddingTop = 5f;
+				const float kPaddingRight = 30f;
+				const float kPaddingBottom = 7.5f;
+				const float kPaddingLeft = 5f;
 				const float kHeightToFuncRatio = 20f;
-				const float kPaddingRightExt   = 100f;
+				const float kPaddingRightExt = 100f;
 
 				float FuncsHeight = Screen.height * ConsoleRatio;
 
@@ -799,17 +835,14 @@ namespace MW.Console
 						GUI.contentColor = MConsoleColourLibrary.White;
 					}
 
-					StringBuilder ParamsBuilder = new StringBuilder();
-					foreach (ParameterInfo Param in Func.Value.Method.GetParameters())
-					{
-						string[] ParamSplit = Param.ParameterType.Name.Split('.');
-						ParamsBuilder.Append(ParamSplit[ParamSplit.Length - 1]).Append(' ').Append(Param.Name).Append(", ");
-					}
+					string Params = BuildMethodParameterList(Func.Value);
+					string ExecDescription = Func.Value.Exec.Description;
 
-					string Text = $"{Func.Value.Method.Name} ({ParamsBuilder.ToString().TrimEnd(',', ' ')}) - {Func.Value.Exec.Description}";
+					string Text = $"{Func.Value.Method.Name} ({Params.TrimEnd(',', ' ')})";
+					if (!string.IsNullOrEmpty(ExecDescription))
+						Text += $" - {ExecDescription}";
 
 					Rect TextRect = new Rect(kPaddingLeft, kHeightToFuncRatio * i++, ExecList.width - kPaddingRightExt, kConsoleFontHeight);
-
 
 					GUI.Label(TextRect, Text);
 				}
@@ -859,6 +892,18 @@ namespace MW.Console
 			GUI.FocusControl("Exec Text Field");
 		}
 #endif // RELEASE
+
+		string BuildMethodParameterList(MethodExec<MethodInfo, ExecAttribute> MethodExec)
+		{
+			StringBuilder ParamsBuilder = new StringBuilder();
+			foreach (ParameterInfo Param in MethodExec.Method.GetParameters())
+			{
+				string[] ParamSplit = Param.ParameterType.Name.Split('.');
+				ParamsBuilder.Append(ParamSplit[ParamSplit.Length - 1]).Append(' ').Append(Param.Name).Append(", ");
+			}
+
+			return ParamsBuilder.ToString();
+		}
 	}
 
 	internal class MConsoleErrorHander
