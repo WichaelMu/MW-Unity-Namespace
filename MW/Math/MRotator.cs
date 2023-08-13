@@ -62,7 +62,7 @@ namespace MW
 		/// <returns>A Quaternion with Pitch, Yaw, Roll.</returns>
 		public Quaternion Quaternion()
 		{
-			const float kDegToRadOver2 = Mathf.Deg2Rad * .5f;
+			const float kDegToRadOver2 = FMath.D2R * .5f;
 
 			float InternalPitch = ModTowardsZero(-Yaw, 360.0f) * kDegToRadOver2;
 			float InternalYaw = ModTowardsZero(-Roll, 360.0f) * kDegToRadOver2;

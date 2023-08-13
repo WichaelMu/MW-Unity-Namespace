@@ -35,9 +35,12 @@ internal class InGameEditorDiagnosticsEditor : Editor
 
 		if (Diagnostics.bDrawOrientation)
 		{
-			Handles.Label(Position + (Quat * Vector3.right * Scale.x), $"Roll: {Rotation.z}", Style);
-			Handles.Label(Position + (Quat * Vector3.up * Scale.y), $"Pitch: {Rotation.x}", Style);
-			Handles.Label(Position + (Quat * Vector3.forward * Scale.z), $"Yaw: {Rotation.y}", Style);
+			for (int i = 0; i < 3; ++i)
+				if (Rotation[i] > 180f)
+					Rotation[i] -= 360f;
+			Handles.Label(Position + (Quat * Vector3.right * Scale.x), $"Roll: {Rotation.z:F2}", Style);
+			Handles.Label(Position + (Quat * Vector3.up * Scale.y), $"Pitch: {Rotation.x:F2}", Style);
+			Handles.Label(Position + (Quat * Vector3.forward * Scale.z), $"Yaw: {Rotation.y:F2}", Style);
 		}
 	}
 
