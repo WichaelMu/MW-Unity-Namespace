@@ -175,9 +175,11 @@ namespace MW.Console
 		/// <returns></returns>
 		public object Exec(string[] Args)
 		{
-			string First = Args[0];
+			if (Args.Length == 0)
+				return null;
+
 			MArray<string> Params = new MArray<string>(Args);
-			Params.Pull(First);
+			Params.Pull(0); // Pop Exec function.
 
 			return Exec(Array.Empty<string>(), Args[0], Params);
 		}
