@@ -57,11 +57,11 @@ constexpr const char* CSS_NAV_LINKS = Q(navLinks);
   functions, depending on whether the namespace class is a part of
   the root MW namespace.
 */
-constexpr const char* CSS_HEADER_STYLE = Q(basicHead);
+constexpr const char* CSS_HEADER_STYLE = Q(FuncTitle);
 /*
 * The CSS selector/s used to define the style for namespace classes.
 */
-constexpr const char* CSS_CLASS_STYLE = Q(classHead C);
+constexpr const char* CSS_CLASS_STYLE = Q(DefinedType C);
 /*
 * The CSS selector/s used to style the namespace class summary.
 */
@@ -91,15 +91,21 @@ constexpr const char* HTML_TAB = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs
 
 #if WRITE_DEBUG_LINES
 #define DEBUG_WRITELINE << "<p style=" Q(color:white) ">" INTER_INJECT_TEXT(__LINE__) << "</p>"
-#define GET_LINE << " " << __LINE__
+#define GET_LINE << " L" << __LINE__
 #else
 #define DEBUG_WRITELINE
 #define GET_LINE
 #endif
 
 #define INTER_INJECT_TEXT(text) << text GET_LINE
-#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=" Q(C) " style=" Q(padding-right:25%;color:rgb(40,255,120);) ">" INTER_INJECT_TEXT(decorations) << "</pre>"
-#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=" Q(padding-right:25%;color:rgb(133, 245, 215);font-weight:549) ">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_CLASS_DECORATIONS(decorations) "<pre class=" Q(C) " style=" Q(padding-right:25%;color:rgb(126, 252, 202);) ">" INTER_INJECT_TEXT(decorations) << "</pre>"
+#define INTER_INJECT_FUNCTION_DECORATIONS(decorations) "<br><pre style=" Q(padding-right:25%;color:rgb(126, 252, 202);font-weight:549) ">" INTER_INJECT_TEXT(decorations) << "</pre>"
+
+#define FMT_PARAM_PRIM_TYPE(type) "<span class=" Q(PrimitiveType) ">" + type + "</span>"
+#define FMT_PARAM_DEF_TYPE(type) "<span class=" Q(DefinedType) ">" + type + "</span>"
+#define FMT_PARAM_NAME(name) "<span class=" Q(FuncParamName) ">" + name + "</span>"
+#define FMT_PRIM_FUNC(type, name) FMT_PARAM_PRIM_TYPE(type) " " FMT_PARAM_NAME(name)
+#define FMT_DEF_FUNC(type, name) FMT_PARAM_DEF_TYPE(type) " " FMT_PARAM_NAME(name)
 
 #define HTML_HOLDING_DIV "<div style=" << CSS_HOLDING_DIV << "><div style=" << CSS_INNER_DIV << "><div style=" << CSS_LEFT_COL_DIV << ">" DEBUG_WRITELINE
 #define HTML_NAV_ENTRY(entry) "<div class=" << CSS_NAV_LINKS << "><a href=\"" << entry << ".html\">" << entry << "</a></div><br>" DEBUG_WRITELINE
@@ -239,19 +245,21 @@ void Writer::Write(const VT(MW)& all_mw)
 			}
 			else
 			{
-				std::string params;
-
+				std::string param;
 				auto size_of_name = mw.function_parameters_name.size();
 
 				// Writing function parameter types.
 				std::string generics = "TYUMNKR";
 				for (int i = 0, generic_count = 0; i < size_of_name; ++i)
 				{
+					std::string param_type;
+					std::string param_name;
+
 					// If the type is just a standalone 'T', then we know it's a generic.
 					// Replace the genric 'T' with the std::string generics using generic_count.
 					if (mw.function_parameters_type[i].length() == 1 && mw.function_parameters_type[i][0] == 'T')
 					{
-						params += generics[generic_count++];
+						param_type = generics[generic_count++];
 					}
 					else
 					{
@@ -260,23 +268,27 @@ void Writer::Write(const VT(MW)& all_mw)
 						// If this is the case, only add one T, the first T, to the params.
 						if (mw.function_parameters_type[i] == "TT")
 						{
-							params += mw.function_parameters_type[i][0];
+							param_type = mw.function_parameters_type[i][0];
 						}
 						else
 						{
 							// Otherwise, add the type as normal.
-							params += mw.function_parameters_type[i];
+							param_type = mw.function_parameters_type[i];
 						}
 					}
 
-					params += " " + mw.function_parameters_name[i];
+					param_name += mw.function_parameters_name[i];
 
 					if (i != size_of_name - 1)
-						params += ", ";
+						param_name += ", ";
+
+					param += (param_type.length() && std::isupper(param_type[0]))
+						? FMT_DEF_FUNC(param_type, param_name)
+						: FMT_PRIM_FUNC(param_type, param_name);
 				}
 
 				// Write the name of the function.
-				html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, params, GetDecorations(mw.decorations));
+				html << HTML_DECLARE_FUNCTION_PARAMS(mw.mw_name, param, GetDecorations(mw.decorations));
 
 				// If there is a summary, write it here.
 				if (mw.summary.length() != 0)

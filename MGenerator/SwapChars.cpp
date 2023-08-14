@@ -27,7 +27,7 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 				// Both 'out' and 'ref' are used throughout the MW namespace.
 				// It is impossible to determine which one the '@' represents,
 				// so just use & to signify an 'out' OR 'ref' parameter.
-				const std::string ref = "& ";
+				const std::string ref = "&";
 
 				std::string new_param = "";
 				for (int i = 0; i < param.length(); ++i)
@@ -118,6 +118,7 @@ void SwapChars::BuildTranslator()
 	translator["Single"] = "float";
 	translator["Boolean"] = "bool";
 	translator["Int32"] = "int";
+	translator["String"] = "string";
 	translator["Int64"] = "long";
 	translator["UInt64"] = "uint";
 

@@ -187,6 +187,30 @@ nav {
 	font-size: 30px;
 }
 
+.FuncTitle {
+	text-align: left;
+	padding-left: 5%;
+	font-size: 30px;
+
+	font-family: 'Cascadia Code', sans-serif;
+	color: #DFFEE9;
+}
+
+.PrimitiveType {
+	color: #7EFCCA;
+}
+
+.DefinedType {
+	color: #28FF78;
+	background-color: #00461B;
+
+	font-family: 'Cascadia Code', sans-serif;
+}
+
+.FuncParamName {
+	color: #DDE4FF;
+}
+
 .ParamName {
 	text-align: left;
 	position: relative;
