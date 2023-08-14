@@ -13,7 +13,10 @@ namespace MW
 	[Serializable]
 	public class MArray<T> : MArray, IEnumerable<T>
 	{
-		[UnityEngine.SerializeField] List<T> Items;
+#if RELEASE
+		[UnityEngine.SerializeField]
+#endif
+		List<T> Items;
 
 		internal Dictionary<T, Stack<int>> HashMap;
 
