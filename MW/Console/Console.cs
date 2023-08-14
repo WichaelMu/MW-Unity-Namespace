@@ -179,7 +179,7 @@ namespace MW.Console
 				return null;
 
 			MArray<string> Params = new MArray<string>(Args);
-			Params.Pull(0); // Pop Exec function.
+			Params.PullAtIndex(0); // Pop Exec function.
 
 			return Exec(Array.Empty<string>(), Args[0], Params);
 		}
