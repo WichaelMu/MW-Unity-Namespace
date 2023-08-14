@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using MW.Diagnostics;
 
 namespace MW
 {
@@ -78,6 +79,7 @@ namespace MW
 
 		/// <summary>Removes the most recent push of Item.</summary>
 		/// <decorations decor="public int"></decorations>
+		/// <remarks>If you plan to Pull multiple items, see PullAll(T) or PullMulti(params T).</remarks>
 		/// <param name="Item">The element to remove.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist.</returns>
@@ -114,6 +116,77 @@ namespace MW
 			return Num;
 		}
 
+		/// <summary>Conducts a single Pull operation on every T item.</summary>
+		/// <param name="Items">The most recent push of each Item to pull.</param>
+		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist. Returns Num if Length of Items is 0.</docreturns>
+		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist. Returns <see cref="Num"/> if Length of Items is 0.</returns>
+		public int PullMulti(params T[] Items)
+		{
+			if (Items.Length == 0)
+				return Num;
+			if (Items.Length == 1)
+				return Pull(Items[0]);
+
+			int[] IndicesToRemove = new int[Items.Length];
+			int i = 0;
+
+			foreach (T Item in Items)
+				if (Contains(Item))
+					IndicesToRemove[i++] = HashMap[Item].Peek();
+
+			return PullMultiIndex(IndicesToRemove).Num;
+		}
+
+		/// <summary>Pulls an Item from an Index.</summary>
+		/// <param name="Index">The Index to pull from.</param>
+		/// <returns>The pulled T from Index.</returns>
+		public T PullAtIndex(int Index)
+		{
+			if (Index >= Num || Index < 0)
+			{
+				Log.W($"Index out of range! Expected Index < Num && Index >= 0. Index: {Index}");
+				return default;
+			}
+
+			T ItemAtIndex = PullWithoutRemap(Index);
+			Remap();
+
+			return ItemAtIndex;
+		}
+
+		public MArray<T> PullMultiIndex(params int[] Indices)
+		{
+			MArray<T> RetVal = new MArray<T>(Indices.Length);
+
+			if (Indices.Length == 0)
+				return RetVal;
+
+			if (Indices.Length == 1)
+			{
+				RetVal.Push(PullAtIndex(Indices[0]));
+				return RetVal;
+			}
+
+			// Descending order.
+			Array.Sort(Indices, (L, R) => L < R ? 1 : -1);
+
+			foreach (int Index in Indices)
+			{
+				if (Index >= Num || Index < 0)
+				{
+					Log.W($"Index out of range! Expected Index < Num && Index >= 0. Index: {Index}");
+					return RetVal;
+				}
+
+				T ItemAtIndex = PullWithoutRemap(Index);
+				RetVal.Push(ItemAtIndex);
+			}
+
+			Remap();
+
+			return RetVal;
+		}
+
 		int PullWithoutRemap(T Item)
 		{
 			Items.RemoveAt(HashMap[Item].Pop());
@@ -124,6 +197,14 @@ namespace MW
 			}
 
 			return Num;
+		}
+
+		T PullWithoutRemap(int Index)
+		{
+			T ItemAtIndex = Items[Index];
+			Items.RemoveAt(Index);
+
+			return ItemAtIndex;
 		}
 
 		public static void Copy(MArray<T> Destination, MArray<T> Source, int Start, int Num)
@@ -184,16 +265,14 @@ namespace MW
 		/// <returns>The item that was at the front of the queue.</returns>
 		public T FirstPop()
 		{
+			if (Num <= 0)
+				return default;
+
 			T T = First();
 
 			int[] Positions = Access(T).Positions;
 
 			Items.RemoveAt(Positions[Positions.Length - 1]);
-
-			if (HashMap[T].Count == 0)
-			{
-				HashMap.Remove(T);
-			}
 
 			Remap();
 

@@ -37,6 +37,8 @@ namespace MTest
 			Assert.IsTrue(M.TopPop() == 18);
 			Assert.IsTrue(M.TopPop() == 1);
 
+			Assert.IsTrue(M.Num == 14);
+
 			// M = (15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2)
 			Assert.IsTrue(M[0] == 15);
 
@@ -297,6 +299,85 @@ namespace MTest
 			M3.Pull(6f);
 			Access = M3.Access(1.4f);
 			Assert.IsTrue(Access.Positions[0] == 4);
+		}
+
+		[TestMethod]
+		public void MArrayPushPullTests()
+		{
+			MArray<int> M = new MArray<int>(17);
+			Assert.IsTrue(M.Num == 0,"Num, provided with Initial Size");
+
+			M.Push(17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
+
+			Assert.IsTrue(M.Num == 17, "Num after Pushes.");
+
+			// Push Unique.
+			//
+			M.PushUnique(10);
+			Assert.AreEqual(17, M.Num);
+
+			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 }
+			M.PushUnique(15, 6, 12, 1, 11, 1, 17, 18, 19, 20, 18, 21, 26, 18, 23, 24, 25, 18, 26, 27);
+			Assert.AreEqual(26, M.Num);
+
+			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27 }
+			M.Push(32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41);
+			Assert.AreEqual(40, M.Num);
+			
+			//
+			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41 }
+			//
+
+			// Pull Operations.
+			//
+			M.Pull(15);
+			Assert.IsFalse(M.Contains(15));
+			Assert.AreEqual(39, M.Num);
+
+			// { 17, 16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41 }
+
+			MArray.AccessedData Data = M.Access(33);
+			//                                                                                                  __      __              __      __          __
+			// { 17, 16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41 }
+			M.PullAll(33);
+			// { 17, 16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 34, 35, 36, 37, 38, 39, 40, 41 }
+			Assert.AreEqual(5, Data.Occurrences);
+			Assert.AreEqual(34, M.Num);
+
+			M.PullMulti(13, 34, 19, 20, 6, 41, 21, 1, 38);
+			Assert.AreEqual(25, M.Num);
+			Assert.IsFalse(M.Contains(13));
+			Assert.IsFalse(M.Contains(34));
+			Assert.IsFalse(M.Contains(19));
+			Assert.IsFalse(M.Contains(20));
+			Assert.IsFalse(M.Contains(06));
+			Assert.IsFalse(M.Contains(41));
+			Assert.IsFalse(M.Contains(21));
+			Assert.IsFalse(M.Contains(01));
+			Assert.IsFalse(M.Contains(38));
+
+			// {  0,  1,  2,  3,  4,  5, 6, 7, 8, 9, 10,11,12,13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 }
+			// { 17, 16, 14, 12, 11, 10, 9, 8, 7, 5, 4, 3, 2, 18, 26, 23, 24, 25, 27, 32, 35, 36, 37, 39, 40 }
+			M.PullAtIndex(3);
+			Assert.IsFalse(M.Contains(12));
+			Assert.AreEqual(24, M.Num);
+
+			// {  0,  1,  2,  3,4, 5, 6, 7,  8,  9, 10, 11, 12, 13, 14, 15 }
+			// { 17, 16, 11, 9, 7, 4, 3, 2, 18, 26, 23, 24, 25, 32, 36, 39 }
+			M.PullMultiIndex(2, 4, 6, 8, 23, 21, 19, 17);
+			Assert.AreEqual(16, M.Num);
+			Assert.IsFalse(M.Contains(40));
+			Assert.IsFalse(M.Contains(37));
+			Assert.IsFalse(M.Contains(35));
+			Assert.IsFalse(M.Contains(27));
+			Assert.IsFalse(M.Contains(05));
+			Assert.IsFalse(M.Contains(08));
+			Assert.IsFalse(M.Contains(10));
+			Assert.IsFalse(M.Contains(12));
+
+			// {  1,  2,  3, 4, 5, 6, 7, 8,  9, 10, 11, 12, 13, 14, 15, 16 }
+			// { 17, 12, 10, 8, 5, 4, 3, 2, 18, 26, 23, 24, 27, 35, 37, 40 }
+			Assert.AreEqual("17, 16, 11, 9, 7, 4, 3, 2, 18, 26, 23, 24, 25, 32, 36, 39", M.Print(Separator: ", "));
 		}
 
 		[TestMethod]
