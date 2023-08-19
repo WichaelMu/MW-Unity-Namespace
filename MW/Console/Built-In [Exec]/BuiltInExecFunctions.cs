@@ -120,13 +120,6 @@ namespace MW.Console
 			T.position = Position;
 		}
 
-		[BuiltInExec("Params Test")]
-		public static void T(Vector3 Position, params Transform[] T)
-		{
-			foreach (Transform t in T)
-				t.position = Position;
-		}
-
 		#endregion
 
 		#region Animations
@@ -202,9 +195,6 @@ namespace MW.Console
 			foreach (GameObject O in G)
 				O.AddComponent<InGameObjectDiagnostics>();
 		}
-
-		[BuiltInExec("MEGALUL")]
-		public static MVector GetT(MVector V) => V;
 
 		#endregion
 	}
