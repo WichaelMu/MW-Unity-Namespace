@@ -373,6 +373,12 @@ namespace MW.Console
 			return GameObject.Find(Target);
 		}
 
+		/// <summary>Gets the GameObject named Target.</summary>
+		/// <decorations decor="protected bool"></decorations>
+		/// <param name="Target">The name of the GameObject to find.</param>
+		/// <param name="TargetObject">Out reference to the GameObject named Target.</param>
+		/// <docreturns>True if a GameObject named Target was found. Otherwise, false.</docreturns>
+		/// <returns><see langword="True"/> if a <see cref="GameObject"/> named <paramref name="Target"/> was found. Otherwise, <see langword="false"/>.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected bool GetTargetFromString(string Target, out GameObject TargetObject)
 		{
@@ -518,6 +524,10 @@ namespace MW.Console
 			return RetVal;
 		}
 
+		/// <summary>Writes to the MConsole Output.</summary>
+		/// <decorations decor="protected virtual void"></decorations>
+		/// <param name="Output">The string to write to the MConsole Output.</param>
+		/// <param name="bWithTrailingNewLine">True to write to the MConsole Output with a new line escape character.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected virtual void WriteToOutput(string Output, bool bWithTrailingNewLine = true)
 		{
@@ -538,12 +548,20 @@ namespace MW.Console
 #endif // RELEASE
 		}
 
+		/// <summary>Writes to the MConsole Output.</summary>
+		/// <decorations decor="protected virtual void"></decorations>
+		/// <param name="Output">The StringBuilder with the contents to write to the MConsole Output.</param>
+		/// <param name="bWithTrailingNewLine">True to write to the MConsole Output with a new line escape character.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected virtual void WriteToOutput(StringBuilder Output, bool bWithTrailingNewLine = true)
 		{
 			WriteToOutput(Output.ToString(), bWithTrailingNewLine);
 		}
 
+		/// <summary>Writes to the MConsole Output with a Colour.</summary>
+		/// <decorations decor="protected void"></decorations>
+		/// <param name="Output">The string to write to the MConsole Output.</param>
+		/// <param name="Colour">If #RELEASE, RGB Colour to print to the MConsole Output. If #STANDALONE, the ConsoleColor to print to the Terminal.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected void WriteToOutput(string Output,
 #if RELEASE
@@ -564,6 +582,10 @@ namespace MW.Console
 
 		}
 
+		/// <summary>Writes to the MConsole Output with a Colour.</summary>
+		/// <decorations decor="protected void"></decorations>
+		/// <param name="Output">The StringBuilder with the contents to write to the MConsole Output.</param>
+		/// <param name="Colour">If #RELEASE, RGB Colour to print to the MConsole Output. If #STANDALONE, the ConsoleColor to print to the Terminal.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		protected void WriteToOutput(StringBuilder Output,
 #if RELEASE
@@ -630,6 +652,10 @@ namespace MW.Console
 			|| T == typeof(MRotator);
 
 #if RELEASE
+		/// <summary>Gets the content on the bottom of the MConsole Output.</summary>
+		/// <remarks>This is usually for changing variables that you may want to know or keep track of during runtime.</remarks>
+		/// <decorations decor="protected virtual string"></decorations>
+		/// <returns>The Persistent Output. By default, this is the FPS, DeltaTime, and the __HELP__ command.</returns>
 		protected virtual string GetPersistentOutput()
 			=> $"FPS: {Utils.FPS():D4} | Delta Time: {Time.deltaTime:F3} | Exec __HELP__ for Help |";
 #endif
@@ -744,6 +770,10 @@ namespace MW.Console
 			ScrollOutputLog = new Vector2(0, GetOutputLogHeight(out _));
 		}
 
+		/// <summary>Unity Update() Function.</summary>
+		/// <docremarks>Call the base method if you want the __HELP__ message to be displayed after some time.</docremarks>
+		/// <remarks>Call the base method if you want the __HELP__ message to be displayed after <see cref="kHelpTextDisplayDelay"/> seconds.</remarks>
+		/// <decorations decor="protected virtual void"></decorations>
 		protected virtual void Update()
 		{
 			if (bShowConsole && !bHelpMessageHasBeenShown && string.IsNullOrEmpty(RawInput))
