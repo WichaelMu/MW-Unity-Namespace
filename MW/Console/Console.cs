@@ -308,7 +308,7 @@ namespace MW.Console
 						int Length = ObjectTargets.Length;
 
 						StringBuilder AllObjectsOfType = new StringBuilder();
-						AllObjectsOfType.Append($"{Method.Name} () was executed on {Length} GameObject{(Length == 1 ? "" : "s")}{(Length == 0 ? "." : ":")} ");
+						AllObjectsOfType.Append($"{Method.Name} ({new MArray<object>(ExecParameters).Print(Separator: ", ")}) was executed on {Length} GameObject{(Length == 1 ? "" : "s")}{(Length == 0 ? "." : ":")} ");
 
 						for (int i = 0; i < Length; ++i)
 						{
