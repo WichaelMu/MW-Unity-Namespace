@@ -64,6 +64,7 @@ namespace MW.IO
 #endif // STANDALONE
 
 		/// <summary>Writes string lines to a file asynchronously.</summary>
+		/// <decorations decor="public static async Task"></decorations>
 		/// <param name="Path">The path of the file to write to.</param>
 		/// <param name="NameOfFile">The name of the file to write to, including it's extension.</param>
 		/// <param name="Mode"><see cref="EWriteMode"/> append to the file (if it exists), or overwrite the file regardless of it's existing contents.</param>
@@ -81,8 +82,9 @@ namespace MW.IO
 
 			File.Close();
 		}
-		
+
 		/// <summary>Writes string lines to a file.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="Path">The path of the file to write to.</param>
 		/// <param name="NameOfFile">The name of the file to write to, including it's extension.</param>
 		/// <param name="Mode"><see cref="EWriteMode"/> append to the file (if it exists), or overwrite the file regardless of it's existing contents.</param>
@@ -101,6 +103,7 @@ namespace MW.IO
 		}
 
 		/// <summary>Reads contents from a file into a <see cref="List{T}"/> of <see cref="string"/>s.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		/// <param name="Path">The path of the file to read from.</param>
 		/// <param name="NameOfFile">The name of the file to read from, including it's extension.</param>
 		/// <param name="ContentsInFile">The out <see cref="List{T}"/> of <see cref="string"/>s of the contents from the file at path.</param>
@@ -140,6 +143,7 @@ namespace MW.IO
 		}
 
 		/// <summary>Whether or not a file exists.</summary>
+		/// <decorations decor="public static bool"></decorations>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool FileExists(string Path, string NameOfFile)
 		{

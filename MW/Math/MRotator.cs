@@ -295,6 +295,7 @@ namespace MW
 
 #if RELEASE
 		/// <summary>Gets the direction this MRotator is facing when facing forward.</summary>
+		/// <decorations decor="public MVector"></decorations>
 		/// <param name="Forward">Forward orientation.</param>
 		/// <returns>An MVector direction representing this Rotation.</returns>
 		public MVector Direction(MVector Forward)
@@ -367,6 +368,7 @@ namespace MW
 #if RELEASE
 		/// <summary>Apply Rotations L and R in sequence.</summary>
 		/// <remarks>MRotator multiplications are not commutative. L * R != R * L.</remarks>
+		/// <decorations decor="public static MRotator operator*"></decorations>
 		/// <param name="L">First rotation.</param>
 		/// <param name="R">Second rotation.</param>
 		/// <returns>An MRotator L rotated by R.</returns>
@@ -419,6 +421,7 @@ namespace MW
 		public static implicit operator Quaternion(MRotator Rotation) => Rotation.Quaternion();
 
 		/// <summary>Rotate Vector by Rotation.</summary>
+		/// <decorations decor="public static MVector operator*"></decorations>
 		/// <param name="Rotation"></param>
 		/// <param name="Vector"></param>
 		/// <returns></returns>
@@ -441,6 +444,7 @@ namespace MW
 		}
 
 		/// <summary>Rotate Vector by Rotation.</summary>
+		/// <decorations decor="public static Vector3 operator*"></decorations>
 		/// <param name="Rotation"></param>
 		/// <param name="Vector"></param>
 		/// <returns></returns>

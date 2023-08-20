@@ -120,6 +120,7 @@ namespace MW
 		}
 
 		/// <summary>Conducts a single Pull operation on every T item.</summary>
+		/// <decorations decor="public int"></decorations>
 		/// <param name="Items">The most recent push of each Item to pull.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist. Returns Num if Length of Items is 0.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist. Returns <see cref="Num"/> if Length of Items is 0.</returns>
@@ -141,6 +142,7 @@ namespace MW
 		}
 
 		/// <summary>Pulls an Item from an Index.</summary>
+		/// <decorations decor="public T"></decorations>
 		/// <param name="Index">The Index to pull from.</param>
 		/// <returns>The pulled T from Index.</returns>
 		public T PullAtIndex(int Index)
