@@ -25,7 +25,7 @@ namespace MW.Math.Magic
 		/// <decorations decor="public static unsafe float"></decorations>
 		/// <param name="N">1 / sqrt(x) where x is N.</param>
 		/// <param name="NewtonIterations">The number of Newton Iterations to perform. + = Increased accuracy, decreased speed. - = Decreased accuracy, increased speed.</param>
-		/// <returns>An approximation for calculating: 1 / sqrt(N), within +-.001 of the real inverse square root with 3 Newton Iterations.</returns>
+		/// <returns>An approximation for calculating: 1 / sqrt(N), within +-.00001 of the real inverse square root with 3 Newton Iterations.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe float FInverseSqrt(float N, int NewtonIterations = 3)
 		{
