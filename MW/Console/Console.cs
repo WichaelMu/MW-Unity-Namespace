@@ -10,7 +10,6 @@ using MW.Conversion;
 using UnityEngine;
 using UE = UnityEngine;
 using UObject = UnityEngine.Object;
-using MW.Diagnostics;
 #endif // STANDALONE
 
 namespace MW.Console
