@@ -18,6 +18,7 @@ namespace MTest
 			Assert.AreEqual(0, false.Cast<int>());
 
 			Assert.AreEqual("4", 4.Cast<string>());
+			Assert.AreEqual(4, ObjectExtensions.Cast<int>("4"));
 
 			MArray<string> Array = new MArray<string>();
 			Assert.IsTrue(Array.Implements<IEnumerable<string>>());
