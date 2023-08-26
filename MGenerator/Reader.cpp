@@ -374,7 +374,7 @@ MW Reader::ProcessNode(const std::string& chars)
 
 	SwapChars::Replace(mw.mw_namespace, true);
 	SwapChars::Replace(mw.mw_class);
-	SwapChars::Replace(mw.mw_name);
+	SwapChars::Replace(mw.mw_name, false, true);
 
 	if (mw.mw_class.length() == 0)
 		mw.mw_class = mw.mw_namespace;

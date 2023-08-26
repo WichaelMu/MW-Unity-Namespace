@@ -1,10 +1,13 @@
 #include "SwapChars.h"
 
 
-void SwapChars::Replace(std::string& param, const bool& is_file_name)
+void SwapChars::Replace(std::string& param, const bool is_file_name, const bool treat_as_template)
 {
-	param.erase(remove(param.begin(), param.end(), ','), param.end());
-	param.erase(remove(param.begin(), param.end(), '1'), param.end());
+	if (!treat_as_template)
+	{
+		param.erase(remove(param.begin(), param.end(), ','), param.end());
+		param.erase(remove(param.begin(), param.end(), '1'), param.end());
+	}
 
 	// Hard-coded replacements.
 	if (translator.count(param))
@@ -76,7 +79,7 @@ void SwapChars::Replace(std::string& param, const bool& is_file_name)
 	param.erase(remove(param.begin(), param.end(), '`'), param.end());
 }
 
-void SwapChars::ReplaceAngleBrackets(std::string& param, const bool& continuous)
+void SwapChars::ReplaceAngleBrackets(std::string& param, const bool continuous)
 {
 	if (continuous)
 	{
@@ -121,6 +124,9 @@ void SwapChars::BuildTranslator()
 	translator["String"] = "string";
 	translator["Int64"] = "long";
 	translator["UInt64"] = "uint";
+	translator["Double"] = "double";
+	translator["SByte"] = "sbyte";
+	translator["Int6"] = "short";
 
 	// Reference/Out Types.
 	translator["Single@"] = "float&";
@@ -128,6 +134,19 @@ void SwapChars::BuildTranslator()
 	translator["Int32@"] = "int&";
 	translator["Int64@"] = "long&";
 	translator["UInt32@"] = "uint&";
+	translator["Double@"] = "double&";
+	translator["SByte@"] = "sbyte&";
+	translator["Int6@"] = "short&";
+
+	// Array / Params.
+	translator["Single[]"] = "float[]";
+	translator["Boolean[]"] = "bool[]";
+	translator["Int32[]"] = "int[]";
+	translator["Int64[]"] = "long[]";
+	translator["UInt32[]"] = "uint[]";
+	translator["Double[]"] = "double[]";
+	translator["SByte[]"] = "sbyte[]";
+	translator["Int6[]"] = "short[]";
 
 	translator["op_Addition"] = "operator+";
 	translator["op_Subtraction"] = "operator-";
