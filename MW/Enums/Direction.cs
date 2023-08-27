@@ -1,8 +1,10 @@
 ﻿#if RELEASE
+
 namespace MW
 {
 	/// <summary>Orientations for specific faces.</summary>
-	/// <decorations decor="public enum"></decorations>
+	/// <decorations decor="[Obsolete] public enum"></decorations>
+	[System.Obsolete]
 	public enum EDirection
 	{
 		/// <summary></summary>

@@ -173,7 +173,7 @@ namespace MW
 		public static bool Parallel(MVector Left, MVector Right) => Mathematics.Parallel(Left, Right);
 #if RELEASE
 		/// <summary>A normalised MVector at Degrees, relative to Forward.</summary>
-		/// <decorations decors="public static MVector"></decorations>
+		/// <decorations decors="[Obsolete] public static MVector"></decorations>
 		/// <param name="Degrees">The angle offset.</param>
 		/// <param name="Forward">The forward direction.</param>
 		[Obsolete($"Use {nameof(RotateVector)} instead!")]
