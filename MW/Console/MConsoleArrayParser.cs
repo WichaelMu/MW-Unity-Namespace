@@ -54,7 +54,7 @@ namespace MW.Console
 			}
 			else if (ElementType.IsPrimitive)
 			{
-				if (!MConsoleArrayPrimitiveTranslator.Get().Translate(Elements, ref TargetObject, ElementType))
+				if (!MConsoleArrayPrimitiveTranslator.Translate(Elements, ref TargetObject, ElementType))
 					Diagnostics.Log.W("Unable to convert to {ElementType}[]");
 			}
 			else

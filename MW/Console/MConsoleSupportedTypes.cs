@@ -280,13 +280,7 @@ namespace MW.Console
 			Instance = this;
 		}
 
-		internal static MConsoleArrayPrimitiveTranslator Get()
-		{
-			Instance ??= new MConsoleArrayPrimitiveTranslator();
-			return Instance;
-		}
-
-		internal bool Translate(object[] Elements, ref object TargetObject, Type ElementType)
+		internal static bool Translate(object[] Elements, ref object TargetObject, Type ElementType)
 		{
 			if (PrimitiveTranslation.ContainsKey(ElementType))
 			{
@@ -297,7 +291,7 @@ namespace MW.Console
 			return false;
 		}
 
-		void Translate<T>(object[] Elements, ref object TargetObject)
+		static void Translate<T>(object[] Elements, ref object TargetObject)
 		{
 			MArray<T> Translation = new MArray<T>();
 			foreach (object Element in Elements)
