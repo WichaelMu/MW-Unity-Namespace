@@ -3,7 +3,6 @@ using UnityEditor;
 using MW.Diagnostics;
 using MW;
 using MW.Extensions;
-using System.Net;
 using System.Text;
 
 [CustomEditor(typeof(InGameObjectDiagnostics))]

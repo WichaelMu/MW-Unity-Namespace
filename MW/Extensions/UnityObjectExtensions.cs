@@ -6,6 +6,18 @@ namespace MW.Extensions
 {
 	public static class UnityObjectExtensions
 	{
+		/// <summary>Gets the position and Rotation</summary>
+		/// <decorations decor="|Extension| void"></decorations>
+		/// <param name="T"></param>
+		/// <param name="Position"></param>
+		/// <param name="Rotation"></param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void GetPositionAndRotation(this Transform T, out Vector3 Position, out Quaternion Rotation)
+		{
+			Position = T.position;
+			Rotation = T.rotation;
+		}
+
 		/// <summary>Gets or Adds T Component to a GameObject.</summary>
 		/// <typeparam name="T">The type to Get or Add to G.</typeparam>
 		/// <decorations decor="|Extension| T"></decorations>

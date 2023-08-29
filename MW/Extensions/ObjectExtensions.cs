@@ -27,6 +27,9 @@ namespace MW.Extensions
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool TryCast<T>(this object O, out T Casted) => O.Is<T>(out Casted);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static object Cast(this object O, Type Type)
 			=> Convert.ChangeType(O, Type);
 
