@@ -215,6 +215,7 @@ namespace MW
 	public interface IHeapItem<T>
 	{
 		/// <summary>The position in a THeap.</summary>
+		/// <decorations decor="int"></decorations>
 		int HeapItemIndex { get; set; }
 	}
 }
