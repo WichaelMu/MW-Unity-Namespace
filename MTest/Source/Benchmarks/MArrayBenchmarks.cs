@@ -71,9 +71,8 @@ namespace MTest
 			ListTimer.Stop();
 
 			MArrayTimer.Restart();
-			MArray.PullMulti(4, 2, 1);
+			MArray.Pull(4, 2, 1);
 			MArrayTimer.Stop();
-			Console.WriteLine(MArrayTimer.Time() + " " + ListTimer.Time());
 			Assert.IsTrue(MArrayTimer.Time() <= ListTimer.Time(), "Pull / Remove Multiple Elements.");
 		}
 	}

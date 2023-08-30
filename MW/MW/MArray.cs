@@ -82,7 +82,7 @@ namespace MW
 
 		/// <summary>Removes the most recent push of Item.</summary>
 		/// <decorations decor="public int"></decorations>
-		/// <remarks>If you plan to Pull multiple items, see PullAll(T) or PullMulti(params T).</remarks>
+		/// <remarks>If you plan to Pull every element from the MArray, see PullAll(T).</remarks>
 		/// <param name="Item">The element to remove.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist.</returns>
@@ -124,7 +124,7 @@ namespace MW
 		/// <param name="Items">The most recent push of each Item to pull.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist. Returns Num if Length of Items is 0.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist. Returns <see cref="Num"/> if Length of Items is 0.</returns>
-		public int PullMulti(params T[] Items)
+		public int Pull(params T[] Items)
 		{
 			if (Items.Length == 0)
 				return Num;
@@ -148,10 +148,7 @@ namespace MW
 		public T PullAtIndex(int Index)
 		{
 			if (Index >= Num || Index < 0)
-			{
-				Log.W($"Index out of range! Expected Index < Num && Index >= 0. Index: {Index}");
-				return default;
-			}
+				throw new IndexOutOfRangeException($"Index out of range! Expected Index < {Num} && Index >= 0. Index: {Index}");
 
 			T ItemAtIndex = PullWithoutRemap(Index);
 			Remap();
@@ -178,10 +175,7 @@ namespace MW
 			foreach (int Index in Indices)
 			{
 				if (Index >= Num || Index < 0)
-				{
-					Log.W($"Index out of range! Expected Index < Num && Index >= 0. Index: {Index}");
-					return RetVal;
-				}
+					throw new IndexOutOfRangeException($"Index out of range! Expected Index < {Num} && Index >= 0. Index: {Index}");
 
 				T ItemAtIndex = PullWithoutRemap(Index);
 				RetVal.Push(ItemAtIndex);
@@ -474,7 +468,7 @@ namespace MW
 			{
 				for (int i = 0; i < Num; ++i)
 				{
-					SB.Append(i + ": " + Items[i].ToString());
+					SB.Append($"{i}: {Items[i]}");
 					if (i != Num - 1)
 						SB.Append(Separator);
 				}
@@ -495,6 +489,7 @@ namespace MW
 		/// <summary>This MArray as T[].</summary>
 		/// <decorations decor="public T[]"></decorations>
 		/// <returns>T[].</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T[] TArray()
 		{
 			return Items.ToArray();
@@ -503,6 +498,7 @@ namespace MW
 		/// <summary>This MArray as List&lt;T&gt;</summary>
 		/// <decorations decor="public List&lt;T&gt;"></decorations>
 		/// <returns>List&lt;T&gt;</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public List<T> LArray()
 		{
 			return Items;

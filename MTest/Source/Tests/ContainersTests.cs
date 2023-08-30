@@ -344,7 +344,7 @@ namespace MTest
 			Assert.AreEqual(5, Data.Occurrences);
 			Assert.AreEqual(34, M.Num);
 
-			M.PullMulti(13, 34, 19, 20, 6, 41, 21, 1, 38);
+			M.Pull(13, 34, 19, 20, 6, 41, 21, 1, 38);
 			Console.WriteLine(M.Print(Separator: " "));
 			Assert.AreEqual(25, M.Num);
 			Assert.IsFalse(M.Contains(13));
