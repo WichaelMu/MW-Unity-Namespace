@@ -92,9 +92,7 @@ namespace MW
 				return kInvalid;
 
 			int NewNum = PullWithoutRemap(Item);
-
-			if (NewNum != kInvalid)
-				Remap();
+			Remap();
 
 			return NewNum;
 		}
@@ -264,6 +262,21 @@ namespace MW
 
 			return Data;
 		}
+
+		int IndexOf(T Item, ESearchDirection SearchDirection = ESearchDirection.LatestPush)
+		{
+			if (!Contains(Item))
+				return kInvalid;
+
+			if (SearchDirection == ESearchDirection.LatestPush)
+				return HashMap[Item].Peek();
+
+			AccessedData Data = Access(Item);
+			return Data.Positions[Data.Positions.Length - 1];
+		}
+
+		public int FirstIndexOf(T Item) => IndexOf(Item, ESearchDirection.EarliestPush);
+		public int LastIndexOf(T Item) => IndexOf(Item, ESearchDirection.LatestPush);
 
 		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the front of the queue.</returns>
@@ -675,6 +688,7 @@ namespace MW
 			/// <decorations decor="public int"></decorations>
 			public int Occurrences;
 			/// <summary>The index locations of this Item in an MArray.</summary>
+			/// <remarks>The array order from left to right is Latest Push to Earliest Push.</remarks>
 			/// <decorations decor="public int[]"></decorations>
 			public int[] Positions;
 
@@ -690,5 +704,11 @@ namespace MW
 			/// <returns><see langword="true"/> if the accessed item does not exist in this <see cref="MArray{T}"/>.</returns>
 			public bool IsNone() => Occurrences == kInvalid && Positions.Length == 0;
 		}
+	}
+
+	internal enum ESearchDirection : byte
+	{
+		EarliestPush,
+		LatestPush
 	}
 }
