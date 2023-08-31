@@ -302,6 +302,25 @@ namespace MTest
 		}
 
 		[TestMethod]
+		public void MArrayCopy()
+		{
+			MArray<float> M = new MArray<float>();
+			M.Push(1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f, 1.7f, 1.8f, 1.9f, 2f);
+
+			MArray<float> W = new MArray<float>();
+			MArray<float>.Copy(W, M, 3, M.Num - 3);
+
+			Assert.IsNotNull(W);
+			Assert.IsFalse(W.IsEmpty());
+			Assert.AreEqual(M.Num - 3, W.Num);
+			Assert.AreEqual(M[3], W[0]);
+
+			MArray<float> E = new MArray<float>();
+			Assert.ThrowsException<IndexOutOfRangeException>(() => MArray<float>.Copy(E, M, -4, M.Num + 4), "Start < 0.");
+			MArray<float>.Copy(W, M, 0, 0);
+		}
+
+		[TestMethod]
 		public void MArrayPushPullTests()
 		{
 			MArray<int> M = new MArray<int>(17);

@@ -3,22 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using MW.Diagnostics;
 
 namespace MW
 {
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
-	/// <decorations decor="public class {T} : MArray, IEnumerable{T}"></decorations>
+	/// <decorations decor="public sealed class {T} : MArray, IEnumerable{T}"></decorations>
 	[Serializable]
-	public class MArray<T> : MArray, IEnumerable<T>
+	public sealed class MArray<T> : MArray, IEnumerable<T>
 	{
 #if RELEASE
 		[UnityEngine.SerializeField]
 #endif
 		List<T> Items;
 
-		internal Dictionary<T, Stack<int>> HashMap;
+		Dictionary<T, Stack<int>> HashMap;
 
 		/// <summary>The number of T in this MArray; the size.</summary>
 		/// <decorations decor="public int"></decorations>
@@ -62,6 +61,7 @@ namespace MW
 		/// <summary>Adds a number of Items.</summary>
 		/// <decorations decor="public void"></decorations>
 		/// <param name="Items">The list of elements to add.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Push(params T[] Items)
 		{
 			foreach (T T in Items)
@@ -156,6 +156,11 @@ namespace MW
 			return ItemAtIndex;
 		}
 
+		/// <summary>Pull from multiple indices.</summary>
+		/// <decorations decor="public MArray&lt;T&gt;"></decorations>
+		/// <param name="Indices">The index positions to remove.</param>
+		/// <returns>An MArray of the removed elements.</returns>
+		/// <exception cref="IndexOutOfRangeException">If one of Indices are out of range.</exception>
 		public MArray<T> PullMultiIndex(params int[] Indices)
 		{
 			MArray<T> RetVal = new MArray<T>(Indices.Length);
@@ -206,12 +211,21 @@ namespace MW
 			return ItemAtIndex;
 		}
 
+		/// <summary>Copies Num elements from an MArray to another MArray from Start.</summary>
+		/// <decorations decor="public static void"></decorations>
+		/// <param name="Destination">The MArray that will be copied *into*.</param>
+		/// <param name="Source">The MArray that will be copied *from*.</param>
+		/// <param name="Start">The index from Source to begin copying into Destination.</param>
+		/// <param name="Num">The number of elements to copy into Destination.</param>
 		public static void Copy(MArray<T> Destination, MArray<T> Source, int Start, int Num)
 		{
+			if (Start < 0 || Start >= Source.Num)
+				throw new IndexOutOfRangeException($"Expected Start ({Start}) to be >= 0 && < Source.Num ({Source.Num}).");
+
 			if (CheckNull(Destination))
 				Destination = new MArray<T>();
 
-			Utils.Clamp(ref Num, 1, Source.Num - 1);
+			FMath.Clamp(ref Num, 0, Source.Num - 1);
 
 			if (Num > 0)
 				Destination.Push(Source.Items.GetRange(Start, Num).ToArray());
