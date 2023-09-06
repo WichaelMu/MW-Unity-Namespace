@@ -85,32 +85,24 @@ namespace MTest
 
 			Stopwatch ListTimer = new Stopwatch();
 			for (int i = 0; i < kLimit; ++i)
-			{
 				List.Add(i);
-			}
 			ListTimer.Stop();
 
 			Stopwatch MArrayTimer = new Stopwatch();
 			for (int i = 0; i < kLimit; ++i)
-			{
 				MArray.Push(i);
-			}
 			MArrayTimer.Stop();
 
 			Assert.IsTrue(MArrayTimer.Time() <= ListTimer.Time(), $"Push Elements. MArrayTimer: {MArrayTimer.Time()} | ListTimer: {ListTimer.Time()}.");
 
 			ListTimer.Restart();
 			for (int i = 0; i < kLimit; i += 3)
-			{
 				List.Add(i);
-			}
 			ListTimer.Stop();
 
 			MArrayTimer.Restart();
 			for (int i = 0; i < kLimit; i += 3)
-			{
 				MArray.Push(i);
-			}
 			MArrayTimer.Stop();
 
 			Assert.IsTrue(MArrayTimer.Time() <= ListTimer.Time(), $"Push 3x Elements. MArrayTimer: {MArrayTimer.Time()} | ListTimer: {ListTimer.Time()}.");

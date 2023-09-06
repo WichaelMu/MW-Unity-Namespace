@@ -129,14 +129,27 @@ namespace MW
 			if (Items.Length == 1)
 				return Pull(Items[0]);
 
-			int[] IndicesToRemove = new int[Items.Length];
-			int i = 0;
+			// Heap = O(x log(x))
+			// x = x * log(x)
+			// x = 10
+			if (Items.Length <= 10)
+			{
+				foreach (T Item in Items)
+					Pull(Item);
+			}
+			else
+			{
+				int[] IndicesToRemove = new int[Items.Length];
+				int i = 0;
 
-			foreach (T Item in Items)
-				if (Contains(Item))
-					IndicesToRemove[i++] = HashMap[Item].Peek();
+				foreach (T Item in Items)
+					if (Contains(Item))
+						IndicesToRemove[i++] = HashMap[Item].Peek();
 
-			return PullMultiIndex(IndicesToRemove).Num;
+				PullMultiIndex(IndicesToRemove);
+			}
+
+			return Num;
 		}
 
 		/// <summary>Pulls an Item from an Index.</summary>
@@ -159,34 +172,30 @@ namespace MW
 		/// <param name="Indices">The index positions to remove.</param>
 		/// <returns>An MArray of the removed elements.</returns>
 		/// <exception cref="IndexOutOfRangeException">If one of Indices are out of range.</exception>
-		public MArray<T> PullMultiIndex(params int[] Indices)
+		public void PullMultiIndex(params int[] Indices)
 		{
-			MArray<T> RetVal = new MArray<T>(Indices.Length);
-
 			if (Indices.Length == 0)
-				return RetVal;
+				return;
 
 			if (Indices.Length == 1)
 			{
-				RetVal.Push(PullAtIndex(Indices[0]));
-				return RetVal;
+				PullAtIndex(Indices[0]);
+				return;
 			}
 
 			// Descending order.
-			Array.Sort(Indices, (L, R) => L < R ? 1 : -1);
+			MHeap<int> MinHeap = MHeap<int>.Heapify(Indices, (L, R) => L == R ? 0 : L > R ? 1 : -1);
 
-			foreach (int Index in Indices)
+			while (MinHeap.Num != 0)
 			{
+				int Index = MinHeap.RemoveFirst();
 				if (Index >= Num || Index < 0)
-					throw new IndexOutOfRangeException($"Index out of range! Expected Index < {Num} && Index >= 0. Index: {Index}");
+					throw new IndexOutOfRangeException($"Index out of range! Expected Index >= 0 && Index < {Num}. Index: {Index}");
 
-				T ItemAtIndex = PullWithoutRemap(Index);
-				RetVal.Push(ItemAtIndex);
+				PullWithoutRemap(Index);
 			}
 
 			Remap();
-
-			return RetVal;
 		}
 
 		int PullWithoutRemap(T Item)
@@ -292,15 +301,10 @@ namespace MW
 		public T FirstPop()
 		{
 			if (Num <= 0)
-				return default;
+				throw new IndexOutOfRangeException($"Cannot {nameof(FirstPop)} when MArray is Empty!");
 
 			T T = First();
-
-			int[] Positions = Access(T).Positions;
-
-			Items.RemoveAt(Positions[Positions.Length - 1]);
-
-			Remap();
+			PullAtIndex(0);
 
 			return T;
 		}
