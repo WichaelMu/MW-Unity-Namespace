@@ -324,7 +324,7 @@ namespace MTest
 		public void MArrayPushPullTests()
 		{
 			MArray<int> M = new MArray<int>(17);
-			Assert.IsTrue(M.Num == 0,"Num, provided with Initial Size");
+			Assert.IsTrue(M.Num == 0, "Num, provided with Initial Size");
 
 			M.Push(17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
 
@@ -342,7 +342,7 @@ namespace MTest
 			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27 }
 			M.Push(32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41);
 			Assert.AreEqual(40, M.Num);
-			
+
 			//
 			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41 }
 			//
@@ -403,7 +403,7 @@ namespace MTest
 		[TestMethod]
 		public void THeapTests()
 		{
-			THeap<TTestClass> Heap = new(11, (L, R) => L.CompareTo(R));
+			THeap<TTestClass, TTestClass> Heap = new(11, (L, R) => L.CompareTo(R));
 			Heap.Add(new TTestClass(46));
 			Heap.Add(new TTestClass(42));
 			Heap.Add(new TTestClass(52));
@@ -419,7 +419,7 @@ namespace MTest
 			for (byte i = 0; i < Heap.Num; ++i)
 				Assert.IsTrue(Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, "Minimum Heap");
 
-			THeap<TTestClass> Heap1 = new THeap<TTestClass>(3, (L, R) => L.CompareTo(R));
+			THeap<TTestClass, TTestClass> Heap1 = new (3, (L, R) => L.CompareTo(R));
 
 			TTestClass Item1 = new TTestClass(4);
 			TTestClass Item2 = new TTestClass(-1);

@@ -6,7 +6,7 @@ namespace MW.Pathfinding
 	/// <summary>Provides the A* Pathfinding implementation for T.</summary>
 	/// <typeparam name="T">Generic type that implements INode and IHeapItem for T that defines a traversable waypoint.</typeparam>
 	/// <decorations decor="public static class {T} where T : MNode, IHeapItem{T}"></decorations>
-	public static class Pathfinding<T> where T : MNode, IHeapItem<T>
+	public static class Pathfinding<T> where T : MNode
 	{
 		/// <summary>A* pathfinds from Origin to Destination looking uDepth times within a uMapSize.</summary>
 		/// <decorations decor="public static bool"></decorations>
@@ -17,20 +17,20 @@ namespace MW.Pathfinding
 		/// <param name="MapSize">The total size of the map to be traversed. (The number of INodes).</param>
 		/// <param name="bUseDiagnostics">Time the duration of Pathfinding?</param>
 		/// <returns>Whether or not a path was found from Origin to Destination within uDepth in uMapSize.</returns>
-		public static bool AStar(T Origin, T Destination, out MArray<T> Path, uint Depth = int.MaxValue, uint MapSize = 10000, bool bUseDiagnostics = false)
+		public static bool AStar(T Origin, T Destination, out MArray<T> Path, uint Depth = int.MaxValue, int MapSize = 10000, bool bUseDiagnostics = false)
 		{
 			Stopwatch sw = new(bUseDiagnostics);
 
 			Path = new();
 			bool bFoundPath = false;
 
-			THeap<T> Open = new(MapSize, (MNL, MNR) => MNL.CompareTo(MNR));
+			MHeap<T> Open = new(MapSize, (MNL, MNR) => MNL.CompareTo(MNR));
 			HashSet<T> Closed = new();
-			Open.Add(Origin);
+			Open.Push(Origin);
 
 			while (Open.Num > 0 && !bFoundPath && Depth-- != 0)
 			{
-				T Current = Open.RemoveFirst();
+				T Current = Open.RemoveFirst().Element;
 				Closed.Add(Current);
 
 				if (Current == Destination)
@@ -54,11 +54,11 @@ namespace MW.Pathfinding
 
 						if (!Open.Contains(Neighbour))
 						{
-							Open.Add(Neighbour);
+							Open.Push(Neighbour);
 						}
 						else
 						{
-							Open.UpdateItem(Neighbour);
+							Open.UpdateElement(Neighbour);
 						}
 					}
 				}

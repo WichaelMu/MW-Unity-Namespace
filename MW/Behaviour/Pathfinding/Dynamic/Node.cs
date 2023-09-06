@@ -4,10 +4,10 @@ using static MW.Math.Magic.Fast;
 
 namespace MW.Pathfinding
 {
-	/// <summary>A sample Node class for <see cref="Pathfinding{T}.AStar(T, T, out MArray{T}, uint, uint, bool)"/>.</summary>
+	/// <summary>A sample Node class for <see cref="Pathfinding{T}.AStar(T, T, out MArray{T}, uint, int, bool)"/>.</summary>
 	/// <docs>A sample Node class for Pathfinding.</docs>
 	/// <decorations decor="public class Node : MNode, IHeapItem{Node}"></decorations>
-	public class Node : MNode, IHeapItem<Node>
+	public class Node : MNode
 	{
 		public Vector3 Position;
 
