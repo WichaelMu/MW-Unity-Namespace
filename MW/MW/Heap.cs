@@ -57,10 +57,10 @@ namespace MW
 			Num++;
 		}
 
-		/// <summary>Remove the element at the root of this Heap.</summary>
-		/// <decorations decor="public T"></decorations>
+		/// <summary>Remove the Element at the root of this Heap.</summary>
+		/// <decorations decor="public R"></decorations>
 		/// <returns>The element that was removed.</returns>
-		public T RemoveFirst()
+		public R RemoveFirst()
 		{
 			T T_ = Items[0];
 			Num--;
@@ -69,7 +69,7 @@ namespace MW
 			Items[0].HeapItemIndex = 0;
 			SortDown(Items[0]);
 
-			return T_;
+			return T_.Element;
 		}
 
 		/// <summary>Updates Item's position in the Heap.</summary>
@@ -208,6 +208,8 @@ namespace MW
 
 			return Array;
 		}
+
+		protected internal bool InRange(int Index) => Index >= 0 && Index < Num;
 	}
 
 	/// <summary>The Interface that T must implement if it is to be used as a Heap.</summary>
@@ -245,59 +247,68 @@ namespace MW
 		{
 		}
 
+		/// <summary></summary>
+		/// <param name="Element"></param>
 		public void Push(T Element)
 		{
 			THeapInterface<T, T> NewElement = new THeapInterface<T, T>(Element);
 			Add(NewElement);
 		}
 
+		/// <summary></summary>
+		/// <param name="Element"></param>
 		public void UpdateElement(T Element)
 		{
 			if (Find(Element, out THeapInterface<T, T> HeapInterface))
 				UpdateItem(HeapInterface);
 		}
 
+		/// <summary></summary>
+		/// <param name="Element"></param>
+		/// <returns></returns>
+		public bool Contains(T Element) => Find(Element, out _);
+
 		bool Find(T Element, out THeapInterface<T, T> HeapInterface)
 		{
 			THeapInterface<T, T> Root = Items[0];
-			int DepthLimit = Num;
+			int DepthLimit = Num + 1;
 			return RecursiveFind(ref Root, ref Element, out HeapInterface, ref DepthLimit);
 		}
 
 		bool RecursiveFind(ref THeapInterface<T, T> Origin, ref T Element, out THeapInterface<T, T> HeapInterface, ref int DepthLimit)
 		{
+			HeapInterface = default;
+			System.Console.WriteLine($"Finding: {Element} {Origin.Element}");
+
 			if (EqualityCheck(Origin.Element, Element))
 			{
+				System.Console.WriteLine($"Equality: {Element} {Origin.Element}");
 				HeapInterface = Origin;
 				return true;
 			}
 
 			if (DepthLimit-- == 0)
-			{
-				HeapInterface = default;
 				return false;
-			}
+
+			if (SortFunc(Origin.Element, Element) < 0)
+				return false;
 
 			int Left = Origin.HeapItemIndex * 2 + 1;
 			int Right = Origin.HeapItemIndex * 2 + 2;
 
-			if (SortFunc(Items[Left].Element, Element) > 0)
-			{
-				return RecursiveFind(ref Items[Left], ref Element, out HeapInterface, ref DepthLimit);
-			}
+			bool bResult = false;
 
-			if (SortFunc(Items[Right].Element, Element) > 0)
-			{
-				return RecursiveFind(ref Items[Right], ref Element, out HeapInterface, ref DepthLimit);
-			}
+			if (InRange(Left) && SortFunc(Items[Left].Element, Element) > 0)
+				bResult |= RecursiveFind(ref Items[Left], ref Element, out HeapInterface, ref DepthLimit);
 
-			HeapInterface = default;
-			return false;
+			if (InRange(Right) && (!bResult || SortFunc(Items[Right].Element, Element) > 0))
+				bResult |= RecursiveFind(ref Items[Right], ref Element, out HeapInterface, ref DepthLimit);
+
+			HeapInterface ??= default;
+			return bResult;
 		}
 
 		bool EqualityCheck(object A, object B) => (A.Equals(B) || A.GetHashCode() == B.GetHashCode()) && A.GetType() == B.GetType();
-
-		public bool Contains(T Element) => Find(Element, out _);
 	}
 
 	/// <summary>A Heap interface for constructing minimum and maximum Heaps.</summary>

@@ -30,7 +30,7 @@ namespace MW.Pathfinding
 
 			while (Open.Num > 0 && !bFoundPath && Depth-- != 0)
 			{
-				T Current = Open.RemoveFirst().Element;
+				T Current = Open.RemoveFirst();
 				Closed.Add(Current);
 
 				if (Current == Destination)

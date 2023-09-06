@@ -419,7 +419,7 @@ namespace MTest
 			for (byte i = 0; i < Heap.Num; ++i)
 				Assert.IsTrue(Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, "Minimum Heap");
 
-			THeap<TTestClass, TTestClass> Heap1 = new (3, (L, R) => L.CompareTo(R));
+			THeap<TTestClass, TTestClass> Heap1 = new(3, (L, R) => L.CompareTo(R));
 
 			TTestClass Item1 = new TTestClass(4);
 			TTestClass Item2 = new TTestClass(-1);
@@ -437,6 +437,90 @@ namespace MTest
 			Assert.IsFalse(Heap1.Contains(Item1), "Contains 4");
 			Assert.IsFalse(Heap1.Contains(Item2), "Contains 0");
 			Assert.IsTrue(Heap1.Contains(Item3), "Contains 8");
+		}
+
+		[TestMethod]
+		public void MHeapTests()
+		{
+			MHeap<int> MinHeap = new MHeap<int>(3, (L, R) => L == R ? 0 : L < R ? 1 : -1);
+			MinHeap.Push(4);
+			MinHeap.Push(2);
+			MinHeap.Push(3);
+			MinHeap.Push(5);
+			MinHeap.Push(1);
+			MinHeap.Push(3);
+			MinHeap.Push(8);
+			MinHeap.Push(10);
+			MinHeap.Push(9);
+
+			Assert.AreEqual(9, MinHeap.Num, "Num of MHeap");
+
+			Assert.IsTrue(MinHeap.Contains(4), "Contains 4");
+			Assert.IsTrue(MinHeap.Contains(3), "Contains 3");
+			Assert.IsTrue(MinHeap.Contains(1), "Contains 1");
+			Assert.IsFalse(MinHeap.Contains(7), "!Contains 7");
+			Assert.IsFalse(MinHeap.Contains(6), "!Contains 6");
+			Assert.IsFalse(MinHeap.Contains(0), "!Contains 0");
+			Assert.IsFalse(MinHeap.Contains(-3), "!Contains -3");
+			Assert.IsFalse(MinHeap.Contains(-7), "!Contains -7");
+
+			for (int i = 0; i < MinHeap.Num; ++i)
+			{
+				int E = MinHeap.RemoveFirst();
+				int F = MinHeap.RemoveFirst();
+				Assert.IsTrue(E <= F, $"Minimum Heap. {E} < {F}");
+			}
+
+			MHeap<int> MaxHeap = new MHeap<int>(3, (L, R) => L == R ? 0 : L > R ? 1 : -1);
+			MaxHeap.Push(4);
+			MaxHeap.Push(2);
+			MaxHeap.Push(3);
+			MaxHeap.Push(5);
+			MaxHeap.Push(1);
+			MaxHeap.Push(3);
+			MaxHeap.Push(8);
+			MaxHeap.Push(10);
+			MaxHeap.Push(9);
+
+			Assert.AreEqual(9, MaxHeap.Num, "Num of MHeap");
+
+			Console.WriteLine("Beginning Max Heap Searching...");
+			Assert.IsTrue(MaxHeap.Contains(4), "Contains 4");
+			Assert.IsTrue(MaxHeap.Contains(3), "Contains 3");
+			Assert.IsTrue(MaxHeap.Contains(1), "Contains 1");
+			Assert.IsFalse(MaxHeap.Contains(7), "!Contains 7");
+			Assert.IsFalse(MaxHeap.Contains(6), "!Contains 6");
+			Assert.IsFalse(MaxHeap.Contains(0), "!Contains 0");
+			Assert.IsFalse(MaxHeap.Contains(-3), "!Contains -3");
+			Assert.IsFalse(MaxHeap.Contains(-7), "!Contains -7");
+
+			for (int i = 0; i < MaxHeap.Num; ++i)
+			{
+				int E = MaxHeap.RemoveFirst();
+				int F = MaxHeap.RemoveFirst();
+				Assert.IsTrue(E >= F, $"Maximum Heap. {E} > {F}");
+			}
+
+
+			MHeap<TTestClass> Heap1 = new(3, (L, R) => L.CompareTo(R));
+
+			TTestClass Item1 = new TTestClass(4);
+			TTestClass Item2 = new TTestClass(-1);
+			TTestClass Item3 = new TTestClass(8);
+			Heap1.Push(Item1);
+			Heap1.Push(Item2);
+			Heap1.Push(Item3);
+
+			int Num = Heap1.Num; // 3
+			Assert.IsTrue(Heap1.RemoveFirst().Value == -1, "Correct Value -1");
+
+			Num = Heap1.Num; // 2
+			Assert.IsTrue(Heap1.RemoveFirst().Value == 4, "Correct Value 4");
+
+			Assert.IsFalse(Heap1.Contains(Item1), "Contains 4");
+			Assert.IsFalse(Heap1.Contains(Item2), "Contains 0");
+			Assert.IsTrue(Heap1.Contains(Item3), "Contains 8");
+
 		}
 	}
 }
