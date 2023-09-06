@@ -236,19 +236,16 @@ namespace MW
 		/// <summary>Generates a new Heap.</summary>
 		/// <remarks>Initialised with an initial size of 32.</remarks>
 		/// <param name="HeapOrder">The ordering in which to sort T in a heap.</param>
-		public MHeap(SortFunc<T> HeapOrder) : base(HeapOrder)
-		{
-		}
+		public MHeap(SortFunc<T> HeapOrder) : base(HeapOrder) { }
 
 		/// <summary>Generates a new Heap, initialised with MaxSize.</summary>
 		/// <param name="InitialSize">The size of the heap.</param>
 		/// <param name="HeapOrder">The ordering in which to sort T in a heap.</param>
-		public MHeap(int InitialSize, SortFunc<T> HeapOrder) : base(InitialSize, HeapOrder)
-		{
-		}
+		public MHeap(int InitialSize, SortFunc<T> HeapOrder) : base(InitialSize, HeapOrder) { }
 
-		/// <summary></summary>
-		/// <param name="Element"></param>
+		/// <summary>Adds Element to the Heap.</summary>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="Element">The Element to add.</param>
 		public void Push(T Element)
 		{
 			THeapInterface<T, T> NewElement = new THeapInterface<T, T>(Element);
@@ -256,6 +253,7 @@ namespace MW
 		}
 
 		/// <summary>Creates a Heap out of T[] Elements, ordered by SortFunc.</summary>
+		/// <decorations decor="public static MHeap{T}"></decorations>
 		/// <param name="Elements">Elements to Heapify.</param>
 		/// <param name="SortFunc">Priority queue function.</param>
 		/// <returns>A Heap with Elements ordered by SortFunc.</returns>
@@ -267,19 +265,26 @@ namespace MW
 			return RetVal;
 		}
 
+		/// <summary>Params version of above.</summary>
+		/// <decorations decor="public static MHeap{T}"></decorations>
+		/// <param name="SortFunc">Priority queue function.</param>
+		/// <param name="Elements">Elements to Heapify.</param>
+		/// <returns>A Heap with Elements ordered by SortFunc.</returns>
 		public static MHeap<T> Heapify(SortFunc<T> SortFunc, params T[] Elements) => Heapify(Elements, SortFunc);
 
-		/// <summary></summary>
-		/// <param name="Element"></param>
+		/// <summary>Updates an Element's position in the Heap.</summary>
+		/// <decorations decor="public void"></decorations>
+		/// <param name="Element">The Element to update.</param>
 		public void UpdateElement(T Element)
 		{
 			if (Find(Element, out THeapInterface<T, T> HeapInterface))
 				UpdateItem(HeapInterface);
 		}
 
-		/// <summary></summary>
-		/// <param name="Element"></param>
-		/// <returns></returns>
+		/// <summary>Whether or not Element exists in this Heap.</summary>
+		/// <decorations decor="public bool"></decorations>
+		/// <param name="Element">The Element to search for.</param>
+		/// <returns>True if Element exists in the Heap. Otherwise, false.</returns>
 		public bool Contains(T Element) => Find(Element, out _);
 
 		bool Find(T Element, out THeapInterface<T, T> HeapInterface)
@@ -322,7 +327,12 @@ namespace MW
 			return bResult;
 		}
 
-		bool EqualityCheck(object A, object B) => (A.Equals(B) || A.GetHashCode() == B.GetHashCode()) && A.GetType() == B.GetType();
+		/// <summary>Equality Check for type T.</summary>
+		/// <decorations decor="protected virtual bool"></decorations>
+		/// <param name="A"></param>
+		/// <param name="B"></param>
+		/// <returns>True if A is considered equal to B.</returns>
+		protected virtual bool EqualityCheck(T A, T B) => (A.Equals(B) || A.GetHashCode() == B.GetHashCode()) && A.GetType() == B.GetType();
 	}
 
 	/// <summary>A Heap interface for constructing minimum and maximum Heaps.</summary>
@@ -332,19 +342,18 @@ namespace MW
 	public class THeapInterface<T, R> : IHeapItem<R>
 	{
 		/// <summary>The element in this Heap.</summary>
+		/// <decorations decor="public R"></decorations>
 		public R Element { get => Item; set => Item = value; }
 		R Item;
 
 		/// <summary>The index in this Heap.</summary>
-		/// <remarks>This is provided by IHeapItem.</remarks>
+		/// <remarks>This is implemented with IHeapItem.</remarks>
 		/// <decorations decor="public int"></decorations>
 		public int HeapItemIndex { get => HeapIndex; set => HeapIndex = value; }
 
 		int HeapIndex;
 
-		/// <summary></summary>
-		/// <param name="Element"></param>
-		public THeapInterface(R Element)
+		internal THeapInterface(R Element)
 		{
 			this.Element = Element;
 		}
