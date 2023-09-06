@@ -6,7 +6,6 @@ void SwapChars::Replace(std::string& param, const bool is_file_name, const bool 
 	if (!treat_as_template)
 	{
 		param.erase(remove(param.begin(), param.end(), ','), param.end());
-		param.erase(remove(param.begin(), param.end(), '1'), param.end());
 	}
 
 	// Hard-coded replacements.
