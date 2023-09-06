@@ -255,6 +255,20 @@ namespace MW
 			Add(NewElement);
 		}
 
+		/// <summary>Creates a Heap out of T[] Elements, ordered by SortFunc.</summary>
+		/// <param name="Elements">Elements to Heapify.</param>
+		/// <param name="SortFunc">Priority queue function.</param>
+		/// <returns>A Heap with Elements ordered by SortFunc.</returns>
+		public static MHeap<T> Heapify(T[] Elements, SortFunc<T> SortFunc)
+		{
+			MHeap<T> RetVal = new MHeap<T>(Elements.Length, SortFunc);
+			foreach (T Element in Elements)
+				RetVal.Push(Element);
+			return RetVal;
+		}
+
+		public static MHeap<T> Heapify(SortFunc<T> SortFunc, params T[] Elements) => Heapify(Elements, SortFunc);
+
 		/// <summary></summary>
 		/// <param name="Element"></param>
 		public void UpdateElement(T Element)
