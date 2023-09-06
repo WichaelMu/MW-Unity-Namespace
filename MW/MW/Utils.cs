@@ -11,6 +11,11 @@ using UnityEngine;
 
 namespace MW
 {
+	/// <summary>Sorting delegate function.</summary>
+	/// <typeparam name="T">Type to compare.</typeparam>
+	/// <param name="L">Left T.</param>
+	/// <param name="R">Right T.</param>
+	/// <returns>1 if L > R. -1 if L &lt; R. 0 if L == R.</returns>
 	public delegate int SortFunc<in T>(T L, T R);
 
 	/// <summary>Helper Variables and Functions.</summary>
