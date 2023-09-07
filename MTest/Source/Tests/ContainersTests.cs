@@ -522,7 +522,41 @@ namespace MTest
 			Assert.IsFalse(Heap1.Contains(Item1), "Contains 4");
 			Assert.IsFalse(Heap1.Contains(Item2), "Contains 0");
 			Assert.IsTrue(Heap1.Contains(Item3), "Contains 8");
+		}
 
+		[TestMethod]
+		public void MDequeTests()
+		{
+			MDeque<int> Deque = new MDeque<int>(3);
+			Assert.AreEqual(0, Deque.Num);
+			Deque.AddLead(3);
+			Deque.AddLead(1);
+			Deque.AddLead(2);
+
+			Assert.AreEqual(3, Deque.Num);
+			Assert.AreEqual(Deque.Lead(), 2);
+			Assert.AreEqual(Deque.End(), 3);
+
+			Deque.AddEnd(5);
+			Deque.AddEnd(4);
+			Deque.AddEnd(6);
+
+			Assert.AreEqual(6, Deque.Num);
+			Assert.AreEqual(Deque.Lead(), 2);
+			Assert.AreEqual(Deque.End(), 6);
+
+			// { 2, 1, 3, 5, 4, 6 }
+			int L = Deque.PopLead();
+
+			Assert.AreEqual(5, Deque.Num);
+			Assert.AreEqual(L, 2);
+			Assert.AreEqual(Deque.Lead(), 1);
+
+			// { 1, 3, 5, 4, 6 }
+			int E = Deque.PopEnd();
+			Assert.AreEqual(4, Deque.Num);
+			Assert.AreEqual(E, 6);
+			Assert.AreEqual(Deque.End(), 4);
 		}
 	}
 }
