@@ -16,30 +16,26 @@ namespace MW
 	/// <typeparam name="T">The type to store in this heap.</typeparam>
 	/// <typeparam name="R">The raw type to use for comparisons.</typeparam>
 	/// <decorations decor="public class {T} where T : IHeapItem"></decorations>
-	public class THeap<T, R> where T : IHeapItem<R>
+	public class THeap<T, R> : MContainer<T> where T : IHeapItem<R>
 	{
-		protected T[] Items;
 		protected SortFunc<R> SortFunc;
-
-		/// <summary>The number of elements in the heap.</summary>
-		/// <decorations decor="public int"></decorations>
-		public int Num;
 
 		/// <summary>Generates a new Heap.</summary>
 		/// <remarks>Initialised with an initial size of 32.</remarks>
 		/// <param name="HeapOrder">The ordering in which to sort T in a heap.</param>
-		public THeap(SortFunc<R> HeapOrder)
+		public THeap(SortFunc<R> HeapOrder) : base(32)
 		{
 			SortFunc = HeapOrder;
-			Items = new T[32];
 		}
 
 		/// <summary>Generates a new Heap, initialised with MaxSize.</summary>
 		/// <param name="InitialSize">The size of the heap.</param>
 		/// <param name="HeapOrder">The ordering in which to sort T in a heap.</param>
-		public THeap(int InitialSize, SortFunc<R> HeapOrder) : this(HeapOrder)
+		public THeap(int InitialSize, SortFunc<R> HeapOrder)
 		{
-			Items = new T[InitialSize];
+			SortFunc = HeapOrder;
+			Elements = new T[InitialSize];
+			Num = 0;
 		}
 
 		/// <summary>Adds an item to this Heap.</summary>
@@ -47,11 +43,11 @@ namespace MW
 		/// <param name="Item">The item to add.</param>
 		public void Add(T Item)
 		{
-			if (Num == Items.Length)
+			if (Num == Elements.Length)
 				Resize(Num + 5);
 
 			Item.HeapItemIndex = Num;
-			Items[Num] = Item;
+			Elements[Num] = Item;
 
 			SortUp(Item);
 			Num++;
@@ -62,12 +58,12 @@ namespace MW
 		/// <returns>The element that was removed.</returns>
 		public R RemoveFirst()
 		{
-			T T_ = Items[0];
+			T T_ = Elements[0];
 			Num--;
 
-			Items[0] = Items[Num];
-			Items[0].HeapItemIndex = 0;
-			SortDown(Items[0]);
+			Elements[0] = Elements[Num];
+			Elements[0].HeapItemIndex = 0;
+			SortDown(Elements[0]);
 
 			return T_.Element;
 		}
@@ -101,7 +97,7 @@ namespace MW
 		/// <decorations decor="public bool"></decorations>
 		/// <param name="Item">The Item to check.</param>
 		/// <returns>True if Item exists in this Heap.</returns>
-		public bool Contains(T Item) => Equals(Items[Item.HeapItemIndex], Item);
+		public bool Contains(T Item) => Equals(Elements[Item.HeapItemIndex], Item);
 
 		/// <summary>Clears this Heap.</summary>
 		/// <decorations decor="public void"></decorations>
@@ -109,25 +105,9 @@ namespace MW
 		{
 			if (Num > 0)
 			{
-				System.Array.Clear(Items, 0, Num);
+				System.Array.Clear(Elements, 0, Num);
 				Num = 0;
 			}
-		}
-
-		/// <summary>Reduces this Heap's memory usage to smallest possible required to store its elements.</summary>
-		/// <decorations decor="public T[]"></decorations>
-		/// <returns>The shrunk array.</returns>
-		public T[] Shrink()
-		{
-			Resize(Num);
-			return Array();
-		}
-
-		void Resize(int NewSize)
-		{
-			T[] Resized = new T[NewSize];
-			System.Array.Copy(Items, Resized, Num);
-			Items = Resized;
 		}
 
 		void SortDown(T Item)
@@ -144,15 +124,15 @@ namespace MW
 
 					if (nRight < Num)
 					{
-						if (SortFunc(Items[nLeft].Element, Items[nRight].Element) < 0)
+						if (SortFunc(Elements[nLeft].Element, Elements[nRight].Element) < 0)
 						{
 							nSwap = nRight;
 						}
 					}
 
-					if (SortFunc(Item.Element, Items[nSwap].Element) < 0)
+					if (SortFunc(Item.Element, Elements[nSwap].Element) < 0)
 					{
-						Swap(Item, Items[nSwap]);
+						Swap(Item, Elements[nSwap]);
 					}
 					else
 					{
@@ -172,7 +152,7 @@ namespace MW
 
 			while (true)
 			{
-				T TParent = Items[nParent];
+				T TParent = Elements[nParent];
 
 				if (SortFunc(Item.Element, TParent.Element) > 0)
 				{
@@ -189,8 +169,8 @@ namespace MW
 
 		void Swap(T T1, T T2)
 		{
-			Items[T1.HeapItemIndex] = T2;
-			Items[T2.HeapItemIndex] = T1;
+			Elements[T1.HeapItemIndex] = T2;
+			Elements[T2.HeapItemIndex] = T1;
 
 			int _ = T1.HeapItemIndex;
 			T1.HeapItemIndex = T2.HeapItemIndex;
@@ -200,16 +180,14 @@ namespace MW
 		/// <summary>The Heap as a T[].</summary>
 		/// <decorations decor="public T[]"></decorations>
 		/// <returns>T[] in the order of this THeap.</returns>
-		public T[] Array()
+		public override T[] TArray()
 		{
 			T[] Array = new T[Num];
 			for (int i = 0; i < Num; ++i)
-				Array[i] = Items[i];
+				Array[i] = Elements[i];
 
 			return Array;
 		}
-
-		protected internal bool InRange(int Index) => Index >= 0 && Index < Num;
 	}
 
 	/// <summary>The Interface that T must implement if it is to be used as a Heap.</summary>
@@ -289,7 +267,7 @@ namespace MW
 
 		bool Find(T Element, out THeapInterface<T, T> HeapInterface)
 		{
-			THeapInterface<T, T> Root = Items[0];
+			THeapInterface<T, T> Root = Elements[0];
 			int DepthLimit = Num + 1;
 			return RecursiveFind(ref Root, ref Element, out HeapInterface, ref DepthLimit);
 		}
@@ -317,11 +295,11 @@ namespace MW
 
 			bool bResult = false;
 
-			if (InRange(Left) && SortFunc(Items[Left].Element, Element) > 0)
-				bResult |= RecursiveFind(ref Items[Left], ref Element, out HeapInterface, ref DepthLimit);
+			if (InRange(Left) && SortFunc(Elements[Left].Element, Element) > 0)
+				bResult |= RecursiveFind(ref Elements[Left], ref Element, out HeapInterface, ref DepthLimit);
 
-			if (InRange(Right) && (!bResult || SortFunc(Items[Right].Element, Element) > 0))
-				bResult |= RecursiveFind(ref Items[Right], ref Element, out HeapInterface, ref DepthLimit);
+			if (InRange(Right) && (!bResult || SortFunc(Elements[Right].Element, Element) > 0))
+				bResult |= RecursiveFind(ref Elements[Right], ref Element, out HeapInterface, ref DepthLimit);
 
 			HeapInterface ??= default;
 			return bResult;
