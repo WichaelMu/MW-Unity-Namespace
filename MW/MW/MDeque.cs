@@ -3,10 +3,16 @@ using System.Runtime.CompilerServices;
 
 namespace MW
 {
+	/// <summary>The implementation of a double-ended Queue; a 'Deque'.</summary>
+	/// <typeparam name="T">The type to store in this Deque.</typeparam>
+	/// <decorations decor="public class {T} : MContainer{T}"></decorations>
 	public class MDeque<T> : MContainer<T>
 	{
-		public MDeque() : this(32) { }
+		/// <summary>Initialisation of a new MDeque with an Initial Size of T-defaulted Elements.</summary>
+		/// <param name="InitialSize">Initial capacity of Elements.</param>
 		public MDeque(int InitialSize) : base(InitialSize) { }
+		/// <summary>Initialisation of a new MDeque with 32 T-defaulted Elements.</summary>
+		public MDeque() : this(32) { }
 
 		/// <summary>Adds an Element to the front of the Queue.</summary>
 		/// <decorations decor="public void"></decorations>
