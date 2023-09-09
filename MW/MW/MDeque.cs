@@ -5,7 +5,7 @@ namespace MW
 {
 	public class MDeque<T> : MContainer<T>
 	{
-		public MDeque() : base() { }
+		public MDeque() : this(32) { }
 		public MDeque(int InitialSize) : base(InitialSize) { }
 
 		/// <summary>Adds an Element to the front of the Queue.</summary>

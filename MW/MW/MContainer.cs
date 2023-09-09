@@ -20,7 +20,7 @@ namespace MW
 		/// <param name="InitialSize">Initial capacity of Elements.</param>
 		public MContainer(int InitialSize)
 		{
-			Elements = new T[InitialSize];
+			Elements = new T[FMath.Max(32, InitialSize)];
 			Num = 0;
 		}
 
