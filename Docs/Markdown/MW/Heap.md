@@ -16,6 +16,8 @@ MContainer<T>
 THeap provides the raw implementation of the MW Heap data structure, while MHeap provides the user-
 friendly API. To use MW Heaps, instantiate MHeap, instead of THeap.
 
+Both Heaps are available in RELEASE and STANDALONE builds.
+
 ## MW.MHeap&lt;T&gt;
 
 This class provides Heap functionality to any generic type `T`. Unlike `THeap<T, R>`, this means
