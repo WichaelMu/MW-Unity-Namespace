@@ -534,8 +534,8 @@ namespace MTest
 			Deque.AddLead(2);
 
 			Assert.AreEqual(3, Deque.Num);
-			Assert.AreEqual(Deque.Lead(), 2);
-			Assert.AreEqual(Deque.End(), 3);
+			Assert.AreEqual(2, Deque.Lead());
+			Assert.AreEqual(3, Deque.End());
 
 			Deque.AddEnd(5);
 			Deque.AddEnd(4);
