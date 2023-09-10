@@ -157,7 +157,7 @@ namespace MTest
 
 			AD = M.Access(T1);
 			Assert.IsTrue(AD.Occurrences == 3 && AD.Positions.Length == AD.Occurrences);
-			Assert.IsTrue(AD.Positions[0] == 9 && AD.Positions[1] == 8 && AD.Positions[2] == 0);
+			Assert.IsTrue(AD.Positions[0] == 0 && AD.Positions[1] == 8 && AD.Positions[2] == 9);
 			Assert.IsTrue(M.Contains(T1));
 			M.Pull(T1);
 			Assert.IsTrue(M.Contains(T1));
@@ -184,8 +184,8 @@ namespace MTest
 
 			Assert.IsTrue(AD.Occurrences == 2 && AD.Positions.Length == AD.Occurrences);
 
-			Assert.IsTrue(AD.Positions[0] == M.Num - 1);
-			Assert.IsTrue(AD.Positions[1] == (M.Num - 1) / 2);
+			Assert.IsTrue(AD.Positions[0] == 14);
+			Assert.IsTrue(AD.Positions[1] == M.Num - 1, $"{AD.Positions[1]} {M.Num-1}");
 
 			M.Flush();
 
@@ -201,7 +201,7 @@ namespace MTest
 			int[] Positions = M2.Access(8).Positions;
 			bool bIsContinuous = true;
 			for (int i = 0; i < Positions.Length - 1 && bIsContinuous; ++i)
-				bIsContinuous = Positions[i] == Positions[i + 1] + 1;
+				bIsContinuous = Positions[i] == Positions[i + 1] - 1;
 			Assert.IsTrue(bIsContinuous);
 
 			M2.Pull(9); // No effect.
@@ -216,7 +216,7 @@ namespace MTest
 			M3.Push(2.4f, 2.4f, 4.667f, 1.6f, 1.6f, -.5f);
 			Access = M3.Access(2.4f);
 			Assert.IsTrue(Access.Occurrences == 2);
-			Assert.IsTrue(Access.Positions[0] == 1 && Access.Positions[1] == 0);
+			Assert.IsTrue(Access.Positions[0] == 0 && Access.Positions[1] == 1);
 
 			Assert.IsTrue(M3.FirstPop() == 2.4f);
 			Access = M3.Access(2.4f);
@@ -238,7 +238,7 @@ namespace MTest
 			Access = M3.Access(1.6f);
 
 			Assert.IsTrue(Access.Occurrences == 2);
-			Assert.IsTrue(Access.Positions[0] == 2 && Access.Positions[1] == 1);
+			Assert.IsTrue(Access.Positions[0] == 1 && Access.Positions[1] == 2);
 			Assert.IsTrue(M3.TopPop() == -.5f);
 			Assert.IsTrue(M3.TopPop() == 1.6f);
 			Assert.IsTrue(M3.Contains(1.6f));
@@ -298,7 +298,10 @@ namespace MTest
 			M3.Push(1.4f, 1.4f, 6f, 6f, 1.4f, 1.4f);
 			M3.Pull(6f);
 			Access = M3.Access(1.4f);
-			Assert.IsTrue(Access.Positions[0] == 4);
+			Assert.IsTrue(Access.Positions[^1] == 4);
+			Assert.IsTrue(Access.Positions[0] == 0);
+			Assert.IsTrue(Access.Positions[1] == 1);
+			Assert.IsTrue(Access.Positions[2] == 3);
 		}
 
 		[TestMethod]

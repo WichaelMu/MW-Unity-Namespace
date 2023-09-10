@@ -17,7 +17,7 @@ namespace MW
 #endif
 		List<T> Items;
 
-		Dictionary<T, Stack<int>> HashMap;
+		Dictionary<T, MDeque<int>> HashMap;
 
 		/// <summary>The number of T in this MArray; the size.</summary>
 		/// <decorations decor="public int"></decorations>
@@ -53,7 +53,7 @@ namespace MW
 				HashMap.Add(Item, new());
 			}
 
-			HashMap[Item].Push(Num);
+			HashMap[Item].AddEnd(Num);
 
 			Items.Add(Item);
 		}
@@ -144,7 +144,7 @@ namespace MW
 
 				foreach (T Item in Items)
 					if (Contains(Item))
-						IndicesToRemove[i++] = HashMap[Item].Peek();
+						IndicesToRemove[i++] = HashMap[Item].End();
 
 				PullMultiIndex(IndicesToRemove);
 			}
@@ -200,9 +200,9 @@ namespace MW
 
 		int PullWithoutRemap(T Item)
 		{
-			Items.RemoveAt(HashMap[Item].Pop());
+			Items.RemoveAt(HashMap[Item].PopEnd());
 
-			if (HashMap[Item].Count == 0)
+			if (HashMap[Item].Num == 0)
 			{
 				HashMap.Remove(Item);
 			}
@@ -261,13 +261,9 @@ namespace MW
 
 			AccessedData Data = new()
 			{
-				Occurrences = HashMap[Item].Count,
-				Positions = new int[HashMap[Item].Count]
+				Occurrences = HashMap[Item].Num,
+				Positions = HashMap[Item].TArray()
 			};
-
-			int i = 0;
-			foreach (int Position in HashMap[Item])
-				Data.Positions[i++] = Position;
 
 			return Data;
 		}
@@ -278,7 +274,7 @@ namespace MW
 				return kInvalid;
 
 			if (SearchDirection == ESearchDirection.LatestPush)
-				return HashMap[Item].Peek();
+				return HashMap[Item].End();
 
 			AccessedData Data = Access(Item);
 			return Data.Positions[Data.Positions.Length - 1];
@@ -480,7 +476,7 @@ namespace MW
 					HashMap.Add(Items[i], new());
 				}
 
-				HashMap[Items[i]].Push(i);
+				HashMap[Items[i]].AddEnd(i);
 			}
 		}
 
