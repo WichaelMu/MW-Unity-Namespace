@@ -275,11 +275,9 @@ namespace MW
 		bool RecursiveFind(ref THeapInterface<T, T> Origin, ref T Element, out THeapInterface<T, T> HeapInterface, ref int DepthLimit)
 		{
 			HeapInterface = default;
-			System.Console.WriteLine($"Finding: {Element} {Origin.Element}");
 
 			if (EqualityCheck(Origin.Element, Element))
 			{
-				System.Console.WriteLine($"Equality: {Element} {Origin.Element}");
 				HeapInterface = Origin;
 				return true;
 			}
