@@ -90,7 +90,12 @@ namespace MW
 		/// <decorations decor="public override T[]"></decorations>
 		/// <returns>T[].</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override T[] TArray() => Elements;
+		public override T[] TArray()
+		{
+			T[] RetVal = new T[Num];
+			Array.Copy(Elements, RetVal, Num);
+			return RetVal;
+		}
 
 		/// <summary>Square bracket accessor.</summary>
 		/// <decorations decor="public T"></decorations>
