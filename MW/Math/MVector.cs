@@ -342,11 +342,11 @@ namespace MW
 
 		/// <summary>Rotates this MVector at an angle of AngleDegrees around Axis.</summary>
 		/// <remarks>
-		/// <b>While looking towards Axis:</b><br></br>
+		/// <b>While looking in the direction of Axis:</b><br></br>
 		/// + Angle is CW. - Angle is CCW.
 		/// </remarks>
 		/// <docremarks>
-		/// While looking towards Axis:&lt;br&gt;
+		/// While looking in the direction of Axis:&lt;br&gt;
 		/// + Angle is CW. - Angle is CCW.
 		/// </docremarks>
 		/// <decorations decors="public MVector"></decorations>
