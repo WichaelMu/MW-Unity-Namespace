@@ -95,15 +95,15 @@ namespace MW.Behaviour
 
 
 		[Header("Optimisations")]
-		static SpringArm MainSpringArmComponent;
-		/// <summary>The maximum <see cref="SpringArm.Distance"/> before FABRIK turns off.</summary>
+		static MSpringArm MainSpringArmComponent;
+		/// <summary>The maximum <see cref="MSpringArm.Distance"/> before FABRIK turns off.</summary>
 		/// <docs>The maximum SpringArm.Distance before FABRIK turns off.</docs>
 		/// <decorations decor="[SerializeField] protected float"></decorations>
 		[SerializeField, Tooltip("The Maximum Distance a Spring Arm can be before FABRIK turns off.")] protected float SpringArmThreshold = 15;
 		/// <summary>The maximum distance the Camera can be before FABRIK turns off.</summary>
 		/// <remarks>
 		/// <b>
-		/// Assumes that <see cref="SpringArm.Boom"/> is the Camera.
+		/// Assumes that <see cref="MSpringArm"/> is a Camera.
 		/// <br></br>
 		/// <i>Will not work otherwise!</i>
 		/// </b>
@@ -131,13 +131,13 @@ namespace MW.Behaviour
 
 		/// <summary>Initialises the <see cref="MainSpringArmComponent"/>.</summary>
 		/// <docs>Initialises MainSpringArmComponent.</docs>
-		/// <remarks>Assumes that <see cref="Camera.main"/> has a <see cref="SpringArm"/> attached to it.</remarks>
+		/// <remarks>Assumes that <see cref="Camera.main"/> has a <see cref="MSpringArm"/> attached to it.</remarks>
 		/// <docremarks>Assumes that Camera.main has a SpringArm attached to it.</docremarks>
 		/// <decorations decor="protected virtual void"></decorations>
 		protected virtual void Start()
 		{
 			if (!MainSpringArmComponent)
-				MainSpringArmComponent = Camera.main.GetComponent<SpringArm>();
+				MainSpringArmComponent = Camera.main.GetComponent<MSpringArm>();
 
 			if (!MainSpringArmComponent)
 				Debug.LogWarning("The Camera has no Spring Arm Component. Optimisations made to FABRIK will be switched off.");
@@ -444,7 +444,7 @@ namespace MW.Behaviour
 			if (MainSpringArmComponent)
 			{
 				Vector3 FABRIK = transform.position;
-				Vector3 Camera = MainSpringArmComponent.Boom.transform.position;
+				Vector3 Camera = MainSpringArmComponent.transform.position;
 
 				float A = FABRIK.x - Camera.x;
 				float B = FABRIK.y - Camera.y;

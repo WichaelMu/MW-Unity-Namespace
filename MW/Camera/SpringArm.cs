@@ -18,7 +18,8 @@ namespace MW.CameraUtils
 		[SerializeField, Space(10)] MRotator ArmRotation;
 		[SerializeField] MVector Offset;
 
-		[SerializeField, Space(10)] float Distance;
+		[Space(10)]
+		public float Distance;
 
 		[Header("Collision Settings")]
 		[SerializeField] MSpringArmCollision CollisionSettings;
