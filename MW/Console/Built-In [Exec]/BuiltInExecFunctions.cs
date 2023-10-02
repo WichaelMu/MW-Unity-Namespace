@@ -131,6 +131,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Sets the Velocity of a Rigidbody.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="R"></param>
 		/// <param name="Velocity"></param>
 		[BuiltInExec("Sets the velocity of a Rigidbody.")]
@@ -140,6 +141,7 @@ namespace MW.Console
 		}
 
 		/// <summary>Zero-out a Rigidbody's velocity.</summary>
+		/// <decorations decor="public static void"></decorations>
 		/// <param name="R"></param>
 		[BuiltInExec("Zero-out a Rigidbody's velocity.")]
 		public static void SetZeroVelocity(Rigidbody R)
