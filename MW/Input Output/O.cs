@@ -144,6 +144,8 @@ namespace MW.IO
 
 		/// <summary>Whether or not a file exists.</summary>
 		/// <decorations decor="public static bool"></decorations>
+		/// <param name="NameOfFile">Name of the file to check, including its extension.</param>
+		/// <param name="Path">The path to check.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool FileExists(string Path, string NameOfFile)
 		{

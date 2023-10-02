@@ -6,7 +6,6 @@ void SwapChars::Replace(std::string& param, const bool is_file_name, const bool 
 	if (!treat_as_template)
 	{
 		param.erase(remove(param.begin(), param.end(), ','), param.end());
-		param.erase(remove(param.begin(), param.end(), '1'), param.end());
 	}
 
 	// Hard-coded replacements.
@@ -126,7 +125,7 @@ void SwapChars::BuildTranslator()
 	translator["UInt64"] = "uint";
 	translator["Double"] = "double";
 	translator["SByte"] = "sbyte";
-	translator["Int6"] = "short";
+	translator["Int16"] = "short";
 
 	// Reference/Out Types.
 	translator["Single@"] = "float&";
@@ -136,7 +135,7 @@ void SwapChars::BuildTranslator()
 	translator["UInt32@"] = "uint&";
 	translator["Double@"] = "double&";
 	translator["SByte@"] = "sbyte&";
-	translator["Int6@"] = "short&";
+	translator["Int16@"] = "short&";
 
 	// Array / Params.
 	translator["Single[]"] = "float[]";
@@ -146,7 +145,7 @@ void SwapChars::BuildTranslator()
 	translator["UInt32[]"] = "uint[]";
 	translator["Double[]"] = "double[]";
 	translator["SByte[]"] = "sbyte[]";
-	translator["Int6[]"] = "short[]";
+	translator["Int16[]"] = "short[]";
 
 	translator["op_Addition"] = "operator+";
 	translator["op_Subtraction"] = "operator-";

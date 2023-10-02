@@ -11,9 +11,12 @@ namespace MTest
 		public TTestClass(int Value)
 		{
 			this.Value = Value;
+			Instance = this;
 		}
 
 		public int HeapItemIndex { get => Index; set => Index = value; }
+		public TTestClass Element { get => Instance; set => Instance = value; }
+		public TTestClass Instance;
 
 		public int CompareTo(TTestClass? Other)
 		{
@@ -30,7 +33,12 @@ namespace MTest
 
 		public override int GetHashCode()
 		{
-			return Value.GetHashCode();
+			return Value;
+		}
+
+		public override string ToString()
+		{
+			return Value.ToString();
 		}
 
 		public static implicit operator int(TTestClass TTC) => TTC.Value;

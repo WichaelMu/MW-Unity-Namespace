@@ -44,7 +44,7 @@ namespace MW.Diagnostics
 		/// <param name="ArrowHeadLength">The length of the Arrow head.</param>
 		/// <param name="ArrowHeadAngle">The angle of the Arrow head.</param>
 		/// <param name="Duration">The Duration in seconds in which to show this arrow.</param>
-		public static void DebugArrow(Vector3 Position, Vector3 Direction, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = 2f)
+		public static void DebugArrow(Vector3 Position, Vector3 Direction, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = .02f)
 		{
 			DebugArrow(Position, Direction, Color.white, ArrowHeadLength, ArrowHeadAngle, Duration);
 		}
@@ -57,7 +57,7 @@ namespace MW.Diagnostics
 		/// <param name="ArrowHeadLength">The length of the Arrow head.</param>
 		/// <param name="ArrowHeadAngle">The angle of the Arrow head.</param>
 		/// <param name="Duration">The Duration in seconds in which to show this arrow.</param>
-		public static void DebugArrow(Vector3 Position, Vector3 Direction, Color Colour, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = 2f)
+		public static void DebugArrow(Vector3 Position, Vector3 Direction, Color Colour, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = .02f)
 		{
 			Debug.DrawRay(Position, Direction, Colour, Duration);
 
@@ -106,7 +106,7 @@ namespace MW.Diagnostics
 		/// <param name="ArrowHeadLength">The length of the Arrow head.</param>
 		/// <param name="ArrowHeadAngle">The angle of the Arrow head.</param>
 		/// <param name="Duration">The Duration in seconds in which to show this arrow.</param>
-		public static void DebugArrow(MVector Position, MVector Direction, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = 2f)
+		public static void DebugArrow(MVector Position, MVector Direction, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = .02f)
 		{
 			DebugArrow(Position, Direction, Color.white, ArrowHeadLength, ArrowHeadAngle, Duration);
 		}
@@ -119,7 +119,7 @@ namespace MW.Diagnostics
 		/// <param name="ArrowHeadLength">The length of the Arrow head.</param>
 		/// <param name="ArrowHeadAngle">The angle of the Arrow head.</param>
 		/// <param name="Duration">The Duration in seconds in which to show this arrow.</param>
-		public static void DebugArrow(MVector Position, MVector Direction, Color Colour, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = 2f)
+		public static void DebugArrow(MVector Position, MVector Direction, Color Colour, float ArrowHeadLength = .25f, float ArrowHeadAngle = 20f, float Duration = .02f)
 		{
 			Debug.DrawRay(Position, Direction, Colour, Duration);
 

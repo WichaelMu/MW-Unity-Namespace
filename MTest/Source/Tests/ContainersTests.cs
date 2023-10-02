@@ -157,7 +157,7 @@ namespace MTest
 
 			AD = M.Access(T1);
 			Assert.IsTrue(AD.Occurrences == 3 && AD.Positions.Length == AD.Occurrences);
-			Assert.IsTrue(AD.Positions[0] == 9 && AD.Positions[1] == 8 && AD.Positions[2] == 0);
+			Assert.IsTrue(AD.Positions[0] == 0 && AD.Positions[1] == 8 && AD.Positions[2] == 9);
 			Assert.IsTrue(M.Contains(T1));
 			M.Pull(T1);
 			Assert.IsTrue(M.Contains(T1));
@@ -184,8 +184,8 @@ namespace MTest
 
 			Assert.IsTrue(AD.Occurrences == 2 && AD.Positions.Length == AD.Occurrences);
 
-			Assert.IsTrue(AD.Positions[0] == M.Num - 1);
-			Assert.IsTrue(AD.Positions[1] == (M.Num - 1) / 2);
+			Assert.IsTrue(AD.Positions[0] == 14);
+			Assert.IsTrue(AD.Positions[1] == M.Num - 1, $"{AD.Positions[1]} {M.Num-1}");
 
 			M.Flush();
 
@@ -201,7 +201,7 @@ namespace MTest
 			int[] Positions = M2.Access(8).Positions;
 			bool bIsContinuous = true;
 			for (int i = 0; i < Positions.Length - 1 && bIsContinuous; ++i)
-				bIsContinuous = Positions[i] == Positions[i + 1] + 1;
+				bIsContinuous = Positions[i] == Positions[i + 1] - 1;
 			Assert.IsTrue(bIsContinuous);
 
 			M2.Pull(9); // No effect.
@@ -216,7 +216,7 @@ namespace MTest
 			M3.Push(2.4f, 2.4f, 4.667f, 1.6f, 1.6f, -.5f);
 			Access = M3.Access(2.4f);
 			Assert.IsTrue(Access.Occurrences == 2);
-			Assert.IsTrue(Access.Positions[0] == 1 && Access.Positions[1] == 0);
+			Assert.IsTrue(Access.Positions[0] == 0 && Access.Positions[1] == 1);
 
 			Assert.IsTrue(M3.FirstPop() == 2.4f);
 			Access = M3.Access(2.4f);
@@ -238,7 +238,7 @@ namespace MTest
 			Access = M3.Access(1.6f);
 
 			Assert.IsTrue(Access.Occurrences == 2);
-			Assert.IsTrue(Access.Positions[0] == 2 && Access.Positions[1] == 1);
+			Assert.IsTrue(Access.Positions[0] == 1 && Access.Positions[1] == 2);
 			Assert.IsTrue(M3.TopPop() == -.5f);
 			Assert.IsTrue(M3.TopPop() == 1.6f);
 			Assert.IsTrue(M3.Contains(1.6f));
@@ -298,14 +298,36 @@ namespace MTest
 			M3.Push(1.4f, 1.4f, 6f, 6f, 1.4f, 1.4f);
 			M3.Pull(6f);
 			Access = M3.Access(1.4f);
-			Assert.IsTrue(Access.Positions[0] == 4);
+			Assert.IsTrue(Access.Positions[^1] == 4);
+			Assert.IsTrue(Access.Positions[0] == 0);
+			Assert.IsTrue(Access.Positions[1] == 1);
+			Assert.IsTrue(Access.Positions[2] == 3);
+		}
+
+		[TestMethod]
+		public void MArrayCopy()
+		{
+			MArray<float> M = new MArray<float>();
+			M.Push(1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f, 1.7f, 1.8f, 1.9f, 2f);
+
+			MArray<float> W = new MArray<float>();
+			MArray<float>.Copy(W, M, 3, M.Num - 3);
+
+			Assert.IsNotNull(W);
+			Assert.IsFalse(W.IsEmpty());
+			Assert.AreEqual(M.Num - 3, W.Num);
+			Assert.AreEqual(M[3], W[0]);
+
+			MArray<float> E = new MArray<float>();
+			Assert.ThrowsException<IndexOutOfRangeException>(() => MArray<float>.Copy(E, M, -4, M.Num + 4), "Start < 0.");
+			MArray<float>.Copy(W, M, 0, 0);
 		}
 
 		[TestMethod]
 		public void MArrayPushPullTests()
 		{
 			MArray<int> M = new MArray<int>(17);
-			Assert.IsTrue(M.Num == 0,"Num, provided with Initial Size");
+			Assert.IsTrue(M.Num == 0, "Num, provided with Initial Size");
 
 			M.Push(17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
 
@@ -323,7 +345,7 @@ namespace MTest
 			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27 }
 			M.Push(32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41);
 			Assert.AreEqual(40, M.Num);
-			
+
 			//
 			// { 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41 }
 			//
@@ -340,11 +362,12 @@ namespace MTest
 			//                                                                                                  __      __              __      __          __
 			// { 17, 16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 33, 34, 33, 35, 36, 37, 33, 38, 33, 39, 40, 33, 41 }
 			M.PullAll(33);
+			// {  0,  1,  2,  3,  4,  5,  6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 }
 			// { 17, 16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 18, 19, 20, 21, 26, 23, 24, 25, 27, 32, 34, 35, 36, 37, 38, 39, 40, 41 }
 			Assert.AreEqual(5, Data.Occurrences);
 			Assert.AreEqual(34, M.Num);
 
-			M.PullMulti(13, 34, 19, 20, 6, 41, 21, 1, 38);
+			M.Pull(13, 34, 19, 20, 6, 41, 21, 1, 38);
 			Console.WriteLine(M.Print(Separator: " "));
 			Assert.AreEqual(25, M.Num);
 			Assert.IsFalse(M.Contains(13));
@@ -359,6 +382,7 @@ namespace MTest
 
 			// {  0,  1,  2,  3,  4,  5, 6, 7, 8, 9, 10,11,12,13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 }
 			// { 17, 16, 14, 12, 11, 10, 9, 8, 7, 5, 4, 3, 2, 18, 26, 23, 24, 25, 27, 32, 35, 36, 37, 39, 40 }
+			Assert.IsTrue(M.Contains(12));
 			M.PullAtIndex(3);
 			Assert.IsFalse(M.Contains(12));
 			Assert.AreEqual(24, M.Num);
@@ -384,7 +408,7 @@ namespace MTest
 		[TestMethod]
 		public void THeapTests()
 		{
-			THeap<TTestClass> Heap = new(11, (L, R) => L.CompareTo(R));
+			THeap<TTestClass, TTestClass> Heap = new(11, (L, R) => L.CompareTo(R));
 			Heap.Add(new TTestClass(46));
 			Heap.Add(new TTestClass(42));
 			Heap.Add(new TTestClass(52));
@@ -400,7 +424,7 @@ namespace MTest
 			for (byte i = 0; i < Heap.Num; ++i)
 				Assert.IsTrue(Heap.RemoveFirst().Value < Heap.RemoveFirst().Value, "Minimum Heap");
 
-			THeap<TTestClass> Heap1 = new THeap<TTestClass>(3, (L, R) => L.CompareTo(R));
+			THeap<TTestClass, TTestClass> Heap1 = new(3, (L, R) => L.CompareTo(R));
 
 			TTestClass Item1 = new TTestClass(4);
 			TTestClass Item2 = new TTestClass(-1);
@@ -418,6 +442,124 @@ namespace MTest
 			Assert.IsFalse(Heap1.Contains(Item1), "Contains 4");
 			Assert.IsFalse(Heap1.Contains(Item2), "Contains 0");
 			Assert.IsTrue(Heap1.Contains(Item3), "Contains 8");
+		}
+
+		[TestMethod]
+		public void MHeapTests()
+		{
+			MHeap<int> MinHeap = new MHeap<int>(3, (L, R) => L == R ? 0 : L < R ? 1 : -1);
+			MinHeap.Push(4);
+			MinHeap.Push(2);
+			MinHeap.Push(3);
+			MinHeap.Push(5);
+			MinHeap.Push(1);
+			MinHeap.Push(3);
+			MinHeap.Push(8);
+			MinHeap.Push(10);
+			MinHeap.Push(9);
+
+			Assert.AreEqual(9, MinHeap.Num, "Num of MHeap");
+
+			Assert.IsTrue(MinHeap.Contains(4), "Contains 4");
+			Assert.IsTrue(MinHeap.Contains(3), "Contains 3");
+			Assert.IsTrue(MinHeap.Contains(1), "Contains 1");
+			Assert.IsFalse(MinHeap.Contains(7), "!Contains 7");
+			Assert.IsFalse(MinHeap.Contains(6), "!Contains 6");
+			Assert.IsFalse(MinHeap.Contains(0), "!Contains 0");
+			Assert.IsFalse(MinHeap.Contains(-3), "!Contains -3");
+			Assert.IsFalse(MinHeap.Contains(-7), "!Contains -7");
+
+			for (int i = 0; i < MinHeap.Num; ++i)
+			{
+				int E = MinHeap.RemoveFirst();
+				int F = MinHeap.RemoveFirst();
+				Assert.IsTrue(E <= F, $"Minimum Heap. {E} < {F}");
+			}
+
+			MHeap<int> MaxHeap = new MHeap<int>(3, (L, R) => L == R ? 0 : L > R ? 1 : -1);
+			MaxHeap.Push(4);
+			MaxHeap.Push(2);
+			MaxHeap.Push(3);
+			MaxHeap.Push(5);
+			MaxHeap.Push(1);
+			MaxHeap.Push(3);
+			MaxHeap.Push(8);
+			MaxHeap.Push(10);
+			MaxHeap.Push(9);
+
+			Assert.AreEqual(9, MaxHeap.Num, "Num of MHeap");
+
+			Console.WriteLine("Beginning Max Heap Searching...");
+			Assert.IsTrue(MaxHeap.Contains(4), "Contains 4");
+			Assert.IsTrue(MaxHeap.Contains(3), "Contains 3");
+			Assert.IsTrue(MaxHeap.Contains(1), "Contains 1");
+			Assert.IsFalse(MaxHeap.Contains(7), "!Contains 7");
+			Assert.IsFalse(MaxHeap.Contains(6), "!Contains 6");
+			Assert.IsFalse(MaxHeap.Contains(0), "!Contains 0");
+			Assert.IsFalse(MaxHeap.Contains(-3), "!Contains -3");
+			Assert.IsFalse(MaxHeap.Contains(-7), "!Contains -7");
+
+			for (int i = 0; i < MaxHeap.Num; ++i)
+			{
+				int E = MaxHeap.RemoveFirst();
+				int F = MaxHeap.RemoveFirst();
+				Assert.IsTrue(E >= F, $"Maximum Heap. {E} > {F}");
+			}
+
+
+			MHeap<TTestClass> Heap1 = new(3, (L, R) => L.CompareTo(R));
+
+			TTestClass Item1 = new TTestClass(4);
+			TTestClass Item2 = new TTestClass(-1);
+			TTestClass Item3 = new TTestClass(8);
+			Heap1.Push(Item1);
+			Heap1.Push(Item2);
+			Heap1.Push(Item3);
+
+			int Num = Heap1.Num; // 3
+			Assert.IsTrue(Heap1.RemoveFirst().Value == -1, "Correct Value -1");
+
+			Num = Heap1.Num; // 2
+			Assert.IsTrue(Heap1.RemoveFirst().Value == 4, "Correct Value 4");
+
+			Assert.IsFalse(Heap1.Contains(Item1), "Contains 4");
+			Assert.IsFalse(Heap1.Contains(Item2), "Contains 0");
+			Assert.IsTrue(Heap1.Contains(Item3), "Contains 8");
+		}
+
+		[TestMethod]
+		public void MDequeTests()
+		{
+			MDeque<int> Deque = new MDeque<int>(3);
+			Assert.AreEqual(0, Deque.Num);
+			Deque.AddLead(3);
+			Deque.AddLead(1);
+			Deque.AddLead(2);
+
+			Assert.AreEqual(3, Deque.Num);
+			Assert.AreEqual(2, Deque.Lead());
+			Assert.AreEqual(3, Deque.End());
+
+			Deque.AddEnd(5);
+			Deque.AddEnd(4);
+			Deque.AddEnd(6);
+
+			Assert.AreEqual(6, Deque.Num);
+			Assert.AreEqual(Deque.Lead(), 2);
+			Assert.AreEqual(Deque.End(), 6);
+
+			// { 2, 1, 3, 5, 4, 6 }
+			int L = Deque.PopLead();
+
+			Assert.AreEqual(5, Deque.Num);
+			Assert.AreEqual(L, 2);
+			Assert.AreEqual(Deque.Lead(), 1);
+
+			// { 1, 3, 5, 4, 6 }
+			int E = Deque.PopEnd();
+			Assert.AreEqual(4, Deque.Num);
+			Assert.AreEqual(E, 6);
+			Assert.AreEqual(Deque.End(), 4);
 		}
 	}
 }

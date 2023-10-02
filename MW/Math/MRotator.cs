@@ -1,6 +1,7 @@
 ﻿using System;
 using MW.Math;
 using static MW.Math.Magic.Fast;
+using System.Runtime.CompilerServices;
 #if RELEASE
 using MW.Extensions;
 using UnityEngine;
@@ -79,6 +80,32 @@ namespace MW
 			Q.w = CosineRoll * CosinePitch * CosineYaw + SineRoll * SinePitch * SineYaw;
 
 			return Q;
+		}
+
+		/// <summary>Computes a <see cref="UnityEngine.Quaternion"/> with a rotation of Pitch, Yaw and Roll.</summary>
+		/// <docs>Computes a Quaternion with a rotation of Pitch, Yaw and Roll.</docs>
+		/// <decorations decor="public Quaternion"></decorations>
+		/// <returns>A Quaternion with Pitch, Yaw, Roll.</returns>
+		public Quaternion Quaternion(Transform T)
+		{
+			return T.rotation * Quaternion();
+		}
+
+		public MRotator Rotation(Transform T)
+		{
+			return Quaternion(T).MakeRotator();
+		}
+
+		public MRotator Relative(MVector Vector, MVector UpVector)
+		{
+			MVector RightVector = Vector ^ UpVector;
+			MVector ForwardVector = RightVector ^ UpVector;
+
+			MVector Rotation = Vector.RotateVector(Pitch, RightVector);
+			Rotation = Rotation.RotateVector(Yaw, UpVector);
+			Rotation = Rotation.RotateVector(Roll, ForwardVector);
+
+			return Rotation.Rotation();
 		}
 
 		/// <summary>Converts a <see cref="UnityEngine.Quaternion"/> to an MRotator.</summary>
@@ -288,6 +315,7 @@ namespace MW
 		/// <summary>An <see cref="MW.MVector"/> where X = Pitch, Y = Yaw, Z = Roll.</summary>
 		/// <docs>An MVector where X = Pitch, Y = Yaw, Z = Roll.</docs>
 		/// <decorations decor="public MVector"></decorations>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public MVector MV()
 		{
 			return new MVector(Pitch, Yaw, Roll);
@@ -298,9 +326,21 @@ namespace MW
 		/// <decorations decor="public MVector"></decorations>
 		/// <param name="Forward">Forward orientation.</param>
 		/// <returns>An MVector direction representing this Rotation.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public MVector Direction(MVector Forward)
 		{
 			return this * Forward;
+		}
+
+		public MVector AsOrientationVector()
+		{
+			float InternalPitch = ModTowardsZero(Pitch, 360.0f) * D2R;
+			float InternalYaw = ModTowardsZero(Yaw, 360.0f) * D2R;
+
+			Mathematics.SinCos(out float SinePitch, out float CosinePitch, InternalPitch, true);
+			Mathematics.SinCos(out float SineYaw, out float CosineYaw, InternalYaw, true);
+
+			return new MVector(CosinePitch * SineYaw, SinePitch, CosinePitch * CosineYaw);
 		}
 #endif // RELEASE
 
@@ -328,6 +368,12 @@ namespace MW
 				Roll += 360f;
 
 			return this;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool IsZero(float ZeroThreshold = kEpsilon)
+		{
+			return Utils.IsZero(this, ZeroThreshold);
 		}
 
 		/// <summary>Adds two MRotators together.</summary>

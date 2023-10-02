@@ -1,8 +1,8 @@
 ﻿namespace MW.Pathfinding
 {
 	/// <summary>Base class for Nodes to be use in A* Pathfinding.</summary>
-	/// <decorations decor="public abstract class : INode{MNode}, IHeapItem{MNode}"></decorations>
-	public abstract class MNode : INode<MNode>, IHeapItem<MNode>
+	/// <decorations decor="public abstract class : INode{MNode}"></decorations>
+	public abstract class MNode : INode<MNode>
 	{
 		/// <summary>Is this Node an obstacle for Pathfinding?</summary>
 		public bool bIsTraversable;

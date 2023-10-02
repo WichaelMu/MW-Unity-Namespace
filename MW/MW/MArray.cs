@@ -3,22 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using MW.Diagnostics;
 
 namespace MW
 {
 	/// <summary>A dynamic generic array combining the functionality of a List and a Dictionary.</summary>
 	/// <typeparam name="T">The generic type.</typeparam>
-	/// <decorations decor="public class {T} : MArray, IEnumerable{T}"></decorations>
+	/// <decorations decor="public sealed class {T} : MArray, IEnumerable{T}"></decorations>
 	[Serializable]
-	public class MArray<T> : MArray, IEnumerable<T>
+	public sealed class MArray<T> : MArray, IEnumerable<T>
 	{
 #if RELEASE
 		[UnityEngine.SerializeField]
 #endif
 		List<T> Items;
 
-		internal Dictionary<T, Stack<int>> HashMap;
+		Dictionary<T, MDeque<int>> HashMap;
 
 		/// <summary>The number of T in this MArray; the size.</summary>
 		/// <decorations decor="public int"></decorations>
@@ -54,7 +53,7 @@ namespace MW
 				HashMap.Add(Item, new());
 			}
 
-			HashMap[Item].Push(Num);
+			HashMap[Item].AddEnd(Num);
 
 			Items.Add(Item);
 		}
@@ -62,6 +61,7 @@ namespace MW
 		/// <summary>Adds a number of Items.</summary>
 		/// <decorations decor="public void"></decorations>
 		/// <param name="Items">The list of elements to add.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Push(params T[] Items)
 		{
 			foreach (T T in Items)
@@ -82,7 +82,7 @@ namespace MW
 
 		/// <summary>Removes the most recent push of Item.</summary>
 		/// <decorations decor="public int"></decorations>
-		/// <remarks>If you plan to Pull multiple items, see PullAll(T) or PullMulti(params T).</remarks>
+		/// <remarks>If you plan to Pull every element from the MArray, see PullAll(T).</remarks>
 		/// <param name="Item">The element to remove.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist.</returns>
@@ -92,9 +92,7 @@ namespace MW
 				return kInvalid;
 
 			int NewNum = PullWithoutRemap(Item);
-
-			if (NewNum != kInvalid)
-				Remap();
+			Remap();
 
 			return NewNum;
 		}
@@ -124,21 +122,34 @@ namespace MW
 		/// <param name="Items">The most recent push of each Item to pull.</param>
 		/// <docreturns>The new size of this MArray, or kInvalid if Item doesn't exist. Returns Num if Length of Items is 0.</docreturns>
 		/// <returns>The new size of this MArray, or <see cref="MArray.kInvalid"/> if Item doesn't exist. Returns <see cref="Num"/> if Length of Items is 0.</returns>
-		public int PullMulti(params T[] Items)
+		public int Pull(params T[] Items)
 		{
 			if (Items.Length == 0)
 				return Num;
 			if (Items.Length == 1)
 				return Pull(Items[0]);
 
-			int[] IndicesToRemove = new int[Items.Length];
-			int i = 0;
+			// Heap = O(x log(x))
+			// x = x * log(x)
+			// x = 10
+			if (Items.Length <= 10)
+			{
+				foreach (T Item in Items)
+					Pull(Item);
+			}
+			else
+			{
+				int[] IndicesToRemove = new int[Items.Length];
+				int i = 0;
 
-			foreach (T Item in Items)
-				if (Contains(Item))
-					IndicesToRemove[i++] = HashMap[Item].Peek();
+				foreach (T Item in Items)
+					if (Contains(Item))
+						IndicesToRemove[i++] = HashMap[Item].End();
 
-			return PullMultiIndex(IndicesToRemove).Num;
+				PullMultiIndex(IndicesToRemove);
+			}
+
+			return Num;
 		}
 
 		/// <summary>Pulls an Item from an Index.</summary>
@@ -148,10 +159,7 @@ namespace MW
 		public T PullAtIndex(int Index)
 		{
 			if (Index >= Num || Index < 0)
-			{
-				Log.W($"Index out of range! Expected Index < Num && Index >= 0. Index: {Index}");
-				return default;
-			}
+				throw new IndexOutOfRangeException($"Index out of range! Expected Index < {Num} && Index >= 0. Index: {Index}");
 
 			T ItemAtIndex = PullWithoutRemap(Index);
 			Remap();
@@ -159,44 +167,42 @@ namespace MW
 			return ItemAtIndex;
 		}
 
-		public MArray<T> PullMultiIndex(params int[] Indices)
+		/// <summary>Pull from multiple indices.</summary>
+		/// <decorations decor="public MArray&lt;T&gt;"></decorations>
+		/// <param name="Indices">The index positions to remove.</param>
+		/// <returns>An MArray of the removed elements.</returns>
+		/// <exception cref="IndexOutOfRangeException">If one of Indices are out of range.</exception>
+		public void PullMultiIndex(params int[] Indices)
 		{
-			MArray<T> RetVal = new MArray<T>(Indices.Length);
-
 			if (Indices.Length == 0)
-				return RetVal;
+				return;
 
 			if (Indices.Length == 1)
 			{
-				RetVal.Push(PullAtIndex(Indices[0]));
-				return RetVal;
+				PullAtIndex(Indices[0]);
+				return;
 			}
 
 			// Descending order.
-			Array.Sort(Indices, (L, R) => L < R ? 1 : -1);
+			MHeap<int> MinHeap = MHeap<int>.Heapify(Indices, (L, R) => L == R ? 0 : L > R ? 1 : -1);
 
-			foreach (int Index in Indices)
+			while (MinHeap.Num != 0)
 			{
+				int Index = MinHeap.RemoveFirst();
 				if (Index >= Num || Index < 0)
-				{
-					Log.W($"Index out of range! Expected Index < Num && Index >= 0. Index: {Index}");
-					return RetVal;
-				}
+					throw new IndexOutOfRangeException($"Index out of range! Expected Index >= 0 && Index < {Num}. Index: {Index}");
 
-				T ItemAtIndex = PullWithoutRemap(Index);
-				RetVal.Push(ItemAtIndex);
+				PullWithoutRemap(Index);
 			}
 
 			Remap();
-
-			return RetVal;
 		}
 
 		int PullWithoutRemap(T Item)
 		{
-			Items.RemoveAt(HashMap[Item].Pop());
+			Items.RemoveAt(HashMap[Item].PopEnd());
 
-			if (HashMap[Item].Count == 0)
+			if (HashMap[Item].Num == 0)
 			{
 				HashMap.Remove(Item);
 			}
@@ -212,12 +218,21 @@ namespace MW
 			return ItemAtIndex;
 		}
 
+		/// <summary>Copies Num elements from an MArray to another MArray from Start.</summary>
+		/// <decorations decor="public static void"></decorations>
+		/// <param name="Destination">The MArray that will be copied *into*.</param>
+		/// <param name="Source">The MArray that will be copied *from*.</param>
+		/// <param name="Start">The index from Source to begin copying into Destination.</param>
+		/// <param name="Num">The number of elements to copy into Destination.</param>
 		public static void Copy(MArray<T> Destination, MArray<T> Source, int Start, int Num)
 		{
+			if (Start < 0 || Start >= Source.Num)
+				throw new IndexOutOfRangeException($"Expected Start ({Start}) to be >= 0 && < Source.Num ({Source.Num}).");
+
 			if (CheckNull(Destination))
 				Destination = new MArray<T>();
 
-			Utils.Clamp(ref Num, 1, Source.Num - 1);
+			FMath.Clamp(ref Num, 0, Source.Num - 1);
 
 			if (Num > 0)
 				Destination.Push(Source.Items.GetRange(Start, Num).ToArray());
@@ -246,16 +261,27 @@ namespace MW
 
 			AccessedData Data = new()
 			{
-				Occurrences = HashMap[Item].Count,
-				Positions = new int[HashMap[Item].Count]
+				Occurrences = HashMap[Item].Num,
+				Positions = HashMap[Item].TArray()
 			};
-
-			int i = 0;
-			foreach (int Position in HashMap[Item])
-				Data.Positions[i++] = Position;
 
 			return Data;
 		}
+
+		int IndexOf(T Item, ESearchDirection SearchDirection = ESearchDirection.LatestPush)
+		{
+			if (!Contains(Item))
+				return kInvalid;
+
+			if (SearchDirection == ESearchDirection.LatestPush)
+				return HashMap[Item].End();
+
+			AccessedData Data = Access(Item);
+			return Data.Positions[Data.Positions.Length - 1];
+		}
+
+		public int FirstIndexOf(T Item) => IndexOf(Item, ESearchDirection.EarliestPush);
+		public int LastIndexOf(T Item) => IndexOf(Item, ESearchDirection.LatestPush);
 
 		/// <decorations decor="public T"></decorations>
 		/// <returns>The item at the front of the queue.</returns>
@@ -271,15 +297,10 @@ namespace MW
 		public T FirstPop()
 		{
 			if (Num <= 0)
-				return default;
+				throw new IndexOutOfRangeException($"Cannot {nameof(FirstPop)} when MArray is Empty!");
 
 			T T = First();
-
-			int[] Positions = Access(T).Positions;
-
-			Items.RemoveAt(Positions[Positions.Length - 1]);
-
-			Remap();
+			PullAtIndex(0);
 
 			return T;
 		}
@@ -455,7 +476,7 @@ namespace MW
 					HashMap.Add(Items[i], new());
 				}
 
-				HashMap[Items[i]].Push(i);
+				HashMap[Items[i]].AddEnd(i);
 			}
 		}
 
@@ -474,7 +495,7 @@ namespace MW
 			{
 				for (int i = 0; i < Num; ++i)
 				{
-					SB.Append(i + ": " + Items[i].ToString());
+					SB.Append($"{i}: {Items[i]}");
 					if (i != Num - 1)
 						SB.Append(Separator);
 				}
@@ -495,6 +516,7 @@ namespace MW
 		/// <summary>This MArray as T[].</summary>
 		/// <decorations decor="public T[]"></decorations>
 		/// <returns>T[].</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T[] TArray()
 		{
 			return Items.ToArray();
@@ -503,6 +525,7 @@ namespace MW
 		/// <summary>This MArray as List&lt;T&gt;</summary>
 		/// <decorations decor="public List&lt;T&gt;"></decorations>
 		/// <returns>List&lt;T&gt;</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public List<T> LArray()
 		{
 			return Items;
@@ -665,6 +688,7 @@ namespace MW
 			/// <decorations decor="public int"></decorations>
 			public int Occurrences;
 			/// <summary>The index locations of this Item in an MArray.</summary>
+			/// <remarks>The array order from left to right is Latest Push to Earliest Push.</remarks>
 			/// <decorations decor="public int[]"></decorations>
 			public int[] Positions;
 
@@ -680,5 +704,11 @@ namespace MW
 			/// <returns><see langword="true"/> if the accessed item does not exist in this <see cref="MArray{T}"/>.</returns>
 			public bool IsNone() => Occurrences == kInvalid && Positions.Length == 0;
 		}
+	}
+
+	internal enum ESearchDirection : byte
+	{
+		EarliestPush,
+		LatestPush
 	}
 }

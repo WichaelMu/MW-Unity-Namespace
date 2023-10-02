@@ -318,6 +318,18 @@ namespace MW.Math
 
 			return EulerRadians * FMath.R2D;
 		}
+
+		public static MVector M2PYR(MVector M)
+		{
+			MVector EulerRadians = new MVector
+			{
+				X = FArcSine(M.Y),
+				Y = FArcTangent2(M.X, M.Z),
+				Z = 0
+			};
+
+			return FMath.R2D * EulerRadians;
+		}
 #endif // RELEASE
 
 		/// <summary>The 11-Degree Minimax Approximation Sine and 10-Degree Minimax Approximation Cosine over an angle.</summary>

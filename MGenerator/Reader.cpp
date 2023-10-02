@@ -372,6 +372,9 @@ MW Reader::ProcessNode(const std::string& chars)
 		}
 	}
 
+	mw.mw_namespace.erase(remove(mw.mw_namespace.begin(), mw.mw_namespace.end(), '1'), mw.mw_namespace.end());
+	mw.mw_namespace.erase(remove(mw.mw_namespace.begin(), mw.mw_namespace.end(), '2'), mw.mw_namespace.end());
+	mw.mw_namespace.erase(remove(mw.mw_namespace.begin(), mw.mw_namespace.end(), '3'), mw.mw_namespace.end());
 	SwapChars::Replace(mw.mw_namespace, true);
 	SwapChars::Replace(mw.mw_class);
 	SwapChars::Replace(mw.mw_name, false, true);
