@@ -82,20 +82,42 @@ namespace MW
 			return Q;
 		}
 
-		/// <summary>Computes a <see cref="UnityEngine.Quaternion"/> with a rotation of Pitch, Yaw and Roll.</summary>
+		/// <summary>Computes a <see cref="UnityEngine.Quaternion"/> with a rotation combining T's Rotation with Pitch, Yaw, and Roll.</summary>
 		/// <docs>Computes a Quaternion with a rotation of Pitch, Yaw and Roll.</docs>
 		/// <decorations decor="public Quaternion"></decorations>
-		/// <returns>A Quaternion with Pitch, Yaw, Roll.</returns>
+		/// <param name="T">The Transform to combine with.</param>
+		/// <returns>A Quaternion combining T's Rotation with this Pitch, Yaw, and Roll.</returns>
 		public Quaternion Quaternion(Transform T)
 		{
 			return T.rotation * Quaternion();
 		}
 
+		/// <summary>Computes a Rotator combining T's Rotation with Pitch, Yaw, and Roll.</summary>
+		/// <decorations decor="public MRotator"></decorations>
+		/// <param name="T">The Transform to combine with.</param>
+		/// <returns>An MRotator combining T's Rotation with this Pitch, Yaw, and Roll.</returns>
 		public MRotator Rotation(Transform T)
 		{
 			return Quaternion(T).MakeRotator();
 		}
 
+		/// <summary>Computes a Rotator relative to a directional Vector and Up Vector.</summary>
+		/// <remarks>
+		/// Suppose UpVector is the Positive Y-Axis.
+		/// <br></br>
+		/// Pitch would result in a rotation about the X-Axis.
+		/// <br></br>
+		/// Yaw would result in a rotation about the Y-Axis.
+		/// <br></br>
+		/// Roll would result in a rotation about the Z-Axis.
+		/// <br></br><br></br>
+		/// If UpVector was defined as the Positive X-Axis, Pitch and Yaw components
+		/// would be swapped. Roll would remain unaffected.
+		/// </remarks>
+		/// <decorations decor="public MRotator"></decorations>
+		/// <param name="Vector">Relative facing direction.</param>
+		/// <param name="UpVector">Global Up Vector.</param>
+		/// <returns>An MRotator rotated relative to a Vector with respect to Up.</returns>
 		public MRotator Relative(MVector Vector, MVector UpVector)
 		{
 			MVector RightVector = Vector ^ UpVector;
@@ -332,6 +354,9 @@ namespace MW
 			return this * Forward;
 		}
 
+		/// <summary>This Rotator as a directional Vector.</summary>
+		/// <decorations decor="public MVector"></decorations>
+		/// <returns>An normalised MVector describing this MRotator.</returns>
 		public MVector AsOrientationVector()
 		{
 			float InternalPitch = ModTowardsZero(Pitch, 360.0f) * D2R;
@@ -370,6 +395,10 @@ namespace MW
 			return this;
 		}
 
+		/// <summary>If this MRotator is Neutral, considering ZeroThreshold.</summary>
+		/// <decorations decor="public bool"></decorations>
+		/// <param name="ZeroThreshold">The threshold to consider Zero. Default = kEpsilon.</param>
+		/// <returns>True if this MRotator is considered Neutral.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool IsZero(float ZeroThreshold = kEpsilon)
 		{
