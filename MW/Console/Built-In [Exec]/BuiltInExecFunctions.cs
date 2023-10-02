@@ -37,6 +37,16 @@ namespace MW.Console
 			SceneManager.LoadScene(CurrentScene.buildIndex);
 		}
 
+		/// <summary>Loads a Scene by Build Index.</summary>
+		/// <remarks>Assumes that the Scene with Build Index has been added in the Unity Editor.</remarks>
+		/// <decorations decor="public static void"></decorations>
+		/// <param name="BuildIndex"></param>
+		[BuiltInExec("Loads Scene by Build Index.")]
+		public static void LoadSceneBuildIndex(int BuildIndex)
+		{
+			SceneManager.LoadScene(BuildIndex);
+		}
+
 		/// <summary>Sets Time.timeScale to InTimeScale.</summary>
 		/// <decorations decor="public static void"></decorations>
 		/// <param name="InTimeScale"></param>
@@ -118,6 +128,23 @@ namespace MW.Console
 		public static void Teleport(Transform T, Vector3 Position)
 		{
 			T.position = Position;
+		}
+
+		/// <summary>Sets the Velocity of a Rigidbody.</summary>
+		/// <param name="R"></param>
+		/// <param name="Velocity"></param>
+		[BuiltInExec("Sets the velocity of a Rigidbody.")]
+		public static void SetVelocity(Rigidbody R, Vector3 Velocity)
+		{
+			R.velocity = Velocity;
+		}
+
+		/// <summary>Zero-out a Rigidbody's velocity.</summary>
+		/// <param name="R"></param>
+		[BuiltInExec("Zero-out a Rigidbody's velocity.")]
+		public static void SetZeroVelocity(Rigidbody R)
+		{
+			SetVelocity(R, Vector3.zero);
 		}
 
 		#endregion
