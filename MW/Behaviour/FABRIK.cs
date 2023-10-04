@@ -103,13 +103,13 @@ namespace MW.Behaviour
 		/// <summary>The maximum distance the Camera can be before FABRIK turns off.</summary>
 		/// <remarks>
 		/// <b>
-		/// Assumes that <see cref="MSpringArm"/> is a Camera.
+		/// Assumes that the <see cref="MSpringArm"/> object is a Camera.
 		/// <br></br>
 		/// <i>Will not work otherwise!</i>
 		/// </b>
 		/// </remarks>
 		/// <docremarks>
-		/// Assumes that SpringArm.Boom is the Camera.
+		/// Assumes that the MSpringArm objet is a Camera.
 		/// &lt;br&gt;
 		/// &lt;b&gt;&lt;i&gt;Will not work otherwise!&lt;/i&gt;&lt;/b&gt;
 		/// </docremarks>

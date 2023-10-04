@@ -1,5 +1,9 @@
 ﻿#if STANDALONE
-using MW;
+using MW.Diagnostics;
 
-Console.WriteLine("STANDALONE Testing Environment for MW.");
-#endif
+Log.P("STANDALONE Testing Environment for MW.");
+#else
+
+#error RUN MAPI IN A STANDALONE CONFIGURATION.
+
+#endif // STANDALONE

@@ -5,6 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <BaseOutputPath>Output\Binaries</BaseOutputPath>
+    <Configurations>Debug;Release;Standalone</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
