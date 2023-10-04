@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MWEditor", "MWEditor\MWEdit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "MSandbox\Assembly-CSharp.csproj", "{E137CDE5-BF46-54EF-218D-09B0632A94C4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MAPI", "MAPI\MAPI.csproj", "{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,24 @@ Global
 		{E137CDE5-BF46-54EF-218D-09B0632A94C4}.Standalone|x64.Build.0 = Debug|Any CPU
 		{E137CDE5-BF46-54EF-218D-09B0632A94C4}.Standalone|x86.ActiveCfg = Debug|Any CPU
 		{E137CDE5-BF46-54EF-218D-09B0632A94C4}.Standalone|x86.Build.0 = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Release|x64.Build.0 = Release|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Release|x86.Build.0 = Release|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Standalone|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Standalone|Any CPU.Build.0 = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Standalone|x64.ActiveCfg = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Standalone|x64.Build.0 = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Standalone|x86.ActiveCfg = Debug|Any CPU
+		{DA4E25AB-0356-42B4-A2D9-62920A1DD4DF}.Standalone|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

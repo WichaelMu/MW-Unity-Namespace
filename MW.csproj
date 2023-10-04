@@ -36,6 +36,7 @@
 	<ItemGroup>
 		<Compile Remove="Docs\**" />
 		<Compile Remove="Extensions\**" />
+		<Compile Remove="MAPI\**" />
 		<Compile Remove="MEditor\**" />
 		<Compile Remove="MGenerator\**" />
 		<Compile Remove="MSandbox\**" />
@@ -47,6 +48,7 @@
 		<Compile Remove="x64\**" />
 		<EmbeddedResource Remove="Docs\**" />
 		<EmbeddedResource Remove="Extensions\**" />
+		<EmbeddedResource Remove="MAPI\**" />
 		<EmbeddedResource Remove="MEditor\**" />
 		<EmbeddedResource Remove="MGenerator\**" />
 		<EmbeddedResource Remove="MSandbox\**" />
@@ -58,6 +60,7 @@
 		<EmbeddedResource Remove="x64\**" />
 		<None Remove="Docs\**" />
 		<None Remove="Extensions\**" />
+		<None Remove="MAPI\**" />
 		<None Remove="MEditor\**" />
 		<None Remove="MGenerator\**" />
 		<None Remove="MSandbox\**" />
