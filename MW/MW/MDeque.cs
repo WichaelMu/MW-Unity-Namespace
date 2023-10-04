@@ -114,7 +114,8 @@ namespace MW
 			{
 				if (InRange(I))
 					Elements[I] = value;
-				throw new IndexOutOfRangeException($"Expected Index >= 0 && Index < {Num}. Index: {I}");
+				else
+					throw new IndexOutOfRangeException($"Expected Index >= 0 && Index < {Num}. Index: {I}");
 			}
 		}
 	}
