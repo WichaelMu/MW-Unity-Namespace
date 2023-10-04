@@ -280,7 +280,19 @@ namespace MW
 			return Data.Positions[Data.Positions.Length - 1];
 		}
 
+		/// <summary>The index of the first occurrence of Item; index of Item's <see cref="ESearchDirection.EarliestPush"/>.</summary>
+		/// <docs>The index of the first occurrence of Item; index of Item's Earliest Push.</docs>
+		/// <decorations decor="public int"></decorations>
+		/// <param name="Item">The Item to search for.</param>
+		/// <docreturns>Zero-indexed position, if found. Otherwise, kInvalid.</docreturns>
+		/// <returns>Zero-indexed position, if found. Otherwise, <see cref="MArray.kInvalid"/>.</returns>
 		public int FirstIndexOf(T Item) => IndexOf(Item, ESearchDirection.EarliestPush);
+		/// <summary>The index of the last occurrence of Item; index of Item's <see cref="ESearchDirection.LatestPush"/>.</summary>
+		/// <docs>The index of the last occurrence of Item; index of Item's Latest Push.</docs>
+		/// <decorations decor="public int"></decorations>
+		/// <param name="Item">The Item to search for.</param>
+		/// <docreturns>Zero-indexed position, if found. Otherwise, kInvalid.</docreturns>
+		/// <returns>Zero-indexed position, if found. Otherwise, <see cref="MArray.kInvalid"/>.</returns>
 		public int LastIndexOf(T Item) => IndexOf(Item, ESearchDirection.LatestPush);
 
 		/// <decorations decor="public T"></decorations>
@@ -469,12 +481,11 @@ namespace MW
 		void Remap()
 		{
 			HashMap.Clear();
+
 			for (int i = 0; i < Num; ++i)
 			{
 				if (!HashMap.ContainsKey(Items[i]))
-				{
 					HashMap.Add(Items[i], new());
-				}
 
 				HashMap[Items[i]].AddEnd(i);
 			}
