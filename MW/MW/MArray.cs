@@ -40,7 +40,8 @@ namespace MW
 
 		public MArray(T[] Array) : this(Array.Length)
 		{
-			Push(Array);
+			Items = new List<T>(Array);
+			Remap();
 		}
 
 		/// <summary>Adds Item.</summary>
@@ -68,12 +69,14 @@ namespace MW
 				Push(T);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void PushUnique(T Item)
 		{
 			if (!Contains(Item))
 				Push(Item);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void PushUnique(params T[] Items)
 		{
 			foreach (T T in Items)
