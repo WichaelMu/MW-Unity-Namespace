@@ -613,7 +613,11 @@ namespace MW.Console
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void WriteDefaultMessage()
 		{
+#if RELEASE
 			WriteToOutput("-- MW Unity Namespace - MConsole --", MConsoleColourLibrary.Green);
+#else
+			WriteToOutput("-- MW MConsole --", MConsoleColourLibrary.LimeGreen);
+#endif // RELEASE
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
