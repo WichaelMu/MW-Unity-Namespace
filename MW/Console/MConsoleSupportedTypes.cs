@@ -48,6 +48,7 @@ namespace MW.Console
 			SupportedTypes = new Dictionary<Type, SupportedExecTypeFunction>();
 			this.Settings = Settings;
 
+			MConsoleArrayPrimitiveTranslator.Initialise();
 			MapSupportedTypes();
 		}
 
@@ -254,7 +255,6 @@ namespace MW.Console
 
 	internal class MConsoleArrayPrimitiveTranslator
 	{
-		static MConsoleArrayPrimitiveTranslator Instance;
 		delegate void PrimitiveTranslationFunc(object[] Elements, ref object TargetObject);
 		static Dictionary<Type, PrimitiveTranslationFunc> PrimitiveTranslation;
 
@@ -276,8 +276,11 @@ namespace MW.Console
 				{ typeof(double), Translate<double> },
 				{ typeof(float), Translate<float> }
 			};
+		}
 
-			Instance = this;
+		internal static void Initialise()
+		{
+			_ = new MConsoleArrayPrimitiveTranslator();
 		}
 
 		internal static bool Translate(object[] Elements, ref object TargetObject, Type ElementType)
