@@ -636,8 +636,8 @@ namespace MW.Console
 #if STANDALONE
 			WriteToOutput($"\t__LIST__ - Prints the list of functions supported by Exec.", MConsoleColourLibrary.LimeGreen);
 #endif // STANDALONE
-			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.LimeGreen);
 #if RELEASE
+			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.LimeGreen);
 			WriteToOutput($"\t__SET_RATIO__ - Sets the ratio for the Console. It accepts values between .15 to .85 as a percentage of your screen's height. Default is {kDefaultConsoleRatio}.", MConsoleColourLibrary.LimeGreen);
 #endif // RELEASE
 			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.LimeGreen);
