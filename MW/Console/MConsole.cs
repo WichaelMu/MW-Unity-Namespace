@@ -678,27 +678,27 @@ namespace MW.Console
 		void WriteHelpMessage()
 		{
 			WriteToOutput("-- Help --", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\t{nameof(MConsole)} is a developer tool for debugging and arbitrary code execution during runtime.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t{nameof(MConsole)} is a developer tool for debugging and arbitrary code execution during runtime.", MConsoleColourLibrary.Grey);
 #if RELEASE
-			WriteToOutput($"\tAbove are a list of [Exec] functions that you can execute at will, with most supported parameter types in Unity and the MW Namespace.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\tSome [Exec] functions are 'Built-In' and can be hidden by executing '__TOGGLE_BUILTIN__' in the text area.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tAbove are a list of [Exec] functions that you can execute at will, with most supported parameter types in Unity and the MW Namespace.", MConsoleColourLibrary.Grey);
+			WriteToOutput($"\tSome [Exec] functions are 'Built-In' and can be hidden by executing '__TOGGLE_BUILTIN__' in the text area.", MConsoleColourLibrary.Grey);
 #endif // RELEASE
-			WriteToOutput($"\tTo add your own functions, simply add 'using MW.Console;' and mark your methods and functions with the [Exec] attribute.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\t\tOnly public, static, and instance functions are included. Private [Exec] functions are ignored.", MConsoleColourLibrary.Yellow);
+			WriteToOutput($"\tTo add your own functions, simply add 'using MW.Console;' and mark your methods and functions with the [Exec] attribute.", MConsoleColourLibrary.Grey);
+			WriteToOutput($"\t\tOnly public, static, and instance functions are included. Private [Exec] functions are ignored.", MConsoleColourLibrary.Grey);
 			WriteToOutput("");
-			WriteToOutput($"\tThere are also a few functions that are 'Internal'.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tThere are also a few functions that are 'Internal'.", MConsoleColourLibrary.Grey);
 #if STANDALONE
-			WriteToOutput($"\t__LIST__ - Prints the list of functions supported by Exec.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__LIST__ - Prints the list of functions supported by Exec.", MConsoleColourLibrary.Grey);
 #endif // STANDALONE
 #if RELEASE
-			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\t__SET_RATIO__ - Sets the ratio for the Console. It accepts values between .15 to .85 as a percentage of your screen's height. Default is {kDefaultConsoleRatio}.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__CLEAR__ - Clears the output.", MConsoleColourLibrary.Grey);
+			WriteToOutput($"\t__SET_RATIO__ - Sets the ratio for the Console. It accepts values between .15 to .85 as a percentage of your screen's height. Default is {kDefaultConsoleRatio}.", MConsoleColourLibrary.Grey);
 #endif // RELEASE
-			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\t__HELP__, ?, -h, and --help - Shows this help message.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\t__TOGGLE_BUILTIN__ - Shows and hides Built-In [Exec] Functions. They can still be executed regardless of being hidden.", MConsoleColourLibrary.Grey);
+			WriteToOutput($"\t__HELP__, ?, -h, and --help - Shows this help message.", MConsoleColourLibrary.Grey);
 			WriteToOutput("");
-			WriteToOutput($"\tWhen making a game, you will eventually need to make your own types and aren't natively supported by {nameof(MConsole)}.", MConsoleColourLibrary.LimeGreen);
-			WriteToOutput($"\tCustom parameters can be handled by overriding certain functions, such as {nameof(HandleCustomParameter)} for function parameters or {nameof(HandleCustomArrayType)} for arrays.", MConsoleColourLibrary.LimeGreen);
+			WriteToOutput($"\tWhen making a game, you will eventually need to make your own types and aren't natively supported by {nameof(MConsole)}.", MConsoleColourLibrary.Grey);
+			WriteToOutput($"\tCustom parameters can be handled by overriding certain functions, such as {nameof(HandleCustomParameter)} for function parameters or {nameof(HandleCustomArrayType)} for arrays.", MConsoleColourLibrary.Grey);
 			WriteToOutput("");
 		}
 
@@ -1029,6 +1029,7 @@ namespace MW.Console
 
 		static Color bla = Colour.ColourHex("#444444");
 		static Color whi = Colour.ColourHex("#FFFFFF");
+		static Color gry = Colour.ColourHex("#909090");
 
 		static Color bti = Colour.ColourHex("#C2FFA1");
 
@@ -1040,6 +1041,7 @@ namespace MW.Console
 
 		internal static Color Black => bla;
 		internal static Color White => whi;
+		internal static Color Grey = gry;
 
 		internal static Color BuiltIn = bti;
 #else
@@ -1052,7 +1054,7 @@ namespace MW.Console
 
 		internal static ConsoleColor Black = ConsoleColor.Black;
 		internal static ConsoleColor White = ConsoleColor.White;
-		internal static ConsoleColor Grey = ConsoleColor.Gray;
+		internal static ConsoleColor Grey = ConsoleColor.DarkGray;
 #endif // RELEASE
 	}
 }
