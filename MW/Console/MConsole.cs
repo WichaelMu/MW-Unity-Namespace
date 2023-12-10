@@ -177,10 +177,20 @@ namespace MW.Console
 			if (Args.Length == 0)
 				return null;
 
-			MArray<string> Params = new MArray<string>(Args);
-			Params.PullAtIndex(0); // Pop Exec function.
 
-			return Exec(Array.Empty<string>(), Args[0], Params);
+			MDeque<string> CLI = new MDeque<string>(Args);
+			for (int i = 0; i < Args.Length; ++i)
+				if (CheckInternallyDefinedCommands(CLI.Lead(), new object[] { }))
+					CLI.PopLead();
+				else break;
+
+			if (!CLI.IsEmpty())
+			{
+				string MethodName = CLI.PopLead();
+				return Exec(Array.Empty<string>(), MethodName, CLI.TArray());
+			}
+
+			return null;
 		}
 #endif // STANDALONE
 
@@ -603,6 +613,50 @@ namespace MW.Console
 #endif // RELEASE
 		}
 
+		/// <summary>Writes to the MConsole Output with a Colour.</summary>
+		/// <decorations decor="protected void"></decorations>
+		/// <param name="Output">The StringBuilder with the contents to write to the MConsole Output.</param>
+		/// <param name="Colour">If #RELEASE, RGB Colour to print to the MConsole Output. If #STANDALONE, the ConsoleColor to print to the Terminal.</param>
+		/// <param name="bWithTrailingNewLine">True to write to the MConsole Output with a new line escape character.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void WriteToOutput(string Output,
+#if RELEASE
+			MVector Colour
+#else
+			ConsoleColor Colour
+#endif // RELEASE
+			, bool bWithTrailingNewLine
+			)
+		{
+#if RELEASE
+			OutputLog.Append(Colour).Append('\\');
+			WriteToOutput(Output, bWithTrailingNewLine);
+#else
+			System.Console.ForegroundColor = Colour;
+			WriteToOutput(Output, bWithTrailingNewLine);
+			System.Console.ForegroundColor = MConsoleColourLibrary.White;
+#endif // RELEASE
+		}
+
+		/// <summary>Writes to the MConsole Output with a Colour.</summary>
+		/// <decorations decor="protected void"></decorations>
+		/// <param name="Output">The StringBuilder with the contents to write to the MConsole Output.</param>
+		/// <param name="Colour">If #RELEASE, RGB Colour to print to the MConsole Output. If #STANDALONE, the ConsoleColor to print to the Terminal.</param>
+		/// <param name="bWithTrailingNewLine">True to write to the MConsole Output with a new line escape character.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void WriteToOutput(StringBuilder Output,
+#if RELEASE
+			MVector Colour
+#else
+			ConsoleColor Colour
+#endif // RELEASE
+			, bool bWithTrailingNewLine
+			)
+		{
+			WriteToOutput(Output.ToString(), Colour, bWithTrailingNewLine);
+		}
+
+
 		const float kConsoleFontHeight = 20f;
 		float GetOutputLogHeight(out string[] Output)
 		{
@@ -668,11 +722,11 @@ namespace MW.Console
 		{
 			switch (Command)
 			{
+#if RELEASE
 				case "__CLEAR__":
 					OutputLog.Clear();
 					WriteDefaultMessage();
 					break;
-#if RELEASE
 				case "__SET_RATIO__":
 					if (Parameters != null && Parameters.Length != 0)
 					{
@@ -733,16 +787,28 @@ namespace MW.Console
 #if STANDALONE
 		void PrintExecFunctions()
 		{
+			if (bShowBuiltIn)
+			{
+				WriteToOutput("Functions in ", false);
+				WriteToOutput("Cyan ", MConsoleColourLibrary.Cyan, false);
+				WriteToOutput("are Built-In Exec Functions.\nExec Functions in ", false);
+				WriteToOutput("Grey ", MConsoleColourLibrary.Grey, false);
+				WriteToOutput("are user-defined Exec Functions.\n", MConsoleColourLibrary.White);
+			}
+
 			foreach (KeyValuePair<string, MethodExec<MethodInfo, ExecAttribute>> Func in Funcs)
 			{
 				ExecAttribute Exec = Func.Value.Exec;
 				if (Exec.bHideInConsole)
 					continue;
 
-				ConsoleColor OutputColour = MConsoleColourLibrary.White;
+				if (Exec.bIsBuiltIn && !bShowBuiltIn)
+					continue;
 
-				if (Exec.bIsBuiltIn && bShowBuiltIn)
-					OutputColour = MConsoleColourLibrary.Purple;
+				ConsoleColor OutputColour = MConsoleColourLibrary.Grey;
+
+				if (Exec.bIsBuiltIn)
+					OutputColour = MConsoleColourLibrary.Cyan;
 
 				string Params = BuildMethodParameterList(Func.Value);
 				string ExecDescription = Exec.Description;
@@ -982,9 +1048,11 @@ namespace MW.Console
 		internal static ConsoleColor Green = ConsoleColor.DarkGreen;
 		internal static ConsoleColor LimeGreen = ConsoleColor.Green;
 		internal static ConsoleColor Purple = ConsoleColor.Magenta;
+		internal static ConsoleColor Cyan = ConsoleColor.Cyan;
 
 		internal static ConsoleColor Black = ConsoleColor.Black;
 		internal static ConsoleColor White = ConsoleColor.White;
+		internal static ConsoleColor Grey = ConsoleColor.Gray;
 #endif // RELEASE
 	}
 }
