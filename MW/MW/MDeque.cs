@@ -9,6 +9,9 @@ namespace MW
 	public class MDeque<T> : MContainer<T>
 	{
 		/// <summary>Initialisation of a new MDeque with an Initial Size of T-defaulted Elements.</summary>
+		/// <param name="Elements">Initial Elements.</param>
+		public MDeque(T[] Elements) : base(Elements) { }
+		/// <summary>Initialisation of a new MDeque with an Initial Size of T-defaulted Elements.</summary>
 		/// <param name="InitialSize">Initial capacity of Elements.</param>
 		public MDeque(int InitialSize) : base(InitialSize) { }
 		/// <summary>Initialisation of a new MDeque with 32 T-defaulted Elements.</summary>
@@ -62,6 +65,9 @@ namespace MW
 		/// <returns>The Element that was at the front of the Queue.</returns>
 		public T PopLead()
 		{
+			if (Num == 0)
+				return default;
+
 			T RetVal = Lead();
 			--Num;
 

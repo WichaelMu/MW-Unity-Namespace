@@ -17,6 +17,14 @@ namespace MW
 		public int Num;
 
 		/// <summary>Initialisation of a new Container with an Initial Size of T-defaulted Elements.</summary>
+		/// <param name="Elements">Initial Elements.</param>
+		public MContainer(T[] Elements)
+		{
+			this.Elements = Elements;
+			Num = Elements.Length;
+		}
+
+		/// <summary>Initialisation of a new Container with an Initial Size of T-defaulted Elements.</summary>
 		/// <param name="InitialSize">Initial capacity of Elements.</param>
 		public MContainer(int InitialSize)
 		{
@@ -53,6 +61,10 @@ namespace MW
 			Array.Copy(Elements, Resized, Num);
 			Elements = Resized;
 		}
+
+		/// <summary>Sets this MContainer of T Elements.</summary>
+		/// <param name="Elements">The Elements to set.</param>
+		public void SetFromElements(T[] Elements) { this.Elements = Elements; }
 
 		/// <summary>Converts this Container to a T[].</summary>
 		/// <decorations decor="public abstract T[]"></decorations>
