@@ -68,6 +68,11 @@ namespace MW.Console
 	internal class StandaloneExec : ExecAttribute
 	{
 		internal StandaloneExec() : base() { bIsStandalone = true; }
+		internal StandaloneExec(bool bIsBuiltIn) : base()
+		{
+			bIsStandalone = true;
+			this.bIsBuiltIn = bIsBuiltIn;
+		}
 	}
 
 	public struct MethodExec<T1, T2>
