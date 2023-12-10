@@ -724,10 +724,13 @@ namespace MW.Console
 			{
 #if RELEASE
 				case "__CLEAR__":
+				case "-c":
 					OutputLog.Clear();
 					WriteDefaultMessage();
 					break;
 				case "__SET_RATIO__":
+				case "-sr":
+				case "--set-ratio":
 					if (Parameters != null && Parameters.Length != 0)
 					{
 						if (Parameters[0].Is(out float InRatio))
@@ -748,11 +751,16 @@ namespace MW.Console
 					break;
 #endif // RELEASE
 				case "__TOGGLE_BUILTIN__":
+				case "__TOGGLE_BUILT_IN__":
+				case "-t":
+				case "--toggle":
 					bShowBuiltIn = !bShowBuiltIn;
 					WriteToOutput($"Built-In [Exec] Functions shown: {bShowBuiltIn}", MConsoleColourLibrary.Purple);
 					break;
 #if STANDALONE
 				case "__LIST__":
+				case "-l":
+				case "--list":
 					PrintExecFunctions();
 					break;
 #endif // STANDALONE
