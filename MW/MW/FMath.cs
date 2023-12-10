@@ -66,7 +66,7 @@ namespace MW
 		/// <decorations decor="public static bool"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsPowerOfTwo(float F) => Mathematics.IsPowerOfTwo((int)F);
 
@@ -74,21 +74,21 @@ namespace MW
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Sine(float F) => F.IsIllegalFloat() ? float.NaN : (float)__CS_MATH__.Sin(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Cos(float F) => F.IsIllegalFloat() ? float.NaN : (float)__CS_MATH__.Cos(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Tan(float F) => F.IsIllegalFloat() ? float.NaN : (float)__CS_MATH__.Tan(F);
 
@@ -96,21 +96,21 @@ namespace MW
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcSine(float F) => FArcSine(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcCos(float F) => FArcCosine(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcTan(float F) => FArcTangent(F);
 		/// <summary></summary>
@@ -118,16 +118,16 @@ namespace MW
 		/// <param name="Y"></param>
 		/// <param name="X"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ArcTan2(float Y, float X) => FArcTangent2(Y, X);
 
 #if STANDALONE
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Sqrt(float F) => (float)__CS_MATH__.Sqrt(F);
 
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float InvSqrt(float F) => 1f / Sqrt(F);
 #endif // STANDALONE
@@ -164,35 +164,35 @@ namespace MW
 		/// <decorations decor="public static sbyte"></decorations>
 		/// <param name="B"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static sbyte Abs(sbyte B) => (sbyte)(B < 0 ? -B : B);
 		/// <summary></summary>
 		/// <decorations decor="public static short"></decorations>
 		/// <param name="S"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static short Abs(short S) => (short)(S < 0 ? -S : S);
 		/// <summary></summary>
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="I"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Abs(int I) => I < 0 ? -I : I;
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Abs(float F) => F < 0f ? -F : F;
 		/// <summary></summary>
 		/// <decorations decor="public static double"></decorations>
 		/// <param name="D"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static double Abs(double D) => D < .0 ? -D : D;
 
@@ -332,7 +332,7 @@ namespace MW
 		/// <decorations decor="public static double"></decorations>
 		/// <param name="Params"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		public static double Min(params double[] Params)
 		{
 			if (Params.Length == 0)
@@ -408,7 +408,7 @@ namespace MW
 		/// <decorations decor="public static double"></decorations>
 		/// <param name="Params"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		public static double Max(params double[] Params)
 		{
 			if (Params.Length == 0)
@@ -425,24 +425,24 @@ namespace MW
 		/// <param name="F"></param>
 		/// <param name="P"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Power(float F, float P) => (float)__CS_MATH__.Pow(F, P);
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Exp(float F) => (float)__CS_MATH__.Exp(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Log(float F) => (float)__CS_MATH__.Log(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Log10(float F) => (float)__CS_MATH__.Log10(F);
 		/// <summary></summary>
@@ -450,7 +450,7 @@ namespace MW
 		/// <param name="F"></param>
 		/// <param name="Base"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Log(float F, float Base) => (float)__CS_MATH__.Log(F, Base);
 
@@ -458,7 +458,7 @@ namespace MW
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		public static float Ceiling(float F) => (float)__CS_MATH__.Ceiling(F);
 		/// <summary></summary>
 		/// <decorations decor="public static int"></decorations>
@@ -470,59 +470,59 @@ namespace MW
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Floor(float F) => (float)__CS_MATH__.Floor(F);
 		/// <summary></summary>
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int FloorInt(float F) => (int)Floor(F);
 		/// <summary></summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Round(float F) => (float)__CS_MATH__.Round(F);
 		/// <summary></summary>
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="F"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int RoundInt(float F) => (int)__CS_MATH__.Round(F);
 
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="B"></param>
 		/// <returns>1 if positive, -1 if negative, 0 if zero.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(sbyte B) => B == 0 ? 0 : B > 0 ? 1 : -1;
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="S"></param>
 		/// <returns>1 if positive, -1 if negative, 0 if zero.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(short S) => S == 0 ? 0 : S > 0 ? 1 : -1;
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="I"></param>
 		/// <returns>1 if positive, -1 if negative, 0 if zero.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(int I) => I == 0 ? 0 : I > 0 ? 1 : -1;
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="F"></param>
 		/// <returns>1 if positive, -1 if negative, 0 if zero.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(float F) => F == 0 ? 0 : F > 0f ? 1 : -1;
 		/// <decorations decor="public static int"></decorations>
 		/// <param name="D"></param>
 		/// <returns>1 if positive, -1 if negative, 0 if zero.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Sign(double D) => D == 0 ? 0 : D > 0 ? 1 : -1;
 
@@ -583,7 +583,7 @@ namespace MW
 		/// <param name="D"></param>
 		/// <param name="Min"></param>
 		/// <param name="Max"></param>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Clamp(ref double D, double Min, double Max)
 		{
@@ -682,7 +682,7 @@ namespace MW
 		/// <param name="Min"></param>
 		/// <param name="Max"></param>
 		/// <returns></returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static double Clamp(double D, double Min, double Max)
 		{
@@ -703,7 +703,7 @@ namespace MW
 		/// <param name="L"></param>
 		/// <param name="R"></param>
 		/// <returns>The difference between two angles.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float DeltaAngle(float L, float R)
 		{
@@ -717,7 +717,7 @@ namespace MW
 		/// <param name="B"></param>
 		/// <param name="Alpha"></param>
 		/// <returns>Interpolated number Alpha percentage between A and B.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Lerp(float A, float B, float Alpha) => A + (B - A) * Alpha;
 		/// <summary>Interpolates between two Angles.</summary>
@@ -726,7 +726,7 @@ namespace MW
 		/// <param name="B"></param>
 		/// <param name="Alpha"></param>
 		/// <returns>Interpolated angle between A and B by Alpha.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float LerpAngle(float A, float B, float Alpha)
 		{
@@ -739,7 +739,7 @@ namespace MW
 		/// <param name="B"></param>
 		/// <param name="F">Current between A and B.</param>
 		/// <returns>Percentage F is towards B, relative to A.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float InvLerp(float A, float B, float F)
 		{
@@ -754,7 +754,7 @@ namespace MW
 		/// <param name="Now"></param>
 		/// <param name="Target"></param>
 		/// <param name="MaximumDelta">Step from Now towards Target.</param>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Approach(float Now, float Target, float MaximumDelta)
 		{
@@ -768,7 +768,7 @@ namespace MW
 		/// <param name="Now"></param>
 		/// <param name="Target"></param>
 		/// <param name="MaximumDelta">Angle step Now towards Target.</param>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ApproachAngle(float Now, float Target, float MaximumDelta)
 		{
@@ -799,7 +799,7 @@ namespace MW
 		/// <param name="B"></param>
 		/// <param name="Tolerance">Equality threshold.</param>
 		/// <returns>Abs(A - B) &lt;= Tolerance.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsApproxEqual(float A, float B, float Tolerance = kEpsilon)
 		{
@@ -814,7 +814,7 @@ namespace MW
 		/// <param name="B"></param>
 		/// <param name="Tolerance">Equality threshold.</param>
 		/// <returns><see langword="True"/> if the square magnitude of A - B are within +-Tolerance.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsApproxEqual(MVector A, MVector B, float Tolerance = kEpsilon)
 		{
@@ -879,7 +879,7 @@ namespace MW
 		/// <param name="F">The number to ping-pong.</param>
 		/// <param name="Magnitude">The length of the ping-pong.</param>
 		/// <returns>An oscillating number that goes between +- Magnitude.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		public static float Oscillate(float F, float Magnitude)
 		{
 			F = Mathematics.Wrap(F, 0f, Magnitude * 2f);
@@ -891,7 +891,7 @@ namespace MW
 		/// <param name="F">The base number.</param>
 		/// <param name="Multiple">The factor.</param>
 		/// <returns>A factor of Multiple before F.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float PreviousMultiple(float F, float Multiple) => F - (F % Multiple);
 
@@ -900,7 +900,7 @@ namespace MW
 		/// <param name="F">The base number</param>
 		/// <param name="Multiple">The factor.</param>
 		/// <returns>A factor of Multiple after F.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float NextMultiple(float F, float Multiple)
 			=> F + (Multiple - (F % Multiple));
@@ -910,7 +910,7 @@ namespace MW
 		/// <param name="F">The base number.</param>
 		/// <param name="Multiple">The factor.</param>
 		/// <returns>A factor of Multiple that F is closest to.</returns>
-		[StandaloneExec]
+		[StandaloneExec(bIsBuiltIn: true)]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ClosestMultiple(float F, float Multiple)
 		{
