@@ -2,11 +2,11 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using MW;
 using MW.Diagnostics;
 
 namespace MW.CameraUtils
 {
-
 	[ExecuteAlways]
 	public class MSpringArm : MonoBehaviour
 	{
@@ -18,8 +18,7 @@ namespace MW.CameraUtils
 		[SerializeField, Space(10)] MRotator ArmRotation;
 		[SerializeField] MVector Offset;
 
-		[Space(10)]
-		public float Distance;
+		[SerializeField, Space(10)] float Distance;
 
 		[Header("Collision Settings")]
 		[SerializeField] MSpringArmCollision CollisionSettings;
@@ -43,13 +42,24 @@ namespace MW.CameraUtils
 				return;
 			}
 
-			MRotator InterpRotation;
-			InterpRotation.Pitch = FMath.SmoothDampAngle(PreviousRotation.Pitch, SpringArmRotation.Pitch, ref RefVelocities.Pitch, PositionalLagStrength, Time.deltaTime);
-			InterpRotation.Yaw = FMath.SmoothDampAngle(PreviousRotation.Yaw, SpringArmRotation.Yaw, ref RefVelocities.Yaw, PositionalLagStrength, Time.deltaTime);
-			InterpRotation.Roll = FMath.SmoothDampAngle(PreviousRotation.Roll, SpringArmRotation.Roll, ref RefVelocities.Roll, PositionalLagStrength, Time.deltaTime);
+			MRotator InterpRotation = ArmRotation;
+
+			if (!SpringArmRotation.IsZero())
+			{
+				InterpRotation.Pitch = FMath.SmoothDampAngle(PreviousRotation.Pitch, SpringArmRotation.Pitch, ref RefVelocities.Pitch, PositionalLagStrength, Time.deltaTime);
+				InterpRotation.Yaw = FMath.SmoothDampAngle(PreviousRotation.Yaw, SpringArmRotation.Yaw, ref RefVelocities.Yaw, PositionalLagStrength, Time.deltaTime);
+				InterpRotation.Roll = FMath.SmoothDampAngle(PreviousRotation.Roll, SpringArmRotation.Roll, ref RefVelocities.Roll, PositionalLagStrength, Time.deltaTime);
+			}
 
 			transform.position = GetRotationEndPosition(SpringArmDistance, InterpRotation);
 			PreviousRotation = InterpRotation;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void SetDeltaRotation(float Pitch, float Yaw)
+		{
+			ArmRotation.Pitch += Pitch;
+			ArmRotation.Yaw += Yaw;
 		}
 
 		void GetRotationAndDistance(out MRotator SpringArmRotation, out float SpringArmDistance)
@@ -150,6 +160,7 @@ namespace MW.CameraUtils
 		Vector3 GetArmDirection(MRotator Rotation)
 			=> GetRelativeRotation(Rotation).AsOrientationVector();
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		MRotator GetRelativeRotation(MRotator Rotation)
 			=> Rotation.Relative(-Target.forward, Target.up);
 	}
@@ -174,6 +185,5 @@ namespace MW.CameraUtils
 		SingleRaycast = 0b1,
 		MultiRaycast = 0b10
 	}
-
 }
 #endif // RELEASE
