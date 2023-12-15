@@ -698,6 +698,38 @@ namespace MW
 			return D;
 		}
 
+		/// <summary>If F is considered zero, return zero.</summary>
+		/// <decorations decor="public static float"></decorations>
+		/// <param name="F"></param>
+		/// <param name="ZeroThreshold"></param>
+		/// <returns>F &lt; ZeroThreshold ? 0F : F</returns>
+		public static float IfZeroThenZero(float F, float ZeroThreshold = 1E-05f)
+			=> F < ZeroThreshold ? 0F : F;
+
+		/// <summary>If D is considered zero, return zero.</summary>
+		/// <decorations decor="public static double"></decorations>
+		/// <param name="D"></param>
+		/// <param name="ZeroThreshold"></param>
+		/// <returns>D &lt; ZeroThreshold ? 0.0 : D</returns>
+		public static double IfZeroThenZero(double D, double ZeroThreshold = (double)1E-05)
+			=> D < ZeroThreshold ? 0.0 : D;
+
+		/// <summary>If F is considered zero, return zero.</summary>
+		/// <decorations decor="public static float"></decorations>
+		/// <param name="F"></param>
+		/// <param name="ZeroThreshold"></param>
+		/// <returns>F &lt; ZeroThreshold ? 0F : F</returns>
+		public static float IfZeroThenZero(ref float F, float ZeroThreshold = 1E-05f)
+			=> F < ZeroThreshold ? 0F : F;
+
+		/// <summary>If D is considered zero, return zero.</summary>
+		/// <decorations decor="public static double"></decorations>
+		/// <param name="D"></param>
+		/// <param name="ZeroThreshold"></param>
+		/// <returns>D &lt; ZeroThreshold ? 0.0 : D</returns>
+		public static double IfZeroThenZero(ref double D, double ZeroThreshold = (double)1E-05)
+			=> D < ZeroThreshold ? 0.0 : D;
+
 		/// <summary>Difference between two angles.</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="L"></param>
@@ -837,7 +869,7 @@ namespace MW
 			float TOST = 2f * FInverse(SmoothTime);
 			float TSDT = TOST * DeltaTime;
 
-			float num3 = FInverse(1f + TSDT + 0.48f * TSDT * TSDT + 0.235f * TSDT * TSDT * TSDT);
+			float Inv = FInverse(1f + TSDT + 0.48f * TSDT * TSDT + 0.235f * TSDT * TSDT * TSDT, 8);
 			float Difference = Now - Target;
 			float T = Target;
 			float FIS1 = Terminal * SmoothTime;
@@ -847,13 +879,13 @@ namespace MW
 
 			float FIS2 = (RefVelocity + TOST * Difference) * DeltaTime;
 
-			RefVelocity = (RefVelocity - TOST * FIS2) * num3;
-			float RetVal = Target + (Difference + FIS2) * num3;
+			RefVelocity = (RefVelocity - TOST * FIS2) * Inv;
+			float RetVal = Target + (Difference + FIS2) * Inv;
 
 			if (T - Now > 0f == RetVal > T)
 			{
 				RetVal = T;
-				RefVelocity = (RetVal - T) * FInverse(DeltaTime);
+				RefVelocity = (RetVal - T) * FInverse(DeltaTime, 8);
 			}
 
 			return RetVal;
