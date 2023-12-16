@@ -16,13 +16,14 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 @SET VS_BUILDCONFIGURATION=%1
+@SET BUILD_CONFIGURATION=/p:Configuration=%VS_BUILDCONFIGURATION%
 
 IF %VS_BUILDCONFIGURATION%X==X (
 	@SET VS_BUILDCONFIGURATION=Release
 )
 
 IF %VS_BUILDCONFIGURATION%==Standalone (
-	ECHO You do not need to run %0 in a Standalone Configuration.
+	call :BuildMW
 	PAUSE
 	EXIT \b 0
 )
@@ -57,7 +58,7 @@ IF NOT EXIST %TMPRO% (
 	EXIT \b 1
 )
 
-@SET BUILD_CONFIGURATION=/p:Configuration=%VS_BUILDCONFIGURATION%
+
 
 REM Build MGenerator and Remove Unnecessary Residue
 @ECHO Building MGenerator
@@ -74,6 +75,7 @@ REM Build MWEditor
 
 @ECHO MW Project Initialised! Building MW...
 
+:BuildMW
 @dotnet build ../MW.csproj %BUILD_CONFIGURATION%
 
 @ECHO -- Initialised MW --
