@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using MW;
+using MW.Extensions;
 using MW.Diagnostics;
 
 namespace MW.CameraUtils
@@ -15,10 +15,12 @@ namespace MW.CameraUtils
 
 		[Header("SpringArm Targets")]
 		public Transform Target;
-		[SerializeField, Space(10)] MRotator ArmRotation;
+		[SerializeField, Space(10)] MRotator ArmRotation = new MRotator(-25f, 0, 0);
 		[SerializeField] MVector Offset;
+		[SerializeField] MRotator OrientationAngleOffset = new MRotator(15, 0, 0);
 
-		[SerializeField, Space(10)] float Distance;
+		[Space(10)]
+		public float Distance;
 
 		[Header("Collision Settings")]
 		[SerializeField] MSpringArmCollision CollisionSettings;
@@ -32,6 +34,7 @@ namespace MW.CameraUtils
 		{
 			GetRotationAndDistance(out MRotator SpringArmRotation, out float SpringArmDistance);
 			SetRotationAndDistance(SpringArmRotation, SpringArmDistance);
+			OrientToTarget();
 		}
 
 		protected void SetRotationAndDistance(MRotator SpringArmRotation, float SpringArmDistance)
@@ -44,11 +47,23 @@ namespace MW.CameraUtils
 
 			MRotator InterpRotation = ArmRotation;
 
-			if (!SpringArmRotation.IsZero())
+			if (!SpringArmRotation.IsZero(.015f))
 			{
+				SpringArmRotation.Pitch = FMath.ClosestMultiple(SpringArmRotation.Pitch, .2f);
+				SpringArmRotation.Yaw = FMath.ClosestMultiple(SpringArmRotation.Yaw, .2f);
+				SpringArmRotation.Roll = FMath.ClosestMultiple(SpringArmRotation.Roll, .2f);
+
+				FMath.IfZeroThenZero(ref SpringArmRotation.Pitch);
+				FMath.IfZeroThenZero(ref SpringArmRotation.Yaw);
+				FMath.IfZeroThenZero(ref SpringArmRotation.Roll);
+
 				InterpRotation.Pitch = FMath.SmoothDampAngle(PreviousRotation.Pitch, SpringArmRotation.Pitch, ref RefVelocities.Pitch, PositionalLagStrength, Time.deltaTime);
 				InterpRotation.Yaw = FMath.SmoothDampAngle(PreviousRotation.Yaw, SpringArmRotation.Yaw, ref RefVelocities.Yaw, PositionalLagStrength, Time.deltaTime);
 				InterpRotation.Roll = FMath.SmoothDampAngle(PreviousRotation.Roll, SpringArmRotation.Roll, ref RefVelocities.Roll, PositionalLagStrength, Time.deltaTime);
+
+				FMath.IfZeroThenZero(ref InterpRotation.Pitch);
+				FMath.IfZeroThenZero(ref InterpRotation.Yaw);
+				FMath.IfZeroThenZero(ref InterpRotation.Roll);
 			}
 
 			transform.position = GetRotationEndPosition(SpringArmDistance, InterpRotation);
@@ -60,6 +75,16 @@ namespace MW.CameraUtils
 		{
 			ArmRotation.Pitch += Pitch;
 			ArmRotation.Yaw += Yaw;
+		}
+
+		void OrientToTarget()
+		{
+			Vector3 LookDirection = (Target.position - transform.position).FNormalise();
+			MRotator LookRotation = LookDirection.MV().Rotation();
+			transform.rotation = LookRotation + OrientationAngleOffset;
+
+			if (bShowArmLine)
+				Arrow.DebugArrow(transform.position, LookRotation.AsOrientationVector().V3() * .1f, Color.grey, .025f);
 		}
 
 		void GetRotationAndDistance(out MRotator SpringArmRotation, out float SpringArmDistance)
