@@ -80,6 +80,15 @@ namespace MW.Extensions
 			return I;
 		}
 
+		/// <summary>Whether or not a float is considered to be zero.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="F">The float to check.</param>
+		/// <param name="Tolerance">The threshold for F to be considered zero.</param>
+		/// <returns>True if F is +- Tolerance of zero.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsZero(this float F, float Tolerance = FMath.kEpsilon)
+			=> Utils.IsZero(F, Tolerance);
+
 		/// <summary>Checks if a float cannot be used for arithmetic.</summary>
 		/// <decorations decor="|Extension| bool"></decorations>
 		/// <param name="F">The float to check.</param>
