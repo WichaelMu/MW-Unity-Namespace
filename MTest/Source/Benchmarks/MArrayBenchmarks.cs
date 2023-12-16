@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#if ENABLE_BENCHMARKS
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MW;
 using MW.Diagnostics;
 
@@ -129,3 +130,4 @@ namespace MTest
 		}
 	}
 }
+#endif // ENABLE_BENCHMARKS
