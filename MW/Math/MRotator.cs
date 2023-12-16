@@ -405,6 +405,14 @@ namespace MW
 			return Utils.IsZero(this, ZeroThreshold);
 		}
 
+		/// <summary>Checks R's components for NaN.</summary>
+		/// <decorations decor="public static bool"></decorations>
+		/// <param name="R">The vector to check.</param>
+		/// <returns>True if R contains NaN.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool ContainsNaN(MRotator R)
+			=> R.Pitch.IsIllegalFloat() || R.Yaw.IsIllegalFloat() || R.Roll.IsIllegalFloat();
+
 		/// <summary>Adds two MRotators together.</summary>
 		/// <decorations decor="public static MRotator operator+"></decorations>
 		/// <param name="L">Left-side MRotator.</param>
