@@ -53,6 +53,7 @@ namespace MW
 		public const float D2R = 0.01745329251994329576923690768489F;
 		public const float R2D = 57.29578F;
 		public const float kEpsilon = 1E-05F;
+		public const double kDEpsilon = 1E-05;
 		public const float NaN = 0F / 0F;
 
 		/// <summary>Shorthand for writing / 3.</summary>
@@ -701,34 +702,34 @@ namespace MW
 		/// <summary>If F is considered zero, return zero.</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
-		/// <param name="ZeroThreshold"></param>
+		/// <param name="Tolerance"></param>
 		/// <returns>F &lt; ZeroThreshold ? 0F : F</returns>
-		public static float IfZeroThenZero(float F, float ZeroThreshold = 1E-05f)
-			=> F < ZeroThreshold ? 0F : F;
+		public static float IfZeroThenZero(float F, float Tolerance = kEpsilon)
+			=> Utils.IsZero(F, Tolerance) ? 0F : F;
 
 		/// <summary>If D is considered zero, return zero.</summary>
 		/// <decorations decor="public static double"></decorations>
 		/// <param name="D"></param>
-		/// <param name="ZeroThreshold"></param>
+		/// <param name="Tolerance"></param>
 		/// <returns>D &lt; ZeroThreshold ? 0.0 : D</returns>
-		public static double IfZeroThenZero(double D, double ZeroThreshold = (double)1E-05)
-			=> D < ZeroThreshold ? 0.0 : D;
+		public static double IfZeroThenZero(double D, double Tolerance = kDEpsilon)
+			=> Abs(D) < Tolerance ? 0.0 : D;
 
 		/// <summary>If F is considered zero, return zero.</summary>
 		/// <decorations decor="public static float"></decorations>
 		/// <param name="F"></param>
-		/// <param name="ZeroThreshold"></param>
+		/// <param name="Tolerance"></param>
 		/// <returns>F &lt; ZeroThreshold ? 0F : F</returns>
-		public static float IfZeroThenZero(ref float F, float ZeroThreshold = 1E-05f)
-			=> F < ZeroThreshold ? 0F : F;
+		public static float IfZeroThenZero(ref float F, float Tolerance = kEpsilon)
+			=> Utils.IsZero(F, Tolerance) ? 0F : F;
 
 		/// <summary>If D is considered zero, return zero.</summary>
 		/// <decorations decor="public static double"></decorations>
 		/// <param name="D"></param>
-		/// <param name="ZeroThreshold"></param>
+		/// <param name="Tolerance"></param>
 		/// <returns>D &lt; ZeroThreshold ? 0.0 : D</returns>
-		public static double IfZeroThenZero(ref double D, double ZeroThreshold = (double)1E-05)
-			=> D < ZeroThreshold ? 0.0 : D;
+		public static double IfZeroThenZero(ref double D, double Tolerance = kDEpsilon)
+			=> Abs(D) < Tolerance ? 0.0 : D;
 
 		/// <summary>Difference between two angles.</summary>
 		/// <decorations decor="public static float"></decorations>
@@ -869,7 +870,7 @@ namespace MW
 			float TOST = 2f * FInverse(SmoothTime);
 			float TSDT = TOST * DeltaTime;
 
-			float Inv = FInverse(1f + TSDT + 0.48f * TSDT * TSDT + 0.235f * TSDT * TSDT * TSDT, 8);
+			float Inv = 1f / (1f + TSDT + 0.48f * TSDT * TSDT + 0.235f * TSDT * TSDT * TSDT);
 			float Difference = Now - Target;
 			float T = Target;
 			float FIS1 = Terminal * SmoothTime;
@@ -885,7 +886,7 @@ namespace MW
 			if (T - Now > 0f == RetVal > T)
 			{
 				RetVal = T;
-				RefVelocity = (RetVal - T) * FInverse(DeltaTime, 8);
+				RefVelocity = (RetVal - T) / DeltaTime;
 			}
 
 			return RetVal;
