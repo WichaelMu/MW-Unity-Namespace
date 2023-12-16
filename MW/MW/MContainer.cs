@@ -63,6 +63,7 @@ namespace MW
 		}
 
 		/// <summary>Sets this MContainer of T Elements.</summary>
+		/// <decorations decor="public void"></decorations>
 		/// <param name="Elements">The Elements to set.</param>
 		public void SetFromElements(T[] Elements) { this.Elements = Elements; }
 
