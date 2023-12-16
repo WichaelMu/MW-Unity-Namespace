@@ -1,12 +1,12 @@
 ﻿using System;
-using MW.Math;
 using static MW.Math.Magic.Fast;
 using System.Runtime.CompilerServices;
 #if RELEASE
-using MW.Extensions;
+using MW.Math;
 using UnityEngine;
-#endif // RELEASE
 using static MW.FMath;
+#endif // RELEASE
+using MW.Extensions;
 
 namespace MW
 {
