@@ -222,7 +222,7 @@ namespace MW
 				Q.x = (F12 - F21) * Sqrt;
 				Q.y = (F20 - F02) * Sqrt;
 				Q.z = (F01 - F10) * Sqrt;
-				return Q.MakeRotator();
+				return Rotator(Q);
 			}
 
 			if (F00 >= F11 && F00 >= F22)
@@ -233,7 +233,7 @@ namespace MW
 				Q.y = (F01 + F10) * Inverse;
 				Q.z = (F02 + F20) * Inverse;
 				Q.w = (F12 - F21) * Inverse;
-				return Q.MakeRotator();
+				return Rotator(Q);
 			}
 
 			if (F11 > F22)
@@ -244,7 +244,7 @@ namespace MW
 				Q.y = .5f * Sqrt;
 				Q.z = (F21 + F12) * Inverse;
 				Q.w = (F20 - F02) * Inverse;
-				return Q.MakeRotator();
+				return Rotator(Q);
 			}
 
 			{
@@ -254,7 +254,7 @@ namespace MW
 				Q.y = (F21 + F12) * Inverse;
 				Q.z = .5f * Sqrt;
 				Q.w = (F01 - F10) * Inverse;
-				return Q.MakeRotator();
+				return Rotator(Q);
 			}
 		}
 #endif // RELEASE
