@@ -51,6 +51,7 @@ namespace MW.Console
 		protected const char kGameObjectByNameIdentifier = '#';
 		protected const char kArrayDeclaration = '{';
 		protected const char kArrayTermination = '}';
+		protected const char kStringDeclaration = '"';
 
 		StringBuilder OutputLog;
 		bool bShowBuiltIn = true;
@@ -69,6 +70,7 @@ namespace MW.Console
 			Settings.GameObjectByNameIdentifier = kGameObjectByNameIdentifier;
 			Settings.ArrayDeclaration = kArrayDeclaration;
 			Settings.ArrayTermination = kArrayTermination;
+			Settings.StringDeclaration = kStringDeclaration;
 #if RELEASE
 			Settings.GetTargetFromString = GetTargetFromString;
 #endif // RELEASE
@@ -134,11 +136,26 @@ namespace MW.Console
 			RawInput = "";
 		}
 
+#if RELEASE
 		void BuildExec()
 		{
 			if (!string.IsNullOrEmpty(RawInput))
 			{
 				string[] Split = RawInput.Split(' ');
+
+				if (!SupportedTypes.ValidateQuotationMarks(Split))
+				{
+					WriteToOutput($"-- Quotation Mark Mismatch -- You have one or more unclosed Quotation Marks (\")!", MConsoleColourLibrary.Red);
+					return;
+				}
+
+				if (!SupportedTypes.ValidateArrayDeclarations(Split))
+				{
+					WriteToOutput($"-- Invalid Array Declaration -- You have one or more unclosed Array Declarations! Wrap Array Parameters with" +
+						$"'{kArrayDeclaration}' and '{kArrayTermination}'.", MConsoleColourLibrary.Red);
+					return;
+				}
+
 				int ArgC = Split.Length;
 				MArray<object> ArgV = new MArray<object>();
 				MArray<string> TargetsArgV = new MArray<string>();
@@ -155,7 +172,10 @@ namespace MW.Console
 					}
 					else
 					{
-						ArgV.Push(Split[Arg]);
+						ArgV.Push(SupportedTypes.GetQuotedString(Split[Arg], Split, ref Arg, out string QuotedString)
+							? QuotedString
+							: Split[Arg]
+						);
 					}
 				}
 
@@ -167,6 +187,7 @@ namespace MW.Console
 
 			RawInput = "";
 		}
+#endif // RELEASE
 
 #if STANDALONE
 		/// <summary>Executes <paramref name="Args"/>[0] as if it were being run in a CLI environment.</summary>
@@ -424,7 +445,7 @@ namespace MW.Console
 #endif // RELEASE
 				if (ExecParameterType.IsPrimitive) // Any other primitive.
 				{
-					return SupportedTypes.Primitive(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
+					return MConsoleSupportedTypes.Primitive(RawParams, ref ParamIndex, ref TargetObject, ExecParameterType);
 				}
 				else if (ExecParameterType.IsArray) // Arrays as T[].
 				{

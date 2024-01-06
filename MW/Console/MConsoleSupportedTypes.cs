@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using MW.Extensions;
 using MV = MW.MVector;
 using MR = MW.MRotator;
+using System.Linq;
 #if RELEASE
+using System.Text;
 using UnityEngine;
 using V3 = UnityEngine.Vector3;
 #endif
@@ -28,6 +30,7 @@ namespace MW.Console
 		public char GameObjectByNameIdentifier;
 		public char ArrayDeclaration;
 		public char ArrayTermination;
+		public char StringDeclaration;
 
 #if RELEASE
 		public FindTargetFunction GetTargetFromString;
@@ -213,16 +216,79 @@ namespace MW.Console
 
 		internal bool String(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
-			TargetObject = RawParams[ParamIndex].Cast<string>();
+			string StringValue = RawParams[ParamIndex].Cast<string>();
+
+			TargetObject = StringValue;
 
 			++ParamIndex;
 			return true;
 		}
 
-		internal bool Primitive(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
+#if RELEASE
+		internal bool GetQuotedString(string StringValue, string[] Arguments, ref int ParamIndex, out string QuotedString)
+		{
+			if (StringValue[0] != Settings.StringDeclaration)
+			{
+				QuotedString = StringValue;
+				return false;
+			}
+
+			int OriginalParamIndex = ParamIndex;
+			QuotedString = StringValue;
+			StringBuilder QuotedStringBuilder = new StringBuilder();
+			if (StringValue.GetLastChar() == Settings.StringDeclaration)
+			{
+				QuotedString = StringValue.Substring(1, StringValue.GetLastIndex() - 1);
+				return true;
+			}
+
+			QuotedStringBuilder.Append(StringValue.MakeStringStart(1));
+
+			++ParamIndex;
+			bool bFoundStringTermination = false;
+			for (; ParamIndex < Arguments.Length; ++ParamIndex)
+			{
+				StringValue = Arguments[ParamIndex];
+				if (string.IsNullOrEmpty(StringValue))
+					continue;
+
+				if (StringValue.GetLastChar() == Settings.StringDeclaration)
+				{
+					QuotedStringBuilder.Append(StringValue.MakeStringEnd(0));
+					bFoundStringTermination = true;
+					break;
+				}
+				else
+				{
+					QuotedStringBuilder.Append(' ').Append(StringValue);
+				}
+			}
+
+			if (bFoundStringTermination)
+			{
+				QuotedString = QuotedStringBuilder.ToString();
+			}
+			else
+			{
+				ParamIndex = OriginalParamIndex;
+			}
+
+			return bFoundStringTermination;
+		}
+
+		internal bool ValidateQuotationMarks(string[] Arguments)
+		{
+			int QuoteCount = 0;
+			foreach (string Argument in Arguments)
+				QuoteCount += Argument.Count(C => C == Settings.StringDeclaration);
+			return QuoteCount % 2 == 0;
+		}
+#endif // RELEASE
+
+		internal static bool Primitive(object[] RawParams, ref int ParamIndex, ref object TargetObject, Type ExecParameterType)
 		{
 			MConsole.HandlePrimitiveParameter(ref TargetObject, RawParams[ParamIndex], ExecParameterType);
-			
+
 			++ParamIndex;
 			return true;
 		}
@@ -231,7 +297,7 @@ namespace MW.Console
 		{
 			if (RawParams[ParamIndex].Cast<string>()[0] != Settings.ArrayDeclaration)
 			{
-				ThrowError($"To parse arrays into Exec functions, they must be wrapped with {Settings.ArrayDeclaration} and {Settings.ArrayTermination}");
+				ThrowError($"To parse arrays into Exec functions, they must be wrapped with '{Settings.ArrayDeclaration}' and '{Settings.ArrayTermination}'!");
 				return false;
 			}
 
@@ -250,6 +316,19 @@ namespace MW.Console
 
 			++ParamIndex;
 			return MConsoleArrayParser.Convert(this, ref TargetObject, ElementType, Array);
+		}
+
+		internal bool ValidateArrayDeclarations(string[] Arguments)
+		{
+			int ArrayDeclarationCount = 0;
+			int ArrayTerminationCount = 0;
+			foreach (string Argument in Arguments)
+			{
+				ArrayDeclarationCount += Argument.Count(C => C == Settings.ArrayDeclaration);
+				ArrayTerminationCount += Argument.Count(C => C == Settings.ArrayTermination);
+			}
+
+			return ArrayDeclarationCount == ArrayTerminationCount;
 		}
 	}
 
