@@ -8,7 +8,7 @@
 		<StartupObject></StartupObject>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<BaseOutputPath>MW\Output\Binaries</BaseOutputPath>
-		<DocumentationFile></DocumentationFile>
+		<DocumentationFile>$(BaseOutputPath)\$(Configuration)\$(TargetFramework)\MW.xml</DocumentationFile>
 		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
