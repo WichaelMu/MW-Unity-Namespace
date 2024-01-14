@@ -214,10 +214,10 @@ namespace MW.Math
 		/// <param name="n">The float number to wrap.</param>
 		/// <param name="Min">The minimum value to wrap.</param>
 		/// <param name="Max">The maximum value to wrap.</param>
-		public static float Wrap(int n, int Min, int Max)
+		public static int Wrap(int n, int Min, int Max)
 		{
-			float s = Max - Min;
-			float e = n;
+			int s = Max - Min;
+			int e = n;
 			while (e < Min)
 			{
 				e += s;
